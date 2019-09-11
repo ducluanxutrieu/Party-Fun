@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_vertical_margin">@dimen/_16sdp</dimen>
+    <dimen name="activity_horizontal_margin">@dimen/_16sdp</dimen>
+    <dimen name="corner_radius">@dimen/_10sdp</dimen>
+    <dimen name="name_item_recycler_view">@dimen/_20sdp</dimen>
+    <dimen name="icon_item_margin">10dp</dimen>
+    <dimen name="icon_avatar_item">@dimen/_50sdp</dimen>
+    <dimen name="margin_start_item_text">@dimen/_5sdp</dimen>
+    <dimen name="icon_text_fields">@dimen/_50sdp</dimen>
+    <dimen name="collapsing_title_margin_start">@dimen/_48sdp</dimen>
+    <dimen name="collapsing_title_margin_end">@dimen/_64sdp</dimen>
+    <dimen name="image_width">@dimen/_120sdp</dimen>
+    <dimen name="image_final_width">@dimen/_32sdp</dimen>
+    <dimen name="spacing_normal">@dimen/_16sdp</dimen>
+    <dimen name="dialog_width">@dimen/_290sdp</dimen>
+    <dimen name="dialog_height_project">@dimen/_400sdp</dimen>
+    <dimen name="dialog_height_task">680dp</dimen>
+    <dimen name="margin_single_button_horizontal">@dimen/_50sdp</dimen>
+    <dimen name="margin_floating">@dimen/_30sdp</dimen>
+    <dimen name="margin_item_login">@dimen/_10sdp</dimen>
+    <dimen name="margin_item_form">@dimen/_5sdp</dimen>
+    <dimen name="icon_project_size">60dp</dimen>
+    <dimen name="fab_margin">@dimen/_16sdp</dimen>
+    <dimen name="margin_horizontal_item">@dimen/_15sdp</dimen>
+    <dimen name="text_description_box">@dimen/_12ssp</dimen>
+    <dimen name="margin_tag">3dp</dimen>
+    <dimen name="padding_tag">5dp</dimen>
+    <dimen name="description_height">@dimen/_150sdp</dimen>
+</resources>
