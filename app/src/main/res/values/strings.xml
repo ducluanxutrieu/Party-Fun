@@ -81,5 +81,10 @@
     <string name="password_is_required">Password is required</string>
     <string name="action_phone_number">Phone Number</string>
     <string name="create_account">Create account</string>
+    <string name="this_field_required">This field required</string>
+    <string name="this_field_cannot_contain_space">This field cannot contain spcae</string>
+    <string name="password_too_short">Password too short</string>
+    <string name="phone_not_valid">Phone number not valid</string>
+    <string name="not_matched_with_password">Not matched with password</string>
 
 </resources>

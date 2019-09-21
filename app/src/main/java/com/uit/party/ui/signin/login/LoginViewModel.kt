@@ -14,9 +14,10 @@ import com.uit.party.model.UserLoginInfo
 import com.uit.party.ui.MainActivity.Companion.SHARE_REFERENCE_MODE
 import com.uit.party.ui.MainActivity.Companion.SHARE_REFERENCE_NAME
 import com.uit.party.util.GlobalApplication
+import com.uit.party.util.StringUtil
 
 class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
-    val user = UserLoginInfo()
+    private val user = UserLoginInfo()
     val loginEnabled: ObservableBoolean = ObservableBoolean()
     lateinit var loginModel: LoginModel
 
@@ -24,11 +25,14 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
 
     val context = GlobalApplication.appContext!!
 
-    var errorMessageEmail: ObservableField<String> = ObservableField()
-    var errorMessagePassword: ObservableField<String> = ObservableField()
+    var errorUsername: ObservableField<String> = ObservableField()
+    var errorPassword: ObservableField<String> = ObservableField()
 
-    var emailValid = false
-    var passwordValid = false
+    private var usernameValid = false
+    private var passwordValid = false
+
+    private var usernameText = ""
+    private var passwordText = ""
 
     var showLoading: ObservableInt = ObservableInt(View.GONE)
 
@@ -88,23 +92,49 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
 
     fun getUsernameTextChanged(): TextWatcher {
         return object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                if (!p0.isNullOrEmpty()) {
-                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(p0).matches()){
-                        errorMessageEmail.set("")
-                        emailValid = true
-                        user.username = p0.toString()
-                        checkShowButtonLogin()
-                    }else{
-                        emailValid = false
-                        loginEnabled.set(false)
-                        errorMessageEmail.set(context.getString(R.string.email_not_valid))
-                    }
-                } else {
-                    errorMessageEmail.set(context.getString(R.string.email_is_not_empty))
-                    emailValid = false
-                    loginEnabled.set(false)
-                }
+            override fun afterTextChanged(editable: Editable?) {
+                checkUsernameValid(editable)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        }
+    }
+
+    fun checkUsernameValid(editable: Editable?) {
+        when {
+            editable.isNullOrEmpty() -> {
+                errorUsername.set(StringUtil.getString(R.string.this_field_required))
+                usernameValid = false
+                checkShowButtonLogin()
+            }
+            editable.contains(" ") -> {
+                errorUsername.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                usernameValid = false
+                checkShowButtonLogin()
+            }
+            else -> {
+                usernameValid = true
+                errorUsername.set("")
+                usernameText = editable.toString()
+                checkShowButtonLogin()
+            }
+        }
+    }
+    private fun checkShowButtonLogin() {
+        if (usernameValid && passwordValid) {
+            loginEnabled.set(true)
+        } else loginEnabled.set(false)
+    }
+
+    fun getPasswordTextChanged(): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                checkPasswordValid(editable)
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -117,39 +147,29 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
         }
     }
 
-    private fun checkShowButtonLogin() {
-        if (emailValid && passwordValid) {
-            loginEnabled.set(true)
-        } else loginEnabled.set(false)
-    }
-
-    fun getPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                if (!p0.isNullOrEmpty()) {
-                    user.password = p0.toString()
-                    if (p0.length > 5) {
-                        errorMessagePassword.set(null)
-                        passwordValid = true
-                        checkShowButtonLogin()
-                    } else {
-                        passwordValid = false
-                        loginEnabled.set(false)
-                    }
-                } else {
-                    errorMessagePassword.set(context.getString(R.string.password_is_required))
-                    passwordValid = false
-                    loginEnabled.set(false)
-                }
+    private fun checkPasswordValid(editable: Editable?) {
+        when {
+            editable.isNullOrEmpty() -> {
+                errorPassword.set(StringUtil.getString(R.string.this_field_required))
+                passwordValid = false
+                checkShowButtonLogin()
             }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            editable.contains(" ") -> {
+                errorPassword.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                passwordValid = false
+                checkShowButtonLogin()
             }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+            editable.length < 6 -> {
+                errorPassword.set(StringUtil.getString(R.string.password_too_short))
+                passwordValid = false
+                checkShowButtonLogin()
             }
-
+            else -> {
+                passwordValid = true
+                errorPassword.set("")
+                passwordText = editable.toString()
+                checkShowButtonLogin()
+            }
         }
     }
 

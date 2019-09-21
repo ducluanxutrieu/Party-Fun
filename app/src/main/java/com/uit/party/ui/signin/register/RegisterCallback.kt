@@ -1,4 +1,4 @@
-package com.uit.party.view_model.register
+package com.uit.party.ui.signin.register
 
 interface RegisterCallback {
     fun onBackLogin()

@@ -1,4 +1,4 @@
-package com.uit.party.ui
+package com.uit.party.ui.signin.register
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentRegisterBinding
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.view_model.register.RegisterCallback
-import com.uit.party.view_model.register.RegisterViewModel
 
 
 class RegisterFragment : Fragment(), RegisterCallback {

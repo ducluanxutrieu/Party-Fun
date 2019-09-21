@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.uit.party.R
 import com.uit.party.databinding.ActivitySignInBinding
-import com.uit.party.ui.RegisterFragment
+import com.uit.party.ui.signin.register.RegisterFragment
 import com.uit.party.ui.signin.login.LoginFragment
 import com.uit.party.util.AddNewFragment
 

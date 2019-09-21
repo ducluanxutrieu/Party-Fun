@@ -5,11 +5,12 @@
 
         <variable
             name="viewModel"
-            type="com.uit.party.view_model.register.RegisterViewModel" />
+            type="com.uit.party.ui.signin.register.RegisterViewModel" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,7 +58,10 @@
                         android:textStyle="bold|italic" />
                 </RelativeLayout>
 
-                <com.google.android.material.textfield.TextInputLayout style="@style/TextInputLayout">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    bind:textError="@{viewModel.errorFullName}"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_full_name"
@@ -69,7 +73,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout style="@style/TextInputLayout">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    bind:textError="@{viewModel.errorUserName}"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_username"
@@ -81,7 +88,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout style="@style/TextInputLayout">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    bind:textError="@{viewModel.errorEmail}"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_email"
@@ -92,7 +102,10 @@
                         app:addTextChangedListener="@{viewModel.getEmailTextChanged()}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout style="@style/TextInputLayout">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    bind:textError="@{viewModel.errorPhoneNumber}"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_phone_number"
@@ -100,10 +113,13 @@
                         android:hint="@string/action_phone_number"
                         android:inputType="phone"
                         android:text="@{viewModel.phoneNumber}"
-                        app:addTextChangedListener="@{viewModel.getEmailTextChanged()}" />
+                        app:addTextChangedListener="@{viewModel.getPhoneNumberTextChanged()}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout style="@style/TextInputLayout">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    bind:textError="@{viewModel.errorPassword}"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_password"
@@ -115,7 +131,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout style="@style/TextInputLayout">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    bind:textError="@{viewModel.errorConfirmPassword}"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_repeat_password"
