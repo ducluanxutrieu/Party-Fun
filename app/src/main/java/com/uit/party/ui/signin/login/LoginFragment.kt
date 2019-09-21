@@ -14,10 +14,10 @@ import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentLoginBinding
 import com.uit.party.model.LoginModel
-import com.uit.party.ui.MainActivity
-import com.uit.party.ui.MainActivity.Companion.SHARE_REFERENCE_MODE
-import com.uit.party.ui.MainActivity.Companion.SHARE_REFERENCE_NAME
-import com.uit.party.ui.MainActivity.Companion.TAG
+import com.uit.party.ui.main.MainActivity
+import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_MODE
+import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
+import com.uit.party.ui.main.MainActivity.Companion.TAG
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.SignInCallback
 

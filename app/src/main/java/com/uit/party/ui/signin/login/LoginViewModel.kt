@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModel
 import com.uit.party.R
 import com.uit.party.model.LoginModel
 import com.uit.party.model.UserLoginInfo
-import com.uit.party.ui.MainActivity.Companion.SHARE_REFERENCE_MODE
-import com.uit.party.ui.MainActivity.Companion.SHARE_REFERENCE_NAME
+import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_MODE
+import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.StringUtil
 

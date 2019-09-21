@@ -27,9 +27,10 @@
     <dimen name="margin_tag">3dp</dimen>
     <dimen name="padding_tag">5dp</dimen>
     <dimen name="description_height">@dimen/_150sdp</dimen>
-    <dimen name="shrine_grid_item_margin">4dp</dimen>
-    <dimen name="shrine_card_inner_padding">8dp</dimen>
-    <dimen name="shrine_grid_image_height">20dp</dimen>
+    <dimen name="shrine_grid_item_margin">@dimen/_5sdp</dimen>
+    <dimen name="shrine_card_inner_padding">@dimen/_8sdp</dimen>
+    <dimen name="shrine_grid_image_height">@dimen/_150sdp</dimen>
     <dimen name="margin_vertical_item_form">10dp</dimen>
     <dimen name="margin_field_form_horizontal">@dimen/_30sdp</dimen>
+    <dimen name="card_view_default_elevation">@dimen/_2sdp</dimen>
 </resources>

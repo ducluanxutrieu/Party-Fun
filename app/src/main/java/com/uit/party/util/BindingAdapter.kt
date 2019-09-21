@@ -2,7 +2,7 @@ package com.uit.party.util
 
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -14,7 +14,7 @@ import java.util.*
 @BindingAdapter("app:data")
 fun <T> setupRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
     recyclerView.setHasFixedSize(true)
-    val layoutManager = LinearLayoutManager(recyclerView.context, RecyclerView.VERTICAL, false)
+    val layoutManager = GridLayoutManager(recyclerView.context, 2)
     recyclerView.layoutManager = layoutManager
 
     if (recyclerView.adapter is BindableAdapter<*>) {
@@ -24,11 +24,9 @@ fun <T> setupRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
 
 @BindingAdapter("app:imageUrl")
 fun setImageIcon(imageView: AppCompatImageView, url: String?) {
-    val requestOptions = RequestOptions()
-//        .error(R.drawable.ic_round_account)
-//        .placeholder(R.drawable.ic_round_account)
-        .circleCrop()
-    Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
+    if (!url.isNullOrEmpty()){
+        Glide.with(imageView.context).load(url).apply(RequestOptions.centerInsideTransform()).into(imageView)
+    }
 }
 
 @BindingAdapter("bind:textError")
