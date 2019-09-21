@@ -80,5 +80,6 @@
     <string name="email_not_valid">Email not valid</string>
     <string name="password_is_required">Password is required</string>
     <string name="action_phone_number">Phone Number</string>
+    <string name="create_account">Create account</string>
 
 </resources>

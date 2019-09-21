@@ -2,11 +2,9 @@ package com.uit.party.view_model.register
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import com.uit.party.model.ResponseMessage
 import com.uit.party.ui.RegisterFragment
@@ -14,9 +12,6 @@ import com.uit.party.util.GlobalApplication
 
 
 class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewModel(){
-    val showCardView: ObservableInt = ObservableInt()
-    val showFAB: ObservableInt = ObservableInt()
-
     var fullNameValid = false
     var usernameValid = false
     var emailValid = false
@@ -223,20 +218,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         registerCallback.onBackLogin()
     }
 
-    fun setCardViewShow(isCardShow: Boolean) {
-        if (isCardShow){
-            showCardView.set(View.VISIBLE)
-        }else {
-            showCardView.set(View.GONE)
-        }
-    }
+    fun onCardClicked(){
 
-    fun setFABShow(isFABShow: Boolean){
-        if (isFABShow){
-            showFAB.set(View.VISIBLE)
-        }else {
-            showFAB.set(View.GONE)
-        }
     }
-
 }

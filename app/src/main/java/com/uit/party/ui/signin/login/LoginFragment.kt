@@ -68,7 +68,7 @@ class LoginFragment : Fragment(), LoginCallback {
     }
 
     override fun onRegister() {
-        signInCallback.onRegister(binding.fab.x, binding.fab.y, binding.fab)
+        signInCallback.onRegister(binding.tvRegister.width/2 + binding.tvRegister.x, binding.tvRegister.height/2 + binding.tvRegister.y, binding.tvRegister)
     }
 
     override fun onAttach(context: Context) {

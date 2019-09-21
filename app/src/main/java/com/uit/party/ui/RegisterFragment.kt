@@ -15,7 +15,6 @@ import com.uit.party.databinding.FragmentRegisterBinding
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.view_model.register.RegisterCallback
 import com.uit.party.view_model.register.RegisterViewModel
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
 class RegisterFragment : Fragment(), RegisterCallback {
@@ -72,18 +71,6 @@ class RegisterFragment : Fragment(), RegisterCallback {
         )
         mAnimator.duration = 300
         mAnimator.interpolator = AccelerateInterpolator()
-        mAnimator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                viewModel.setCardViewShow(true)
-                viewModel.setFABShow(false)
-                super.onAnimationStart(animation)
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                viewModel.setFABShow(true)
-                super.onAnimationEnd(animation)
-            }
-        })
         mAnimator.start()
     }
 
@@ -95,13 +82,11 @@ class RegisterFragment : Fragment(), RegisterCallback {
             binding.cvAdd.height.toFloat(),
             cY
         )
-        mAnimator.duration = 500
+        mAnimator.duration = 300
         mAnimator.interpolator = AccelerateInterpolator()
         mAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
-                viewModel.setCardViewShow(false)
                 super.onAnimationEnd(animation)
-                fab.setImageResource(R.drawable.plus)
                 (context as SignInActivity).onBackPressed()
             }
         })

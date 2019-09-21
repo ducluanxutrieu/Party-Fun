@@ -81,34 +81,35 @@
                         app:addTextChangedListener="@{viewModel.getPasswordTextChanged()}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bt_go"
                     style="@style/MaterialButton"
                     android:layout_marginStart="@dimen/_30sdp"
                     android:layout_marginEnd="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
                     android:enabled="@{viewModel.loginEnabled}"
                     android:onClick="@{() -> viewModel.onLoginClicked()}"
                     android:stateListAnimator="@drawable/state_list_animator_button"
                     android:text="@string/action_sign_in"
                     app:cornerRadius="@dimen/corner_radius" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_account"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:textStyle="bold"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    tools:ignore="UnusedAttribute"
+                    android:onClick="@{() -> viewModel.onRegisterClicked()}"
+                    />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/cv"
-            android:layout_alignEnd="@id/cv"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:layout_marginEnd="-20dp"
-            android:onClick="@{() -> viewModel.onRegisterClicked()}"
-            android:src="@drawable/plus"
-            android:transitionName="loginFab"
-            app:fabSize="normal" />
 
         <ProgressBar
             android:id="@+id/loading_login"
