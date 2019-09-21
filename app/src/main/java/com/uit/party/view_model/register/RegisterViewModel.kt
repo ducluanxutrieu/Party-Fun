@@ -2,29 +2,27 @@ package com.uit.party.view_model.register
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.uit.party.model.ResponseMessage
-import com.uit.party.ui.RegisterActivity
+import com.uit.party.ui.RegisterFragment
 import com.uit.party.util.GlobalApplication
 
 
 class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewModel(){
     val showCardView: ObservableInt = ObservableInt()
+    val showFAB: ObservableInt = ObservableInt()
+
     var fullNameValid = false
     var usernameValid = false
     var emailValid = false
+    var phoneNumberValid = false
     var passwordValid = false
     var confirmPasswordValid = false
-    var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    var mUser : FirebaseUser? = null
     private val TAG = "RegisterTag"
 
     var btnRegisterEnabled: ObservableBoolean = ObservableBoolean()
@@ -32,6 +30,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     var fullName: ObservableField<String> = ObservableField()
     var username: ObservableField<String> = ObservableField()
     var email: ObservableField<String> = ObservableField()
+    var phoneNumber: ObservableField<String> = ObservableField()
     var password: ObservableField<String> = ObservableField()
     var confirmPassword: ObservableField<String> = ObservableField()
 
@@ -40,10 +39,11 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     var fullNameText: String = ""
     var usernameText: String = ""
     var emailText: String = ""
+    var phoneNumberText: String = ""
     var passwordText: String =""
-    private lateinit var activity: RegisterActivity
+    private lateinit var activity: RegisterFragment
 
-    fun init(activity: RegisterActivity){
+    fun init(activity: RegisterFragment){
         this.activity = activity
     }
 
@@ -202,27 +202,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         }
     }
 
-    private fun register(fullName: String, username: String, email: String, password: String, activity: RegisterActivity, onComplete: (ResponseMessage?) -> Unit){
-        mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(activity
-            ) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success")
-                    val user = mAuth.currentUser
-                    updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        content, "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    updateUI(null)
-                }
-
-                // ...
-            }
+    private fun register(fullName: String, username: String, email: String, password: String, activity: RegisterFragment, onComplete: (ResponseMessage?) -> Unit){
 
 //        serviceRetrofit.register(fullName, username, email, password)
 //                .enqueue(object : Callback<ResponseMessage> {
@@ -233,22 +213,30 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
 //                    override fun onResponse(call: Call<ResponseMessage>, responseMessage: Response<ResponseMessage>) {
 //                        val repo = responseMessage.body()
 //                        onComplete(repo)
-//                        Log.i(LoginActivity.TAG, repo.toString())
+//                        Log.i(LoginFragment.TAG, repo.toString())
 //                    }
 //                })
     }
 
-    private fun updateUI(user : FirebaseUser?){
-        //TODO update user UI
-    }
 
     fun onBackLogin(){
         registerCallback.onBackLogin()
     }
 
-    fun setCardViewShow() {
-        showCardView.set(View.GONE)
+    fun setCardViewShow(isCardShow: Boolean) {
+        if (isCardShow){
+            showCardView.set(View.VISIBLE)
+        }else {
+            showCardView.set(View.GONE)
+        }
     }
 
+    fun setFABShow(isFABShow: Boolean){
+        if (isFABShow){
+            showFAB.set(View.VISIBLE)
+        }else {
+            showFAB.set(View.GONE)
+        }
+    }
 
 }

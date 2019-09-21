@@ -8,10 +8,40 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Material" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Material" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextInputLayout.TextInputEditText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:drawablePadding">@dimen/_8sdp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:color">@color/editTextColor</item>
+    </style>
+
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_field_form_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/margin_field_form_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/margin_vertical_item_form</item>
+        <item name="android:textColorHint">#4e342e</item>
+    </style>
+
+    <style name="MaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="cornerRadius">@dimen/corner_radius</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:stateListAnimator">@drawable/state_list_animator_button</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <color name="editTextColor">#f0f7f4</color>
+    <color name="editTextHindColor">#c5c5c5</color>
 </resources>
