@@ -81,4 +81,10 @@
     <string name="phone_not_valid">Phone number not valid</string>
     <string name="not_matched_with_password">Not matched with password</string>
 
+    <string name="icon_search_title">Search</string>
+    <string name="icon_filter_title">Filter</string>
+    <string name="bottom_nav_favorites">Favorite</string>
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_cart">Cart</string>
+
 </resources>

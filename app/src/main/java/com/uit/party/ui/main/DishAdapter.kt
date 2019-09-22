@@ -9,7 +9,7 @@ import com.uit.party.R
 import com.uit.party.databinding.ItemDishBinding
 import com.uit.party.util.BindableAdapter
 
-class DishAdapter : RecyclerView.Adapter<DishAdapter.DishViewHolder>(), BindableAdapter<DishModel> {
+class DishAdapter(private val itemClicked: DishItemOnClicked) : RecyclerView.Adapter<DishAdapter.DishViewHolder>(), BindableAdapter<DishModel> {
     private var dishList = ArrayList<DishModel>()
     private lateinit var binding: ItemDishBinding
 
@@ -20,7 +20,7 @@ class DishAdapter : RecyclerView.Adapter<DishAdapter.DishViewHolder>(), Bindable
             parent,
             false
         )
-        return DishViewHolder(binding)
+        return DishViewHolder(binding, itemClicked)
     }
 
     override fun getItemCount(): Int {
@@ -37,12 +37,19 @@ class DishAdapter : RecyclerView.Adapter<DishAdapter.DishViewHolder>(), Bindable
         notifyDataSetChanged()
     }
 
-    class DishViewHolder(val binding: ItemDishBinding) : RecyclerView.ViewHolder(binding.root) {
+    interface DishItemOnClicked{
+        fun onItemDishClicked(position: Int, item: DishModel)
+    }
+
+    class DishViewHolder(val binding: ItemDishBinding, private val itemClicked: DishItemOnClicked) : RecyclerView.ViewHolder(binding.root) {
         fun bind(dishModel: DishModel) {
             val itemViewModel = ItemDishViewModel()
             binding.setVariable(BR.itemViewModel, itemViewModel)
             binding.executePendingBindings()
             itemViewModel.init(dishModel)
+            binding.root.setOnClickListener {
+                itemClicked.onItemDishClicked(adapterPosition, dishModel)
+            }
         }
     }
 }

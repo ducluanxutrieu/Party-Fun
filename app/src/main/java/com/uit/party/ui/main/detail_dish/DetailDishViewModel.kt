@@ -1,22 +1,23 @@
-package com.uit.party.ui.main
+package com.uit.party.ui.main.detail_dish
 
-import android.widget.Toast
-import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
-import com.uit.party.util.GlobalApplication
+import androidx.lifecycle.ViewModel
+import com.uit.party.ui.main.DishModel
 
-class ItemDishViewModel : BaseObservable(){
+class DetailDishViewModel : ViewModel(){
     var imageDish = ObservableField<String>()
     var priceDish = ObservableField<String>()
     var nameDish = ObservableField<String>()
+    var descriptionDish = ObservableField<String>()
 
     fun init(dishModel: DishModel){
         imageDish.set(dishModel.url)
         priceDish.set(dishModel.price)
         nameDish.set(dishModel.title)
+        descriptionDish.set(dishModel.description)
     }
 
-    fun onAddCartClicked(){
-        Toast.makeText(GlobalApplication.appContext, "Add to cart clicked", Toast.LENGTH_SHORT).show()
+    fun addToCartClicked(){
+
     }
 }

@@ -5,15 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import com.uit.party.R
 import com.uit.party.databinding.ActivityMainBinding
+import com.uit.party.ui.main.detail_dish.DetailDishFragment
 import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.util.AddNewFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DishAdapter.DishItemOnClicked {
     lateinit var binding: ActivityMainBinding
     private val viewModel = MainViewModel()
-    private val adapter = DishAdapter()
+    private val adapter = DishAdapter(this)
 
     companion object {
         const val SHARE_REFERENCE_NAME = "com.uit.party.ui"
@@ -33,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onItemDishClicked(position: Int, item: DishModel) {
+        val fragment = DetailDishFragment.newInstance(item, position)
+        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, this)
     }
 
     private fun setupBinding() {

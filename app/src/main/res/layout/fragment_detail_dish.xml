@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.uit.party.ui.main.detail_dish.DetailDishViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/app_bar"
+                style="@style/Widget.Shrine.Toolbar.Logo.Product" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_spacing"
+                    android:layout_marginRight="@dimen/standard_spacing"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ProductImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_image_height"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/standard_spacing"
+                        android:layout_marginBottom="@dimen/standard_spacing"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        app:imageUrl="@{viewModel.imageDish}" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/large_margin_start"
+                        android:layout_marginBottom="@dimen/large_spacing"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/ProductTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/standard_spacing"
+                            android:layout_marginBottom="@dimen/standard_spacing"
+                            android:text="@{viewModel.nameDish}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                            android:textSize="@dimen/item_product_title_size" />
+
+                        <TextView
+                            android:id="@+id/ProductDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/standard_spacing"
+                            android:layout_marginBottom="@dimen/large_spacing"
+                            android:lineSpacingMultiplier="1.5"
+                            android:text="@{viewModel.descriptionDish}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/_40sdp"
+            android:onClick="@{() -> viewModel.addToCartClicked()}"
+            android:backgroundTint="@color/colorAccentSecondary"
+            android:src="@drawable/ic_shopping_cart_vd_theme_24" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -33,4 +33,12 @@
     <dimen name="margin_vertical_item_form">10dp</dimen>
     <dimen name="margin_field_form_horizontal">@dimen/_30sdp</dimen>
     <dimen name="card_view_default_elevation">@dimen/_2sdp</dimen>
+    <dimen name="standard_spacing">16dp</dimen>
+    <dimen name="large_spacing">36dp</dimen>
+    <dimen name="spinner_width">212dp</dimen>
+    <dimen name="spinner_border_width">2dp</dimen>
+    <dimen name="small_spacing">8dp</dimen>
+    <dimen name="item_product_title_size">30sp</dimen>
+    <dimen name="large_margin_start">56dp</dimen>
+    <dimen name="item_image_height">292dp</dimen>
 </resources>

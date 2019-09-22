@@ -47,9 +47,10 @@
                     android:id="@+id/btn_add_to_card"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:src="@drawable/ic_add_dish_cart_24dp"
                     android:elevation="@dimen/_2sdp"
+                    android:onClick="@{() -> itemViewModel.onAddCartClicked()}"
                     />
             </LinearLayout>
             <androidx.appcompat.widget.AppCompatImageView
