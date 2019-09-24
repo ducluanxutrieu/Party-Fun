@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), DishAdapter.DishItemOnClicked {
 
         setupBinding()
 
-        //goToSignIn()
+        goToSignIn()
     }
 
     private fun goToSignIn() {
