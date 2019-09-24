@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.uit.party.R
 import com.uit.party.databinding.FragmentLoginBinding
 import com.uit.party.model.LoginModel
@@ -69,9 +68,7 @@ class LoginFragment : Fragment(), LoginCallback {
     }
 
     override fun onRegister() {
-        //signInCallback.onRegister(binding.tvRegister.width/2 + binding.tvRegister.x, binding.tvRegister.height/2 + binding.tvRegister.y, binding.tvRegister)
-//         val action = FirstFragmentDirections.actionToRegisterFragment()
-        findNavController().navigate(R.id.actionToRegisterFragment)
+        signInCallback.onRegister(binding.tvRegister.width/2 + binding.tvRegister.x, binding.tvRegister.height/2 + binding.tvRegister.y, binding.tvRegister)
     }
 
     override fun onAttach(context: Context) {
