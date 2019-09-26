@@ -1,4 +1,4 @@
-package com.uit.party.ui.main
+package com.uit.party.ui.main.list_dish
 
 class DishModel (
     val title: String,

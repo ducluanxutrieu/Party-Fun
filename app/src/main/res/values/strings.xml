@@ -86,5 +86,6 @@
     <string name="bottom_nav_favorites">Favorite</string>
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_cart">Cart</string>
+    <string name="uit_party">UIT Party</string>
 
 </resources>

@@ -3,37 +3,57 @@ package com.uit.party.model
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class LoginModel: Serializable {
-    var id: Int = 0
-    var email:String? = null
-    var fullname:String? = null
-    var username : String? = null
-    var avatar: String? = null
-    var token:String? = null
+class LoginModel(
+    @SerializedName("username") var username: String,
+    @SerializedName("password") var password: String
+) : Serializable
+
+class RegisterModel(
+    @SerializedName("fullName") var fullName: String,
+    @SerializedName("username")var username: String,
+    @SerializedName("email")var email: String,
+    @SerializedName("phoneNumber")var phoneNumber: String,
+    @SerializedName("password")var password: String
+) : Serializable
+
+class AccountResponse {
+    @SerializedName("token")
+    val token: String? = null
+    @SerializedName("success")
+    val success: Boolean? = false
+    @SerializedName("name")
+    val name: String? = null //type of Response
+    @SerializedName("errorMessage")
+    val errorMessage: Any? = null
+    @SerializedName("username")
+    val username: Any? = null
+    @SerializedName("account")
+    val account: Account? = null
 }
 
-//class Project {
-//    var id:Int? = 0
-//    var name:String? = null
-//    var description:String? = null
-//    var type:String? = null
-//    var state:String? = null
-//    var color:String? = null
-//    var avatar:String? = null
-//    var createdAt:String? = null
-//    var updatedAt:String? = null
-//    var userProject:UserProject? = null
-//}
+class Account {
+    @SerializedName("_id")
+    val id: String? = null
+    @SerializedName("fullName")
+    val fullName: String? = null
+    @SerializedName("username")
+    val username: String? = null
+    @SerializedName("email")
+    val email: String? = null
+    @SerializedName("activeStatus")
+    val activeStatus: Boolean = false
+    @SerializedName("image")
+    val image: String? = null
+    @SerializedName("phoneNumber")
+    val phoneNumber: String? = null
+    @SerializedName("password")
+    val password: String? = null
+    @SerializedName("updatedAt")
+    val updatedAt: String? = null
+    @SerializedName("userCart")
+    val userCart: UserCart? = null
+}
 
-/**
-val numberOfMember: Int? = null
-
- */
-
-data class UserProject (
-    @SerializedName("user_id") val user_id : Int,
-    @SerializedName("project_id") val project_id : Int,
-    @SerializedName("role") val role : String,
-    @SerializedName("createdAt") val createdAt : String,
-    @SerializedName("updatedAt") val updatedAt : String
-)
+class UserCart {
+    //make for future
+}

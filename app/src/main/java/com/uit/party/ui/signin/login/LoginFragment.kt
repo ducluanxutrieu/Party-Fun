@@ -46,9 +46,9 @@ class LoginFragment : Fragment(), LoginCallback {
     }
 
     private fun updateUiWithUser(model: LoginModel) {
-        Toast.makeText(context, "Login successful - Welcome ${model.fullname}", Toast.LENGTH_LONG).show()
+//        Toast.makeText(context, "Login successful - Welcome ${model.fullname}", Toast.LENGTH_LONG).show()
         Log.i(TAG, model.toString())
-        viewModel.saveToMemory(model)
+//        viewModel.saveToMemory(model)
 
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra("userInfo", model)

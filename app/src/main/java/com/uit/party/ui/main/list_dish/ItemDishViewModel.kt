@@ -1,8 +1,9 @@
-package com.uit.party.ui.main
+package com.uit.party.ui.main.list_dish
 
 import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
+import com.uit.party.ui.main.list_dish.DishModel
 import com.uit.party.util.GlobalApplication
 
 class ItemDishViewModel : BaseObservable(){

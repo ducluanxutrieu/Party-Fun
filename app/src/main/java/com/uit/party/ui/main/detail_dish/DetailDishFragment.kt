@@ -9,9 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentDetailDishBinding
-import com.uit.party.ui.main.DishModel
+import com.uit.party.ui.main.list_dish.DishModel
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.MainViewModel
 
 class DetailDishFragment : Fragment(){
     private lateinit var model: DishModel
@@ -41,12 +40,18 @@ class DetailDishFragment : Fragment(){
         super.onActivityCreated(savedInstanceState)
         viewModel.init(model)
 
+        setupActionBar()
+    }
+
+    private fun setupActionBar() {
         binding.appBar.setNavigationIcon(R.drawable.ic_arrow_back_while_24dp)
+        binding.appBar.title = model.title
+        binding.appBar.setTitleTextColor(resources.getColor(R.color.colorWhile))
         binding.appBar.setNavigationOnClickListener {
             (context as MainActivity).onBackPressed()
         }
 
-        binding.appBar.inflateMenu(R.menu.shrine_toolbar_menu)
+        binding.appBar.inflateMenu(R.menu.toolbar_menu)
         binding.appBar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.ToolbarFilterIcon -> {

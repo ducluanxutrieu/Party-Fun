@@ -2,7 +2,7 @@ package com.uit.party.ui.main.detail_dish
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.uit.party.ui.main.DishModel
+import com.uit.party.ui.main.list_dish.DishModel
 
 class DetailDishViewModel : ViewModel(){
     var imageDish = ObservableField<String>()

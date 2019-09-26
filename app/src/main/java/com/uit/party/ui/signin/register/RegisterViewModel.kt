@@ -7,19 +7,24 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.uit.party.R
-import com.uit.party.model.ResponseMessage
+import com.uit.party.model.AccountResponse
+import com.uit.party.model.RegisterModel
+import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.StringUtil
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewModel() {
-    var fullNameValid = false
-    var usernameValid = false
-    var emailValid = false
-    var phoneNumberValid = false
-    var passwordValid = false
-    var confirmPasswordValid = false
-    private val TAG = "RegisterTag"
+    private var fullNameValid = false
+    private var usernameValid = false
+    private var emailValid = false
+    private var phoneNumberValid = false
+    private var passwordValid = false
+    private var confirmPasswordValid = false
 
     var btnRegisterEnabled: ObservableBoolean = ObservableBoolean()
 
@@ -37,13 +42,13 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     var password: ObservableField<String> = ObservableField()
     var confirmPassword: ObservableField<String> = ObservableField()
 
-    private val content = GlobalApplication.appContext
+    private val context = GlobalApplication.appContext
 
-    var fullNameText: String = ""
-    var usernameText: String = ""
-    var emailText: String = ""
-    var phoneNumberText: String = ""
-    var passwordText: String = ""
+    private var fullNameText: String = ""
+    private var usernameText: String = ""
+    private var emailText: String = ""
+    private var phoneNumberText: String = ""
+    private var passwordText: String = ""
     private lateinit var activity: RegisterFragment
 
     fun init(activity: RegisterFragment) {
@@ -256,7 +261,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                 confirmPasswordValid = false
                 checkShowButtonRegister()
             }
-            !passwordText.equals(editable.toString()) -> {
+            passwordText != editable.toString() -> {
                 errorConfirmPassword.set(StringUtil.getString(R.string.not_matched_with_password))
                 confirmPasswordValid = false
                 checkShowButtonRegister()
@@ -270,45 +275,53 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     }
 
     fun onRegisterClicked() {
-        register(
-            fullNameText,
-            usernameText,
-            emailText,
-            passwordText,
-            activity
-        ) { registerResponse ->
-            when (registerResponse?.message) {
-                "Create successed" -> {
-                    Toast.makeText(content, "Register successful", Toast.LENGTH_LONG).show()
-                    registerCallback.onBackLogin()
-                }
-                "Create failed" -> registerCallback.onFail("Register Failed - Please try again")
-                "Username existed" -> registerCallback.onFail("Username existed - Please try another")
+        val model =
+            RegisterModel(fullNameText, usernameText, emailText, phoneNumberText, passwordText)
+        register(model) { registerResponse ->
+            if (registerResponse?.success!!) {
+                Toast.makeText(context, "Register success", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Register false: ${registerResponse.errorMessage}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
     private fun register(
-        fullName: String,
-        username: String,
-        email: String,
-        password: String,
-        activity: RegisterFragment,
-        onComplete: (ResponseMessage?) -> Unit
+        model: RegisterModel,
+        onComplete: (AccountResponse?) -> Unit
     ) {
+        serviceRetrofit.register(model)
+            .enqueue(object : Callback<AccountResponse> {
+                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+                    Toast.makeText(context, "Register false: ${t.message}", Toast.LENGTH_LONG)
+                        .show()
+                }
 
-//        serviceRetrofit.register(fullName, username, email, password)
-//                .enqueue(object : Callback<ResponseMessage> {
-//                    override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
-//
-//                    }
-//
-//                    override fun onResponse(call: Call<ResponseMessage>, responseMessage: Response<ResponseMessage>) {
-//                        val repo = responseMessage.body()
-//                        onComplete(repo)
-//                        Log.i(LoginFragment.TAG, repo.toString())
-//                    }
-//                })
+                override fun onResponse(
+                    call: Call<AccountResponse>,
+                    response: Response<AccountResponse>
+                ) {
+                    val repo = response.body()
+                    if (repo != null) {
+                        onComplete(repo)
+                    } else {
+                        try {
+                            val jObjError = JSONObject(response.errorBody()!!.string())
+                            Toast.makeText(
+                                context,
+                                jObjError.getString("errorMessage"),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            })
     }
 
 

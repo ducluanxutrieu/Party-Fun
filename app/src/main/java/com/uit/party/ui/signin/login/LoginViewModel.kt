@@ -1,6 +1,5 @@
 package com.uit.party.ui.signin.login
 
-import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -9,19 +8,20 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import com.uit.party.R
+import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
-import com.uit.party.model.UserLoginInfo
 import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_MODE
 import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
+import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.StringUtil
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
-    private val user = UserLoginInfo()
+class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
     val loginEnabled: ObservableBoolean = ObservableBoolean()
-    lateinit var loginModel: LoginModel
-
-    private lateinit var shareReference: SharedPreferences
 
     val context = GlobalApplication.appContext!!
 
@@ -38,10 +38,11 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
 
     fun onLoginClicked() {
         showLoading.set(View.VISIBLE)
-        login(user.username, user.password) { success ->
+        val loginModel = LoginModel(usernameText, passwordText)
+        login(loginModel) { success ->
             showLoading.set(View.GONE)
             if (success != null) {
-                when(success) {
+                when (success) {
                     "Success" -> {
                         loginResult.onRepos(loginModel)
                         loginResult.onSuccess("Login Successful")
@@ -57,33 +58,36 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
         }
     }
 
-    private fun login(username: String, password: String, onComplete: (String?) -> Unit) {
-//        serviceRetrofit.login(username, password)
-//            .enqueue(object : Callback<LoginModel> {
-//                override fun onFailure(call: Call<LoginModel>, t: Throwable) {
-//                    onComplete(t.message)
-//                }
-//
-//                override fun onResponse(call: Call<LoginModel>, model: Response<LoginModel>) {
-//                    val repos = model.body()
-//                    if (repos != null) {
-//                        try {
-//                            loginModel = repos
-//                            onComplete("Success")
-//                        }catch (e: java.lang.Exception){
-//                            onComplete(e.message)
-//                        }
-//
-//                    } else {
-//                        try {
-//                            val jObjError = JSONObject(model.errorBody()!!.string())
-//                            onComplete(jObjError.getString("message"))
-//                        } catch (e: Exception) {
-//                            onComplete(e.message)
-//                        }
-//                    }
-//                }
-//            })
+    private fun login(loginModel: LoginModel, onComplete: (String?) -> Unit) {
+        serviceRetrofit.login(loginModel)
+            .enqueue(object : Callback<AccountResponse> {
+                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+                    onComplete(t.message)
+                }
+
+                override fun onResponse(
+                    call: Call<AccountResponse>,
+                    model: Response<AccountResponse>
+                ) {
+                    val repos = model.body()
+                    if (repos != null) {
+                        try {
+                            saveToMemory(repos)
+                            onComplete("Success")
+                        } catch (e: java.lang.Exception) {
+                            onComplete(e.message)
+                        }
+
+                    } else {
+                        try {
+                            val jObjError = JSONObject(model.errorBody()!!.string())
+                            onComplete(jObjError.getString("message"))
+                        } catch (e: Exception) {
+                            onComplete(e.message)
+                        }
+                    }
+                }
+            })
     }
 
     fun onRegisterClicked() {
@@ -125,6 +129,7 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
             }
         }
     }
+
     private fun checkShowButtonLogin() {
         if (usernameValid && passwordValid) {
             loginEnabled.set(true)
@@ -173,15 +178,14 @@ class LoginViewModel(private val loginResult : LoginCallback) : ViewModel(){
         }
     }
 
-    fun saveToMemory(model: LoginModel) {
-        shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
+    private fun saveToMemory(model: AccountResponse) {
+        val shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
         val editor = shareReference.edit()
-        editor.putString("username", user.username)
-        editor.putString("password", user.password)
-        editor.putString("tokenAccess", model.token)
-        editor.putString("avatar",model.avatar)
-        editor.putString("fullname",model.fullname)
-        editor.putInt("userID", model.id)
+        editor.putString("username", model.account?.username)
+        editor.putString("token", model.token)
+        editor.putString("avatar",model.account?.image)
+        editor.putString("fullName",model.account?.fullName)
+        editor.putString("userID", model.account?.id)
         editor.apply()
     }
 }

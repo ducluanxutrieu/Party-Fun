@@ -15,20 +15,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_sign_in_background"
-            android:orientation="vertical"
-            tools:context=".ui.main.MainActivity">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:data="@{viewModel.dishList}">
-
-            </androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
     </FrameLayout>
 </layout>
