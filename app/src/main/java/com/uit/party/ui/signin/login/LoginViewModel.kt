@@ -181,11 +181,21 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
     private fun saveToMemory(model: AccountResponse) {
         val shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
         val editor = shareReference.edit()
-        editor.putString("username", model.account?.username)
-        editor.putString("token", model.token)
-        editor.putString("avatar",model.account?.image)
-        editor.putString("fullName",model.account?.fullName)
-        editor.putString("userID", model.account?.id)
+        editor.putString(USERNAME_KEY, model.account?.username)
+        editor.putString(TOKEN_KEY, model.token)
+        editor.putString(AVATAR_KEY,model.account?.image)
+        editor.putString(FULL_NAME_KEY,model.account?.fullName)
+        editor.putString(USER_ID_KEY, model.account?.id)
         editor.apply()
+        TOKEN_ACCESS = model.token.toString()
+    }
+
+    companion object{
+        internal const val USERNAME_KEY = "USERNAME_KEY"
+        internal const val TOKEN_KEY = "TOKEN_KEY"
+        internal const val AVATAR_KEY = "AVATAR_KEY"
+        internal const val FULL_NAME_KEY = "FULL_NAME_KEY"
+        internal const val USER_ID_KEY = "USER_ID_KEY"
+        internal var TOKEN_ACCESS: String = ""
     }
 }

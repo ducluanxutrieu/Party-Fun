@@ -12,6 +12,10 @@
         android:icon="@drawable/ic_search_vd_theme_24"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/ToolbarChangePassword"
+        android:title="@string/change_password"
+        />
+    <item
         android:id="@+id/ToolbarLogout"
         android:title="@string/logout"
         android:icon="@drawable/ic_logout"

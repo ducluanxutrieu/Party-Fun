@@ -21,10 +21,18 @@ interface ServiceRetrofit {
         @Body body: LoginModel
     ): Call<AccountResponse>
 
-    @HTTP(method = "POST", path = "addUser", hasBody = true)
+    @POST("addUser")
     fun register(
         @Body body: RegisterModel
     ): Call<AccountResponse>
+
+    @POST("user/changepassword")
+    @FormUrlEncoded
+    fun changePassword(
+        @Header("authorization") token: String,
+        @Field("password") password: String,
+        @Field("passwordchange") passwordchange: String
+    ): Call<ResponseMessage>
 }
 
 class SetupConnectToServer {

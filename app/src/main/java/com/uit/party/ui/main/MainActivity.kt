@@ -13,6 +13,7 @@ import com.uit.party.ui.main.list_dish.DishModel
 import com.uit.party.ui.main.list_dish.ListDishFragment
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginFragment
+import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_KEY
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SetupConnectToServer
 
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity(){
 
     private fun checkLogin(){
         val shareReference = getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
-        val token =  shareReference.getString("token", null)
+        val token =  shareReference.getString(TOKEN_KEY, null)
         if (token == null){
             goToSignIn()
         }else{

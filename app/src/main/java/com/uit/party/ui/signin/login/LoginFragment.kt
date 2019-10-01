@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
@@ -20,6 +19,7 @@ import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
 import com.uit.party.ui.main.MainActivity.Companion.TAG
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.SignInCallback
+import com.uit.party.util.ToastUtil
 
 class LoginFragment : Fragment(), LoginCallback {
     private lateinit var shareReference: SharedPreferences
@@ -56,11 +56,19 @@ class LoginFragment : Fragment(), LoginCallback {
     }
 
     override fun onSuccess(success: String) {
-        Toast.makeText(context, "Login Success", Toast.LENGTH_LONG).show()
+        ToastUtil().showToast("Login Success")
+        gotoMainActivity()
+    }
+
+    private fun gotoMainActivity() {
+        val context = context as SignInActivity
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
+        context.finish()
     }
 
     override fun onError(error: String) {
-        Toast.makeText(context, "Login Error", Toast.LENGTH_LONG).show()
+        ToastUtil().showToast("Login Error")
     }
 
     override fun onRepos(loginModel: LoginModel) {

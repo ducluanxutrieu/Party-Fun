@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.list_dish
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +13,17 @@ import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.ui.main.DishAdapter
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
+import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.signin.change_password.ChangePasswordFragment
+import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.util.AddNewFragment
 
 @Suppress("DEPRECATION")
 class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
-
+    private val shareReference = context?.getSharedPreferences(
+        MainActivity.SHARE_REFERENCE_NAME,
+        MainActivity.SHARE_REFERENCE_MODE
+    )
     val viewModel = ListDishViewModel()
     lateinit var binding: FragmentListDishBinding
     private val adapter = DishAdapter(this)
@@ -64,6 +71,11 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
                     true
                 }
 
+                R.id.ToolbarChangePassword -> {
+                    changePassword()
+                    true
+                }
+
                 R.id.ToolbarLogout -> {
                     logOut()
                     true
@@ -74,12 +86,17 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
         }
     }
 
+    private fun changePassword() {
+        val fragment = ChangePasswordFragment.newInstance(TOKEN_ACCESS)
+        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+    }
+
     private fun logOut() {
-        val shareReference = context?.getSharedPreferences(
-            MainActivity.SHARE_REFERENCE_NAME,
-            MainActivity.SHARE_REFERENCE_MODE
-        )
+
         shareReference?.edit()?.clear()?.apply()
+        val intent = Intent(context, SignInActivity::class.java)
+        startActivity(intent)
+        (context as MainActivity).finish()
     }
 
     override fun onItemDishClicked(position: Int, item: DishModel) {

@@ -87,5 +87,10 @@
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_cart">Cart</string>
     <string name="uit_party">UIT Party</string>
+    <string name="action_current_password">Current Password</string>
+    <string name="action_new_password">New Password</string>
+    <string name="action_confirm_password">Confirm Password</string>
+    <string name="action_next">Next</string>
+    <string name="wrong_password">Wrong Password</string>
 
 </resources>
