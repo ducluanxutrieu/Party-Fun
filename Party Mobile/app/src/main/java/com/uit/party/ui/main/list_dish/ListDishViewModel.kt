@@ -7,7 +7,7 @@ import androidx.databinding.library.baseAdapters.BR
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.uit.party.R
-import com.uit.party.model.ResponseMessage
+import com.uit.party.model.BaseResponse
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
@@ -73,15 +73,15 @@ class ListDishViewModel : BaseObservable(){
 
     fun logout(onSuccess : (Boolean) -> Unit) {
         serviceRetrofit.logout(TOKEN_ACCESS)
-            .enqueue(object : Callback<ResponseMessage>{
-                override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
+            .enqueue(object : Callback<BaseResponse>{
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil().showToast(it) }
                     onSuccess(false)
                 }
 
                 override fun onResponse(
-                    call: Call<ResponseMessage>,
-                    response: Response<ResponseMessage>
+                    call: Call<BaseResponse>,
+                    response: Response<BaseResponse>
                 ) {
                     val repo = response.body()
                     if (repo != null && response.code() == 200){

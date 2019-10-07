@@ -182,12 +182,12 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
         val shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
         val editor = shareReference.edit()
         editor.putString(USERNAME_KEY, model.account?.username)
-        editor.putString(TOKEN_KEY, model.token)
+        editor.putString(TOKEN_KEY, model.account?.token)
         editor.putString(AVATAR_KEY,model.account?.image)
         editor.putString(FULL_NAME_KEY,model.account?.fullName)
         editor.putString(USER_ID_KEY, model.account?.id)
         editor.apply()
-        TOKEN_ACCESS = model.token.toString()
+        TOKEN_ACCESS = model.account?.token.toString()
     }
 
     companion object{

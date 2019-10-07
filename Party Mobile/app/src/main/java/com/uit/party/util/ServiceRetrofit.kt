@@ -3,7 +3,7 @@ package com.uit.party.util
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
 import com.uit.party.model.RegisterModel
-import com.uit.party.model.ResponseMessage
+import com.uit.party.model.BaseResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -29,7 +29,7 @@ interface ServiceRetrofit {
     @POST("user/logout")
     fun logout(
         @Header("authorization") token: String
-    ): Call<ResponseMessage>
+    ): Call<BaseResponse>
 
     @POST("user/changepassword")
     @FormUrlEncoded
@@ -37,7 +37,7 @@ interface ServiceRetrofit {
         @Header("authorization") token: String,
         @Field("password") password: String,
         @Field("passwordchange") passwordchange: String
-    ): Call<ResponseMessage>
+    ): Call<BaseResponse>
 }
 
 class SetupConnectToServer {

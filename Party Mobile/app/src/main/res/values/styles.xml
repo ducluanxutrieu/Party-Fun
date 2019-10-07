@@ -77,6 +77,10 @@
         <item name="android:background">#7f000000</item>
     </style>
 
+    <style name="Widget.Shrine.Toolbar.Logo.CrystalClear">
+        <item name="android:background">#00000000</item>
+    </style>
+
     <style name="Shrine.BottomNavView" parent="Base.Shrine.BottomNavView"/>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

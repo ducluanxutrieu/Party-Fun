@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.uit.party.ui.profile.ProfileFragmentViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rl_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_bar"
+            style="@style/Widget.Shrine.Toolbar.Logo.CrystalClear" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhile">
+
+            <View
+                android:id="@+id/rl_background"
+                android:layout_width="match_parent"
+                android:layout_height="146dp"
+                android:background="@color/colorPrimary"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_avatar"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="70dp"
+                app:cardCornerRadius="75dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_account_circle_24dp" />
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:id="@+id/rl_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_background"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_edit"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:tint="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:id="@+id/tv_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/iv_edit"
+                    android:text="@string/edit_profile"
+                    android:textColor="#B3000000"
+                    android:textSize="@dimen/_12sdp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_change_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_background"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_change_password"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/change_password"
+                    android:tint="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:id="@+id/tv_change_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/iv_change_password"
+                    android:text="@string/profile_change_password"
+                    android:textColor="#B3000000"
+                    android:textSize="@dimen/_12sdp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cv_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_bg_project"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/upload_avatar"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_full_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_upload"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/margin_item_form"
+                android:text="@string/test_name"
+                android:textColor="#000"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_full_name"
+                android:layout_centerHorizontal="true"
+                android:text="@string/test_email" />
+
+            <TextView
+                android:id="@+id/tv_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_email"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/_17ssp"
+                tools:text="Intern" />
+
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="180dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="64dp"
+            android:visibility="gone"
+            app:layout_constraintVertical_bias="0.3" />
+    </RelativeLayout>
+</layout>

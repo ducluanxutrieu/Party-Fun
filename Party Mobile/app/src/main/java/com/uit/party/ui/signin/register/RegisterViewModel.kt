@@ -283,7 +283,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             } else {
                 Toast.makeText(
                     context,
-                    "Register false: ${registerResponse.errorMessage}",
+                    "Register false: ${registerResponse.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }

@@ -3,30 +3,29 @@ package com.uit.party.ui.main.list_dish
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.navigation.NavigationView
 import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.ui.main.DishAdapter
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
+import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.change_password.ChangePasswordFragment
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.ToastUtil
-import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 @Suppress("DEPRECATION")
-class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
+class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationView.OnNavigationItemSelectedListener {
     private lateinit var shareReference: SharedPreferences
 
     private var avatarUrl: String = ""
@@ -34,9 +33,9 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
     private var fullName: String = ""
 
 
-    val mViewModel = ListDishViewModel()
-    lateinit var binding: FragmentListDishBinding
-    lateinit var headerBinding: NavHeaderMainBinding
+    private val mViewModel = ListDishViewModel()
+    private lateinit var binding: FragmentListDishBinding
+    private lateinit var headerBinding: NavHeaderMainBinding
     private val adapter = DishAdapter(this)
 
     override fun onCreateView(
@@ -55,6 +54,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.nav_header_main, container, false)
 
         binding.navView.addHeaderView(headerBinding.root)
+        binding.navView.setNavigationItemSelectedListener(this)
 
         binding.viewModel = mViewModel
         mViewModel.init()
@@ -69,8 +69,10 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
 
     private fun setupDrawer(){
         if (avatarUrl.isNotEmpty()) {
+            avatarUrl = avatarUrl.replace("\\", "/", false)
+            avatarUrl = "http://${avatarUrl}"
             Glide.with(context!!).load(avatarUrl).apply { RequestOptions.circleCropTransform() }
-                .into(binding.navView.iv_avatar)
+                .into(headerBinding.ivAvatar)
         }
 
         if (username.isNotEmpty()) {
@@ -115,6 +117,40 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked {
 
                 else -> super.onOptionsItemSelected(it)
             }
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.user_profile -> {
+                getToProfileActivity()
+            }
+            R.id.log_out -> {
+
+            }
+//            R.id.nav_slideshow -> {
+//
+//            }
+//            R.id.nav_tools -> {
+//
+//            }
+//            R.id.nav_share -> {
+//
+//            }
+//            R.id.nav_send -> {
+//
+//            }
+        }
+
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun getToProfileActivity() {
+        if (context is MainActivity){
+            val intent = Intent(context, ProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 

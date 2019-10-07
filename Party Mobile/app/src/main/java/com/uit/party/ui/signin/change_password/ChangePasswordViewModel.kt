@@ -8,7 +8,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import com.uit.party.R
-import com.uit.party.model.ResponseMessage
+import com.uit.party.model.BaseResponse
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.util.StringUtil
@@ -39,8 +39,8 @@ class ChangePasswordViewModel(private val onBackMain: ChangePasswordCallback) : 
             currentPasswordText,
             newPasswordText
         )
-            .enqueue(object : Callback<ResponseMessage> {
-                override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
+            .enqueue(object : Callback<BaseResponse> {
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     onComplete(false)
                     if (t.message != null) {
                         ToastUtil().showToast(t.message!!)
@@ -48,8 +48,8 @@ class ChangePasswordViewModel(private val onBackMain: ChangePasswordCallback) : 
                 }
 
                 override fun onResponse(
-                    call: Call<ResponseMessage>,
-                    model: Response<ResponseMessage>
+                    call: Call<BaseResponse>,
+                    model: Response<BaseResponse>
                 ) {
                     if (model.code() == 200) {
                         onComplete(true)

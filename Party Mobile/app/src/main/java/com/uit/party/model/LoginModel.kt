@@ -16,17 +16,7 @@ class RegisterModel(
     @SerializedName("password")var password: String
 ) : Serializable
 
-class AccountResponse {
-    @SerializedName("token")
-    val token: String? = null
-    @SerializedName("success")
-    val success: Boolean? = false
-    @SerializedName("name")
-    val name: String? = null //type of Response
-    @SerializedName("errorMessage")
-    val errorMessage: Any? = null
-    @SerializedName("username")
-    val username: Any? = null
+class AccountResponse: BaseResponse() {
     @SerializedName("account")
     val account: Account? = null
 }
@@ -34,20 +24,22 @@ class AccountResponse {
 class Account {
     @SerializedName("_id")
     val id: String? = null
+    @SerializedName("token")
+    val token: String ?= null
     @SerializedName("fullName")
     val fullName: String? = null
     @SerializedName("username")
     val username: String? = null
     @SerializedName("email")
     val email: String? = null
+    @SerializedName("role")
+    val role: String? = null
     @SerializedName("activeStatus")
-    val activeStatus: Boolean = false
-    @SerializedName("image")
+    val activeStatus: Boolean? = false
+    @SerializedName("imageurl")
     val image: String? = null
     @SerializedName("phoneNumber")
     val phoneNumber: String? = null
-    @SerializedName("password")
-    val password: String? = null
     @SerializedName("updatedAt")
     val updatedAt: String? = null
     @SerializedName("userCart")

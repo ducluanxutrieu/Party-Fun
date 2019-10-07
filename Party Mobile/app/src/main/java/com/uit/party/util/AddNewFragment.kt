@@ -1,6 +1,5 @@
 package com.uit.party.util
 
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.uit.party.R
