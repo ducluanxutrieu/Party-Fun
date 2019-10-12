@@ -10,40 +10,41 @@ class LoginModel(
 
 class RegisterModel(
     @SerializedName("fullName") var fullName: String,
-    @SerializedName("username")var username: String,
-    @SerializedName("email")var email: String,
-    @SerializedName("phoneNumber")var phoneNumber: String,
-    @SerializedName("password")var password: String
+    @SerializedName("username") var username: String,
+    @SerializedName("email") var email: String,
+    @SerializedName("phoneNumber") var phoneNumber: String,
+    @SerializedName("password") var password: String
 ) : Serializable
 
-class AccountResponse: BaseResponse() {
-    @SerializedName("account")
-    val account: Account? = null
-}
+class AccountResponse(
+    @SerializedName("success") val success: Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("account") val account: Account? = null
+)
 
 class Account {
     @SerializedName("_id")
-    val id: String? = null
-    @SerializedName("token")
-    val token: String ?= null
-    @SerializedName("fullName")
-    val fullName: String? = null
-    @SerializedName("username")
-    val username: String? = null
+    val _id: String? = null
     @SerializedName("email")
     val email: String? = null
+    @SerializedName("fullName")
+    val fullName: String? = null
+    @SerializedName("phoneNumber")
+    val phoneNumber: Int? = 0
+    @SerializedName("username")
+    val username: String? = null
+    @SerializedName("birthday")
+    val birthday: String? = null
+    @SerializedName("sex")
+    val sex: String? = null
+    @SerializedName("token")
+    val token: String? = null
     @SerializedName("role")
     val role: String? = null
-    @SerializedName("activeStatus")
-    val activeStatus: Boolean? = false
     @SerializedName("imageurl")
-    val image: String? = null
-    @SerializedName("phoneNumber")
-    val phoneNumber: String? = null
-    @SerializedName("updatedAt")
-    val updatedAt: String? = null
-    @SerializedName("userCart")
-    val userCart: UserCart? = null
+    val imageurl: String? = null
+    @SerializedName("date")
+    val date: String? = null
 }
 
 class UserCart {

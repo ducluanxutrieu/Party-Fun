@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputLayout
+import com.uit.party.R
 import java.util.*
 
 
@@ -25,7 +26,11 @@ fun <T> setupRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
 @BindingAdapter("app:imageUrl")
 fun setImageIcon(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
-        Glide.with(imageView.context).load(url).apply(RequestOptions.centerInsideTransform()).into(imageView)
+        val requestOptions = RequestOptions
+            .circleCropTransform()
+            .error(R.drawable.ic_account_circle_24dp)
+            .placeholder(R.drawable.ic_account_circle_24dp)
+        Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
     }
 }
 

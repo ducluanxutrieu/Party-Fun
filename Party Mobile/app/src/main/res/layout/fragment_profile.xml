@@ -16,7 +16,8 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/app_bar"
+            android:id="@+id/profile_tool_bar"
+            android:elevation="@dimen/_2sdp"
             style="@style/Widget.Shrine.Toolbar.Logo.CrystalClear" />
 
         <RelativeLayout
@@ -43,6 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    app:imageUrl="@{viewModel.mAvatar}"
                     android:src="@drawable/ic_account_circle_24dp" />
             </androidx.cardview.widget.CardView>
 
@@ -65,14 +67,16 @@
                     android:src="@drawable/ic_edit_black_24dp"
                     android:tint="@color/colorPrimaryDark" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/iv_edit"
                     android:text="@string/edit_profile"
                     android:textColor="#B3000000"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    android:onClick="@{() -> viewModel.editProfile()}"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -95,14 +99,16 @@
                     android:src="@drawable/change_password"
                     android:tint="@color/colorPrimaryDark" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_change_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/iv_change_password"
                     android:text="@string/profile_change_password"
                     android:textColor="#B3000000"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    android:onClick="@{() -> viewModel.changePassword()}"
+                    />
             </RelativeLayout>
 
             <TextView
@@ -126,9 +132,11 @@
                 android:layout_below="@id/tv_upload"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin_item_form"
-                android:text="@string/test_name"
+                android:text="@{viewModel.mName}"
                 android:textColor="#000"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                tools:text="Trần Đức Luân"
+                />
 
             <TextView
                 android:id="@+id/tv_email"
@@ -136,7 +144,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_full_name"
                 android:layout_centerHorizontal="true"
-                android:text="@string/test_email" />
+                tools:text="ducluanxutrieu@gmail.com"
+                android:text="@{viewModel.mEmail}"
+                />
 
             <TextView
                 android:id="@+id/tv_position"
@@ -146,7 +156,9 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_17ssp"
-                tools:text="Intern" />
+                tools:text="Intern"
+                android:text="@{viewModel.mRole}"
+                />
 
 
         </RelativeLayout>

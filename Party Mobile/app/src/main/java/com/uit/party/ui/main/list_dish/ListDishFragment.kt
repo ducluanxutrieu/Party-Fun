@@ -1,7 +1,6 @@
 package com.uit.party.ui.main.list_dish
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -14,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.databinding.NavHeaderMainBinding
+import com.uit.party.model.Account
 import com.uit.party.ui.main.DishAdapter
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
@@ -22,13 +22,12 @@ import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.change_password.ChangePasswordFragment
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.util.AddNewFragment
+import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 
 @Suppress("DEPRECATION")
 class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationView.OnNavigationItemSelectedListener {
-    private lateinit var shareReference: SharedPreferences
-
-    private var avatarUrl: String = ""
+    private var avatarUrl: String? = ""
     private var username: String = ""
     private var fullName: String = ""
 
@@ -68,8 +67,8 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
     }
 
     private fun setupDrawer(){
-        if (avatarUrl.isNotEmpty()) {
-            avatarUrl = avatarUrl.replace("\\", "/", false)
+        if (!avatarUrl.isNullOrEmpty()) {
+            avatarUrl = avatarUrl?.replace("\\", "/", false)
             avatarUrl = "http://${avatarUrl}"
             Glide.with(context!!).load(avatarUrl).apply { RequestOptions.circleCropTransform() }
                 .into(headerBinding.ivAvatar)
@@ -160,7 +159,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
     }
 
     private fun logOut() {
-        shareReference.edit()?.clear()?.apply()
+        SharedPrefs().getInstance().clear()
         mViewModel.logout {
             if (it){
                 val intent = Intent(context, SignInActivity::class.java)
@@ -178,12 +177,11 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
     }
 
     companion object {
-        fun newInstance(sharedPreferences: SharedPreferences, avatar: String, username: String, fullName: String): ListDishFragment {
+        fun newInstance(account: Account): ListDishFragment {
             return ListDishFragment().apply {
-                this.shareReference = sharedPreferences
-                this.avatarUrl = avatar
-                this.username = username
-                this.fullName = fullName
+                this.avatarUrl = account.imageurl
+                this.username = account.username!!
+                this.fullName = account.fullName!!
             }
         }
     }

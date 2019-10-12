@@ -7,6 +7,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
@@ -14,6 +15,7 @@ import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_MODE
 import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
+import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
 import org.json.JSONObject
 import retrofit2.Call
@@ -179,23 +181,16 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
     }
 
     private fun saveToMemory(model: AccountResponse) {
-        val shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
-        val editor = shareReference.edit()
-        editor.putString(USERNAME_KEY, model.account?.username)
-        editor.putString(TOKEN_KEY, model.account?.token)
-        editor.putString(AVATAR_KEY,model.account?.image)
-        editor.putString(FULL_NAME_KEY,model.account?.fullName)
-        editor.putString(USER_ID_KEY, model.account?.id)
-        editor.apply()
+//        val shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
+//        val editor = shareReference.edit()
+//        editor.putString(USER_INFO_KEY, Gson().toJson(model.mAccount))
+//        editor.apply()
+        SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
         TOKEN_ACCESS = model.account?.token.toString()
     }
 
     companion object{
-        internal const val USERNAME_KEY = "USERNAME_KEY"
-        internal const val TOKEN_KEY = "TOKEN_KEY"
-        internal const val AVATAR_KEY = "AVATAR_KEY"
-        internal const val FULL_NAME_KEY = "FULL_NAME_KEY"
-        internal const val USER_ID_KEY = "USER_ID_KEY"
+        internal const val USER_INFO_KEY = "USER_INFO_KEY"
         internal var TOKEN_ACCESS: String = ""
     }
 }
