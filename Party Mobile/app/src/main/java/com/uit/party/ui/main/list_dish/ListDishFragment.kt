@@ -87,7 +87,6 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
         binding.appBar.title = getString(R.string.uit_party)
         binding.appBar.setTitleTextColor(resources.getColor(R.color.colorWhile))
         binding.appBar.setNavigationOnClickListener {
-            Toast.makeText(context, "Navigation bar Clicked", Toast.LENGTH_SHORT).show()
             binding.drawerLayout.openDrawer(Gravity.START)
         }
 

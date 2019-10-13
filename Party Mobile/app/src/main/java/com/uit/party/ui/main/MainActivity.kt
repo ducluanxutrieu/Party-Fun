@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun checkLogin(){
-//        val shareReference = getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
         val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
         if (account?.token.isNullOrEmpty()){
             goToSignIn()
@@ -52,13 +51,6 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun showFragment() {
-        val shareReference = getSharedPreferences(
-            SHARE_REFERENCE_NAME,
-            SHARE_REFERENCE_MODE
-        )
-//        val avatarUrl = shareReference.getString(LoginViewModel.AVATAR_KEY, "").toString()
-//        val username = shareReference.getString(LoginViewModel.USERNAME_KEY, "").toString()
-//        val fullName = shareReference.getString(LoginViewModel.FULL_NAME_KEY, "").toString()
         val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
         if (account != null) {

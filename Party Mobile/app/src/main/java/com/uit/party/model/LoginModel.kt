@@ -17,10 +17,8 @@ class RegisterModel(
 ) : Serializable
 
 class AccountResponse(
-    @SerializedName("success") val success: Boolean,
-    @SerializedName("message") val message: String,
     @SerializedName("account") val account: Account? = null
-)
+):BaseResponse()
 
 class Account {
     @SerializedName("_id")
@@ -30,7 +28,7 @@ class Account {
     @SerializedName("fullName")
     val fullName: String? = null
     @SerializedName("phoneNumber")
-    val phoneNumber: Int? = 0
+    val phoneNumber: String? = null
     @SerializedName("username")
     val username: String? = null
     @SerializedName("birthday")

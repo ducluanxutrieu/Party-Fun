@@ -12,7 +12,7 @@ import com.uit.party.databinding.FragmentProfileBindingImpl
 
 class ProfileFragment : Fragment(){
     private lateinit var binding : FragmentProfileBindingImpl
-    private val mViewModel = ProfileFragmentViewModel()
+    private val mViewModel = ProfileFragmentViewModel(context as ProfileActivity)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +40,6 @@ class ProfileFragment : Fragment(){
             (context as ProfileActivity).finish()
         }
     }
-
 
     companion object{
         fun newInstance() : ProfileFragment {
