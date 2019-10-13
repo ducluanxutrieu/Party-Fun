@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.uit.party.ui.profile.ProfileFragmentViewModel" />
+            type="com.uit.party.ui.profile.profile_fragment.ProfileFragmentViewModel" />
     </data>
 
     <RelativeLayout
@@ -45,6 +45,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_account_circle_24dp"
+                    android:onClick="@{() -> viewModel.avatarClicked()}"
                     app:imageUrl="@{viewModel.mAvatar}" />
             </androidx.cardview.widget.CardView>
 
@@ -57,7 +58,8 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:onClick="@{() -> viewModel.editProfile()}">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_edit"
@@ -72,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/iv_edit"
-                    android:onClick="@{() -> viewModel.editProfile()}"
+                    android:gravity="center"
                     android:text="@string/edit_profile"
                     android:textColor="#B3000000"
                     android:textSize="@dimen/_12sdp" />
@@ -88,7 +90,8 @@
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:onClick="@{() -> viewModel.changePassword()}">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_change_password"
@@ -103,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/iv_change_password"
-                    android:onClick="@{() -> viewModel.changePassword()}"
+                    android:gravity="center"
                     android:text="@string/profile_change_password"
                     android:textColor="#B3000000"
                     android:textSize="@dimen/_12sdp" />
@@ -135,57 +138,73 @@
                 android:textSize="30sp"
                 tools:text="Trần Đức Luân" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_full_name"
-                android:layout_margin="@dimen/_10sdp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_below="@id/tv_full_name">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/TextViewTitle"
-                    android:text="@string/action_email" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_15sdp"
+                    android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_email"
-                    style="@style/TextViewContent"
-                    android:text="@{viewModel.mEmail}"
-                    tools:text="ducluanxutrieu@gmail.com" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextViewTitle"
+                        android:text="@string/user_name" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/TextViewTitle"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/mobile" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_username"
+                        style="@style/TextViewContent"
+                        android:text="@{viewModel.mUsername}"
+                        tools:text="ducluanxutrieu" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_mobile"
-                    style="@style/TextViewContent"
-                    android:text="@{viewModel.mMobile}"
-                    tools:text="0123456789" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextViewTitle"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="@string/action_email" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/TextViewTitle"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/sex" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_email"
+                        style="@style/TextViewContent"
+                        android:text="@{viewModel.mEmail}"
+                        tools:text="ducluanxutrieu@gmail.com" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_sex"
-                    style="@style/TextViewContent"
-                    android:text="@{viewModel.mSex}"
-                    tools:text="Male" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextViewTitle"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="@string/mobile" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/TextViewTitle"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:text="@string/sex" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_mobile"
+                        style="@style/TextViewContent"
+                        android:text="@{viewModel.mMobile}"
+                        tools:text="0123456789" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_birthday"
-                    style="@style/TextViewContent"
-                    android:text="@{viewModel.mBirthDay}"
-                    tools:text="01/01/1997" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextViewTitle"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="@string/sex" />
 
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_sex"
+                        style="@style/TextViewContent"
+                        android:text="@{viewModel.mSex}"
+                        tools:text="Male" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextViewTitle"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="@string/birthday" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_birthday"
+                        style="@style/TextViewContent"
+                        android:text="@{viewModel.mBirthDay}"
+                        tools:text="01/01/1997" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </ScrollView>
         </RelativeLayout>
 
         <ProgressBar

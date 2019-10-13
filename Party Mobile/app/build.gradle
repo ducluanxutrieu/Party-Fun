@@ -59,4 +59,7 @@ dependencies {
 
     //box when over view
     implementation 'com.google.android:flexbox:1.1.0'
+
+    implementation 'com.github.jrvansuita:PickImage:+'
+    implementation 'id.zelory:compressor:2.1.0'
 }

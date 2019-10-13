@@ -1,0 +1,107 @@
+package com.uit.party.ui.profile.profile_fragment
+
+import android.content.Context
+import android.graphics.Bitmap
+import androidx.databinding.ObservableField
+import androidx.lifecycle.ViewModel
+import com.uit.party.R
+import com.uit.party.model.Account
+import com.uit.party.model.BaseResponse
+import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
+import com.uit.party.ui.profile.ProfileActivity
+import com.uit.party.ui.profile.change_password.ChangePasswordFragment
+import com.uit.party.ui.profile.editprofile.EditProfileFragment
+import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
+import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
+import com.uit.party.util.AddNewFragment
+import com.uit.party.util.SharedPrefs
+import com.uit.party.util.ToastUtil
+import com.vansuita.pickimage.bundle.PickSetup
+import com.vansuita.pickimage.dialog.PickImageDialog
+import id.zelory.compressor.Compressor
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.File
+
+class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
+    val mName = ObservableField("")
+    val mUsername = ObservableField("")
+    val mEmail = ObservableField("")
+    val mMobile = ObservableField("")
+    val mSex = ObservableField("")
+    val mBirthDay = ObservableField("")
+    val mAvatar = ObservableField("")
+
+    var mAccount = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
+
+    init {
+        mName.set(mAccount?.fullName)
+        mEmail.set(mAccount?.email)
+        mSex.set(mAccount?.sex)
+        mBirthDay.set(mAccount?.birthday)
+        mAvatar.set(mAccount?.imageurl)
+        mMobile.set(mAccount?.phoneNumber)
+        mUsername.set(mAccount?.username)
+    }
+
+    fun editProfile(){
+        val fragment = EditProfileFragment.newInstance(context)
+        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+    }
+
+    fun changePassword(){
+        val fragment = ChangePasswordFragment.newInstance( context)
+        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+    }
+
+    fun avatarClicked(){
+        PickImageDialog.build(PickSetup()).setOnPickResult { result ->
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            result.bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+//            binding.loadingAvatar.visibility = View.VISIBLE
+            uploadAvatar(context, result.path) {
+                mAvatar.set(it)
+//                RxBus.publish(RxEvent.ChangeInfo(userInfo))
+//                binding.loadingAvatar.visibility = View.GONE
+            }
+        }.setOnPickCancel { /*binding.loadingAvatar.visibility = View.GONE */}
+            .show(context.supportFragmentManager)
+    }
+
+    private fun uploadAvatar(context: Context, result: String, onComplete: (String?) -> Unit) {
+        val file = Compressor(context).compressToFile(File(result))
+        val extension = file.extension
+        val parseType = "image/$extension"
+
+        val part: MultipartBody.Part = MultipartBody.Part.createFormData(
+            "avatar",
+            file.name,
+            RequestBody.create(MediaType.parse(parseType), file)
+        )
+        serviceRetrofit.updateAvatar(TOKEN_ACCESS, part)
+            .enqueue(object : Callback<BaseResponse> {
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+                    if (t.message != null) {
+                        ToastUtil().showToast(t.message!!)
+                    }
+                }
+
+                override fun onResponse(
+                    call: Call<BaseResponse>,
+                    response: Response<BaseResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        onComplete(response.body()?.message)
+                    } else {
+                        ToastUtil().showToast(response.message())
+//                        Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+    }
+}

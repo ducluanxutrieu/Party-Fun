@@ -22,27 +22,27 @@ class AccountResponse(
 
 class Account {
     @SerializedName("_id")
-    val _id: String? = null
+    var _id: String? = null
     @SerializedName("email")
-    val email: String? = null
+    var email: String? = null
     @SerializedName("fullName")
-    val fullName: String? = null
+    var fullName: String? = null
     @SerializedName("phoneNumber")
-    val phoneNumber: String? = null
+    var phoneNumber: String? = null
     @SerializedName("username")
-    val username: String? = null
+    var username: String? = null
     @SerializedName("birthday")
-    val birthday: String? = null
+    var birthday: String? = null
     @SerializedName("sex")
-    val sex: String? = null
+    var sex: String? = null
     @SerializedName("token")
-    val token: String? = null
+    var token: String? = null
     @SerializedName("role")
-    val role: String? = null
+    var role: String? = null
     @SerializedName("imageurl")
-    val imageurl: String? = null
-    @SerializedName("date")
-    val date: String? = null
+    var imageurl: String? = null
+    @SerializedName("createAt")
+    val createAt: String? = null
 }
 
 class UserCart {

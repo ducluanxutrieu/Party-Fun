@@ -4,7 +4,9 @@ import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
 import com.uit.party.model.RegisterModel
 import com.uit.party.model.BaseResponse
+import com.uit.party.ui.profile.editprofile.RequestUpdateProfile
 import okhttp3.Interceptor
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,17 +18,17 @@ import java.util.concurrent.TimeUnit
 
 
 interface ServiceRetrofit {
-    @HTTP(method = "POST", path = "login", hasBody = true)
+    @HTTP(method = "POST", path = "user/signin", hasBody = true)
     fun login(
         @Body body: LoginModel
     ): Call<AccountResponse>
 
-    @POST("addUser")
+    @POST("user/signup")
     fun register(
         @Body body: RegisterModel
     ): Call<AccountResponse>
 
-    @POST("user/logout")
+    @POST("user/signout")
     fun logout(
         @Header("authorization") token: String
     ): Call<BaseResponse>
@@ -37,6 +39,18 @@ interface ServiceRetrofit {
         @Header("authorization") token: String,
         @Field("password") password: String,
         @Field("passwordchange") passwordchange: String
+    ): Call<BaseResponse>
+
+    @POST("user/updateuser")
+    fun updateUser(
+        @Header("authorization") token: String,
+        @Body body: RequestUpdateProfile
+    ): Call<AccountResponse>
+
+    @POST("user/uploadavatar")
+    fun updateAvatar(
+        @Header("authorization") token: String,
+        @Part image: MultipartBody.Part
     ): Call<BaseResponse>
 }
 
@@ -55,7 +69,7 @@ class SetupConnectToServer {
 
 
         val builder = Retrofit.Builder()
-            .baseUrl(" http://104.43.21.105:1111/")
+            .baseUrl(" http://23.101.31.63:3000/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
         val retrofit = builder.build()

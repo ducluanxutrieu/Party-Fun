@@ -127,20 +127,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         }
     }
 
-    fun getEmailTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkEmailValid(editable)
-            }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
 
     fun getPhoneNumberTextChanged(): TextWatcher {
         return object : TextWatcher {
@@ -175,6 +162,21 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                 phoneNumberText = editable.toString()
                 checkShowButtonRegister()
             }
+        }
+    }
+
+    fun getEmailTextChanged(): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                checkEmailValid(editable)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
         }
     }
 

@@ -113,10 +113,12 @@
     <string name="sex">Sex </string>
     <string name="sex_male">Male</string>
     <string name="sex_female">Female</string>
-    <string name="birthday">Birthday:</string>
+    <string name="birthday">Birthday</string>
     <string name="example_name">Nguyen Van A</string>
     <string name="example_phone_number">01234589</string>
     <string name="example_birthday" >10/10/2010</string>
     <string name="mobile">Mobile</string>
-    <string name="email">Email:</string>
+    <string name="email">Email</string>
+    <string name="toolbar_edit_profile">Edit Profile</string>
+    <string name="update_profile_success">Update profile successful</string>
 </resources>

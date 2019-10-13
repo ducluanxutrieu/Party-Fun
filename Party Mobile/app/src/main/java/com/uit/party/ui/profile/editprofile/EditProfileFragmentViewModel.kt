@@ -1,69 +1,111 @@
 package com.uit.party.ui.profile.editprofile
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.uit.party.R
-import com.uit.party.util.GlobalApplication
+import com.uit.party.model.Account
+import com.uit.party.model.AccountResponse
+import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
+import com.uit.party.ui.profile.ProfileActivity
+import com.uit.party.ui.signin.login.LoginViewModel
+import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
+import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
-import java.text.DateFormat
+import com.uit.party.util.ToastUtil
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditProfileFragmentViewModel : ViewModel(){
+class EditProfileFragmentViewModel(private val mActivity: ProfileActivity) : ViewModel(){
     private var fullNameValid = false
     private var phoneNumberValid = false
+    private var emailValid = false
 
     var errorFullName = ObservableField<String>("")
     var errorPhoneNumber = ObservableField<String>("")
-    var birthdayText = ObservableField<String>("")
+    var errorEmailText = ObservableField<String>("")
+
+    val mFullName = ObservableField("")
+    val mPhoneNumber = ObservableField("")
+    val mEmail = ObservableField("")
+    val mBirthday = ObservableField("")
+    var mSex: String = ""
 
     var btnUpdateEnabled: ObservableBoolean = ObservableBoolean()
 
-    private var fullNameText: String = ""
-    private var phoneNumberText: String = ""
 
-    private var timeBirthdayPicker = Calendar.getInstance()
-    private var callBirthdayPicker = Calendar.getInstance()
+
+    private var calBirthdayPicker = Calendar.getInstance()
 
     private val formatDateUI = "dd-MM-yyyy"
     private val sf = SimpleDateFormat(formatDateUI, Locale.US)
-    private val context = GlobalApplication.appContext!!
+
+    private val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
     private val birthDaySetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-        timeBirthdayPicker()
-        callBirthdayPicker.set(Calendar.YEAR, year)
-        callBirthdayPicker.set(Calendar.MONTH, monthOfYear)
-        callBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        updateBirthdayInView()
+        calBirthdayPicker.set(Calendar.YEAR, year)
+        calBirthdayPicker.set(Calendar.MONTH, monthOfYear)
+        calBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
     }
-    private fun timeBirthdayPicker() {
-        val timeStartSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-            timeBirthdayPicker.set(Calendar.HOUR_OF_DAY, hour)
-            timeBirthdayPicker.set(Calendar.MINUTE, minute)
-            updateBirthdayInView()
-        }
-        TimePickerDialog(
-            context,
-            timeStartSetListener,
-            timeBirthdayPicker.get(Calendar.HOUR_OF_DAY),
-            timeBirthdayPicker.get(Calendar.MINUTE),
-            true
-        ).show()
+
+    init {
+//        val timeStart = sf.format(calBirthdayPicker.time)
+        mBirthday.set(account?.birthday)
+        mEmail.set(account?.email)
+        mPhoneNumber.set(account?.phoneNumber)
+        mFullName.set(account?.fullName)
     }
 
     private fun updateBirthdayInView() {
-        val timeStart = "${sf.format(callBirthdayPicker.time)} ${DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(timeBirthdayPicker.time)}"
-        birthdayText.set(timeStart)
+        val timeStart = sf.format(calBirthdayPicker.time)
+        this.mBirthday.set(timeStart)
     }
 
     private fun checkEnableButtonUpdate() {
-        if (fullNameValid && phoneNumberValid) {
+        if (fullNameValid && phoneNumberValid && emailValid) {
             btnUpdateEnabled.set(true)
         } else btnUpdateEnabled.set(false)
+    }
+
+    fun getEmailTextChanged(): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                checkEmailValid(editable)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        }
+    }
+
+    private fun checkEmailValid(editable: Editable?) {
+        when {
+            editable.isNullOrEmpty() -> {
+                errorEmailText.set(StringUtil.getString(R.string.this_field_required))
+                emailValid = false
+                checkEnableButtonUpdate()
+            }
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(editable).matches() -> {
+                errorEmailText.set(StringUtil.getString(R.string.email_not_valid))
+                emailValid = false
+                checkEnableButtonUpdate()
+            }
+            else -> {
+                emailValid = true
+                errorEmailText.set("")
+                checkEnableButtonUpdate()
+            }
+        }
     }
 
     fun getFullNameTextChanged(): TextWatcher {
@@ -90,7 +132,6 @@ class EditProfileFragmentViewModel : ViewModel(){
             else -> {
                 fullNameValid = true
                 errorFullName.set("")
-                fullNameText = editable.toString()
                 checkEnableButtonUpdate()
             }
         }
@@ -126,22 +167,44 @@ class EditProfileFragmentViewModel : ViewModel(){
             else -> {
                 phoneNumberValid = true
                 errorPhoneNumber.set("")
-                phoneNumberText = editable.toString()
                 checkEnableButtonUpdate()
             }
         }
     }
     fun onBirthdayClicked(){
         DatePickerDialog(
-            context,
+            mActivity,
             birthDaySetListener,
-            callBirthdayPicker.get(Calendar.YEAR),
-            callBirthdayPicker.get(Calendar.MONTH),
-            callBirthdayPicker.get(Calendar.DAY_OF_MONTH)
+            calBirthdayPicker.get(Calendar.YEAR),
+            calBirthdayPicker.get(Calendar.MONTH),
+            calBirthdayPicker.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
 
     fun onUpdateClicked(){
+        val requestModel = RequestUpdateProfile(mEmail.get(), mFullName.get(), mPhoneNumber.get(), mBirthday.get(), mSex)
+        serviceRetrofit.updateUser(LoginViewModel.TOKEN_ACCESS, requestModel)
+            .enqueue(object : Callback<AccountResponse>{
+                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+                    if (!t.message.isNullOrEmpty()) {
+                        ToastUtil().showToast(t.message!!)
+                    }
+                }
 
+                override fun onResponse(
+                    call: Call<AccountResponse>,
+                    response: Response<AccountResponse>
+                ) {
+                    val repo = response.body()
+                    if (repo != null){
+                        saveToMemory(repo)
+                        ToastUtil().showToast(StringUtil.getString(R.string.update_profile_success))
+                    }
+                }
+            })
+    }
+
+    private fun saveToMemory(model: AccountResponse) {
+        SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
     }
 }

@@ -3,7 +3,6 @@ package com.uit.party.ui.main.list_dish
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,14 +18,13 @@ import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.ui.signin.change_password.ChangePasswordFragment
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 
 @Suppress("DEPRECATION")
-class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationView.OnNavigationItemSelectedListener {
+class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
+    NavigationView.OnNavigationItemSelectedListener {
     private var avatarUrl: String? = ""
     private var username: String = ""
     private var fullName: String = ""
@@ -50,7 +48,8 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
     private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
 
-        headerBinding = DataBindingUtil.inflate(inflater, R.layout.nav_header_main, container, false)
+        headerBinding =
+            DataBindingUtil.inflate(inflater, R.layout.nav_header_main, container, false)
 
         binding.navView.addHeaderView(headerBinding.root)
         binding.navView.setNavigationItemSelectedListener(this)
@@ -66,7 +65,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
         setupActionBar()
     }
 
-    private fun setupDrawer(){
+    private fun setupDrawer() {
         if (!avatarUrl.isNullOrEmpty()) {
             avatarUrl = avatarUrl?.replace("\\", "/", false)
             avatarUrl = "http://${avatarUrl}"
@@ -90,32 +89,32 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
             binding.drawerLayout.openDrawer(Gravity.START)
         }
 
-        binding.appBar.inflateMenu(R.menu.main_menu)
-        binding.appBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.ToolbarFilterIcon -> {
-                    Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
-                    true
-                }
-
-                R.id.ToolbarSearchIcon -> {
-                    Toast.makeText(context, "Search Clicked", Toast.LENGTH_SHORT).show()
-                    true
-                }
-
-                R.id.ToolbarChangePassword -> {
-                    changePassword()
-                    true
-                }
-
-                R.id.ToolbarLogout -> {
-                    logOut()
-                    true
-                }
-
-                else -> super.onOptionsItemSelected(it)
-            }
-        }
+//        binding.appBar.inflateMenu(R.menu.main_menu)
+////        binding.appBar.setOnMenuItemClickListener {
+////            when (it.itemId) {
+////                R.id.ToolbarFilterIcon -> {
+////                    Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
+////                    true
+////                }
+////
+////                R.id.ToolbarSearchIcon -> {
+////                    Toast.makeText(context, "Search Clicked", Toast.LENGTH_SHORT).show()
+////                    true
+////                }
+////
+////                R.id.ToolbarChangePassword -> {
+////                    changePassword()
+////                    true
+////                }
+////
+////                R.id.ToolbarLogout -> {
+////                    logOut()
+////                    true
+////                }
+////
+////                else -> super.onOptionsItemSelected(it)
+////            }
+////        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -125,7 +124,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
                 getToProfileActivity()
             }
             R.id.log_out -> {
-
+                logOut()
             }
 //            R.id.nav_slideshow -> {
 //
@@ -146,25 +145,20 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
     }
 
     private fun getToProfileActivity() {
-        if (context is MainActivity){
+        if (context is MainActivity) {
             val intent = Intent(context, ProfileActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun changePassword() {
-        val fragment = ChangePasswordFragment.newInstance(TOKEN_ACCESS)
-        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
-    }
-
     private fun logOut() {
         SharedPrefs().getInstance().clear()
         mViewModel.logout {
-            if (it){
+            if (it) {
                 val intent = Intent(context, SignInActivity::class.java)
                 startActivity(intent)
                 (context as MainActivity).finish()
-            }else{
+            } else {
                 ToastUtil().showToast(getString(R.string.cannot_logout))
             }
         }
@@ -184,5 +178,4 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked, NavigationVi
             }
         }
     }
-
 }

@@ -181,10 +181,6 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
     }
 
     private fun saveToMemory(model: AccountResponse) {
-//        val shareReference = context.getSharedPreferences(SHARE_REFERENCE_NAME, SHARE_REFERENCE_MODE)
-//        val editor = shareReference.edit()
-//        editor.putString(USER_INFO_KEY, Gson().toJson(model.mAccount))
-//        editor.apply()
         SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
         TOKEN_ACCESS = model.account?.token.toString()
     }
