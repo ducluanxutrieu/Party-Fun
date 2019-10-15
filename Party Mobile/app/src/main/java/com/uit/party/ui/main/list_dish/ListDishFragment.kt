@@ -68,7 +68,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
     private fun setupDrawer() {
         if (!avatarUrl.isNullOrEmpty()) {
             avatarUrl = avatarUrl?.replace("\\", "/", false)
-            avatarUrl = "http://${avatarUrl}"
+//            avatarUrl = "http://${avatarUrl}"
             Glide.with(context!!).load(avatarUrl).apply { RequestOptions.circleCropTransform() }
                 .into(headerBinding.ivAvatar)
         }
@@ -120,15 +120,15 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.user_profile -> {
+            R.id.nav_user_profile -> {
                 getToProfileActivity()
             }
             R.id.log_out -> {
                 logOut()
             }
-//            R.id.nav_slideshow -> {
-//
-//            }
+            R.id.naw_user_order -> {
+                ToastUtil().showToast("Your Order clicked")
+            }
 //            R.id.nav_tools -> {
 //
 //            }

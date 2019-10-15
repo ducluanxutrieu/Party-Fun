@@ -106,5 +106,5 @@
     <color name="editTextColor">#f0f7f4</color>
     <color name="editTextHindColor">#c5c5c5</color>
     <dimen name="bottom_nav_view_height">56dp</dimen>
-    <dimen name="toolbar_collapsed_height">72dp</dimen>
+    <dimen name="toolbar_collapsed_height">60dp</dimen>
 </resources>

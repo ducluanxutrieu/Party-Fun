@@ -59,7 +59,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="@{() -> viewModel.editProfile()}">
+                android:onClick="@{() -> viewModel.editProfile()}"
+                android:padding="@dimen/_5sdp"
+                >
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_edit"
@@ -77,7 +79,8 @@
                     android:gravity="center"
                     android:text="@string/edit_profile"
                     android:textColor="#B3000000"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -91,7 +94,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="@{() -> viewModel.changePassword()}">
+                android:onClick="@{() -> viewModel.changePassword()}"
+                android:padding="@dimen/_5sdp"
+                >
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_change_password"

@@ -57,10 +57,24 @@ class EditProfileFragmentViewModel(private val mActivity: ProfileActivity) : Vie
 
     init {
 //        val timeStart = sf.format(calBirthdayPicker.time)
-        mBirthday.set(account?.birthday)
-        mEmail.set(account?.email)
-        mPhoneNumber.set(account?.phoneNumber)
-        mFullName.set(account?.fullName)
+        if (account?.birthday.isNullOrEmpty()) {
+            mBirthday.set(account?.birthday)
+        }
+        if (!account?.email.isNullOrEmpty()) {
+            mEmail.set(account?.email)
+            emailValid = true
+            checkEnableButtonUpdate()
+        }
+        if (!account?.phoneNumber.isNullOrEmpty()) {
+            mPhoneNumber.set(account?.phoneNumber)
+            phoneNumberValid = true
+            checkEnableButtonUpdate()
+        }
+        if (!account?.fullName.isNullOrEmpty()) {
+            mFullName.set(account?.fullName)
+            fullNameValid = true
+            checkEnableButtonUpdate()
+        }
     }
 
     private fun updateBirthdayInView() {

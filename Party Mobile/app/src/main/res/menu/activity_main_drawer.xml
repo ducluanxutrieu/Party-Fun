@@ -6,9 +6,49 @@
 
     <group>
         <item
-            android:id="@+id/user_profile"
+            android:id="@+id/nav_user_profile"
             android:icon="@drawable/ic_account_circle_24dp"
             android:title="@string/user_profile"
+            />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_user_address"
+            android:icon="@drawable/ic_location"
+            android:title="@string/address"
+            />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_user_vouchers"
+            android:icon="@drawable/ic_voucher"
+            android:title="@string/my_vouchers"
+            />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/naw_user_order"
+            android:icon="@drawable/ic_order_food"
+            android:title="@string/your_ordered"
+            />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_email"
+            android:title="@string/feedback"
+            />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info"
+            android:title="@string/about"
             />
     </group>
 

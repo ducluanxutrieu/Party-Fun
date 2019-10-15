@@ -121,4 +121,11 @@
     <string name="email">Email</string>
     <string name="toolbar_edit_profile">Edit Profile</string>
     <string name="update_profile_success">Update profile successful</string>
+    <string name="your_ordered">My Ordered</string>
+    <string name="my_vouchers">My Vouchers</string>
+    <string name="address">Address</string>
+    <string name="version_1_0_alpha">Version 1.0 Alpha</string>
+    <string name="toolbar_change_password">Change Password</string>
+    <string name="feedback">Feedback</string>
+    <string name="about">About Now</string>
 </resources>
