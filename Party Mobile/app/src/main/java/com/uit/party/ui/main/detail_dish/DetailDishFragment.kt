@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentDetailDishBinding
+import com.uit.party.model.DishModel
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.list_dish.DishModel
 
 class DetailDishFragment : Fragment(){
     private lateinit var model: DishModel
@@ -45,7 +45,7 @@ class DetailDishFragment : Fragment(){
 
     private fun setupActionBar() {
         binding.appBar.setNavigationIcon(R.drawable.ic_arrow_back_while_24dp)
-        binding.appBar.title = model.title
+        binding.appBar.title = model.name
         binding.appBar.setTitleTextColor(resources.getColor(R.color.colorWhile))
         binding.appBar.setNavigationOnClickListener {
             (context as MainActivity).onBackPressed()

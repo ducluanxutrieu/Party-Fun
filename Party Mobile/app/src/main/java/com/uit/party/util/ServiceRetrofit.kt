@@ -1,9 +1,6 @@
 package com.uit.party.util
 
-import com.uit.party.model.AccountResponse
-import com.uit.party.model.LoginModel
-import com.uit.party.model.RegisterModel
-import com.uit.party.model.BaseResponse
+import com.uit.party.model.*
 import com.uit.party.ui.profile.editprofile.RequestUpdateProfile
 import okhttp3.Interceptor
 import okhttp3.MultipartBody
@@ -15,6 +12,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
+import okhttp3.RequestBody
+import retrofit2.http.POST
+import retrofit2.http.Multipart
+
+
 
 
 interface ServiceRetrofit {
@@ -38,7 +40,7 @@ interface ServiceRetrofit {
     fun changePassword(
         @Header("authorization") token: String,
         @Field("password") password: String,
-        @Field("passwordchange") passwordchange: String
+        @Field("newpassword") passwordchange: String
     ): Call<BaseResponse>
 
     @POST("user/updateuser")
@@ -47,11 +49,29 @@ interface ServiceRetrofit {
         @Body body: RequestUpdateProfile
     ): Call<AccountResponse>
 
+    @Multipart
     @POST("user/uploadavatar")
     fun updateAvatar(
         @Header("authorization") token: String,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part, @Part("image") requestBody: RequestBody
     ): Call<BaseResponse>
+
+    @Multipart
+    @POST("product/adddish")
+    fun addDish(
+        @Header("authorization") token: String,
+        @Part("dishName") name: String,
+        @Part("description") description: String,
+        @Part("price") price: String,
+        @Part("type") type: String,
+        @Part image: ArrayList<MultipartBody.Part>,
+        @Part("image") requestBody: RequestBody
+    ): Call<AddDishResponse>
+
+    @GET("product/finddish")
+    fun getListDishes(
+        @Header("authorization") token: String
+    ): Call<DishesResponse>
 }
 
 class SetupConnectToServer {
@@ -69,7 +89,7 @@ class SetupConnectToServer {
 
 
         val builder = Retrofit.Builder()
-            .baseUrl(" http://23.101.31.63:3000/")
+            .baseUrl("http://138.91.33.161:3000/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
         val retrofit = builder.build()

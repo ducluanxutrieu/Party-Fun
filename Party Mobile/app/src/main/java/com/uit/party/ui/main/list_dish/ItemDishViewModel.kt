@@ -3,7 +3,7 @@ package com.uit.party.ui.main.list_dish
 import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
-import com.uit.party.ui.main.list_dish.DishModel
+import com.uit.party.model.DishModel
 import com.uit.party.util.GlobalApplication
 
 class ItemDishViewModel : BaseObservable(){
@@ -12,9 +12,12 @@ class ItemDishViewModel : BaseObservable(){
     var nameDish = ObservableField<String>()
 
     fun init(dishModel: DishModel){
-        imageDish.set(dishModel.url)
-        priceDish.set(dishModel.price)
-        nameDish.set(dishModel.title)
+        var imageUrl = dishModel.image?.get(0)
+        if (!imageUrl.isNullOrEmpty())
+            imageUrl = imageUrl.replace("\\", "/", true)
+        imageDish.set(imageUrl)
+        priceDish.set(dishModel.price.toString())
+        nameDish.set(dishModel.name)
     }
 
     fun onAddCartClicked(){

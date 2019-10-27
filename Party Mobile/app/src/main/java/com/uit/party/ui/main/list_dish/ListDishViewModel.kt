@@ -8,9 +8,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.uit.party.R
 import com.uit.party.model.BaseResponse
+import com.uit.party.model.DishModel
+import com.uit.party.model.DishesResponse
 import com.uit.party.ui.main.MainActivity
+import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.ToastUtil
 import retrofit2.Call
@@ -30,7 +32,8 @@ class ListDishViewModel : BaseObservable(){
         }
 
     fun init() {
-        initProductEntryList()
+        //initProductEntryList()
+        getListDishes()
     }
 
     private fun initProductEntryList() {
@@ -69,6 +72,28 @@ class ListDishViewModel : BaseObservable(){
             jsonProductsString,
             productListType
         )
+    }
+
+    private fun getListDishes(){
+        serviceRetrofit.getListDishes(TOKEN_ACCESS)
+            .enqueue(object : Callback<DishesResponse>{
+                override fun onFailure(call: Call<DishesResponse>, t: Throwable) {
+                    t.message?.let { ToastUtil().showToast(it) }
+                }
+
+                override fun onResponse(
+                    call: Call<DishesResponse>,
+                    response: Response<DishesResponse>
+                ) {
+                    if (response.isSuccessful){
+                        val dishes = response.body()?.lishDishs
+                        if (dishes != null){
+                            dishList = dishes
+                        }
+                    }
+                }
+
+            })
     }
 
     fun logout(onSuccess : (Boolean) -> Unit) {

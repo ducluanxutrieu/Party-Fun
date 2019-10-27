@@ -20,7 +20,7 @@
         tools:context=".ui.main.MainActivity"
         tools:openDrawer="end">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -33,10 +33,18 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:data="@{viewModel.dishList}">
+                android:layout_below="@id/app_bar"
+                app:data="@{viewModel.dishList}" />
 
-            </androidx.recyclerview.widget.RecyclerView>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_dish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/plus" />
+        </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
@@ -45,6 +53,7 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/activity_main_drawer" />
+
     </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>
