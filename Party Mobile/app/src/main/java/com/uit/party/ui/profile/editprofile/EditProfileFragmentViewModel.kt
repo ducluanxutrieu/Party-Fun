@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.AccountResponse
+import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.login.LoginViewModel
@@ -197,7 +198,7 @@ class EditProfileFragmentViewModel(private val mActivity: ProfileActivity) : Vie
 
     fun onUpdateClicked(){
         val requestModel = RequestUpdateProfile(mEmail.get(), mFullName.get(), mPhoneNumber.get(), mBirthday.get(), mSex)
-        serviceRetrofit.updateUser(LoginViewModel.TOKEN_ACCESS, requestModel)
+        serviceRetrofit.updateUser(TOKEN_ACCESS, requestModel)
             .enqueue(object : Callback<AccountResponse>{
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     if (!t.message.isNullOrEmpty()) {

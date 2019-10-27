@@ -27,7 +27,7 @@ class AddNewFragment {
     fun addNewSlideUp(
         containerId: Int, fragment: Fragment?, shouldAddStack: Boolean,
         context: AppCompatActivity,
-        enter: Int = R.anim.slide_in_up, exit: Int = R.anim.slide_out_up,
+        enter: Int = R.anim.slide_in_up, exit: Int = R.anim.slide_out_down,
         popEnter: Int = R.anim.slide_in_up, popExit: Int = R.anim.slide_out_down
     ) {
         val fragmentManager = context.supportFragmentManager

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.BR
 import com.uit.party.R
 import com.uit.party.databinding.ItemDishBinding
-import com.uit.party.ui.main.list_dish.DishModel
+import com.uit.party.model.DishModel
 import com.uit.party.ui.main.list_dish.ItemDishViewModel
 import com.uit.party.util.BindableAdapter
 

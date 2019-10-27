@@ -2,7 +2,7 @@ package com.uit.party.ui.main.detail_dish
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.uit.party.ui.main.list_dish.DishModel
+import com.uit.party.model.DishModel
 
 class DetailDishViewModel : ViewModel(){
     var imageDish = ObservableField<String>()
@@ -11,9 +11,12 @@ class DetailDishViewModel : ViewModel(){
     var descriptionDish = ObservableField<String>()
 
     fun init(dishModel: DishModel){
-        imageDish.set(dishModel.url)
-        priceDish.set(dishModel.price)
-        nameDish.set(dishModel.title)
+        var imageUrl = dishModel.image?.get(0)
+        if (!imageUrl.isNullOrEmpty())
+            imageUrl = imageUrl.replace("\\", "/", true)
+        imageDish.set(imageUrl)
+        priceDish.set(dishModel.price.toString())
+        nameDish.set(dishModel.name)
         descriptionDish.set(dishModel.description)
     }
 

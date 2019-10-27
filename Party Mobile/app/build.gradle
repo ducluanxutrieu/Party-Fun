@@ -62,4 +62,7 @@ dependencies {
 
     implementation 'com.github.jrvansuita:PickImage:+'
     implementation 'id.zelory:compressor:2.1.0'
+
+    //CameraView
+    implementation 'com.otaliastudios:cameraview:2.3.1'
 }

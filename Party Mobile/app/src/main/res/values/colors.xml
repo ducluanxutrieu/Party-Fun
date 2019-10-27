@@ -8,4 +8,7 @@
     <color name="textColorProduct">#0a3142</color>
     <color name="colorWhile">#ffffff</color>
     <color name="colorBlue_78">#140078</color>
+    <color name="background_color_image">#c5cae9</color>
+    <color name="blackColor">#000000</color>
+    <color name="textColorOrange">#fb8942</color>
 </resources>

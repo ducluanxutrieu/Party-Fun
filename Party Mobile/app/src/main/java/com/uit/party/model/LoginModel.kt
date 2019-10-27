@@ -43,6 +43,8 @@ class Account {
     var imageurl: String? = null
     @SerializedName("createAt")
     val createAt: String? = null
+    @SerializedName("userCart")
+    var userCart: ArrayList<UserCart>? = null
 }
 
 class UserCart {

@@ -13,8 +13,10 @@ import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
+import com.uit.party.model.DishModel
 import com.uit.party.ui.main.DishAdapter
 import com.uit.party.ui.main.MainActivity
+import com.uit.party.ui.main.addnewdish.AddNewDishFragment
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
@@ -57,6 +59,11 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         binding.viewModel = mViewModel
         mViewModel.init()
         binding.recyclerView.adapter = adapter
+
+        binding.fabAddDish.setOnClickListener {
+            val fragment = AddNewDishFragment.newInstance(context as MainActivity)
+            AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,7 +75,6 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
     private fun setupDrawer() {
         if (!avatarUrl.isNullOrEmpty()) {
             avatarUrl = avatarUrl?.replace("\\", "/", false)
-//            avatarUrl = "http://${avatarUrl}"
             Glide.with(context!!).load(avatarUrl).apply { RequestOptions.circleCropTransform() }
                 .into(headerBinding.ivAvatar)
         }
@@ -86,7 +92,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         binding.appBar.title = getString(R.string.uit_party)
         binding.appBar.setTitleTextColor(resources.getColor(R.color.colorWhile))
         binding.appBar.setNavigationOnClickListener {
-            binding.drawerLayout.openDrawer(Gravity.START)
+            binding.drawerLayout.openDrawer(GravityCompat.START)
         }
 
 //        binding.appBar.inflateMenu(R.menu.main_menu)
@@ -129,15 +135,6 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
             R.id.naw_user_order -> {
                 ToastUtil().showToast("Your Order clicked")
             }
-//            R.id.nav_tools -> {
-//
-//            }
-//            R.id.nav_share -> {
-//
-//            }
-//            R.id.nav_send -> {
-//
-//            }
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START)

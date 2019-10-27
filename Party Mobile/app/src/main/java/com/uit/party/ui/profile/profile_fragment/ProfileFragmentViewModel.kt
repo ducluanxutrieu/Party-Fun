@@ -1,24 +1,23 @@
 package com.uit.party.ui.profile.profile_fragment
 
-import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
+import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.profile.change_password.ChangePasswordFragment
 import com.uit.party.ui.profile.editprofile.EditProfileFragment
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.TOKEN_ACCESS
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
-import id.zelory.compressor.Compressor
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -63,31 +62,31 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
         PickImageDialog.build(PickSetup()).setOnPickResult { result ->
             val byteArrayOutputStream = ByteArrayOutputStream()
             result.bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-//            binding.loadingAvatar.visibility = View.VISIBLE
-            uploadAvatar(context, result.path) {
+            uploadAvatar(result.path) {
                 mAvatar.set(it)
-//                RxBus.publish(RxEvent.ChangeInfo(userInfo))
-//                binding.loadingAvatar.visibility = View.GONE
             }
-        }.setOnPickCancel { /*binding.loadingAvatar.visibility = View.GONE */}
+        }.setOnPickCancel {}
             .show(context.supportFragmentManager)
     }
 
-    private fun uploadAvatar(context: Context, result: String, onComplete: (String?) -> Unit) {
-        val file = Compressor(context).compressToFile(File(result))
-        val extension = file.extension
-        val parseType = "image/$extension"
+    private fun uploadAvatar(result: String, onComplete: (String?) -> Unit) {
+        val file = File(result)
+        val parseType = "multipart/form-data"
 
         val part: MultipartBody.Part = MultipartBody.Part.createFormData(
-            "avatar",
+            "image",
             file.name,
             RequestBody.create(MediaType.parse(parseType), file)
         )
-        serviceRetrofit.updateAvatar(TOKEN_ACCESS, part)
+
+        //Create request body with text description and text media type
+        val description = RequestBody.create(MediaType.parse("text/plain"), "image-type")
+        serviceRetrofit.updateAvatar(TOKEN_ACCESS, part, description)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     if (t.message != null) {
                         ToastUtil().showToast(t.message!!)
+                        Log.e("uploadAvatar", t.message!!)
                     }
                 }
 
@@ -99,7 +98,6 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
                         onComplete(response.body()?.message)
                     } else {
                         ToastUtil().showToast(response.message())
-//                        Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show()
                     }
                 }
             })

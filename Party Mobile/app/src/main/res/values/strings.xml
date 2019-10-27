@@ -128,4 +128,19 @@
     <string name="toolbar_change_password">Change Password</string>
     <string name="feedback">Feedback</string>
     <string name="about">About Now</string>
+    <string name="dish_title">Dish Title</string>
+    <string name="dish_description">Dish Description</string>
+    <string name="add_more_image">Add more image for this dish</string>
+    <string name="add_dish">Add Dish</string>
+    <string name="price">Price: </string>
+    <string name="_0">0</string>
+    <string name="vnd">VND</string>
+    <string name="dish_avatar">Dish Avatar</string>
+    <string name="type">Type</string>
+    <string name="holiday_offers">Holiday Offers</string>
+    <string name="beverages">Beverages</string>
+    <string name="first_dishes">First Dishes</string>
+    <string name="main_dishes">Main Dishes</string>
+    <string name="seafood">Seafood</string>
+    <string name="drinks">Drinks</string>
 </resources>

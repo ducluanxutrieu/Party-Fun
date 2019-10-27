@@ -17,6 +17,7 @@ import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
+import com.uit.party.util.ToastUtil
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -74,8 +75,12 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
                     val repos = model.body()
                     if (repos != null) {
                         try {
-                            saveToMemory(repos)
-                            onComplete("Success")
+                            if (repos.success) {
+                                saveToMemory(repos)
+                                onComplete("Success")
+                            }else{
+                                repos.message?.let { ToastUtil().showToast(it) }
+                            }
                         } catch (e: java.lang.Exception) {
                             onComplete(e.message)
                         }
@@ -182,11 +187,9 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
 
     private fun saveToMemory(model: AccountResponse) {
         SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
-        TOKEN_ACCESS = model.account?.token.toString()
     }
 
-    companion object{
+    companion object {
         internal const val USER_INFO_KEY = "USER_INFO_KEY"
-        internal var TOKEN_ACCESS: String = ""
     }
 }
