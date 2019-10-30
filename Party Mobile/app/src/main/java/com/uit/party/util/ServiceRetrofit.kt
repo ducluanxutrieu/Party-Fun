@@ -101,7 +101,7 @@ class SetupConnectToServer {
         val newRequest: Request = chain.request().newBuilder()
 
             .addHeader("Content-Type", "application/x-www-form-urlencoded")
-            .method(chain.request().method(), chain.request().body())
+            .method(chain.request().method, chain.request().body)
             .build()
 
         chain.proceed(newRequest)

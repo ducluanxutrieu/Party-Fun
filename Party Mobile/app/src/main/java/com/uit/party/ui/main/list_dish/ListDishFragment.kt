@@ -162,8 +162,8 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
     }
 
     override fun onItemDishClicked(position: Int, item: DishModel) {
-        val fragment = DetailDishFragment.newInstance(item, position)
-        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+//        val fragment = DetailDishFragment.newInstance(item, position)
+//        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
     }
 
     companion object {

@@ -19,6 +19,7 @@ import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -76,11 +77,11 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
         val part: MultipartBody.Part = MultipartBody.Part.createFormData(
             "image",
             file.name,
-            RequestBody.create(MediaType.parse(parseType), file)
+            RequestBody.create(parseType.toMediaTypeOrNull(), file)
         )
 
         //Create request body with text description and text media type
-        val description = RequestBody.create(MediaType.parse("text/plain"), "image-type")
+        val description = RequestBody.create("text/plain".toMediaTypeOrNull(), "image-type")
         serviceRetrofit.updateAvatar(TOKEN_ACCESS, part, description)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {

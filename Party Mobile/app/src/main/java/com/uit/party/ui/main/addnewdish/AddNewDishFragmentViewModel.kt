@@ -22,7 +22,7 @@ import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -35,7 +35,6 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
-    val mType = ObservableField("")
 
     val mErrorTitle = ObservableField("")
     val mErrorDescription = ObservableField("")
@@ -48,7 +47,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
 
     val mEnableSendButton = ObservableBoolean(false)
 
-    private val description = RequestBody.create(MediaType.parse("text/plain"), "image-type")
+    private val description = RequestBody.create("text/plain".toMediaTypeOrNull(), "image-type")
 
     private val listImagePath = ArrayList<String>()
 
@@ -180,7 +179,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
                 MultipartBody.Part.createFormData(
                     "image",
                     file.name,
-                    RequestBody.create(MediaType.parse(parseType), file)
+                    RequestBody.create(parseType.toMediaTypeOrNull(), file)
                 )
             )
         }

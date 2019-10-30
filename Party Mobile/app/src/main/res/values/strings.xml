@@ -143,4 +143,5 @@
     <string name="main_dishes">Main Dishes</string>
     <string name="seafood">Seafood</string>
     <string name="drinks">Drinks</string>
+    <string name="dish_detail">Dish Detail</string>
 </resources>

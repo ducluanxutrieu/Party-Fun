@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             goToSignIn()
         } else {
             TOKEN_ACCESS = account?.token.toString()
-            showFragment()
+//            showFragment()
         }
     }
 
