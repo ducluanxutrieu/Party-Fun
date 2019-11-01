@@ -54,12 +54,12 @@ class DetailDishFragment : Fragment(){
         binding.appBar.inflateMenu(R.menu.toolbar_menu)
         binding.appBar.setOnMenuItemClickListener {
             when(it.itemId){
-                R.id.ToolbarFilterIcon -> {
+                R.id.toolbar_filter -> {
                     Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
                     true
                 }
 
-                R.id.ToolbarSearchIcon -> {
+                R.id.toolbar_search -> {
                     Toast.makeText(context, "Search Clicked", Toast.LENGTH_SHORT).show()
                     true
                 }

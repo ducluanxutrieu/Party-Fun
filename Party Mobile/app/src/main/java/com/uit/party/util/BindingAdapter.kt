@@ -34,6 +34,17 @@ fun setImageIcon(imageView: AppCompatImageView, url: String?) {
     }
 }
 
+@BindingAdapter("app:dishUrl")
+fun setDishImage(imageView: AppCompatImageView, url: String?) {
+    if (!url.isNullOrEmpty()){
+        val requestOptions = RequestOptions
+            .circleCropTransform()
+            .error(R.drawable.dish_sample)
+            .placeholder(R.drawable.dish_sample)
+        Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
+    }
+}
+
 @BindingAdapter("bind:textError")
 fun setTextError(textInput: TextInputLayout, error: String?) {
     if (!error.isNullOrEmpty()) {

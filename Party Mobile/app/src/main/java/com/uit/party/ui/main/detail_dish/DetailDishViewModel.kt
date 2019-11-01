@@ -11,10 +11,7 @@ class DetailDishViewModel : ViewModel(){
     var descriptionDish = ObservableField<String>()
 
     fun init(dishModel: DishModel){
-        var imageUrl = dishModel.image?.get(0)
-        if (!imageUrl.isNullOrEmpty())
-            imageUrl = imageUrl.replace("\\", "/", true)
-        imageDish.set(imageUrl)
+        imageDish.set(dishModel.image?.get(0))
         priceDish.set(dishModel.price.toString())
         nameDish.set(dishModel.name)
         descriptionDish.set(dishModel.description)

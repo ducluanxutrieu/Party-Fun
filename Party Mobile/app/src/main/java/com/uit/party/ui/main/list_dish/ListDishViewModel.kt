@@ -1,27 +1,17 @@
 package com.uit.party.ui.main.list_dish
 
-import android.util.Log
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.uit.party.R
 import com.uit.party.model.BaseResponse
 import com.uit.party.model.DishModel
 import com.uit.party.model.DishesResponse
-import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.util.GlobalApplication
 import com.uit.party.util.ToastUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.StringWriter
 
 class ListDishViewModel : BaseObservable(){
     @get: Bindable
@@ -33,10 +23,56 @@ class ListDishViewModel : BaseObservable(){
 
     fun init() {
         //initProductEntryList()
-        getListDishes()
+        getListDishes {}
     }
 
-    private fun initProductEntryList() {
+    fun getListDishes(onComplete : (Boolean) -> Unit){
+        serviceRetrofit.getListDishes(TOKEN_ACCESS)
+            .enqueue(object : Callback<DishesResponse>{
+                override fun onFailure(call: Call<DishesResponse>, t: Throwable) {
+                    t.message?.let { ToastUtil().showToast(it) }
+                    onComplete(false)
+                }
+
+                override fun onResponse(
+                    call: Call<DishesResponse>,
+                    response: Response<DishesResponse>
+                ) {
+                    onComplete(true)
+                    if (response.isSuccessful){
+                        val dishes = response.body()?.lishDishs
+                        if (dishes != null){
+                            dishList = dishes
+                        }
+                    }
+                }
+
+            })
+    }
+
+    fun logout(onSuccess : (Boolean) -> Unit) {
+        serviceRetrofit.logout(TOKEN_ACCESS)
+            .enqueue(object : Callback<BaseResponse>{
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+                    t.message?.let { ToastUtil().showToast(it) }
+                    onSuccess(false)
+                }
+
+                override fun onResponse(
+                    call: Call<BaseResponse>,
+                    response: Response<BaseResponse>
+                ) {
+                    val repo = response.body()
+                    if (repo != null && response.code() == 200){
+                        onSuccess(true)
+                    }else{
+                        onSuccess(false)
+                    }
+                }
+            })
+    }
+
+    /*private fun initProductEntryList() {
         val inputStream = GlobalApplication.appContext!!.resources.openRawResource(R.raw.products)
         val writer = StringWriter()
         val buffer = CharArray(1024)
@@ -72,49 +108,5 @@ class ListDishViewModel : BaseObservable(){
             jsonProductsString,
             productListType
         )
-    }
-
-    private fun getListDishes(){
-        serviceRetrofit.getListDishes(TOKEN_ACCESS)
-            .enqueue(object : Callback<DishesResponse>{
-                override fun onFailure(call: Call<DishesResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil().showToast(it) }
-                }
-
-                override fun onResponse(
-                    call: Call<DishesResponse>,
-                    response: Response<DishesResponse>
-                ) {
-                    if (response.isSuccessful){
-                        val dishes = response.body()?.lishDishs
-                        if (dishes != null){
-                            dishList = dishes
-                        }
-                    }
-                }
-
-            })
-    }
-
-    fun logout(onSuccess : (Boolean) -> Unit) {
-        serviceRetrofit.logout(TOKEN_ACCESS)
-            .enqueue(object : Callback<BaseResponse>{
-                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil().showToast(it) }
-                    onSuccess(false)
-                }
-
-                override fun onResponse(
-                    call: Call<BaseResponse>,
-                    response: Response<BaseResponse>
-                ) {
-                    val repo = response.body()
-                    if (repo != null && response.code() == 200){
-                        onSuccess(true)
-                    }else{
-                        onSuccess(false)
-                    }
-                }
-            })
-    }
+    }*/
 }

@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             goToSignIn()
         } else {
             TOKEN_ACCESS = account?.token.toString()
-            showFragment()
         }
     }
 
@@ -62,6 +61,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
-
+        showFragment()
     }
 }

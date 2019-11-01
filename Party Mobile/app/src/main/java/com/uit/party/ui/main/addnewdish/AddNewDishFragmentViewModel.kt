@@ -22,9 +22,10 @@ import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,7 +36,6 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
-    val mType = ObservableField("")
 
     val mErrorTitle = ObservableField("")
     val mErrorDescription = ObservableField("")
@@ -48,7 +48,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
 
     val mEnableSendButton = ObservableBoolean(false)
 
-    private val description = RequestBody.create(MediaType.parse("text/plain"), "image-type")
+    private val description = "image-type".toRequestBody("text/plain".toMediaTypeOrNull())
 
     private val listImagePath = ArrayList<String>()
 
@@ -180,7 +180,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
                 MultipartBody.Part.createFormData(
                     "image",
                     file.name,
-                    RequestBody.create(MediaType.parse(parseType), file)
+                    file.asRequestBody(parseType.toMediaTypeOrNull())
                 )
             )
         }
@@ -189,10 +189,10 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
         val token = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.token
         serviceRetrofit.addDish(
             token!!,
-            mTitleText,
-            mDescriptionText,
-            mPriceText,
-            mTypeText,
+            mTitleText.toRequestBody(MultipartBody.FORM),
+            mDescriptionText.toRequestBody(MultipartBody.FORM),
+            mPriceText.toRequestBody(MultipartBody.FORM),
+            mTypeText.toRequestBody(MultipartBody.FORM),
             multipartPath,
             description
         )

@@ -1,11 +1,14 @@
 package com.uit.party.ui.main.list_dish
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.navigation.NavigationView
@@ -20,6 +23,7 @@ import com.uit.party.ui.main.addnewdish.AddNewDishFragment
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
@@ -36,6 +40,9 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
     private lateinit var binding: FragmentListDishBinding
     private lateinit var headerBinding: NavHeaderMainBinding
     private val adapter = DishAdapter(this)
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+
+    private var mIsAdmin = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,16 +67,37 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         mViewModel.init()
         binding.recyclerView.adapter = adapter
 
-        binding.fabAddDish.setOnClickListener {
-            val fragment = AddNewDishFragment.newInstance(context as MainActivity)
-            AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+        mIsAdmin = checkAdmin()
+
+        setIsAdmin()
+    }
+
+    private fun setIsAdmin() {
+        if (mIsAdmin){
+            binding.fabAddDish.setImageResource(R.drawable.ic_add_dish_cart_24dp)
+            binding.fabAddDish.setOnClickListener {
+                val fragment = AddNewDishFragment.newInstance(context as MainActivity)
+                AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+            }
+        }else{
+            binding.fabAddDish.setImageResource(R.drawable.ic_shopping_cart_vd_theme_24)
+            binding.fabAddDish.setOnClickListener {
+                val fragment = AddNewDishFragment.newInstance(context as MainActivity)
+                AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+            }
         }
+    }
+
+    private fun checkAdmin(): Boolean {
+        val role = SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
+        return role.equals("Admin")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupDrawer()
         setupActionBar()
+        setPullToRefresh()
     }
 
     private fun setupDrawer() {
@@ -87,6 +115,24 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         }
     }
 
+    private fun setPullToRefresh() {
+        mSwipeRefreshLayout = binding.swlListDish
+        mSwipeRefreshLayout.setOnRefreshListener {
+            mSwipeRefreshLayout.isRefreshing = true
+            mViewModel.getListDishes {
+                mSwipeRefreshLayout.isRefreshing = false
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mSwipeRefreshLayout.setColorSchemeColors(
+                resources.getColor(R.color.colorPrimary, context?.theme),
+                resources.getColor(android.R.color.holo_green_dark, context?.theme),
+                resources.getColor(android.R.color.holo_orange_dark, context?.theme),
+                resources.getColor(android.R.color.holo_blue_dark, context?.theme)
+            )
+        }
+    }
+
     private fun setupActionBar() {
         binding.appBar.setNavigationIcon(R.drawable.ic_navigation_bar_while_24dp)
         binding.appBar.title = getString(R.string.uit_party)
@@ -94,33 +140,30 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         binding.appBar.setNavigationOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
+        binding.appBar.inflateMenu(R.menu.toolbar_menu)
+        binding.appBar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.toolbar_filter -> {
+                    Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
+                    true
+                }
 
-//        binding.appBar.inflateMenu(R.menu.main_menu)
-////        binding.appBar.setOnMenuItemClickListener {
-////            when (it.itemId) {
-////                R.id.ToolbarFilterIcon -> {
-////                    Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
-////                    true
-////                }
-////
-////                R.id.ToolbarSearchIcon -> {
-////                    Toast.makeText(context, "Search Clicked", Toast.LENGTH_SHORT).show()
-////                    true
-////                }
-////
-////                R.id.ToolbarChangePassword -> {
-////                    changePassword()
-////                    true
-////                }
-////
-////                R.id.ToolbarLogout -> {
-////                    logOut()
-////                    true
-////                }
-////
-////                else -> super.onOptionsItemSelected(it)
-////            }
-////        }
+                R.id.toolbar_search -> {
+                    Toast.makeText(context, "Search Clicked", Toast.LENGTH_SHORT).show()
+                    true
+                }
+
+                else -> super.onOptionsItemSelected(it)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_menu, menu)
+
+        val searchView = menu.findItem(R.id.toolbar_search)
+        //TODO add search view
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

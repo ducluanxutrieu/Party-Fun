@@ -44,7 +44,7 @@
                         android:layout_marginBottom="@dimen/standard_spacing"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
-                        app:imageUrl="@{viewModel.imageDish}" />
+                        app:dishUrl="@{viewModel.imageDish}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
