@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.uit.party.ui.main.list_dish.ListDishViewModel" />
+            type="com.uit.party.ui.main.main_menu.MenuViewModel" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -40,7 +40,7 @@
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:data="@{viewModel.dishList}" />
+                    app:linearRecyclerData="@{viewModel.listMenu}" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

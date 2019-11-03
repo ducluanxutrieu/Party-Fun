@@ -7,7 +7,7 @@
 
         <variable
             name="itemViewModel"
-            type="com.uit.party.ui.main.list_dish.ItemDishViewModel" />
+            type="com.uit.party.ui.main.main_menu.menu_item.ItemDishViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView

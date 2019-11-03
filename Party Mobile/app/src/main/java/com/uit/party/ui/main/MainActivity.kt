@@ -8,16 +8,20 @@ import androidx.databinding.DataBindingUtil
 import com.uit.party.R
 import com.uit.party.databinding.ActivityMainBinding
 import com.uit.party.model.Account
-import com.uit.party.ui.main.list_dish.ListDishFragment
+import com.uit.party.model.DishModel
+import com.uit.party.ui.main.detail_dish.DetailDishFragment
+import com.uit.party.ui.main.main_menu.MenuFragment
+import com.uit.party.ui.main.main_menu.menu_item.DishesAdapter
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SetupConnectToServer
 import com.uit.party.util.SharedPrefs
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DishesAdapter.DishItemOnClicked {
     lateinit var binding: ActivityMainBinding
     private val viewModel = MainViewModel()
+
 
     companion object {
         const val SHARE_REFERENCE_NAME = "com.uit.party.ui"
@@ -32,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         setupBinding()
         checkLogin()
+        DishesAdapter(this)
     }
 
     private fun checkLogin() {
@@ -53,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
         if (account != null) {
-            val fragment = ListDishFragment.newInstance(account)
+            val fragment = MenuFragment.newInstance(account)
             AddNewFragment().addFragment(R.id.main_container, fragment, true, this)
         }
     }
@@ -62,5 +67,10 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
         showFragment()
+    }
+
+    override fun onItemDishClicked(dishType: String, position: Int, item: DishModel) {
+        val fragment = DetailDishFragment.newInstance(item, position)
+        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true,  this)
     }
 }

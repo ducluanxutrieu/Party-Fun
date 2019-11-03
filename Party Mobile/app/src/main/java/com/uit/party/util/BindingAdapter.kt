@@ -3,6 +3,7 @@ package com.uit.party.util
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -12,10 +13,22 @@ import java.util.*
 
 
 @Suppress("UNCHECKED_CAST")
-@BindingAdapter("app:data")
-fun <T> setupRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
+@BindingAdapter("app:gridRecyclerData")
+fun <T> setupGridRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
     recyclerView.setHasFixedSize(true)
     val layoutManager = GridLayoutManager(recyclerView.context, 2)
+    recyclerView.layoutManager = layoutManager
+
+    if (recyclerView.adapter is BindableAdapter<*>) {
+        (recyclerView.adapter as BindableAdapter<T>).setData(items)
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+@BindingAdapter("app:linearRecyclerData")
+fun <T> setupLinearRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
+    recyclerView.setHasFixedSize(true)
+    val layoutManager = LinearLayoutManager(recyclerView.context)
     recyclerView.layoutManager = layoutManager
 
     if (recyclerView.adapter is BindableAdapter<*>) {

@@ -1,8 +1,9 @@
-package com.uit.party.ui.main.list_dish
+package com.uit.party.ui.main.main_menu
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -16,11 +17,8 @@ import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
-import com.uit.party.model.DishModel
-import com.uit.party.ui.main.DishAdapter
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.addnewdish.AddNewDishFragment
-import com.uit.party.ui.main.detail_dish.DetailDishFragment
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginViewModel
@@ -29,17 +27,16 @@ import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 
 @Suppress("DEPRECATION")
-class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
+class MenuFragment : Fragment(),
     NavigationView.OnNavigationItemSelectedListener {
     private var avatarUrl: String? = ""
     private var username: String = ""
     private var fullName: String = ""
 
-
-    private val mViewModel = ListDishViewModel()
+    private val mViewModel = MenuViewModel()
     private lateinit var binding: FragmentListDishBinding
     private lateinit var headerBinding: NavHeaderMainBinding
-    private val adapter = DishAdapter(this)
+    private val adapter = MenuAdapter()
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
     private var mIsAdmin = false
@@ -53,6 +50,12 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
 
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.i("menuTag", "onViewCreated")
+    }
+
 
     private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
@@ -73,23 +76,34 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
     }
 
     private fun setIsAdmin() {
-        if (mIsAdmin){
+        if (mIsAdmin) {
             binding.fabAddDish.setImageResource(R.drawable.ic_add_dish_cart_24dp)
             binding.fabAddDish.setOnClickListener {
                 val fragment = AddNewDishFragment.newInstance(context as MainActivity)
-                AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+                AddNewFragment().addNewSlideUp(
+                    R.id.main_container,
+                    fragment,
+                    true,
+                    context as MainActivity
+                )
             }
-        }else{
+        } else {
             binding.fabAddDish.setImageResource(R.drawable.ic_shopping_cart_vd_theme_24)
             binding.fabAddDish.setOnClickListener {
                 val fragment = AddNewDishFragment.newInstance(context as MainActivity)
-                AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
+                AddNewFragment().addNewSlideUp(
+                    R.id.main_container,
+                    fragment,
+                    true,
+                    context as MainActivity
+                )
             }
         }
     }
 
     private fun checkAdmin(): Boolean {
-        val role = SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
+        val role =
+            SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
         return role.equals("Admin")
     }
 
@@ -98,11 +112,11 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         setupDrawer()
         setupActionBar()
         setPullToRefresh()
+        Log.i("menuTag", "onActivityCreated")
     }
 
     private fun setupDrawer() {
         if (!avatarUrl.isNullOrEmpty()) {
-            avatarUrl = avatarUrl?.replace("\\", "/", false)
             Glide.with(context!!).load(avatarUrl).apply { RequestOptions.circleCropTransform() }
                 .into(headerBinding.ivAvatar)
         }
@@ -142,7 +156,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         }
         binding.appBar.inflateMenu(R.menu.toolbar_menu)
         binding.appBar.setOnMenuItemClickListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.toolbar_filter -> {
                     Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
                     true
@@ -162,7 +176,7 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu, menu)
 
-        val searchView = menu.findItem(R.id.toolbar_search)
+//        val searchView = menu.findItem(R.id.toolbar_search)
         //TODO add search view
     }
 
@@ -204,14 +218,9 @@ class ListDishFragment : Fragment(), DishAdapter.DishItemOnClicked,
         }
     }
 
-    override fun onItemDishClicked(position: Int, item: DishModel) {
-        val fragment = DetailDishFragment.newInstance(item, position)
-        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true, context as MainActivity)
-    }
-
     companion object {
-        fun newInstance(account: Account): ListDishFragment {
-            return ListDishFragment().apply {
+        fun newInstance(account: Account): MenuFragment {
+            return MenuFragment().apply {
                 this.avatarUrl = account.imageurl
                 this.username = account.username!!
                 this.fullName = account.fullName!!

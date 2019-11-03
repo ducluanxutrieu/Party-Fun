@@ -1,4 +1,4 @@
-package com.uit.party.ui.main.list_dish
+package com.uit.party.ui.main.main_menu.menu_item
 
 import android.widget.Toast
 import androidx.databinding.BaseObservable
@@ -12,10 +12,7 @@ class ItemDishViewModel : BaseObservable(){
     var nameDish = ObservableField<String>()
 
     fun init(dishModel: DishModel){
-        var imageUrl = dishModel.image?.get(0)
-        if (!imageUrl.isNullOrEmpty())
-            imageUrl = imageUrl.replace("\\", "/", true)
-        imageDish.set(imageUrl)
+        imageDish.set(dishModel.image?.get(0))
         priceDish.set(dishModel.price.toString())
         nameDish.set(dishModel.name)
     }
