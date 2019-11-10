@@ -1,5 +1,6 @@
 package com.uit.party.ui.profile.profile_fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,11 +34,12 @@ class ProfileFragment : Fragment(){
         setupAppBar()
     }
 
+    @SuppressLint("NewApi")
     private fun setupAppBar(){
-        binding.profileToolBar.setNavigationIcon(R.drawable.ic_arrow_back_green_24dp)
-        binding.profileToolBar.title = getString(R.string.profile_detail)
-        binding.profileToolBar.setTitleTextColor(resources.getColor(R.color.colorWhile))
-        binding.profileToolBar.setNavigationOnClickListener {
+        binding.toolBarProfile.setNavigationIcon(R.drawable.ic_arrow_back_green_24dp)
+        binding.toolBarProfile.title = getString(R.string.profile_detail)
+        binding.toolBarProfile.setTitleTextColor(resources.getColor(R.color.colorWhile, context?.theme))
+        binding.toolBarProfile.setNavigationOnClickListener {
             (context as ProfileActivity).finish()
         }
     }

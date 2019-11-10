@@ -3,7 +3,6 @@ package com.uit.party.ui.main.main_menu
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -17,14 +16,20 @@ import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
+import com.uit.party.model.DishModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.addnewdish.AddNewDishFragment
+import com.uit.party.ui.main.cart_detail.CartDetailFragment
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SharedPrefs
+import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.rxbus.RxBus
+import com.uit.party.util.rxbus.RxEvent
+import io.reactivex.disposables.Disposable
 
 @Suppress("DEPRECATION")
 class MenuFragment : Fragment(),
@@ -41,6 +46,10 @@ class MenuFragment : Fragment(),
 
     private var mIsAdmin = false
 
+    private lateinit var mDisposableAddCart: Disposable
+    private var mListDishesSelected = ArrayList<DishModel>()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,12 +59,6 @@ class MenuFragment : Fragment(),
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.i("menuTag", "onViewCreated")
-    }
-
 
     private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
@@ -77,7 +80,8 @@ class MenuFragment : Fragment(),
 
     private fun setIsAdmin() {
         if (mIsAdmin) {
-            binding.fabAddDish.setImageResource(R.drawable.ic_add_dish_cart_24dp)
+            binding.fabAddDish.icon = resources.getDrawable(R.drawable.plus)
+            binding.fabAddDish.text = StringUtil.getString(R.string.add_dish)
             binding.fabAddDish.setOnClickListener {
                 val fragment = AddNewDishFragment.newInstance(context as MainActivity)
                 AddNewFragment().addNewSlideUp(
@@ -88,9 +92,9 @@ class MenuFragment : Fragment(),
                 )
             }
         } else {
-            binding.fabAddDish.setImageResource(R.drawable.ic_shopping_cart_vd_theme_24)
+            binding.fabAddDish.icon = resources.getDrawable(R.drawable.ic_shopping_cart_vd_theme_24)
             binding.fabAddDish.setOnClickListener {
-                val fragment = AddNewDishFragment.newInstance(context as MainActivity)
+                val fragment = CartDetailFragment.newInstance(mListDishesSelected)
                 AddNewFragment().addNewSlideUp(
                     R.id.main_container,
                     fragment,
@@ -112,7 +116,7 @@ class MenuFragment : Fragment(),
         setupDrawer()
         setupActionBar()
         setPullToRefresh()
-        Log.i("menuTag", "onActivityCreated")
+        rxBusListen()
     }
 
     private fun setupDrawer() {
@@ -216,6 +220,19 @@ class MenuFragment : Fragment(),
                 ToastUtil().showToast(getString(R.string.cannot_logout))
             }
         }
+    }
+
+    private fun rxBusListen(){
+        mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe{
+            mListDishesSelected.add(it.dishModel)
+            val textFab = "${mListDishesSelected.size} Dishes Selected"
+            binding.fabAddDish.text = textFab
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
     }
 
     companion object {

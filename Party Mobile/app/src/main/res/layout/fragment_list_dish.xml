@@ -43,14 +43,22 @@
                     app:linearRecyclerData="@{viewModel.listMenu}" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
                 android:id="@+id/fab_add_dish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/plus" />
+                android:contentDescription="@string/your_cart"
+                android:text="@string/your_cart"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_add_dish_cart_24dp"
+                android:backgroundTint="@color/colorCrystalClear"
+                android:textColor="@color/colorWhile"
+                app:iconTint="@color/colorWhile"
+                />
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView

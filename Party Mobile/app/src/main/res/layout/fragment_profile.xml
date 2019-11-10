@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/profile_tool_bar"
+            android:id="@+id/tool_bar_profile"
             style="@style/Widget.Shrine.Toolbar.Logo.CrystalClear"
             android:elevation="@dimen/_2sdp" />
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="itemViewModel"
+            type="com.uit.party.ui.main.cart_detail.CartDetailItemViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_30sdp"
+            app:imageUrl="@{itemViewModel.mAvatarDish}"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            tools:text="Rồng xanh vượt đại dương"
+            android:text="@{itemViewModel.mNameDish}"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{itemViewModel.mNumberDishInType}"
+            tools:text="2"
+            />
+    </LinearLayout>
+</layout>

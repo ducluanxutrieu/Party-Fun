@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.uit.party.ui.main.cart_detail.CartDetailViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_cart_detail"
+            style="@style/Widget.Shrine.Toolbar.Logo.Product" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cart_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:linearRecyclerData="@{viewModel.mListCart}"
+            />
+    </LinearLayout>
+</layout>

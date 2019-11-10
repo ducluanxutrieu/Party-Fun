@@ -11,16 +11,19 @@ import com.uit.party.model.Account
 import com.uit.party.model.DishModel
 import com.uit.party.ui.main.detail_dish.DetailDishFragment
 import com.uit.party.ui.main.main_menu.MenuFragment
-import com.uit.party.ui.main.main_menu.menu_item.DishesAdapter
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SetupConnectToServer
 import com.uit.party.util.SharedPrefs
+import com.uit.party.util.rxbus.RxBus
+import com.uit.party.util.rxbus.RxEvent
+import io.reactivex.disposables.Disposable
 
-class MainActivity : AppCompatActivity(), DishesAdapter.DishItemOnClicked {
+class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
-    private val viewModel = MainViewModel()
+    private val mViewModel = MainViewModel()
+    private lateinit var mDisposableItemDish: Disposable
 
 
     companion object {
@@ -36,7 +39,7 @@ class MainActivity : AppCompatActivity(), DishesAdapter.DishItemOnClicked {
 
         setupBinding()
         checkLogin()
-        DishesAdapter(this)
+        listenRxBus()
     }
 
     private fun checkLogin() {
@@ -65,12 +68,19 @@ class MainActivity : AppCompatActivity(), DishesAdapter.DishItemOnClicked {
 
     private fun setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.viewModel = viewModel
+        binding.viewModel = mViewModel
         showFragment()
     }
 
-    override fun onItemDishClicked(dishType: String, position: Int, item: DishModel) {
-        val fragment = DetailDishFragment.newInstance(item, position)
-        AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true,  this)
+    private fun listenRxBus() {
+        mDisposableItemDish = RxBus.listen(RxEvent.ShowItemDishDetail::class.java).subscribe { model ->
+            val fragment = DetailDishFragment.newInstance(model = model.dishModel, position = model.position, dishType = model.dishType)
+            AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true,  this)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!mDisposableItemDish.isDisposed) mDisposableItemDish.dispose()
     }
 }

@@ -1,5 +1,6 @@
 package com.uit.party.ui.profile.change_password
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,13 +33,14 @@ class ChangePasswordFragment(mActivity: ProfileActivity) : Fragment(){
         binding.viewModel = viewModel
     }
 
+    @SuppressLint("NewApi")
     private fun setupActionBar() {
         binding.toolbarChangePassword.setNavigationIcon(R.drawable.ic_arrow_back_green_24dp)
         binding.toolbarChangePassword.setNavigationOnClickListener{
             (context as ProfileActivity).onBackPressed()
         }
         binding.toolbarChangePassword.title = getString(R.string.toolbar_change_password)
-        binding.toolbarChangePassword.setTitleTextColor(resources.getColor(R.color.colorWhile))
+        binding.toolbarChangePassword.setTitleTextColor(resources.getColor(R.color.colorWhile, context?.theme))
     }
 
     companion object {

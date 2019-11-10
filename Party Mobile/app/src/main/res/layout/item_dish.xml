@@ -53,18 +53,24 @@
                     android:src="@drawable/ic_add_dish_cart_24dp" />
             </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ProductImage"
-                android:layout_width="@dimen/_100sdp"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
-                android:layout_gravity="center"
-                android:elevation="@dimen/_2sdp"
-                android:scaleType="fitCenter"
-                app:dishUrl="@{itemViewModel.imageDish}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_add_to_card" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_add_to_card"
+                app:cardCornerRadius="@dimen/_10sdp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ProductImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    app:dishUrl="@{itemViewModel.imageDish}"
+                    />
+            </androidx.cardview.widget.CardView>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_name"

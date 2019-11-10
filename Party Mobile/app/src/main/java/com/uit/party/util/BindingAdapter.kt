@@ -51,7 +51,7 @@ fun setImageIcon(imageView: AppCompatImageView, url: String?) {
 fun setDishImage(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
         val requestOptions = RequestOptions
-            .circleCropTransform()
+            .centerCropTransform()
             .error(R.drawable.dish_sample)
             .placeholder(R.drawable.dish_sample)
         Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)

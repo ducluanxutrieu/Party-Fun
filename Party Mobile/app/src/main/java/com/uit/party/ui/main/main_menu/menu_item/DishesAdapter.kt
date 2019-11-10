@@ -9,8 +9,10 @@ import com.uit.party.R
 import com.uit.party.databinding.ItemDishBinding
 import com.uit.party.model.DishModel
 import com.uit.party.util.BindableAdapter
+import com.uit.party.util.rxbus.RxBus
+import com.uit.party.util.rxbus.RxEvent
 
-class DishesAdapter(private val itemClicked: DishItemOnClicked) : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(), BindableAdapter<DishModel> {
+class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(), BindableAdapter<DishModel> {
     private var dishList = ArrayList<DishModel>()
     private lateinit var binding: ItemDishBinding
     private lateinit var mDishType: String
@@ -22,7 +24,7 @@ class DishesAdapter(private val itemClicked: DishItemOnClicked) : RecyclerView.A
             parent,
             false
         )
-        return DishViewHolder(mDishType, binding, itemClicked)
+        return DishViewHolder(mDishType, binding)
     }
 
     override fun getItemCount(): Int {
@@ -43,18 +45,14 @@ class DishesAdapter(private val itemClicked: DishItemOnClicked) : RecyclerView.A
         notifyDataSetChanged()
     }
 
-    interface DishItemOnClicked{
-        fun onItemDishClicked(dishType: String, position: Int, item: DishModel)
-    }
-
-    class DishViewHolder(val dishType: String, val binding: ItemDishBinding, private val itemClicked: DishItemOnClicked) : RecyclerView.ViewHolder(binding.root) {
+    class DishViewHolder(private val dishType: String, val binding: ItemDishBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(dishModel: DishModel) {
             val itemViewModel = ItemDishViewModel()
             binding.setVariable(BR.itemViewModel, itemViewModel)
             binding.executePendingBindings()
             itemViewModel.init(dishModel)
             binding.root.setOnClickListener {
-                itemClicked.onItemDishClicked(dishType, adapterPosition, dishModel)
+                RxBus.publish(RxEvent.ShowItemDishDetail(dishType, adapterPosition, dishModel))
             }
         }
     }

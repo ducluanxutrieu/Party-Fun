@@ -7,9 +7,8 @@ import androidx.databinding.library.baseAdapters.BR
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
 import com.uit.party.ui.main.main_menu.menu_item.DishesAdapter
-import com.uit.party.util.ToastUtil
 
-class ItemMenuViewModel : BaseObservable(), DishesAdapter.DishItemOnClicked{
+class ItemMenuViewModel : BaseObservable(){
     lateinit var mDishesAdapter: DishesAdapter
     val mTypeMenuField = ObservableField("")
 
@@ -21,13 +20,9 @@ class ItemMenuViewModel : BaseObservable(), DishesAdapter.DishItemOnClicked{
         }
 
     fun init(menuModel: MenuModel) {
-        mDishesAdapter = DishesAdapter(this)
+        mDishesAdapter = DishesAdapter()
         mDishesAdapter.setDishesType(menuModel.menuName)
         dishList = menuModel.listDish
         mTypeMenuField.set(menuModel.menuName)
-    }
-
-    override fun onItemDishClicked(dishType: String ,position: Int, item: DishModel) {
-        item.name?.let { ToastUtil().showToast(it) }
     }
 }

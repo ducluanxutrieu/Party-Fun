@@ -142,4 +142,6 @@
     <string name="main_dishes">Main Dishes</string>
     <string name="seafood">Seafood</string>
     <string name="drinks">Drinks</string>
+    <string name="your_cart">Your Cart</string>
+    <string name="cart_detail">Cart Detail</string>
 </resources>
