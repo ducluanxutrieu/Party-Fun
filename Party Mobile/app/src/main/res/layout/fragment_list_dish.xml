@@ -59,6 +59,14 @@
                 android:textColor="@color/colorWhile"
                 app:iconTint="@color/colorWhile"
                 />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/app_bar"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView

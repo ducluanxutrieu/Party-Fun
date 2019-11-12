@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,7 +9,7 @@
             type="com.uit.party.ui.main.cart_detail.CartDetailViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -17,11 +18,107 @@
             android:id="@+id/toolbar_cart_detail"
             style="@style/Widget.Shrine.Toolbar.Logo.Product" />
 
+        <LinearLayout
+            android:id="@+id/ll_title_column"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_5sdp"
+            android:layout_below="@id/toolbar_cart_detail">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="@dimen/_130sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_65sdp"
+                android:text="@string/dish_name"
+                android:gravity="center"
+                android:fontFamily="@font/museo_sans_cyrl"
+                android:textSize="@dimen/_15sdp"
+                />
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:text="@string/dishes_price"
+                android:gravity="center"
+                android:fontFamily="@font/museo_sans_cyrl"
+                android:textSize="@dimen/_15sdp"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_below="@id/ll_title_column"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:background="@color/colorPrimaryDark"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cart_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:linearRecyclerData="@{viewModel.mListCart}"
+            android:layout_below="@id/ll_title_column"
+            android:layout_above="@id/ll_total"
+            android:layout_marginTop="@dimen/_5sdp"
             />
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@id/btn_order_now">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="@dimen/_180sdp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:text="@string/total"
+                android:textColor="@color/colorBlue_78"
+                android:fontFamily="@font/museo_sans_cyrl"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                android:padding="@dimen/_5sdp"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_total_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                tools:text="1.500.000Đ"
+                android:textColor="@color/colorBlue_78"
+                android:fontFamily="@font/museo_sans_cyrl"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                android:padding="@dimen/_5sdp"
+                android:text="@{viewModel.mTotalPrice}"
+                />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_order_now"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:text="@string/order_now"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"
+            style="@style/MaterialButton"
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/_15sdp"
+            />
+    </RelativeLayout>
 </layout>

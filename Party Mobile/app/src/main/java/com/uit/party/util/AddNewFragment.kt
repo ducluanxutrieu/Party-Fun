@@ -2,6 +2,7 @@ package com.uit.party.util
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.uit.party.R
 
 class AddNewFragment {
@@ -16,9 +17,9 @@ class AddNewFragment {
         if (fragment != null) {
 //            val defaultContainerId = R.id.fl_fragment_container
             ft.replace(containerId, fragment, fragment.javaClass.simpleName)
-            if (shouldAddStack) {
-                ft.addToBackStack(fragment.javaClass.simpleName)
-            }
+//            if (shouldAddStack) {
+//                ft.addToBackStack(fragment.javaClass.simpleName)
+//            }
             mCurrentFragment = fragment
         }
         ft.commitAllowingStateLoss()
@@ -38,6 +39,7 @@ class AddNewFragment {
         if (fragment != null) {
 //            val defaultContainerId = R.id.fl_fragment_container
             ft.replace(containerId, fragment, fragment.javaClass.simpleName)
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             if (shouldAddStack) {
                 ft.addToBackStack(fragment.javaClass.simpleName)
             }

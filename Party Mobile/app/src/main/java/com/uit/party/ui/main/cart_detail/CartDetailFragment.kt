@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentCartDetailBinding
 import com.uit.party.model.DishModel
+import com.uit.party.ui.main.MainActivity
 
-class CartDetailFragment : Fragment() {
+class CartDetailFragment : Fragment(){
     private var mListDishes = ArrayList<DishModel>()
     private lateinit var mBinding: FragmentCartDetailBinding
     private val mViewModel = CartDetailViewModel()
-    private val mCartAdapter = CartDetailAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +32,7 @@ class CartDetailFragment : Fragment() {
         mBinding.viewModel = mViewModel
         mViewModel.initData(mListDishes)
 
-        mBinding.rvCartDetail.adapter = mCartAdapter
+        mBinding.rvCartDetail.adapter = mViewModel.mCartAdapter
 
         setupToolbar()
     }
@@ -48,7 +48,7 @@ class CartDetailFragment : Fragment() {
             )
         )
         mBinding.toolbarCartDetail.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            (activity as MainActivity).supportFragmentManager.popBackStack()
         }
     }
 

@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(){
 
         if (account != null) {
             val fragment = MenuFragment.newInstance(account)
-            AddNewFragment().addFragment(R.id.main_container, fragment, true, this)
+            AddNewFragment().addFragment(R.id.main_container, fragment, false, this)
         }
     }
 

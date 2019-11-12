@@ -144,4 +144,9 @@
     <string name="drinks">Drinks</string>
     <string name="your_cart">Your Cart</string>
     <string name="cart_detail">Cart Detail</string>
+    <string name="_1">1</string>
+    <string name="dish_name">Dish Name</string>
+    <string name="total">Total Price: </string>
+    <string name="order_now">Order Now</string>
+    <string name="dishes_price">Price</string>
 </resources>

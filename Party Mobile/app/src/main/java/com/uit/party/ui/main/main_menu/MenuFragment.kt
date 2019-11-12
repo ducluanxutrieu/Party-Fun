@@ -1,10 +1,14 @@
 package com.uit.party.ui.main.main_menu
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,13 +27,11 @@ import com.uit.party.ui.main.cart_detail.CartDetailFragment
 import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginViewModel
-import com.uit.party.util.AddNewFragment
-import com.uit.party.util.SharedPrefs
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.*
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
+
 
 @Suppress("DEPRECATION")
 class MenuFragment : Fragment(),
@@ -48,6 +50,8 @@ class MenuFragment : Fragment(),
 
     private lateinit var mDisposableAddCart: Disposable
     private var mListDishesSelected = ArrayList<DishModel>()
+
+    private lateinit var mDummyImgView: AppCompatImageView
 
 
     override fun onCreateView(
@@ -117,6 +121,7 @@ class MenuFragment : Fragment(),
         setupActionBar()
         setPullToRefresh()
         rxBusListen()
+        mDummyImgView = binding.ivCopy
     }
 
     private fun setupDrawer() {
@@ -222,12 +227,46 @@ class MenuFragment : Fragment(),
         }
     }
 
-    private fun rxBusListen(){
-        mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe{
+    private fun rxBusListen() {
+        mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe {
             mListDishesSelected.add(it.dishModel)
             val textFab = "${mListDishesSelected.size} Dishes Selected"
             binding.fabAddDish.text = textFab
+
+            val b = GlobalApplication().loadBitmapFromView(
+                it.cardDish,
+                it.cardDish.width,
+                it.cardDish.height
+            )
+            animateView(it.cardDish, b)
         }
+    }
+
+    private fun animateView(foodCardView: View, b: Bitmap) {
+        mDummyImgView.setImageBitmap(b)
+        mDummyImgView.visibility = View.VISIBLE
+        val u = IntArray(2)
+        binding.fabAddDish.getLocationInWindow(u)
+        mDummyImgView.left = foodCardView.left
+        mDummyImgView.top = foodCardView.top
+        val animSetXY = AnimatorSet()
+        val y = ObjectAnimator.ofFloat(
+            mDummyImgView,
+            "translationY",
+            (mDummyImgView.top).toFloat(),
+            (u[1] - 2 * 220).toFloat()
+        )
+        val x = ObjectAnimator.ofFloat(
+            mDummyImgView,
+            "translationX",
+            (mDummyImgView.left).toFloat(),
+            (u[0] - 2 * 100).toFloat()
+        )
+        val sy = ObjectAnimator.ofFloat(mDummyImgView, "scaleY", 0.8f, 0.1f)
+        val sx = ObjectAnimator.ofFloat(mDummyImgView, "scaleX", 0.8f, 0.1f)
+        animSetXY.playTogether(x, y, sx, sy)
+        animSetXY.duration = 650
+        animSetXY.start()
     }
 
     override fun onDestroyView() {

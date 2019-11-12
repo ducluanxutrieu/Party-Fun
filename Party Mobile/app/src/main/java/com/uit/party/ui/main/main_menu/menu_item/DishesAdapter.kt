@@ -12,7 +12,8 @@ import com.uit.party.util.BindableAdapter
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 
-class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(), BindableAdapter<DishModel> {
+class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(),
+    BindableAdapter<DishModel> {
     private var dishList = ArrayList<DishModel>()
     private lateinit var binding: ItemDishBinding
     private lateinit var mDishType: String
@@ -31,7 +32,7 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(), Bind
         return dishList.size
     }
 
-    fun setDishesType(dishType: String){
+    fun setDishesType(dishType: String) {
         mDishType = dishType
     }
 
@@ -45,7 +46,8 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(), Bind
         notifyDataSetChanged()
     }
 
-    class DishViewHolder(private val dishType: String, val binding: ItemDishBinding) : RecyclerView.ViewHolder(binding.root) {
+    class DishViewHolder(private val dishType: String, val binding: ItemDishBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(dishModel: DishModel) {
             val itemViewModel = ItemDishViewModel()
             binding.setVariable(BR.itemViewModel, itemViewModel)
@@ -53,6 +55,9 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(), Bind
             itemViewModel.init(dishModel)
             binding.root.setOnClickListener {
                 RxBus.publish(RxEvent.ShowItemDishDetail(dishType, adapterPosition, dishModel))
+            }
+            binding.btnAddToCard.setOnClickListener {
+                RxBus.publish(RxEvent.AddToCart(dishModel, binding.root))
             }
         }
     }
