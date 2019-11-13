@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity(){
 
         setupBinding()
         checkLogin()
-        listenRxBus()
     }
 
     private fun checkLogin() {
@@ -77,6 +76,11 @@ class MainActivity : AppCompatActivity(){
             val fragment = DetailDishFragment.newInstance(model = model.dishModel, position = model.position, dishType = model.dishType)
             AddNewFragment().addNewSlideUp(R.id.main_container, fragment, true,  this)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listenRxBus()
     }
 
     override fun onStop() {
