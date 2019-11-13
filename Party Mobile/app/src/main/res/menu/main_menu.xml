@@ -2,22 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/ToolbarFilterIcon"
-        android:title="@string/icon_filter_title"
-        android:icon="@drawable/ic_filter_list_vd_theme_24"
-        app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/ToolbarSearchIcon"
+        android:id="@+id/toolbar_search"
         android:title="@string/icon_search_title"
         android:icon="@drawable/ic_search_vd_theme_24"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item
-        android:id="@+id/ToolbarChangePassword"
-        android:title="@string/change_password"
-        />
-    <item
-        android:id="@+id/ToolbarLogout"
-        android:title="@string/logout"
-        android:icon="@drawable/ic_logout"
-        />
+        android:id="@+id/toolbar_filter"
+        android:title="@string/your_cart"
+        android:icon="@drawable/ic_shopping_cart_vd_theme_24"
+        app:showAsAction="ifRoom"/>
 </menu>

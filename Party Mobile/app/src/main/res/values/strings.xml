@@ -138,10 +138,18 @@
     <string name="dish_avatar">Dish Avatar</string>
     <string name="type">Type</string>
     <string name="holiday_offers">Holiday Offers</string>
-    <string name="beverages">Beverages</string>
     <string name="first_dishes">First Dishes</string>
     <string name="main_dishes">Main Dishes</string>
     <string name="seafood">Seafood</string>
     <string name="drinks">Drinks</string>
+    <string name="your_cart">Your Cart</string>
+    <string name="cart_detail">Cart Detail</string>
+    <string name="_1">1</string>
+    <string name="dish_name">Dish Name</string>
+    <string name="total">Total Price: </string>
+    <string name="order_now">Order Now</string>
+    <string name="dishes_price">Price</string>
     <string name="dish_detail">Dish Detail</string>
+    <string name="dish_model">DISH_MODEL</string>
+    <string name="home">Home</string>
 </resources>

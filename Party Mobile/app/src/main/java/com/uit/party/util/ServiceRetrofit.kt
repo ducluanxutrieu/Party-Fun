@@ -16,9 +16,6 @@ import okhttp3.RequestBody
 import retrofit2.http.POST
 import retrofit2.http.Multipart
 
-
-
-
 interface ServiceRetrofit {
     @HTTP(method = "POST", path = "user/signin", hasBody = true)
     fun login(
@@ -60,10 +57,10 @@ interface ServiceRetrofit {
     @POST("product/adddish")
     fun addDish(
         @Header("authorization") token: String,
-        @Part("dishName") name: String,
-        @Part("description") description: String,
-        @Part("price") price: String,
-        @Part("type") type: String,
+        @Part("name") name: RequestBody?,
+        @Part("description") description: RequestBody?,
+        @Part("price") price: RequestBody?,
+        @Part("type") type: RequestBody?,
         @Part image: ArrayList<MultipartBody.Part>,
         @Part("image") requestBody: RequestBody
     ): Call<AddDishResponse>

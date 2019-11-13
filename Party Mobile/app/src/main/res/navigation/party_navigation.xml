@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/party_navigation"
-    app:startDestination="@id/nav_list_dish">
+    app:startDestination="@id/nav_user_home">
 
     <fragment
-        android:id="@+id/nav_list_dish"
-        android:name="com.uit.party.ui.main.list_dish.ListDishFragment"
+        android:id="@+id/nav_user_home"
+        android:name="com.uit.party.ui.main.main_menu.MenuFragment"
         android:label="@string/menu_home"
         >
         <action
@@ -30,9 +31,13 @@
             app:argType="integer"
             />
 
-        <argument
-            android:name="dishModel"
-            app:argType="DishModel"
-            />
+        <argument android:name="@string/dish_model"
+            app:argType="com.uit.party.model.DishModel"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_user_profile"
+        android:name="com.uit.party.ui.profile.profile_fragment.ProfileFragment"
+        android:label="@string/profile_detail"
+        tools:layout="@layout/fragment_profile"/>
 </navigation>

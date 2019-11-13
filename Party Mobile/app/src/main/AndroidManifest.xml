@@ -18,8 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Material"
         tools:targetApi="n">
-        <activity android:name=".ui.profile.ProfileActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".ui.signin.SignInActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.main.MainActivity"

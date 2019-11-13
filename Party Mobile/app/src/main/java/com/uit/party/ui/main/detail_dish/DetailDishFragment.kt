@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.detail_dish
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ class DetailDishFragment : Fragment(){
     private lateinit var model: DishModel
     private var position: Int = 0
     private var viewModel = DetailDishViewModel()
+    private lateinit var mDishType: String
     private lateinit var binding: FragmentDetailDishBinding
 
 
@@ -43,10 +45,11 @@ class DetailDishFragment : Fragment(){
         setupActionBar()
     }
 
+    @SuppressLint("NewApi")
     private fun setupActionBar() {
         binding.appBar.setNavigationIcon(R.drawable.ic_arrow_back_while_24dp)
         binding.appBar.title = model.name
-        binding.appBar.setTitleTextColor(resources.getColor(R.color.colorWhile))
+        binding.appBar.setTitleTextColor(resources.getColor(R.color.colorWhile, context?.theme))
         binding.appBar.setNavigationOnClickListener {
             (context as MainActivity).onBackPressed()
         }
@@ -54,12 +57,12 @@ class DetailDishFragment : Fragment(){
         binding.appBar.inflateMenu(R.menu.toolbar_menu)
         binding.appBar.setOnMenuItemClickListener {
             when(it.itemId){
-                R.id.ToolbarFilterIcon -> {
+                R.id.toolbar_filter -> {
                     Toast.makeText(context, "Filter Clicked", Toast.LENGTH_SHORT).show()
                     true
                 }
 
-                R.id.ToolbarSearchIcon -> {
+                R.id.toolbar_search -> {
                     Toast.makeText(context, "Search Clicked", Toast.LENGTH_SHORT).show()
                     true
                 }
@@ -70,10 +73,11 @@ class DetailDishFragment : Fragment(){
     }
 
     companion object{
-        fun newInstance(model: DishModel, position: Int): DetailDishFragment{
+        fun newInstance(model: DishModel, position: Int, dishType: String): DetailDishFragment{
             return DetailDishFragment().apply {
                 this.model = model
                 this.position = position
+                this.mDishType = dishType
             }
         }
     }

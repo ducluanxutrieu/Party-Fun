@@ -11,14 +11,13 @@ import com.uit.party.R
 import com.uit.party.model.BaseResponse
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ChangePasswordViewModel(private val mActivity: ProfileActivity) : ViewModel() {
+class ChangePasswordViewModel(private val mActivity: MainActivity) : ViewModel() {
     val sendButtonEnabled = ObservableBoolean(false)
 
     var errorCurrentPassword = ObservableField("")

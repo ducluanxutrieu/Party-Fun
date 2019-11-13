@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.profile.ProfileActivity
 import com.uit.party.ui.profile.change_password.ChangePasswordFragment
 import com.uit.party.ui.profile.editprofile.EditProfileFragment
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
@@ -18,17 +18,17 @@ import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
+class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
     val mName = ObservableField("")
     val mUsername = ObservableField("")
     val mEmail = ObservableField("")
@@ -37,7 +37,7 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
     val mBirthDay = ObservableField("")
     val mAvatar = ObservableField("")
 
-    var mAccount = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
+    private var mAccount = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
     init {
         mName.set(mAccount?.fullName)
@@ -51,12 +51,12 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
 
     fun editProfile(){
         val fragment = EditProfileFragment.newInstance(context)
-        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+//        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
     }
 
     fun changePassword(){
         val fragment = ChangePasswordFragment.newInstance( context)
-        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+//        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
     }
 
     fun avatarClicked(){
@@ -77,11 +77,11 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
         val part: MultipartBody.Part = MultipartBody.Part.createFormData(
             "image",
             file.name,
-            RequestBody.create(parseType.toMediaTypeOrNull(), file)
+            file.asRequestBody(parseType.toMediaTypeOrNull())
         )
 
         //Create request body with text description and text media type
-        val description = RequestBody.create("text/plain".toMediaTypeOrNull(), "image-type")
+        val description = "image-type".toRequestBody("text/plain".toMediaTypeOrNull())
         serviceRetrofit.updateAvatar(TOKEN_ACCESS, part, description)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {

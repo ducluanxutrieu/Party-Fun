@@ -9,10 +9,9 @@ import androidx.lifecycle.ViewModel
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.AccountResponse
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.profile.ProfileActivity
-import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
@@ -23,7 +22,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditProfileFragmentViewModel(private val mActivity: ProfileActivity) : ViewModel(){
+class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewModel(){
     private var fullNameValid = false
     private var phoneNumberValid = false
     private var emailValid = false

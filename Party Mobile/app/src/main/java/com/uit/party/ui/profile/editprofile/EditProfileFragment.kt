@@ -8,13 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentEditProfileBinding
-import com.uit.party.ui.profile.ProfileActivity
+import com.uit.party.ui.main.MainActivity
 
 @Suppress("DEPRECATION")
 class EditProfileFragment : Fragment(){
     private lateinit var binding: FragmentEditProfileBinding
     private lateinit var viewModel: EditProfileFragmentViewModel
-    private lateinit var activity: ProfileActivity
+    private lateinit var activity: MainActivity
 
 
     override fun onCreateView(
@@ -37,7 +37,7 @@ class EditProfileFragment : Fragment(){
     private fun setupActionBar() {
         binding.toolbarEditProfile.setNavigationIcon(R.drawable.ic_arrow_back_green_24dp)
         binding.toolbarEditProfile.setNavigationOnClickListener{
-            (context as ProfileActivity).onBackPressed()
+            (context as MainActivity).onBackPressed()
         }
         binding.toolbarEditProfile.title = getString(R.string.toolbar_edit_profile)
         binding.toolbarEditProfile.setTitleTextColor(resources.getColor(R.color.colorWhile))
@@ -54,7 +54,7 @@ class EditProfileFragment : Fragment(){
     }
 
     companion object{
-        fun newInstance(activity: ProfileActivity): EditProfileFragment{
+        fun newInstance(activity: MainActivity): EditProfileFragment{
             return EditProfileFragment().apply {
                 this.activity = activity
             }
