@@ -6,45 +6,43 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
-import com.uit.party.model.Account
 import com.uit.party.model.DishModel
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.addnewdish.AddNewDishFragment
-import com.uit.party.ui.main.cart_detail.CartDetailFragment
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.ui.signin.login.LoginViewModel
-import com.uit.party.util.*
+import com.uit.party.util.GlobalApplication
+import com.uit.party.util.SharedPrefs
+import com.uit.party.util.ToastUtil
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
 
-
-@Suppress("DEPRECATION")
 class MenuFragment : Fragment(),
-    NavigationView.OnNavigationItemSelectedListener {
-    private var avatarUrl: String? = ""
-    private var username: String = ""
-    private var fullName: String = ""
-
+    NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
     private val mViewModel = MenuViewModel()
     private lateinit var binding: FragmentListDishBinding
-    private val adapter = MenuAdapter()
+    private val mMenuAdapter = MenuAdapter()
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-
-    private var mIsAdmin = false
 
     private lateinit var mDisposableAddCart: Disposable
     private var mListDishesSelected = ArrayList<DishModel>()
 
     private lateinit var mDummyImgView: AppCompatImageView
+
+    private lateinit var mSearchView: SearchView
 
 
     override fun onCreateView(
@@ -62,67 +60,45 @@ class MenuFragment : Fragment(),
 
         binding.viewModel = mViewModel
         mViewModel.init()
-        binding.recyclerView.adapter = adapter
-
-        mIsAdmin = checkAdmin()
-
-        setIsAdmin()
-    }
-
-    private fun setIsAdmin() {
-        if (mIsAdmin) {
-            binding.fabAddDish.icon = resources.getDrawable(R.drawable.plus)
-            binding.fabAddDish.text = StringUtil.getString(R.string.add_dish)
-            binding.fabAddDish.setOnClickListener {
-                val fragment = AddNewDishFragment.newInstance(context as MainActivity)
-//                AddNewFragment().addNewSlideUp(
-//                    R.id.main_container,
-//                    fragment,
-//                    true,
-//                    context as MainActivity
-//                )
+        binding.recyclerView.adapter = mMenuAdapter
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                binding.fabAddDish.isExtended = dy > 0
             }
-        } else {
-            binding.fabAddDish.icon = resources.getDrawable(R.drawable.ic_shopping_cart_vd_theme_24)
-            binding.fabAddDish.setOnClickListener {
-                val fragment = CartDetailFragment.newInstance(mListDishesSelected)
-//                AddNewFragment().addNewSlideUp(
-//                    R.id.main_container,
-//                    fragment,
-//                    true,
-//                    context as MainActivity
-//                )
-            }
-        }
-    }
-
-    private fun checkAdmin(): Boolean {
-        val role =
-            SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
-        return role.equals("Admin")
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        setupDrawer()
         setPullToRefresh()
         rxBusListen()
         mDummyImgView = binding.ivCopy
+        setHasOptionsMenu(true)
+        val toolbar = activity!!.findViewById<View>(R.id.app_bar) as Toolbar
+        toolbar.inflateMenu(R.menu.main_menu)
+        toolbar.setOnMenuItemClickListener(this)
     }
 
-    /*private fun setupDrawer() {
-        if (!avatarUrl.isNullOrEmpty()) {
-            Glide.with(context!!).load(avatarUrl).apply { RequestOptions.circleCropTransform() }
-                .into(headerBinding.ivAvatar)
-        }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        mSearchView = menu.findItem(R.id.toolbar_search).actionView as SearchView
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
 
-        if (username.isNotEmpty()) {
-            headerBinding.tvUsername.text = username
-        }
-        if (fullName.isNotEmpty()) {
-            headerBinding.tvFullName.text = fullName
-        }
-    }*/
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrEmpty()) {
+                    Log.i(TAG, newText)
+                }
+                mMenuAdapter.getFilter().filter(newText)
+                return true
+            }
+
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     private fun setPullToRefresh() {
         mSwipeRefreshLayout = binding.swlListDish
@@ -142,12 +118,20 @@ class MenuFragment : Fragment(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.toolbar_menu, menu)
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.toolbar_search -> {
+                Log.i("MenuFragment", "SearchClicked")
+                return true
+            }
 
-//        val searchView = menu.findItem(R.id.toolbar_search)
-        //TODO add search view
+            R.id.toolbar_cart -> {
+                val action = MenuFragmentDirections.actionListDishFragmentToCartDetailFragment(Gson().toJson(mListDishesSelected))
+                this.findNavController().navigate(action)
+                return true
+            }
+        }
+        return  false
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -160,8 +144,6 @@ class MenuFragment : Fragment(),
                 ToastUtil().showToast("Your Order clicked")
             }
         }
-
-//        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -226,12 +208,6 @@ class MenuFragment : Fragment(),
     }
 
     companion object {
-        fun newInstance(account: Account): MenuFragment {
-            return MenuFragment().apply {
-                this.avatarUrl = account.imageurl
-                this.username = account.username!!
-                this.fullName = account.fullName!!
-            }
-        }
+        private const val TAG = "MenuFragmentTag"
     }
 }

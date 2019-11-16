@@ -7,12 +7,9 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
-import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_MODE
-import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
@@ -153,9 +150,7 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
-
         }
     }
 

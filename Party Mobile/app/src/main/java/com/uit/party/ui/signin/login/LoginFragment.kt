@@ -2,7 +2,6 @@ package com.uit.party.ui.signin.login
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,16 +13,12 @@ import com.uit.party.R
 import com.uit.party.databinding.FragmentLoginBinding
 import com.uit.party.model.LoginModel
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_MODE
-import com.uit.party.ui.main.MainActivity.Companion.SHARE_REFERENCE_NAME
 import com.uit.party.ui.main.MainActivity.Companion.TAG
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.SignInCallback
 import com.uit.party.util.ToastUtil
 
 class LoginFragment : Fragment(), LoginCallback {
-    private lateinit var shareReference: SharedPreferences
-
     private lateinit var binding: FragmentLoginBinding
 
     private var viewModel = LoginViewModel(this)
@@ -32,10 +27,6 @@ class LoginFragment : Fragment(), LoginCallback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setupBinding(container = container)
-        shareReference = context!!.getSharedPreferences(
-            SHARE_REFERENCE_NAME,
-            SHARE_REFERENCE_MODE
-        )
         return binding.root
 
     }
@@ -46,10 +37,7 @@ class LoginFragment : Fragment(), LoginCallback {
     }
 
     private fun updateUiWithUser(model: LoginModel) {
-//        Toast.makeText(context, "Login successful - Welcome ${model.fullname}", Toast.LENGTH_LONG).show()
         Log.i(TAG, model.toString())
-//        mViewModel.saveToMemory(model)
-
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra("userInfo", model)
         startActivity(intent)

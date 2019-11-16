@@ -7,6 +7,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.BaseResponse
 import com.uit.party.ui.main.MainActivity
@@ -17,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ChangePasswordViewModel(private val mActivity: MainActivity) : ViewModel() {
+class ChangePasswordViewModel : ViewModel() {
     val sendButtonEnabled = ObservableBoolean(false)
 
     var errorCurrentPassword = ObservableField("")
@@ -76,10 +77,10 @@ class ChangePasswordViewModel(private val mActivity: MainActivity) : ViewModel()
             })
     }
 
-    fun onSendClicked() {
+    fun onSendClicked(view: View) {
         sendChangePassword {success ->
             if (success){
-                mActivity.onBackPressed()
+                view.findNavController().popBackStack()
             }
         }
     }

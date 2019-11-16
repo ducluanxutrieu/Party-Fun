@@ -12,19 +12,15 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_cart_detail"
-            style="@style/Widget.Shrine.Toolbar.Logo.Product" />
+        android:orientation="vertical"
+        android:background="@color/colorWhile">
 
         <LinearLayout
             android:id="@+id/ll_title_column"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/_5sdp"
-            android:layout_below="@id/toolbar_cart_detail">
+            android:padding="@dimen/_5sdp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="@dimen/_130sdp"

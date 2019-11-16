@@ -1,20 +1,27 @@
 package com.uit.party.ui.main.main_menu
 
+import android.view.View
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import androidx.databinding.library.baseAdapters.BR
-import com.uit.party.model.BaseResponse
-import com.uit.party.model.DishModel
-import com.uit.party.model.DishesResponse
-import com.uit.party.model.MenuModel
+import androidx.navigation.findNavController
+import com.uit.party.R
+import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
+import com.uit.party.ui.signin.login.LoginViewModel
+import com.uit.party.util.SharedPrefs
+import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MenuViewModel : BaseObservable(){
+    val mShowFab = ObservableInt(View.GONE)
+
     @get: Bindable
     var listMenu = ArrayList<MenuModel>()
         private set(value) {
@@ -24,6 +31,17 @@ class MenuViewModel : BaseObservable(){
 
     fun init() {
         getListDishes {}
+        setIsAdmin()
+    }
+
+    private fun setIsAdmin() {
+        if (checkAdmin()) {
+            mShowFab.set(View.VISIBLE)
+        }
+    }
+
+    fun onAddDishClicked(view: View){
+        view.findNavController().navigate(R.id.action_ListDish_to_AddDish)
     }
 
     fun getListDishes(onComplete : (Boolean) -> Unit){
@@ -104,5 +122,11 @@ class MenuViewModel : BaseObservable(){
                     }
                 }
             })
+    }
+
+    private fun checkAdmin(): Boolean {
+        val role =
+            SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
+        return role.equals("Admin")
     }
 }

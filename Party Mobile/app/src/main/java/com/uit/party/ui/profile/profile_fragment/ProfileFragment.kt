@@ -26,10 +26,4 @@ class ProfileFragment : Fragment(){
         binding.viewModel = mViewModel
         return binding.root
     }
-
-    companion object{
-        fun newInstance() : ProfileFragment {
-            return ProfileFragment()
-        }
-    }
 }

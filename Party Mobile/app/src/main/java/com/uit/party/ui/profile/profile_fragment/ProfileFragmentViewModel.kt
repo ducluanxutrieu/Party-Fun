@@ -2,8 +2,10 @@ package com.uit.party.ui.profile.profile_fragment
 
 import android.graphics.Bitmap
 import android.util.Log
+import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
@@ -49,14 +51,12 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
         mUsername.set(mAccount?.username)
     }
 
-    fun editProfile(){
-        val fragment = EditProfileFragment.newInstance(context)
-//        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+    fun editProfile(view: View){
+        view.findNavController().navigate(R.id.action_ProfileFragment_to_EditProfileFragment)
     }
 
-    fun changePassword(){
-        val fragment = ChangePasswordFragment.newInstance( context)
-//        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+    fun onChangePasswordClicked(view: View){
+        view.findNavController().navigate(R.id.action_ProfileFragment_to_ChangePasswordFragment)
     }
 
     fun avatarClicked(){

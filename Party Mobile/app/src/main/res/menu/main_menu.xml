@@ -5,9 +5,10 @@
         android:id="@+id/toolbar_search"
         android:title="@string/icon_search_title"
         android:icon="@drawable/ic_search_vd_theme_24"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <item
-        android:id="@+id/toolbar_filter"
+        android:id="@+id/toolbar_cart"
         android:title="@string/your_cart"
         android:icon="@drawable/ic_shopping_cart_vd_theme_24"
         app:showAsAction="ifRoom"/>

@@ -3,11 +3,13 @@ package com.uit.party.ui.main.main_menu.menu_item
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.BR
 import com.uit.party.R
 import com.uit.party.databinding.ItemDishBinding
 import com.uit.party.model.DishModel
+import com.uit.party.ui.main.main_menu.MenuFragmentDirections
 import com.uit.party.util.BindableAdapter
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
@@ -54,7 +56,8 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(),
             binding.executePendingBindings()
             itemViewModel.init(dishModel)
             binding.root.setOnClickListener {
-                RxBus.publish(RxEvent.ShowItemDishDetail(dishType, adapterPosition, dishModel))
+                val action = MenuFragmentDirections.actionListDishFragmentToDishDetailFragment(adapterPosition, dishType, dishModel)
+                it.findNavController().navigate(action)
             }
             binding.btnAddToCard.setOnClickListener {
                 RxBus.publish(RxEvent.AddToCart(dishModel, binding.root))

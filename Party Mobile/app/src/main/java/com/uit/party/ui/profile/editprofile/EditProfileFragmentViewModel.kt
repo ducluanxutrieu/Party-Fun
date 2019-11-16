@@ -3,13 +3,14 @@ package com.uit.party.ui.profile.editprofile
 import android.app.DatePickerDialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.AccountResponse
-import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
@@ -22,7 +23,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewModel(){
+class EditProfileFragmentViewModel(private val mActivity: FragmentActivity?) : ViewModel() {
     private var fullNameValid = false
     private var phoneNumberValid = false
     private var emailValid = false
@@ -40,7 +41,6 @@ class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewMo
     var btnUpdateEnabled: ObservableBoolean = ObservableBoolean()
 
 
-
     private var calBirthdayPicker = Calendar.getInstance()
 
     private val formatDateUI = "dd-MM-yyyy"
@@ -48,12 +48,13 @@ class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewMo
 
     private val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
-    private val birthDaySetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-        updateBirthdayInView()
-        calBirthdayPicker.set(Calendar.YEAR, year)
-        calBirthdayPicker.set(Calendar.MONTH, monthOfYear)
-        calBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-    }
+    private val birthDaySetListener =
+        DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            updateBirthdayInView()
+            calBirthdayPicker.set(Calendar.YEAR, year)
+            calBirthdayPicker.set(Calendar.MONTH, monthOfYear)
+            calBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        }
 
     init {
 //        val timeStart = sf.format(calBirthdayPicker.time)
@@ -185,9 +186,10 @@ class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewMo
             }
         }
     }
-    fun onBirthdayClicked(){
+
+    fun onBirthdayClicked(view: View) {
         DatePickerDialog(
-            mActivity,
+            view.context,
             birthDaySetListener,
             calBirthdayPicker.get(Calendar.YEAR),
             calBirthdayPicker.get(Calendar.MONTH),
@@ -195,10 +197,16 @@ class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewMo
         ).show()
     }
 
-    fun onUpdateClicked(){
-        val requestModel = RequestUpdateProfile(mEmail.get(), mFullName.get(), mPhoneNumber.get(), mBirthday.get(), mSex)
+    fun onUpdateClicked() {
+        val requestModel = RequestUpdateProfile(
+            mEmail.get(),
+            mFullName.get(),
+            mPhoneNumber.get(),
+            mBirthday.get(),
+            mSex
+        )
         serviceRetrofit.updateUser(TOKEN_ACCESS, requestModel)
-            .enqueue(object : Callback<AccountResponse>{
+            .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     if (!t.message.isNullOrEmpty()) {
                         ToastUtil().showToast(t.message!!)
@@ -210,7 +218,7 @@ class EditProfileFragmentViewModel(private val mActivity: MainActivity) : ViewMo
                     response: Response<AccountResponse>
                 ) {
                     val repo = response.body()
-                    if (repo != null){
+                    if (repo != null) {
                         saveToMemory(repo)
                         ToastUtil().showToast(StringUtil.getString(R.string.update_profile_success))
                     }

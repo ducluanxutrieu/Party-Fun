@@ -125,7 +125,6 @@
     <string name="my_vouchers">My Vouchers</string>
     <string name="address">Address</string>
     <string name="version_1_0_alpha">Version 1.0 Alpha</string>
-    <string name="toolbar_change_password">Change Password</string>
     <string name="feedback">Feedback</string>
     <string name="about">About Now</string>
     <string name="dish_title">Dish Title</string>
@@ -152,4 +151,6 @@
     <string name="dish_detail">Dish Detail</string>
     <string name="dish_model">DISH_MODEL</string>
     <string name="home">Home</string>
+    <string name="toolbar_change_password">Change Password</string>
+    <string name="list_dish_selected_key">LIST_DISH_SELECTED</string>
 </resources>

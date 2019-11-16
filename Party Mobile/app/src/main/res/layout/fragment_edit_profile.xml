@@ -205,7 +205,7 @@
                     android:editable="false"
                     android:focusable="false"
                     android:text="@{viewModel.mBirthday}"
-                    android:onClick="@{() -> viewModel.onBirthdayClicked()}"
+                    android:onClick="@{(view) -> viewModel.onBirthdayClicked(view)}"
                     bind:ignore="Deprecated" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

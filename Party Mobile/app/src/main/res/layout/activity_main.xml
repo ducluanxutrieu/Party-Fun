@@ -18,8 +18,7 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         tools:context=".ui.main.MainActivity"
-        tools:openDrawer="end"
-        >
+        tools:openDrawer="end">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -34,8 +33,10 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/app_bar"
                     style="@style/Widget.Shrine.Toolbar.Logo.Product"
+                    android:background="?attr/colorPrimary"
                     android:layout_height="?attr/actionBarSize"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -47,6 +48,7 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/party_navigation" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
