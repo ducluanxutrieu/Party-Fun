@@ -2,18 +2,17 @@ package com.uit.party.ui.profile.profile_fragment
 
 import android.graphics.Bitmap
 import android.util.Log
+import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.profile.ProfileActivity
-import com.uit.party.ui.profile.change_password.ChangePasswordFragment
-import com.uit.party.ui.profile.editprofile.EditProfileFragment
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
-import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
@@ -28,7 +27,7 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
+class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
     val mName = ObservableField("")
     val mUsername = ObservableField("")
     val mEmail = ObservableField("")
@@ -37,7 +36,7 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
     val mBirthDay = ObservableField("")
     val mAvatar = ObservableField("")
 
-    var mAccount = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
+    private var mAccount = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
     init {
         mName.set(mAccount?.fullName)
@@ -49,14 +48,12 @@ class ProfileFragmentViewModel(val context: ProfileActivity) : ViewModel(){
         mUsername.set(mAccount?.username)
     }
 
-    fun editProfile(){
-        val fragment = EditProfileFragment.newInstance(context)
-        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+    fun editProfile(view: View){
+        view.findNavController().navigate(R.id.action_ProfileFragment_to_EditProfileFragment)
     }
 
-    fun changePassword(){
-        val fragment = ChangePasswordFragment.newInstance( context)
-        AddNewFragment().addNewSlideUp(R.id.profile_container, fragment, true, context)
+    fun onChangePasswordClicked(view: View){
+        view.findNavController().navigate(R.id.action_ProfileFragment_to_ChangePasswordFragment)
     }
 
     fun avatarClicked(){

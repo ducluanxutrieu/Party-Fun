@@ -15,11 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tool_bar_profile"
-            style="@style/Widget.Shrine.Toolbar.Logo.CrystalClear"
-            android:elevation="@dimen/_2sdp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,7 +23,7 @@
             <View
                 android:id="@+id/rl_background"
                 android:layout_width="match_parent"
-                android:layout_height="146dp"
+                android:layout_height="120dp"
                 android:background="@color/colorPrimary" />
 
             <androidx.cardview.widget.CardView
@@ -59,7 +54,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="@{() -> viewModel.editProfile()}"
+                android:onClick="@{(view) -> viewModel.editProfile(view)}"
                 android:padding="@dimen/_5sdp"
                 >
 
@@ -94,7 +89,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="@{() -> viewModel.changePassword()}"
+                android:onClick="@{(view) -> viewModel.onChangePasswordClicked(view)}"
                 android:padding="@dimen/_5sdp"
                 >
 

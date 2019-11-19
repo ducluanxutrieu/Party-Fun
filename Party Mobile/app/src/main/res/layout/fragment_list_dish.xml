@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -10,73 +9,48 @@
             type="com.uit.party.ui.main.main_menu.MenuViewModel" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_sign_in_background"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        tools:context=".ui.main.MainActivity"
-        tools:openDrawer="end">
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swl_list_dish"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/app_bar"
-                style="@style/Widget.Shrine.Toolbar.Logo.Product" />
-
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swl_list_dish"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:layout_below="@id/app_bar">
+                app:linearRecyclerData="@{viewModel.listMenu}" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:linearRecyclerData="@{viewModel.listMenu}" />
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
-                android:id="@+id/fab_add_dish"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="@dimen/fab_margin"
-                android:contentDescription="@string/your_cart"
-                android:text="@string/your_cart"
-                android:textAllCaps="false"
-                app:icon="@drawable/ic_add_dish_cart_24dp"
-                android:backgroundTint="@color/colorCrystalClear"
-                android:textColor="@color/colorWhile"
-                app:iconTint="@color/colorWhile"
-                />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_copy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/app_bar"
-                android:scaleType="fitXY"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_add_dish"
+            style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:menu="@menu/activity_main_drawer" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:contentDescription="@string/your_cart"
+            android:text="@string/add_dish"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhile"
+            app:icon="@drawable/plus"
+            app:iconTint="@color/colorWhile"
+            android:visibility="@{viewModel.mShowFab}"
+            android:onClick="@{(view) -> viewModel.onAddDishClicked(view)}"/>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
-
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+    </RelativeLayout>
 </layout>

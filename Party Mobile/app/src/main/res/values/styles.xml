@@ -74,7 +74,8 @@
     <style name="TextAppearance.Shrine.Logo" parent="Base.TextAppearance.Shrine.Logo"/>
 
     <style name="Widget.Shrine.Toolbar.Logo.Product">
-        <item name="android:background">@color/colorCrystalClear</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorWhile</item>
     </style>
 
     <style name="Widget.Shrine.Toolbar.Logo.CrystalClear">

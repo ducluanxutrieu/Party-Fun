@@ -32,8 +32,6 @@ class AddNewDishFragment : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        setupToolbar()
         setupSpinner()
     }
 
@@ -55,22 +53,5 @@ class AddNewDishFragment : Fragment(){
                     mViewModel.mTypeText = Thumbnail.Thumbnail1.dishName
                 }
             }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun setupToolbar() {
-        val toolbar = mBinding.toolbarAddDish
-        toolbar.title = getString(R.string.add_dish)
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_green_24dp)
-        toolbar.setNavigationOnClickListener{
-            (context as MainActivity).onBackPressed()
-        }
-        toolbar.setTitleTextColor(resources.getColor(R.color.colorWhile))
-    }
-
-    companion object{
-        fun newInstance(activity: MainActivity): AddNewDishFragment{
-            return AddNewDishFragment().apply { this.mActivity = activity }
-        }
     }
 }

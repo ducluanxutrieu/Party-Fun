@@ -2,6 +2,7 @@ package com.uit.party.model
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.Multipart
+import java.io.Serializable
 
 class AddDishRequest(
     val name: String? = null,
@@ -24,4 +25,4 @@ data class DishModel(
     @SerializedName("image") val image : ArrayList<String>? = null,
     @SerializedName("updateAt") val updateAt : String? = null,
     @SerializedName("createAt") val createAt : String? = null
-)
+): Serializable

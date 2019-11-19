@@ -10,10 +10,44 @@
             type="com.uit.party.ui.main.MainViewModel" />
     </data>
 
-    <FrameLayout
-        android:id="@+id/main_container"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_sign_in_background"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        tools:context=".ui.main.MainActivity"
+        tools:openDrawer="end">
 
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/app_bar"
+                style="@style/Widget.Shrine.Toolbar.Logo.Product"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:titleTextColor="@color/colorWhile"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark"/>
+
+            <fragment
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/party_navigation" />
+        </LinearLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:menu="@menu/menu_main_drawer" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

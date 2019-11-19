@@ -14,15 +14,14 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/_30sdp"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            app:cardCornerRadius="@dimen/_35sdp"
             >
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="@dimen/_60sdp"
-                android:layout_height="@dimen/_60sdp"
-                android:contentDescription="@string/nav_header_desc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_account_circle_24dp" />
         </androidx.cardview.widget.CardView>
 
@@ -39,6 +38,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nav_header_subtitle" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
