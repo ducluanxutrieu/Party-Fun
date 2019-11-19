@@ -13,12 +13,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhile">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_edit_profile"
-            style="@style/Widget.Shrine.Toolbar.Logo.Product"
-            android:background="@color/colorAccent"
-            />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

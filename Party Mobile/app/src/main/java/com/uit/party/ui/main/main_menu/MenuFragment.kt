@@ -140,9 +140,9 @@ class MenuFragment : Fragment(),
             R.id.log_out -> {
                 logOut()
             }
-            R.id.naw_user_order -> {
+/*            R.id.naw_user_order -> {
                 ToastUtil().showToast("Your Order clicked")
-            }
+            }*/
         }
         return true
     }

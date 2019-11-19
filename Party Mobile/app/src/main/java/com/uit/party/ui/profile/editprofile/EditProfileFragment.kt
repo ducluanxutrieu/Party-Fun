@@ -21,7 +21,7 @@ class EditProfileFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false)
-        viewModel = EditProfileFragmentViewModel(activity)
+        viewModel = EditProfileFragmentViewModel()
         binding.viewModel = viewModel
         return binding.root
     }
@@ -38,6 +38,5 @@ class EditProfileFragment : Fragment(){
                 R.id.rb_female -> viewModel.mSex = getString(R.string.sex_female)
             }
         }
-        binding.rgSex.check(R.id.rb_male)
     }
 }

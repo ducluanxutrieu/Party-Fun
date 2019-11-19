@@ -54,15 +54,16 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
                 } else {
                     val filteredList = ArrayList<MenuModel>()
                     for (row in mListDishMenuOrigin) {
-                        if (row.listDish.size != 0){
-                            row.listDish.forEach {dish ->
-                                if (dish.name?.contains(charString.toLowerCase(Locale("vi"))) == false){
-                                    row.listDish.remove(dish)
+                        val menuItem = MenuModel(row.menuName, ArrayList())
+                        if (row.listDish.size != 0) {
+                            row.listDish.forEach { dish ->
+                                if (dish.name?.contains(charString.toLowerCase(Locale("vi"))) == true) {
+                                    menuItem.listDish.add(dish)
                                 }
                             }
                         }
-                        if (row.listDish.size > 0){
-                            filteredList.add(row)
+                        if (row.listDish.size > 0) {
+                            filteredList.add(menuItem)
                         }
                     }
                     filteredList
@@ -73,6 +74,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
                 return filterResults
             }
 
+            @Suppress("UNCHECKED_CAST")
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
                 mListDishMenuFiltered = p1?.values as ArrayList<MenuModel>
                 notifyDataSetChanged()

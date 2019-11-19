@@ -14,11 +14,11 @@
             app:destination="@id/nav_dish_detail" />
         <action
             android:id="@+id/action_ListDish_to_AddDish"
-            app:destination="@+id/fragment_add_new_dish"/>
+            app:destination="@+id/fragment_add_new_dish" />
 
         <action
             android:id="@+id/action_ListDishFragment_to_CartDetailFragment"
-            app:destination="@+id/fragment_cart_detail"/>
+            app:destination="@+id/fragment_cart_detail" />
     </fragment>
 
     <fragment
@@ -35,7 +35,7 @@
 
         <argument
             android:name="dishType"
-            app:argType="string"/>
+            app:argType="string" />
 
         <argument
             android:name="@string/dish_model"
@@ -54,8 +54,9 @@
         android:name="com.uit.party.ui.main.cart_detail.CartDetailFragment"
         android:label="@string/your_cart">
 
-        <argument android:name="@string/list_dish_selected_key"
-            app:argType="string"/>
+        <argument
+            android:name="@string/list_dish_selected_key"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -68,8 +69,20 @@
             app:destination="@+id/fragment_edit_profile" />
         <action
             android:id="@+id/action_ProfileFragment_to_ChangePasswordFragment"
-            app:destination="@+id/fragment_change_password"/>
+            app:destination="@+id/fragment_change_password" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_restaurant_address"
+        android:name="com.uit.party.ui.address.AddressFragment"
+        android:label="@string/our_address"
+        tools:layout="@layout/activity_maps" />
+
+    <fragment
+        android:id="@+id/nav_about_us"
+        android:name="com.uit.party.ui.address.AboutUsFragment"
+        tools:layout="@layout/fragment_about_us"
+        android:label="@string/about_us"/>
 
     <fragment
         android:id="@+id/fragment_edit_profile"

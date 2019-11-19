@@ -39,19 +39,5 @@ class CartDetailFragment : Fragment(){
         mViewModel.initData(mListDishes)
 
         mBinding.rvCartDetail.adapter = mViewModel.mCartAdapter
-
-//        setupToolbar()
     }
-
-    /*@SuppressLint("NewApi")
-    private fun setupToolbar() {
-        mBinding.toolbarCartDetail.setNavigationIcon(R.drawable.ic_arrow_back_green_24dp)
-        mBinding.toolbarCartDetail.title = getString(R.string.cart_detail)
-        mBinding.toolbarCartDetail.setTitleTextColor(
-            resources.getColor(
-                R.color.colorWhile,
-                context?.theme
-            )
-        )
-    }*/
 }

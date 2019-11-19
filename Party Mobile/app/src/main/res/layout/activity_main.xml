@@ -20,25 +20,18 @@
         tools:context=".ui.main.MainActivity"
         tools:openDrawer="end">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".MainActivity">
+            android:orientation="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/app_bar"
-                    style="@style/Widget.Shrine.Toolbar.Logo.Product"
-                    android:background="?attr/colorPrimary"
-                    android:layout_height="?attr/actionBarSize"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    />
-
-            </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/app_bar"
+                style="@style/Widget.Shrine.Toolbar.Logo.Product"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:titleTextColor="@color/colorWhile"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 
             <fragment
                 android:id="@+id/nav_host_fragment"
@@ -47,7 +40,7 @@
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/party_navigation" />
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"

@@ -21,9 +21,13 @@ class ProfileFragment : Fragment(){
     ): View? {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile , container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         mViewModel =
             ProfileFragmentViewModel(context as MainActivity)
         binding.viewModel = mViewModel
-        return binding.root
     }
 }

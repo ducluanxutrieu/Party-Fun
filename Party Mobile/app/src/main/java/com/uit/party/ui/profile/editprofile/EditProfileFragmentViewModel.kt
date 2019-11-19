@@ -23,7 +23,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditProfileFragmentViewModel(private val mActivity: FragmentActivity?) : ViewModel() {
+class EditProfileFragmentViewModel() : ViewModel() {
     private var fullNameValid = false
     private var phoneNumberValid = false
     private var emailValid = false

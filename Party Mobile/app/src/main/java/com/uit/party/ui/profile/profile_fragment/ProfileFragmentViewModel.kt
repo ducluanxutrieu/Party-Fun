@@ -12,10 +12,7 @@ import com.uit.party.model.BaseResponse
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.profile.change_password.ChangePasswordFragment
-import com.uit.party.ui.profile.editprofile.EditProfileFragment
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
-import com.uit.party.util.AddNewFragment
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup

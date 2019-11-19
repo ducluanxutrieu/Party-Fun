@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(){
 
         val navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_user_home, R.id.nav_user_profile), binding.drawerLayout)
+            R.id.nav_user_home, R.id.nav_user_profile, R.id.nav_restaurant_address, R.id.nav_about_us), binding.drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
         binding.drawerLayout.isDrawerOpen(GravityCompat.START)
