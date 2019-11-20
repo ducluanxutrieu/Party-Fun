@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
@@ -32,7 +33,7 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() {
+class AddNewDishFragmentViewModel : BaseObservable() {
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
@@ -64,11 +65,11 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
             Glide.with(GlobalApplication.appContext!!).load(File(result.path))
                 .apply { RequestOptions.fitCenterTransform() }.into(view as AppCompatImageView)
         }.setOnPickCancel { /*binding.loadingAvatar.visibility = View.GONE */ }
-            .show(context.supportFragmentManager)
+            .show((view.context as MainActivity).supportFragmentManager)
     }
 
-    fun onSendAddDishClicked() {
-        uploadDishImages()
+    fun onSendAddDishClicked(view: View) {
+        uploadDishImages(view)
     }
 
     fun getTitleTextChanged(): TextWatcher {
@@ -167,7 +168,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
         }
     }
 
-    private fun uploadDishImages() {
+    private fun uploadDishImages(view: View) {
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
 
@@ -207,7 +208,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
                 ) {
                     if (response.isSuccessful) {
                         response.body()?.message?.let { ToastUtil.showToast(it) }
-                        context.onBackPressed()
+                        view.findNavController().popBackStack()
                     }
                 }
             })

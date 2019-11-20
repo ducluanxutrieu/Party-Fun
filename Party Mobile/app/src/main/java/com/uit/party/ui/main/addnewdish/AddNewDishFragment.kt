@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentAddNewDishBinding
 import com.uit.party.model.Thumbnail
-import com.uit.party.ui.main.MainActivity
-import android.widget.AdapterView
-
 
 
 class AddNewDishFragment : Fragment(){
     private lateinit var mBinding: FragmentAddNewDishBinding
-    private lateinit var mActivity: MainActivity
     private lateinit var mViewModel: AddNewDishFragmentViewModel
 
     override fun onCreateView(
@@ -25,7 +22,7 @@ class AddNewDishFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_new_dish, container, false)
-        mViewModel = AddNewDishFragmentViewModel(mActivity)
+        mViewModel = AddNewDishFragmentViewModel()
         mBinding.viewModel = mViewModel
         return mBinding.root
     }

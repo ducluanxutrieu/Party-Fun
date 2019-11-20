@@ -86,7 +86,7 @@ class SetupConnectToServer {
 
 
         val builder = Retrofit.Builder()
-            .baseUrl("http://138.91.33.161:3000/")
+            .baseUrl("http://139.180.131.30:3000/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
         val retrofit = builder.build()
