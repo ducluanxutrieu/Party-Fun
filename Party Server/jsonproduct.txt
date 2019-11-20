@@ -1,0 +1,262 @@
+[{
+    "_comment": " Account response",
+	// dang nhap
+	API: post /user/signin
+    "success": false,
+    "message": "Sign Up success" || "Account already exists",
+    "account" : {
+        "_id" : 0,
+        "username": "luan",
+        "fullName": "Tran Duc Luan",
+        "email": "ducluanxutrieu@gmail.com",
+        "token": "abdasdfasdf-asndfasdf34ksnd",
+        "imageurl": "https://kenh14cdn.com/2019/6/7/610192706407631463473378619777794299133952n-15599182099941890689288.jpg",
+        "phoneNumber": "0123456789",
+        "createdAt": "2019-08-30T04:04:22.750Z",
+        "updatedAt": "2019-08-30T04:04:22.750Z",
+        "role": "nhanvien",
+        "userCart": [{
+            "dishName": "Rong xanh vuot dai duong",
+            "dishsNunber": 2,
+            "dishNote": "Mon nay phai nau cay",
+            "dishPrice": 50000
+        },
+        {
+            "dishName": "Ga nuong nguyen con",
+            "dishsNunber": 1,
+            "dishNote": null,
+            "dishPrice": 100000
+        }]
+    }
+},
+{ 
+API post /user/signup
+	success:
+	message:
+	account:
+},
+{
+API: post /user/updateuser
+    "_comment": "Request update user",
+    "authorization" : "Token duoc nam o phan header",
+    "email": "ducluanxutrieu@gmail.com",
+    "phoneNumber": "0123456789",
+    "fullName":"Tran Duc Luan1223",
+	"sex": "",
+	"birthday":""
+},
+{
+    "_comment": "Response update user",
+    "success": true,
+    "message": "Update success"  || "Failed to authenticate token.",
+	"account":
+	{ "_id" : 0,
+        "username": "luan",
+        "fullName": "Tran Duc Luan",
+        "email": "ducluanxutrieu@gmail.com",
+        "token": "abdasdfasdf-asndfasdf34ksnd",
+        "imageurl": "https://kenh14cdn.com/2019/6/7/610192706407631463473378619777794299133952n-15599182099941890689288.jpg",
+        "phoneNumber": "0123456789",
+        "createdAt": "2019-08-30T04:04:22.750Z",
+        "updatedAt": "2019-08-30T04:04:22.750Z",
+        "userCart": [{
+            "dishName": "Rong xanh vuot dai duong",
+            "dishsNunber": 2,
+            "dishNote": "Mon nay phai nau cay",
+            "dishPrice": 50000
+        },
+        {
+            "dishName": "Ga nuong nguyen con",
+            "dishsNunber": 1,
+            "dishNote": null,
+            "dishPrice": 100000
+        }]
+	}
+},
+
+{
+API: post /user/changepassword
+    "_comment": "Request change password",
+    "authorization" : "Token duoc nam o phan header",
+	"password": "123456",
+    "newpassword": "thisisnewpass"
+},
+{
+    "_comment": "Response Change password",
+    "success": false,
+    "message": "Wrong Password" || "Failed to authenticate token." || "Password updated",
+},
+
+{
+API: /user/signout
+    "_comment": "Request log out",
+    "authorization" : "Token duoc nam o phan header"
+},
+{
+    "_comment": "Response log out",
+    "success": true,
+    "message": "Sign Out success" || "Failed to authenticate token.",
+},
+
+{
+API: /user/uploadavatar
+    "_comment": "Request change avatar",
+    "authorization":"Token duoc nam o phan header",
+    //
+	"image": file
+},
+{	
+
+    "_comment": "Response change avatar",
+    "success": true,
+    "message": "https://kenh14cdn.com/2019/6/7/610192706407631463473378619777794299133952n-15599182099941890689288.jpg",
+},
+
+
+{
+API: post /user/resetpassword
+	"_comment":"Request reset password",
+	"username": "username"
+},
+{
+	"_comment": "Response reset password",
+	"success": true,
+	"message":"Please check your email"
+},
+{
+API /user/resetconfirm
+	"_comment": "request reset password dung de nhap ma da gui toi email",
+	"resetpassword": "ma nhan duoc trong email",
+	"passwordnew": "mat khau moi"
+},
+{
+	"_comment": "Response reset pass",
+	"success": true, 
+	"message": "Update password success" || "Code OTP incorrect"
+},
+{
+API get /user/profile
+	"_comment":"Request Lay thong tin user",
+	"authorization": "Token o Header"
+},
+{
+	"_comment": "response get user",
+	"success": true, 
+	"message": "Profile User", 
+	"account": account
+},
+{
+API post /user/upgraderole
+	"_comment": "request nang cap quyen role tu khach hang len nhan vien",  // phai dang nhap bang tai khoan Admin pass 123456
+	"authorization": "Token cua acc Admin",
+	"userupgrade": "ten username nang cap quyen"
+},
+{
+	"_comment": "Response upgrade role",
+	"success": true, 
+	"message": "Upgrade Role success" || "You need signin with Administrator"
+	 
+},
+{
+
+// name co the chinh sua
+API post /product/adddish
+	"_comment": "Request them mon an ",
+	"authorization": "Token dang nhap bang role user",
+	"name":"",
+	"description": "",
+	"price": "",
+	"type": "khai vi, mon chinh, nuoc, .....",
+	"createAt": "",
+	"updateAt": "",
+	image: file anh (phai tai len it nhat la 2 file anh),
+	"......": ""
+},
+{
+	"_comment": "Response them mon an",
+	"success": true, 
+	"message": "Add dish success" || "Name is required" || "You need sign in with role nhanvien" || "You need to upload more than 1 file"
+	dish: {
+		"_id":
+		"name":"",
+		"description": "",
+		"price": "",
+		"type": "Khai vi, mon chinh, nuoc, .....",
+		"createAt": "",
+		"updateAt": "",
+		image: file anh (phai tai len it nhat la 2 file anh)
+	}
+},
+{
+API: get /product/finddish
+    "_comment": "Request get list dishs",
+	//request k co body
+    "_comment": response
+    	"success": true, 
+	"message": "Get menu success", 
+	lishDishs: 
+	{
+	"_id":
+	"name":
+	"description":
+	"image": [url1, url2,...] 
+	}
+	
+},
+{
+API post /product/update
+	"_comment": request update
+	token nam o header, dang nhap bang role nhanvien
+	"_id":
+	"name":"",
+	"description": "",
+	"price": "",
+	"type": "Khai vi, mon chinh, nuoc, .....",
+	"image": [file anh] (phai tai len it nhat la 2 file anh)
+},
+{
+API post /product/update
+    "_comment": "response update dish",
+    "success": false,
+    "message": "Failed to authenticate token" || Name is required,
+    "dish": [{
+        "name": "Rong xanh vuot dai duong",
+        "description": "La mot mon an tot cho suc khoe",
+        "price": "30000",
+        "type":"",
+        "image": []
+// 
+},
+{
+Dat ban
+API post /product/book
+       "_comment": "req dat ban"
+       header: token dang nhap tai khoan user
+       [name: numberDish : price]
+       "numberTable": "số lượng bàn"
+       "dateParty":  // bỏ ngày order vì bên server sẽ tạo trường createAt
+       "timeStart":
+},
+{
+	"_comment": "response dat ban"
+	"success":
+	"message":
+	"totalMoney":
+	"IDBill": // id hóa đơn
+	"createAt": // ngày đặt bàn
+	[name:numberDish]
+	"numberTable":  
+	"dateParty":
+	"timeStart": 
+}
+{
+Thanh toan
+	"_comment": req thanh toán
+	token ở đầu header, đăng nhập bằng role nhanvien  
+	"IDBill": "số hóa đơn thanh toán" // có thể chỉ gửi lên 1 trong 2 trường.   
+}
+{
+	"_comment": res thanh toán
+	"success":
+	"message":
+}
