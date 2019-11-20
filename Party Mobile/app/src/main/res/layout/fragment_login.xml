@@ -107,7 +107,7 @@
                     android:foreground="?android:selectableItemBackground"
                     android:layout_marginBottom="@dimen/_20sdp"
                     tools:ignore="UnusedAttribute"
-                    android:onClick="@{() -> viewModel.onRegisterClicked()}"
+                    android:onClick="@{(view) -> viewModel.onRegisterClicked(view)}"
                     />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

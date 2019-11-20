@@ -12,7 +12,6 @@ import com.uit.party.util.AddNewFragment
 
 class SignInActivity : AppCompatActivity(), SignInCallback {
     private lateinit var binding : ActivitySignInBinding
-    private val viewModel = SignInViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +25,6 @@ class SignInActivity : AppCompatActivity(), SignInCallback {
 
     private fun setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in)
-        binding.viewModel = viewModel
     }
     override fun onRegister(cX: Float, cY: Float, sharedElement: View) {
         val fragment = RegisterFragment.newInstance(cX, cY)

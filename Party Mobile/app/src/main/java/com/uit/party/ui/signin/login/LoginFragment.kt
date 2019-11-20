@@ -36,6 +36,12 @@ class LoginFragment : Fragment(), LoginCallback {
         binding.viewModel = viewModel
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.mCxFAB = binding.tvRegister.width/2 + binding.tvRegister.x
+        viewModel binding.tvRegister.height/2 + binding.tvRegister.y, binding.tvRegister
+    }
+
     private fun updateUiWithUser(model: LoginModel) {
         Log.i(TAG, model.toString())
         val intent = Intent(context, MainActivity::class.java)

@@ -94,8 +94,8 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
             })
     }
 
-    fun onRegisterClicked() {
-        loginResult.onRegister()
+    fun onRegisterClicked(view: View) {
+        val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
     }
 
     fun getUsernameTextChanged(): TextWatcher {

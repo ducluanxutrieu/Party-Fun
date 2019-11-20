@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/nav_user_home"
         android:name="com.uit.party.ui.main.main_menu.MenuFragment"
-        android:label="@string/menu_home">
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_list_dish">
         <action
             android:id="@+id/action_ListDishFragment_to_DishDetailFragment"
             app:destination="@id/nav_dish_detail" />
@@ -24,7 +25,8 @@
     <fragment
         android:id="@+id/nav_dish_detail"
         android:name="com.uit.party.ui.main.detail_dish.DetailDishFragment"
-        android:label="@string/dish_detail">
+        android:label="@string/dish_detail"
+        tools:layout="@layout/fragment_detail_dish">
         <action
             android:id="@+id/action_back_ListDishFragment"
             app:popUpToInclusive="true" />
@@ -45,14 +47,16 @@
     <fragment
         android:id="@+id/fragment_add_new_dish"
         android:name="com.uit.party.ui.main.addnewdish.AddNewDishFragment"
-        android:label="@string/add_dish">
+        android:label="@string/add_dish"
+        tools:layout="@layout/fragment_add_new_dish">
 
     </fragment>
 
     <fragment
         android:id="@+id/fragment_cart_detail"
         android:name="com.uit.party.ui.main.cart_detail.CartDetailFragment"
-        android:label="@string/your_cart">
+        android:label="@string/your_cart"
+        tools:layout="@layout/fragment_cart_detail">
 
         <argument
             android:name="@string/list_dish_selected_key"
@@ -76,7 +80,7 @@
         android:id="@+id/nav_restaurant_address"
         android:name="com.uit.party.ui.address.AddressFragment"
         android:label="@string/our_address"
-        tools:layout="@layout/activity_maps" />
+        tools:layout="@layout/fragment_maps_address" />
 
     <fragment
         android:id="@+id/nav_about_us"

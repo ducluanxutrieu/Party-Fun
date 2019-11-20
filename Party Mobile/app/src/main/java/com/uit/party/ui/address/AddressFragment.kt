@@ -19,20 +19,20 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.uit.party.R
-import com.uit.party.databinding.ActivityMapsBinding
+import com.uit.party.databinding.FragmentMapsAddressBinding
 
 
 class AddressFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
-    private lateinit var mBinding: ActivityMapsBinding
+    private lateinit var mBinding: FragmentMapsAddressBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.activity_maps, container, false)
-//        val view = inflater.inflate(R.layout.activity_maps, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_maps_address, container, false)
+//        val view = inflater.inflate(R.layout.fragment_maps_address, container, false)
         return mBinding.root
     }
 
