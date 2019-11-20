@@ -209,7 +209,7 @@ class EditProfileFragmentViewModel() : ViewModel() {
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     if (!t.message.isNullOrEmpty()) {
-                        ToastUtil().showToast(t.message!!)
+                        ToastUtil.showToast(t.message!!)
                     }
                 }
 
@@ -220,7 +220,7 @@ class EditProfileFragmentViewModel() : ViewModel() {
                     val repo = response.body()
                     if (repo != null) {
                         saveToMemory(repo)
-                        ToastUtil().showToast(StringUtil.getString(R.string.update_profile_success))
+                        ToastUtil.showToast(StringUtil.getString(R.string.update_profile_success))
                     }
                 }
             })

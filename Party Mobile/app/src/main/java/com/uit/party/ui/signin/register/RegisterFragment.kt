@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.uit.party.R
 import com.uit.party.databinding.FragmentRegisterBinding
 import com.uit.party.ui.signin.SignInActivity
@@ -18,8 +19,10 @@ import com.uit.party.ui.signin.SignInActivity
 class RegisterFragment : Fragment(), RegisterCallback {
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var viewModel: RegisterViewModel
-    private var cX = 0f
-    private var cY = 0f
+    private var cX = 0
+    private var cY = 0
+    private val myArgs : RegisterFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +35,8 @@ class RegisterFragment : Fragment(), RegisterCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        cX = myArgs.cXFAB
+        cY = myArgs.cYFAB
         animateRevealShow()
     }
 
@@ -51,21 +56,13 @@ class RegisterFragment : Fragment(), RegisterCallback {
         animateRevealClose()
     }
 
-    override fun onRegister() {
-
-    }
-
-    override fun onFail(message: String) {
-//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
     private fun animateRevealShow() {
         val mAnimator = ViewAnimationUtils.createCircularReveal(
             binding.cvAdd,
-            cX.toInt(),
-            cY.toInt(),
+            cX,
+            cY,
             binding.cvAdd.height.toFloat(),
-            cY
+            cY.toFloat()
         )
         mAnimator.duration = 300
         mAnimator.interpolator = AccelerateInterpolator()
@@ -75,10 +72,10 @@ class RegisterFragment : Fragment(), RegisterCallback {
     private fun animateRevealClose() {
         val mAnimator = ViewAnimationUtils.createCircularReveal(
             binding.cvAdd,
-            cX.toInt(),
-            cY.toInt(),
+            cX,
+            cY,
             binding.cvAdd.height.toFloat(),
-            cY
+            cY.toFloat()
         )
         mAnimator.duration = 300
         mAnimator.interpolator = AccelerateInterpolator()
@@ -89,14 +86,5 @@ class RegisterFragment : Fragment(), RegisterCallback {
             }
         })
         mAnimator.start()
-    }
-
-    companion object {
-        fun newInstance(cX: Float, cY: Float): RegisterFragment {
-            return RegisterFragment().apply {
-                this.cX = cX
-                this.cY = cY
-            }
-        }
     }
 }

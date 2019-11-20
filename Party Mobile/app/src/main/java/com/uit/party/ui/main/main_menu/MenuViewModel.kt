@@ -48,7 +48,7 @@ class MenuViewModel : BaseObservable(){
         serviceRetrofit.getListDishes(TOKEN_ACCESS)
             .enqueue(object : Callback<DishesResponse>{
                 override fun onFailure(call: Call<DishesResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil().showToast(it) }
+                    t.message?.let { ToastUtil.showToast(it) }
                     onComplete(false)
                 }
 
@@ -106,7 +106,7 @@ class MenuViewModel : BaseObservable(){
         serviceRetrofit.logout(TOKEN_ACCESS)
             .enqueue(object : Callback<BaseResponse>{
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil().showToast(it) }
+                    t.message?.let { ToastUtil.showToast(it) }
                     onSuccess(false)
                 }
 

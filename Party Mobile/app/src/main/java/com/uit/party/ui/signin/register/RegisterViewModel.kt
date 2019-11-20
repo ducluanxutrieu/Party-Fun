@@ -12,6 +12,7 @@ import com.uit.party.model.RegisterModel
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.StringUtil
+import com.uit.party.util.ToastUtil
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -281,13 +282,9 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             RegisterModel(fullNameText, usernameText, emailText, phoneNumberText, passwordText)
         register(model) { registerResponse ->
             if (registerResponse?.success!!) {
-                Toast.makeText(context, "Register success", Toast.LENGTH_LONG).show()
+                ToastUtil.showToast(StringUtil.getString(R.string.register_successful))
             } else {
-                Toast.makeText(
-                    context,
-                    "Register false: ${registerResponse.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+                ToastUtil.showToast("Register false: ${registerResponse.message}")
             }
         }
     }
@@ -332,6 +329,6 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     }
 
     fun onCardClicked() {
-
+        //Nothing
     }
 }

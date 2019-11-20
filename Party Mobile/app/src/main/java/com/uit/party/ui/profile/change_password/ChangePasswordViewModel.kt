@@ -44,7 +44,7 @@ class ChangePasswordViewModel : ViewModel() {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     onComplete(false)
                     if (t.message != null) {
-                        ToastUtil().showToast(t.message!!)
+                        ToastUtil.showToast(t.message!!)
                     }
                 }
 
@@ -58,7 +58,7 @@ class ChangePasswordViewModel : ViewModel() {
                         onComplete(false)
                         val repos = model.body()
                         if (repos != null) {
-                            ToastUtil().showToast(repos.message!!)
+                            ToastUtil.showToast(repos.message!!)
                             if (repos.message.equals("Wrong Password")){
                                 errorCurrentPassword.set(StringUtil.getString(R.string.wrong_password))
                             }

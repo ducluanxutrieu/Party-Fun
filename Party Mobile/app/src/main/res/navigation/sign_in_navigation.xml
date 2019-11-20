@@ -24,9 +24,9 @@
 
         <argument
             android:name="cX_FAB"
-            app:argType="float" />
+            app:argType="integer" />
         <argument
             android:name="cY_FAB"
-            app:argType="float" />
+            app:argType="integer" />
     </fragment>
 </navigation>

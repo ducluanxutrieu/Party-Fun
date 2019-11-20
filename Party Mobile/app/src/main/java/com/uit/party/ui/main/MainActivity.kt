@@ -28,13 +28,11 @@ class MainActivity : AppCompatActivity(){
     private lateinit var headerBinding: NavHeaderMainBinding
 
     private val mViewModel = MainViewModel()
-
     private lateinit var appBarConfiguration: AppBarConfiguration
-
 
     companion object {
         internal var TOKEN_ACCESS: String = ""
-        const val TAG = "TAGMain"
+//        const val TAG = "TAGMain"
         val serviceRetrofit = SetupConnectToServer().setupConnect()
     }
 
@@ -43,8 +41,12 @@ class MainActivity : AppCompatActivity(){
 
         setupBinding()
         checkLogin()
-
         setSupportActionBar(binding.appBar)
+        setupNavigationDrawer()
+        setNavHeader()
+    }
+
+    private fun setupNavigationDrawer() {
         headerBinding =
             DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.nav_header_main, drawer_layout, false)
 
@@ -56,8 +58,6 @@ class MainActivity : AppCompatActivity(){
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
         binding.drawerLayout.isDrawerOpen(GravityCompat.START)
-//        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        setNavHeader()
     }
 
     private fun setNavHeader(){

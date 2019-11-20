@@ -141,7 +141,7 @@ class MenuFragment : Fragment(),
                 logOut()
             }
 /*            R.id.naw_user_order -> {
-                ToastUtil().showToast("Your Order clicked")
+                ToastUtil.showToast("Your Order clicked")
             }*/
         }
         return true
@@ -155,7 +155,7 @@ class MenuFragment : Fragment(),
                 startActivity(intent)
                 (context as MainActivity).finish()
             } else {
-                ToastUtil().showToast(getString(R.string.cannot_logout))
+                ToastUtil.showToast(getString(R.string.cannot_logout))
             }
         }
     }

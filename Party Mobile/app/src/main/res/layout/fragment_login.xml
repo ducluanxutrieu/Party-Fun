@@ -89,7 +89,7 @@
                     android:layout_marginEnd="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:enabled="@{viewModel.loginEnabled}"
-                    android:onClick="@{() -> viewModel.onLoginClicked()}"
+                    android:onClick="@{(view) -> viewModel.onLoginClicked(view)}"
                     android:stateListAnimator="@drawable/state_list_animator_button"
                     android:text="@string/action_sign_in"
                     app:cornerRadius="@dimen/corner_radius" />

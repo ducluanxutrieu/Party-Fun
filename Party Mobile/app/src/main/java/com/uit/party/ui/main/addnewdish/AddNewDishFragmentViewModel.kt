@@ -198,7 +198,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
         )
             .enqueue(object : Callback<AddDishResponse> {
                 override fun onFailure(call: Call<AddDishResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil().showToast(it) }
+                    t.message?.let { ToastUtil.showToast(it) }
                 }
 
                 override fun onResponse(
@@ -206,7 +206,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
                     response: Response<AddDishResponse>
                 ) {
                     if (response.isSuccessful) {
-                        response.body()?.message?.let { ToastUtil().showToast(it) }
+                        response.body()?.message?.let { ToastUtil.showToast(it) }
                         context.onBackPressed()
                     }
                 }

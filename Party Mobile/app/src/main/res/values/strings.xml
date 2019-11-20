@@ -170,4 +170,7 @@
     <string name="subjects">NT117.K11</string>
     <string name="description_content">Đây là một ứng dụng được nhóm xây dựng trong khuôn khổ môn học Báo cáo đồ án lập trình ứng dụng mạng với sự hướng dẩn của thầy Thái Huy Tân.   Đây là một ứng dụng đặt tiệc cho những buổi tiệc nhỏ, ít người nhăm mang lại cảm giác ấm cúng bên bàn tiệc và cũng để phục vụ tốt hơn cho thực khách</string>
     <string name="communicate">Communicate</string>
+    <string name="login_error">Login Error</string>
+    <string name="login_successful">Login Successful</string>
+    <string name="register_successful">Register success</string>
 </resources>

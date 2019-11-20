@@ -10,24 +10,15 @@ import com.uit.party.ui.signin.register.RegisterFragment
 import com.uit.party.ui.signin.login.LoginFragment
 import com.uit.party.util.AddNewFragment
 
-class SignInActivity : AppCompatActivity(), SignInCallback {
+class SignInActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupBinding()
-        showFragment()
-    }
-
-    private fun showFragment() {
-        AddNewFragment().addFragment(R.id.container, LoginFragment(), true, this)
     }
 
     private fun setupBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in)
-    }
-    override fun onRegister(cX: Float, cY: Float, sharedElement: View) {
-        val fragment = RegisterFragment.newInstance(cX, cY)
-        AddNewFragment().addFragment(R.id.container, fragment, true, this)
     }
 }

@@ -83,7 +83,7 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     if (t.message != null) {
-                        ToastUtil().showToast(t.message!!)
+                        ToastUtil.showToast(t.message!!)
                         Log.e("uploadAvatar", t.message!!)
                     }
                 }
@@ -95,7 +95,7 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
                     if (response.isSuccessful) {
                         onComplete(response.body()?.message)
                     } else {
-                        ToastUtil().showToast(response.message())
+                        ToastUtil.showToast(response.message())
                     }
                 }
             })

@@ -1,5 +1,6 @@
 package com.uit.party.ui.signin.login
 
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -7,11 +8,13 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.util.GlobalApplication
+import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
@@ -20,10 +23,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
+class LoginViewModel : ViewModel() {
     val loginEnabled: ObservableBoolean = ObservableBoolean()
-
-    val context = GlobalApplication.appContext!!
 
     var errorUsername: ObservableField<String> = ObservableField()
     var errorPassword: ObservableField<String> = ObservableField()
@@ -36,7 +37,7 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
 
     var showLoading: ObservableInt = ObservableInt(View.GONE)
 
-    fun onLoginClicked() {
+    fun onLoginClicked(view: View) {
         showLoading.set(View.VISIBLE)
         val loginModel = LoginModel(usernameText, passwordText)
         login(loginModel) { success ->
@@ -44,18 +45,23 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
             if (success != null) {
                 when (success) {
                     "Success" -> {
-                        loginResult.onRepos(loginModel)
-                        loginResult.onSuccess("Login Successful")
+                        ToastUtil.showToast(StringUtil.getString(R.string.login_successful))
+                        startMainActivity(view)
+
                     }
-                    "User not found" -> {
-                        loginResult.onError(success)
-                    }
-                    else -> loginResult.onError("Login Error")
+                    else -> ToastUtil.showToast(success)
                 }
             } else {
-                loginResult.onError("Login Error")
+                ToastUtil.showToast(StringUtil.getString(R.string.login_error))
             }
         }
+    }
+
+    private fun startMainActivity(view: View){
+        val context = view.context as SignInActivity
+        val intent = Intent(context, MainActivity::class.java)
+        context.startActivity(intent)
+        context.finish()
     }
 
     private fun login(loginModel: LoginModel, onComplete: (String?) -> Unit) {
@@ -75,8 +81,8 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
                             if (repos.success) {
                                 saveToMemory(repos)
                                 onComplete("Success")
-                            }else{
-                                repos.message?.let { ToastUtil().showToast(it) }
+                            } else {
+                                repos.message?.let { ToastUtil.showToast(it) }
                             }
                         } catch (e: java.lang.Exception) {
                             onComplete(e.message)
@@ -95,7 +101,11 @@ class LoginViewModel(private val loginResult: LoginCallback) : ViewModel() {
     }
 
     fun onRegisterClicked(view: View) {
-        val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+        val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment(
+            view.width / 2 + view.x.toInt(),
+            view.height / 2 + view.y.toInt()
+        )
+        view.findNavController().navigate(action)
     }
 
     fun getUsernameTextChanged(): TextWatcher {
