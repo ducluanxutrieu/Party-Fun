@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html, body{
+            background-color: #f1f1f1;
+            font-family: Helvetica, sans-serif;
+        }
+        hr{
+            margin: 10px 10px;
+        }
+        .adminContainer{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 150vh;
+            padding: 10px 0px 50px;
+        }
+        .adminPanel{
+            cursor:pointer;
+            text-decoration: none;
+        }
+        .adminPanel{
+            float: left;
+            background-color: #f1f1f1;
+            width: 15%;
+            height: 400px;
+            padding: 10px 10px;
+            margin-left: 30px;
+            font-family: Roboto, Helvetica, sans-serif;
+        }
+        .adminPanel .panel-title{
+            padding: 8px 8px 0px;
+            font-weight: bold;
+        }
+        .adminPanel ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 200px;
+        }
+        .adminPanel a{
+            text-decoration: none;
+            color: rgba(0, 0, 0, 0.87);
+        }
+        .panel-link{
+            display: block;
+            color: rgba(0, 0, 0, 0.87);
+            padding: 8px 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .panel-link:hover{
+            color: white;
+        }
+        .panel-icon{
+            display: inline;
+            margin-right: 10px;
+            text-align: center;
+        }
+        .panel-icon img{
+            width: 1em;
+            height: 1em;
+        }
+        .panel-link panel{
+            display: inline-block;
+        }
+        .admin-section{
+            width: 75%;
+            min-height: 60%;
+            margin-left: 10px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            overflow-x: scroll;
+        }
+        .sidepanel{
+            background-color: #f1f1f1;
+            box-shadow: none;
+            padding: 0px!important;
+        }
+        .sidepanel mat-expansion-panel-header{
+            font-size: 1em;
+            height: 1em!important;
+            padding: 8px 8px;
+            text-decoration: none;
+        }
+        .sidepanel mat-panel-title{
+            margin-right: 8px;
+            width: fit-content!important;
+        }
+    </style>
+</head>
+<body>
+    <div class="adminContainer">
+        <div class="adminPanel">
+            <div class="panel-title">Admin</div>
+            <hr>
+            <ul>
+                <li>
+                    <mat-expansion-panel class="sidepanel">
+                        <mat-expansion-panel-header expandedHeight = 1em collapsedHeight = 1em>
+                            <mat-panel-title>
+                                <div class="panel-icon"><img src="../../../assets/icon/product-icon.png"></div>
+                                Sản phẩm
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <ul>
+                            <li class="panel-link"><a routerLink="/admin/adddish"><div class="panel-icon"><img src="../../../assets/icon/add-icon.png"></div><span>Thêm món ăn</span></a></li>
+                            <li class="panel-link"><a routerLink="/admin/editdish"><div class="panel-icon"><img src="../../../assets/icon/edit-icon.png"></div><span>Sửa món ăn</span></a></li>
+                            <li class="panel-link"><a routerLink="/admin/dishlist"><div class="panel-icon"><img src="../../../assets/icon/list-icon.png"></div><span>Danh sách món ăn</span></a></li>
+                        </ul>
+                    </mat-expansion-panel>
+                </li>
+                <li>
+                    <mat-expansion-panel class="sidepanel">
+                        <mat-expansion-panel-header expandedHeight = 1em collapsedHeight = 1em>
+                            <mat-panel-title>
+                                <div class="panel-icon"><img src="../../../assets/icon/employee-icon.png"></div>
+                                Nhân viên
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <ul>
+                            <li class="panel-link"><a routerLink="/admin/addEmployee"><div class="panel-icon"><img src="../../../assets/icon/add-icon.png"></div><span>Thêm nhân viên</span></a></li>
+                            <li class="panel-link"><a routerLink="/admin/employeeList"><div class="panel-icon"><img src="../../../assets/icon/list-icon.png"></div><span>Danh sách nhân viên</span></a></li>
+                        </ul>
+                    </mat-expansion-panel>
+                </li>
+                <li>
+                    <mat-expansion-panel class="sidepanel">
+                        <mat-expansion-panel-header expandedHeight = 1em collapsedHeight = 1em>
+                            <mat-panel-title>
+                                <div class="panel-icon"><img src="../../../assets/icon/customer-icon.png"></div>
+                                Khách hàng
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <ul>
+                            <li class="panel-link"><a routerLink="/admin/customerList"><div class="panel-icon"><img src="../../../assets/icon/list-icon.png"></div><span>Danh sách khách hàng</span></a></li>
+                        </ul>
+                    </mat-expansion-panel>   
+                </li>
+            </ul>
+        </div>
+        <div class="admin-section">
+            <router-outlet></router-outlet>
+        </div>
+    </div>    
+</body>
+</html>

@@ -1,0 +1,68 @@
+<head>
+    <style>
+        html,body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .content-container{
+            width: 80%;
+        }
+        .top-title{
+            text-align: left;
+            margin-left: 10px;
+            padding: 0px 10px 10px;
+            color: black;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+        .content{
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .content-table{
+            width: 100%;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <div class="content">
+            <header class="top-title">Danh sách món ăn</header>
+            <table mat-table [dataSource]="dataSource" class="content-table">
+
+                <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+                
+                <!-- Position Column -->
+                <ng-container matColumnDef="number">
+                    <th mat-header-cell *matHeaderCellDef> Số thứ tự </th>
+                    <td mat-cell *matCellDef="let element"> {{element.number}} </td>
+                </ng-container>
+                
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Tên </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+                
+                <!-- Weight Column -->
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef> Loại </th>
+                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                </ng-container>
+                
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="price">
+                    <th mat-header-cell *matHeaderCellDef> Giá </th>
+                    <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
+                
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- <link href="../../assets/css/shop-homepage.css" rel="stylesheet"> -->
+    <style>
+        html,body{
+            min-height: 100vh;
+            font-family: Roboto, Helvetica, sans-serif;
+            background-color: #f1f1f1;
+        }
+        .content-container{
+            padding: 20px;
+        }
+        .main-content{
+            width: 100%;
+            height: 100%;
+        }
+        /* .grid-container {
+            height: 100%;
+            width: 90%;
+            display: grid;
+            grid-template-columns: auto auto auto;
+            padding: 10px;
+            grid-gap:50px;
+        } */
+        .grid-item {
+            
+        }
+        .pagination-bar{
+            text-align: center;
+        }
+        .category{
+            color: black;
+        }
+        .category:hover{
+            cursor: pointer;
+        }
+        .custom-panel{
+            background-color: #f37d42;
+        }
+        .category-title{
+            color: #f37d42;
+        }
+        .left-panel{
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Content -->
+    <div class="content-container container"> <!-- class container khiến content margin ra giữa-->
+        <div class="row">
+            <!-- Category -->
+            <div class="left-panel col-12 col-lg-3">
+                <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Danh mục</div>
+                <div class="list-group">
+                    <a href="/category/First Dishes" class="list-group-item category">Khai vị</a>
+                    <a href="/category/Main Dish" class="list-group-item category">Món chính</a>
+                    <a href="/category/Seafood" class="list-group-item category">Hải sản</a>
+                    <a href="/category/Drinks" class="list-group-item category">Đồ uống</a>
+                    <a href="/category/Dessert" class="list-group-item category">Tráng miệng</a>
+                </div>
+            </div>
+            <div class="main-content col-lg-9">
+                <!--div class="sorting-panel"></div-->
+                <h3 class="category-title">{{cat_filter}}</h3>
+                <div class="grid-container row">
+                    <div class="grid-item col-lg-4 col-md-6 mb-4" *ngFor="let item of pageOfItems">
+                        <div class="card h-100">
+                            <a href="/product/{{item._id}}"><img class="item-image" class="card-img-top" src={{item.image[0]}} onError="this.src='../../assets/images/dish-thumbnail-default.png';" alt=""></a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <a href="/product/{{item._id}}">{{item.name}}</a>
+                                </h4>
+                                <h5>{{item.price}} VNĐ</h5>
+                                <p class="card-text">{{item.description}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-secondary" (click)="addCart_clicked(item._id)">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center" *ngIf="!filtered_products.length">Không có sản phẩm nào.</p>
+                <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center">
+                    <jw-pagination [items]="filtered_products" (changePage)="onChangePage($event)"></jw-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

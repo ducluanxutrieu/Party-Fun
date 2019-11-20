@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            html, body{
+                font-family: Helvetica, sans-serif;
+            }
+            header{
+                text-align: left;
+                padding: 0px 10px 10px;
+                color: black;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.2em;
+                font-weight: 400;
+            }
+            .editavatar-container{
+                width: 500px;
+                background-color: white;
+                float: left;
+                margin-left: 10px;
+                padding: 10px;
+                background-color: white;
+                border-radius: 5px;
+            }
+            .avatar{
+                float: left;
+                display: inline-block;
+                margin: 10px 10px;
+            }
+            .avatar img{
+                width: 200px;
+                height: 200px;
+            }
+            .updatePicture{
+                display: inline-block;
+                margin: 0px 10px 10px;
+            }
+            .updatePicture input{
+                margin: 5px 0px;
+            }
+            form {
+                background: white;
+                width: 100%;
+                font-family: Arial, Helvetica, sans-serif;
+                color: #333;
+            }
+            form header {
+                margin: 0px 0px;
+                padding: 0px 0px;
+                color: black;
+                font-size: 0.9em;
+                font-weight: bold;
+            }
+            form .formHeader{
+                margin: 10px 0px;
+            }
+            form p{
+                font-size: 0.8em;
+            }
+            form button{
+                font-size: 0.8em;
+                color: white;
+                background: #14a6fa;
+            }
+            
+        </style>
+    </head>
+
+    <body>
+        <div class="editavatar-container">
+            <header>Avatar</header>
+            <div class="avatar">
+                <img src={{avtUrl}}>
+            </div>
+            <div class="updatePicture">
+                <form #updatepicture = "ngForm" (ngSubmit) = "onClickSubmit(updatepicture.value)" id="picUpdateForm">
+                    <header class="formHeader">Upload avatar mới</header>
+                    <p>Ảnh phải là định dạng jpg, png hoặc gif.</p>
+                    <input type="file" accept="image/x-png,image/gif,image/jpeg" name="avt" (change)="fileChanged($event)" required ngModel>
+                    <br>
+                    <button type="submit" form="picUpdateForm" [disabled]="updatepicture.invalid">Cập nhật</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html,body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .content-container{
+            width: 80%;
+        }
+        form {
+            background: white;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 5px;
+        }
+        form header {
+            text-align: left;
+            margin-left: 10px;
+            padding: 0px 10px 10px;
+            color: black;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+        form label {
+            font-weight: 400;
+            margin-left: 20px;
+            display: inline-block;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+        form input {
+            display: block;
+            width: 80%;
+            margin-left: 20px;
+            padding: 5px 20px;
+            font-size: 1em;
+            border-radius: 3px;
+            outline: none;
+            border: 1px solid #ccc;
+        }
+        form .file-input{
+            width: 30%;
+        }
+        form textarea {
+            display: block;
+            width: 80%;
+            height: 8em;
+            margin-left: 20px;
+            padding: 5px 20px;
+            font-size: 1em;
+            border-radius: 3px;
+            outline: none;
+            border: 1px solid #ccc;
+        }
+        form select{
+            display: block;
+            width: 20%;
+            margin-left: 20px;
+            padding: 5px 20px;
+            font-size: 1em;
+            border-radius: 3px;
+            outline: none;
+            border: 1px solid #ccc;
+        }
+        form button {
+            position: relative;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            left: 40%;
+            transform: translate(-50%, 0);
+            font-family: inherit;
+            color: white;
+            background: #14a6fa;
+            outline: none;
+            border: none;
+            padding: 5px 15px;
+            font-size: 1.3em;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+        form button:hover {
+            background: #ff5252;
+        }
+        form .alert{
+            margin-top: 6px;
+            margin-left: 20px;
+            color: red;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <form #adddishForm = "ngForm" (ngSubmit) = "onClickSubmit(adddishForm.value)" id="addDish">
+            <header>Thêm món ăn</header>
+            <label for="name">Tên món</label>
+            <input id="name" type="text" name="name" ngModel required #dishname="ngModel">
+            <div class="alert" role="alert" *ngIf="dishname.invalid && dishname.touched">Vui lòng điền Tên món</div>
+            <label for="description">Mô tả</label>
+            <textarea class="description" name="description" ngModel></textarea><br>
+            <label for="type">Loại</label>
+            <select id="type" name="type" ngModel required #type="ngModel">
+                <option value="Holiday Offers">Holiday Offers</option>
+                <option value="First Dishes">Khai vị</option>
+                <option value="Main Dish">Món chính</option>
+                <option value="Seafood">Hải sản</option>
+                <option value="Dessert">Tráng miệng</option>
+                <option value="Drinks">Đồ uống</option>
+            </select>
+            <div class="alert" role="alert" *ngIf="type.invalid && type.touched">Vui lòng chọn loại món</div>
+            <label for="price">Giá</label>
+            <input id="price" type="number" name="price" required ngModel #price="ngModel">
+            <div class="alert" role="alert" *ngIf="price.invalid && price.touched">Vui lòng điền giá</div>
+            <label for="promotion">Khuyến mãi</label>
+            <input id="promotion" type="number" name="promotion" ngModel>
+            <label>Ảnh</label>
+            <input class="file-input" id="image1" type="file" accept="image/x-png,image/gif,image/jpeg" name="image1" (change)="fileChanged($event)" ngModel>
+            <!--input class="file-input" id="image2" type="file" accept="image/x-png,image/gif,image/jpeg" name="image2" (change)="fileChanged($event)" ngModel-->
+            <button type="submit" form="addDish" [disabled]="adddishForm.invalid">Thêm</button>
+        </form>
+    </div>
+</body>
+</html>
