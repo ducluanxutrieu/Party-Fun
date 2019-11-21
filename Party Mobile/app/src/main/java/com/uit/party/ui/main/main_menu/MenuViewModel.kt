@@ -3,7 +3,6 @@ package com.uit.party.ui.main.main_menu
 import android.view.View
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.databinding.library.baseAdapters.BR
 import androidx.navigation.findNavController
@@ -13,7 +12,6 @@ import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.SharedPrefs
-import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
 import retrofit2.Call
 import retrofit2.Callback
@@ -127,6 +125,6 @@ class MenuViewModel : BaseObservable(){
     private fun checkAdmin(): Boolean {
         val role =
             SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
-        return role.equals("Admin")
+        return role.equals("nhanvien")
     }
 }
