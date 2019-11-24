@@ -1,262 +1,263 @@
-[{
-    "_comment": " Account response",
-	// dang nhap
-	API: post /user/signin
-    "success": false,
-    "message": "Sign Up success" || "Account already exists",
-    "account" : {
-        "_id" : 0,
-        "username": "luan",
-        "fullName": "Tran Duc Luan",
-        "email": "ducluanxutrieu@gmail.com",
-        "token": "abdasdfasdf-asndfasdf34ksnd",
-        "imageurl": "https://kenh14cdn.com/2019/6/7/610192706407631463473378619777794299133952n-15599182099941890689288.jpg",
-        "phoneNumber": "0123456789",
-        "createdAt": "2019-08-30T04:04:22.750Z",
-        "updatedAt": "2019-08-30T04:04:22.750Z",
-        "role": "nhanvien",
-        "userCart": [{
-            "dishName": "Rong xanh vuot dai duong",
-            "dishsNunber": 2,
-            "dishNote": "Mon nay phai nau cay",
-            "dishPrice": 50000
-        },
-        {
-            "dishName": "Ga nuong nguyen con",
-            "dishsNunber": 1,
-            "dishNote": null,
-            "dishPrice": 100000
-        }]
-    }
-},
-{ 
-API post /user/signup
-	success:
-	message:
-	account:
-},
-{
-API: post /user/updateuser
-    "_comment": "Request update user",
-    "authorization" : "Token duoc nam o phan header",
-    "email": "ducluanxutrieu@gmail.com",
-    "phoneNumber": "0123456789",
-    "fullName":"Tran Duc Luan1223",
-	"sex": "",
-	"birthday":""
-},
-{
-    "_comment": "Response update user",
-    "success": true,
-    "message": "Update success"  || "Failed to authenticate token.",
-	"account":
-	{ "_id" : 0,
-        "username": "luan",
-        "fullName": "Tran Duc Luan",
-        "email": "ducluanxutrieu@gmail.com",
-        "token": "abdasdfasdf-asndfasdf34ksnd",
-        "imageurl": "https://kenh14cdn.com/2019/6/7/610192706407631463473378619777794299133952n-15599182099941890689288.jpg",
-        "phoneNumber": "0123456789",
-        "createdAt": "2019-08-30T04:04:22.750Z",
-        "updatedAt": "2019-08-30T04:04:22.750Z",
-        "userCart": [{
-            "dishName": "Rong xanh vuot dai duong",
-            "dishsNunber": 2,
-            "dishNote": "Mon nay phai nau cay",
-            "dishPrice": 50000
-        },
-        {
-            "dishName": "Ga nuong nguyen con",
-            "dishsNunber": 1,
-            "dishNote": null,
-            "dishPrice": 100000
-        }]
-	}
-},
-
-{
-API: post /user/changepassword
-    "_comment": "Request change password",
-    "authorization" : "Token duoc nam o phan header",
-	"password": "123456",
-    "newpassword": "thisisnewpass"
-},
-{
-    "_comment": "Response Change password",
-    "success": false,
-    "message": "Wrong Password" || "Failed to authenticate token." || "Password updated",
-},
-
-{
-API: /user/signout
-    "_comment": "Request log out",
-    "authorization" : "Token duoc nam o phan header"
-},
-{
-    "_comment": "Response log out",
-    "success": true,
-    "message": "Sign Out success" || "Failed to authenticate token.",
-},
-
-{
-API: /user/uploadavatar
-    "_comment": "Request change avatar",
-    "authorization":"Token duoc nam o phan header",
-    //
-	"image": file
-},
-{	
-
-    "_comment": "Response change avatar",
-    "success": true,
-    "message": "https://kenh14cdn.com/2019/6/7/610192706407631463473378619777794299133952n-15599182099941890689288.jpg",
-},
-
-
-{
-API: post /user/resetpassword
-	"_comment":"Request reset password",
-	"username": "username"
-},
-{
-	"_comment": "Response reset password",
-	"success": true,
-	"message":"Please check your email"
-},
-{
-API /user/resetconfirm
-	"_comment": "request reset password dung de nhap ma da gui toi email",
-	"resetpassword": "ma nhan duoc trong email",
-	"passwordnew": "mat khau moi"
-},
-{
-	"_comment": "Response reset pass",
-	"success": true, 
-	"message": "Update password success" || "Code OTP incorrect"
-},
-{
-API get /user/profile
-	"_comment":"Request Lay thong tin user",
-	"authorization": "Token o Header"
-},
-{
-	"_comment": "response get user",
-	"success": true, 
-	"message": "Profile User", 
-	"account": account
-},
-{
-API post /user/upgraderole
-	"_comment": "request nang cap quyen role tu khach hang len nhan vien",  // phai dang nhap bang tai khoan Admin pass 123456
-	"authorization": "Token cua acc Admin",
-	"userupgrade": "ten username nang cap quyen"
-},
-{
-	"_comment": "Response upgrade role",
-	"success": true, 
-	"message": "Upgrade Role success" || "You need signin with Administrator"
-	 
-},
-{
-
-// name co the chinh sua
-API post /product/adddish
-	"_comment": "Request them mon an ",
-	"authorization": "Token dang nhap bang role user",
-	"name":"",
-	"description": "",
-	"price": "",
-	"type": "khai vi, mon chinh, nuoc, .....",
-	"createAt": "",
-	"updateAt": "",
-	image: file anh (phai tai len it nhat la 2 file anh),
-	"......": ""
-},
-{
-	"_comment": "Response them mon an",
-	"success": true, 
-	"message": "Add dish success" || "Name is required" || "You need sign in with role nhanvien" || "You need to upload more than 1 file"
-	dish: {
-		"_id":
-		"name":"",
-		"description": "",
-		"price": "",
-		"type": "Khai vi, mon chinh, nuoc, .....",
-		"createAt": "",
-		"updateAt": "",
-		image: file anh (phai tai len it nhat la 2 file anh)
-	}
-},
-{
-API: get /product/finddish
-    "_comment": "Request get list dishs",
-	//request k co body
-    "_comment": response
-    	"success": true, 
-	"message": "Get menu success", 
-	lishDishs: 
-	{
-	"_id":
-	"name":
-	"description":
-	"image": [url1, url2,...] 
-	}
+Dia chi IP server: 139.180.131.30
+Port: 3000
+Phan user:
+	Dang ki:post /user/signup
+			Noi dung yeu cau:
+				username : do dai >=4
+				password : do dai >=6
+				fullName : do dai >=6
+				email : do dai >=10
+				phoneNumber : do dai >=9, kieu so 
+			Noi dung tra ve:
+				success: true||false
+				message: success || error...
+				account:
+					{
+						_id:
+						username:
+						fullName:
+						email:
+						phoneNumber:
+						imageurl:
+						resetpassword:
+						role: Admin||nhanvien||khachhang
+						birthday:
+						sex:Male||Female
+						createAt:
+						updateAt:
+						userCart: []
+					}
+	Dang nhap:post /user/signin
+			Noi dung yeu cau:
+				Th1: dang nhap bang token
+					Authoziration o header: token
+				Th2: dang nhap bang username:
+					username:
+					password:
+			Noi dung tra ve:
+				success:
+				message:
+				account:{}
+	Dang xuat: post /user/signout
+			Noi dung yeu cau:
+				Authoziration o header: token
+			Noi dung tra ve:
+				success:
+				message:
+	Upload Avatar: post /user/uploadavatar
+			Noi dung yeu cau:
+				Header: Authoziration: token
+				image: file anh 
+			Noi dung tre ve:
+				success:
+				message: url Avatar
+	Thay doi mat khau: post /user/changepassword
+			Noi dung yeu cau:
+			 	Header: Authoziration: token
+				password: do dai >=6
+				newpassword: do dai >=6
+			Noi dung tra ve:
+				success:
+				message:
+	Reset mat khau:
+		Gui yeu cau reset password: post /user/resetpassword
+			Noi dung yeu cau:
+				username: user name can reset password
+			Noi dung tra ve:
+				success:
+				message: Please check your email ...
+		Xac nhan ma reset password: post /user/resetconfirm
+			Noi dung yeu cau:
+				resetpassword: ma reset password nhan duoc trong email
+				passwordnew: 
+			Noi dung tre ve:
+				success:
+				message:
+	Cap nhat thong tin user: post /user/updateuser
+			Noi dung yeu cau:
+				Header: Authoziration: token
+				fullName:
+				email:
+				phoneNumber:
+				sex: Male || Female
+				birthday: Dinh dang MM/DD/YYYY
+			Noi dung tra ve:
+				success:
+				message:
+				account:{}
+	In thong tin user: get /user/profile
+			Noi dung yeu cau:
+				Header: Authoziration: token
+			Noi dung tra ve:
+				success:
+				message:
+				account:{}
+	Nang cap quyen khachhang len nhanvien: post /user/upgraderole
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin
+				userupgrade: username duoc nang quyen
+			Noi dung tra ve:
+				success:
+				message:
+	Xoa quyen nhan vien, tu nhanvien -> khachhang: delete /user/demotionrole
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin
+				userupgrade: username can xoa quyen
+			Noi dung tra ve:
+				success:
+				message:
 	
-},
-{
-API post /product/update
-	"_comment": request update
-	token nam o header, dang nhap bang role nhanvien
-	"_id":
-	"name":"",
-	"description": "",
-	"price": "",
-	"type": "Khai vi, mon chinh, nuoc, .....",
-	"image": [file anh] (phai tai len it nhat la 2 file anh)
-},
-{
-API post /product/update
-    "_comment": "response update dish",
-    "success": false,
-    "message": "Failed to authenticate token" || Name is required,
-    "dish": [{
-        "name": "Rong xanh vuot dai duong",
-        "description": "La mot mon an tot cho suc khoe",
-        "price": "30000",
-        "type":"",
-        "image": []
-// 
-},
-{
-Dat ban
-API post /product/book
-       "_comment": "req dat ban"
-       header: token dang nhap tai khoan user
-       [name: numberDish : price]
-       "numberTable": "số lượng bàn"
-       "dateParty":  // bỏ ngày order vì bên server sẽ tạo trường createAt
-       "timeStart":
-},
-{
-	"_comment": "response dat ban"
-	"success":
-	"message":
-	"totalMoney":
-	"IDBill": // id hóa đơn
-	"createAt": // ngày đặt bàn
-	[name:numberDish]
-	"numberTable":  
-	"dateParty":
-	"timeStart": 
-}
-{
-Thanh toan
-	"_comment": req thanh toán
-	token ở đầu header, đăng nhập bằng role nhanvien  
-	"IDBill": "số hóa đơn thanh toán" // có thể chỉ gửi lên 1 trong 2 trường.   
-}
-{
-	"_comment": res thanh toán
-	"success":
-	"message":
-}
+Mon an
+	Them mon an: post /product/adddish
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin || nhanvien
+				name: ten mon an
+				discription:
+				price:
+				type:
+				discount:
+				image: file anh. Co the gui nhieu file
+			Noi dung tra ve:
+				success:
+				message:
+				dish:{
+					_id:
+					name:
+					discription:
+					price:
+					type:
+					discount:
+					image:
+					createAt:
+					updateAt:
+					usercreate:
+					rate{
+						average: diem so danh gia mon an trung binh
+						lishRate: [
+							{
+								username: nguoi danh gia
+								_iddish: id mon an danh gia
+								scorerate: diem so danh gia: 1 <= scorerate <=5
+								content: noi dung danh gia
+							},
+							{
+								....
+							}
+						]
+						totalpeople: tong so nguoi danh gia
+					}
+				}
+	Cap nhat mon an: post /product/updatedish
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin || nhanvien
+				name: ten mon an
+				discription:
+				price:
+				type:
+				discount:
+			Noi dung tra ve:
+				success:
+				message:
+				dish:
+	Them anh vao mon an: post /product/uploadimage
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin || nhanvien
+				image: file anh, co the nhieu buc anh
+			Noi dung tre ve:
+				success:
+				message:
+	Xoa mon an: delete /product/deletedish
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin || nhanvien
+				_id: id mon an can xoa
+			Noi dung tre ve:
+				success:
+				message:
+	In ra danh sach mon an: get /product/finddish
+			Noi dung yeu cau:
+			Noi dung tre ve:
+				success:
+				message:
+				lishDishs: []
+	Dat ban: post /product/book
+			Noi dung yeu cau:
+				Header: Authoziration: token
+				dateParty: Dinh dang MM/DD/YYYY H:M, ngay dat tiec phai >= ngay hien tai (quen set dieu kien >= gio + phut hien tai :D)
+				numbertable: so ban dat tiec >0
+				lishDishs: [
+					{
+						numberDish: so luong mon an
+						_id: id mon an
+					}
+				]
+			Noi dung tre ve:
+				success:
+				message:
+				bill:{
+					_id:
+					lishDishs:[]
+					dateParty:
+					numbertable:
+					username: username nguoi dat ban
+					createAt: thoi gian dat ban
+					paymentstatus: true||false : trang thai thanh toan
+					totalMoney: Tong so tien
+					userpayment: null||... : username thanh toan hoa don 
+					paymentAt: null||... : thoi gian thah toan
+				}
+	In ra id bill theo ten nguoi dung: get /product/findbill
+		// muc dich: Khi thanh toán cần nhập id của hóa đơn,trường này dài khó nhập nên sử dụng API này để lấy _id bill nào chưa thanh toán của user đó
+			Noi dung yeu cau:
+				name: ten username khach hang
+			Noi dung tre ve:
+				success:
+				message:
+				bill:{} thông tin bill của khách hàng đó chưa thanh toán
+	Thanh toan: post /product/pay
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin || nhanvien
+				_id: id bill can thanh toan
+			Noi dung tre ve:
+				success:
+				message:
+				bill:
+	Thong ke theo ngay:  get /product/statistical
+			Noi dung yeu cau:
+				Header: Authoziration: token dang nhap bang user Admin || nhanvien
+			Noi dung tre ve:
+				[
+					{
+						dateDay: Format DD-MM-YYYY. 17-11-2019
+						IDDish: id mon an
+						namedish: ten mon an (Hiện tại trường này chưa có, chuẩn bị có)
+						totalorderdish: tổng số lượt order món ăn đó trong 1 ngày (=numbertable * numberDish )
+						totalMoney: Tổng số tiền ngày đó nhận được
+						count_of_bill: Ngày đó được bao nhiêu bill	
+					},
+					{
+        				"totalMoney": 350000,
+        				"count_of_bill": 2,
+        				"totalorderdish": 3,
+        				"dateDay": "17-11-2019",
+        				"IDDish": "5dcfc63346f1351a7c087757"
+    				},
+    				{
+        				"totalMoney": 300000,
+        				"count_of_bill": 1,
+        				"totalorderdish": 2,
+        				"dateDay": "18-11-2019",
+        				"IDDish": "5dcfc63346f1351a7c087757"
+    				}
+				]
+	Danh gia mon an: post /product/ratedish
+			Noi dung yeu cau:
+				Header: Authoziration: token 
+				_id: _id mon an
+				scorerate: diem danh gia 1->5
+				content: noi dung danh gia
+			Noi dung tre ve:
+				success:
+				message:
+				
+			
+		
