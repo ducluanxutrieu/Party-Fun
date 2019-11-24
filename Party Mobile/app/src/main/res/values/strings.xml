@@ -178,4 +178,7 @@
     <string name="ok">Ok</string>
     <string name="cancel" tools:ignore="PrivateResource">Cancel</string>
     <string name="code_from_your_email">Code From Your Email</string>
+    <string name="number_of_table">Number of Tables</string>
+    <string name="date_booking_must_greater_than_day_now">Date party must greater than day now</string>
+    <string name="date_party">Date Party</string>
 </resources>

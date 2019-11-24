@@ -76,6 +76,13 @@ interface ServiceRetrofit {
     fun getListDishes(
         @Header("authorization") token: String
     ): Call<DishesResponse>
+
+    @FormUrlEncoded
+    @POST("/product/book")
+    fun bookParty(
+        @Header("authorization") token: String,
+        @Body body: RequestOrderPartyModel
+    ): Call<Any>
 }
 
 class SetupConnectToServer {

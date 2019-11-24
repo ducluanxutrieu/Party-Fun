@@ -24,4 +24,16 @@ object TimeFormatUtil {
         }
         return null
     }
+
+    fun formatTimeToServer(calPicker : Calendar): String {
+        val myFormat = "MM/dd/yyyy HH:mm"
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        return sdf.format(calPicker.time)
+    }
+
+    fun formatTimeToClient(calPicker : Calendar): String {
+        val myFormat = "dd/MM/yyyy HH:mm"
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        return sdf.format(calPicker.time)
+    }
 }
