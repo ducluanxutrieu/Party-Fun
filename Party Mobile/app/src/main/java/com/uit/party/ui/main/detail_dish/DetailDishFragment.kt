@@ -24,22 +24,24 @@ class DetailDishFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = setupBinding(container)
+        setupBinding(container)
         return binding.root
     }
 
-    private fun setupBinding(
-        container: ViewGroup?
-    ): FragmentDetailDishBinding {
-        val mBinding = DataBindingUtil.inflate<FragmentDetailDishBinding>(LayoutInflater.from(context), R.layout.fragment_detail_dish, container, false)
-        mBinding.viewModel = viewModel
-        return mBinding
+    private fun setupBinding(container: ViewGroup?) {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_detail_dish, container, false)
+        binding.viewModel = viewModel
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initData()
         viewModel.init(mDishModel)
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        binding.rvImagesDish.adapter = viewModel.mAdapter
     }
 
     private fun initData() {

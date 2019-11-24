@@ -2,19 +2,13 @@ package com.uit.party.util
 
 import com.uit.party.model.*
 import com.uit.party.ui.profile.editprofile.RequestUpdateProfile
-import okhttp3.Interceptor
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
-import okhttp3.RequestBody
-import retrofit2.http.POST
-import retrofit2.http.Multipart
 
 interface ServiceRetrofit {
     @HTTP(method = "POST", path = "user/signin", hasBody = true)
@@ -30,6 +24,19 @@ interface ServiceRetrofit {
     @POST("user/signout")
     fun logout(
         @Header("authorization") token: String
+    ): Call<BaseResponse>
+
+    @POST("user/resetpassword")
+    @FormUrlEncoded
+    fun resetPassword(
+        @Field("username") username: String
+    ): Call<BaseResponse>
+
+    @POST("/user/resetconfirm")
+    @FormUrlEncoded
+    fun vertifyPassword(
+        @Field("resetpassword") resetpassword: String,
+        @Field("passwordnew") passwordnew: String
     ): Call<BaseResponse>
 
     @POST("user/changepassword")

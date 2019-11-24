@@ -21,7 +21,7 @@ class MenuViewModel : BaseObservable(){
     val mShowFab = ObservableInt(View.GONE)
 
     @get: Bindable
-    var listMenu = ArrayList<MenuModel>()
+    var listMenu = ArrayList<DishModel>()
         private set(value) {
             field = value
             notifyPropertyChanged(BR.listMenu)
@@ -58,46 +58,11 @@ class MenuViewModel : BaseObservable(){
                     if (response.isSuccessful){
                         val dishes = response.body()?.lishDishs
                         if (dishes != null){
-                            listMenu = menuAllocation(dishes)
+                            listMenu = dishes
                         }
                     }
                 }
             })
-    }
-
-    private fun menuAllocation(dishes: java.util.ArrayList<DishModel>): java.util.ArrayList<MenuModel> {
-        val listMenu = ArrayList<MenuModel>()
-        val listHolidayOffers = ArrayList<DishModel>()
-        val listFirstDishes = ArrayList<DishModel>()
-        val listMainDishes = ArrayList<DishModel>()
-        val listSeafood = ArrayList<DishModel>()
-        val listDrink = ArrayList<DishModel>()
-        for (row in dishes){
-            when(row.type){
-                "Holiday Offers" -> listHolidayOffers.add(row)
-                "First Dishes" -> listFirstDishes.add(row)
-                "Main Dishes" -> listMainDishes.add(row)
-                "Seafood" -> listSeafood.add(row)
-                "Drinks" -> listDrink.add(row)
-            }
-        }
-        if (listHolidayOffers.size > 0){
-            listMenu.add(MenuModel("Holiday Offers", listHolidayOffers))
-        }
-        if (listFirstDishes.size > 0){
-            listMenu.add(MenuModel("First Dishes", listFirstDishes))
-        }
-        if (listMainDishes.size > 0){
-            listMenu.add(MenuModel("Main Dishes", listMainDishes))
-        }
-        if (listSeafood.size > 0){
-            listMenu.add(MenuModel("Seafood", listSeafood))
-        }
-        if (listDrink.size > 0){
-            listMenu.add(MenuModel("Drinks", listDrink))
-        }
-
-        return listMenu
     }
 
     fun logout(onSuccess : (Boolean) -> Unit) {

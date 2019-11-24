@@ -59,15 +59,6 @@
     </item>
 
     <group
-        android:id="@+id/logout">
-        <item
-            android:id="@+id/log_out"
-            android:title="@string/logout"
-            android:icon="@drawable/ic_logout"
-            />
-    </group>
-
-    <group
         android:id="@+id/version_app">
         <item
             android:id="@+id/version"

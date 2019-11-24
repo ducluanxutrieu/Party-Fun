@@ -98,5 +98,9 @@
         android:id="@+id/fragment_change_password"
         android:name="com.uit.party.ui.profile.change_password.ChangePasswordFragment"
         android:label="@string/toolbar_change_password"
-        tools:layout="@layout/fragment_change_password" />
+        tools:layout="@layout/fragment_change_password" >
+
+        <argument android:name="OrderCode"
+            app:argType="string"/>
+    </fragment>
 </navigation>

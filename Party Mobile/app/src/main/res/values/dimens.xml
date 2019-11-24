@@ -40,9 +40,9 @@
     <dimen name="small_spacing">8dp</dimen>
     <dimen name="item_product_title_size">30sp</dimen>
     <dimen name="large_margin_start">56dp</dimen>
-    <dimen name="item_image_height">292dp</dimen>
+    <dimen name="item_image_height">@dimen/_150sdp</dimen>
 
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="nav_header_height">@dimen/_150sdp</dimen>
     <dimen name="add_more_image_size">@dimen/_60sdp</dimen>
 </resources>

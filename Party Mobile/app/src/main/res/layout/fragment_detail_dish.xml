@@ -12,17 +12,11 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        >
+        android:background="#FFFFFF">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -31,16 +25,21 @@
                     android:layout_marginRight="@dimen/standard_spacing"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ProductImage"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_image_height"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/standard_spacing"
-                        android:layout_marginBottom="@dimen/standard_spacing"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        app:dishUrl="@{viewModel.imageDish}" />
+                        android:layout_margin="@dimen/standard_spacing"
+                        app:cardCornerRadius="@dimen/corner_radius">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ProductImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/item_image_height"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            app:dishUrl="@{viewModel.imageDish}" />
+                    </androidx.cardview.widget.CardView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -69,9 +68,14 @@
                             android:text="@{viewModel.descriptionDish}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
                     </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_images_dish"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:linearRecyclerData="@{viewModel.listImages}" />
                 </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+        </ScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/FloatingActionButton"
@@ -79,8 +83,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/_40sdp"
-            android:onClick="@{() -> viewModel.addToCartClicked()}"
             android:backgroundTint="@color/colorAccentSecondary"
+            android:onClick="@{() -> viewModel.addToCartClicked()}"
             android:src="@drawable/ic_shopping_cart_vd_theme_24" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

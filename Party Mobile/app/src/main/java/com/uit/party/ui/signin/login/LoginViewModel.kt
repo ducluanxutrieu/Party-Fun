@@ -23,6 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class LoginViewModel : ViewModel() {
     val loginEnabled: ObservableBoolean = ObservableBoolean()
 
@@ -190,11 +191,17 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+    fun onForgotPasswordClicked(view: View){
+        view.findNavController().navigate(R.id.action_LoginFragment_to_ResetPasswordFragment)
+    }
+
     private fun saveToMemory(model: AccountResponse) {
         SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
+        SharedPrefs().getInstance().put(ACCESS_TOKEN_KEY, model.account?.token)
     }
 
     companion object {
         internal const val USER_INFO_KEY = "USER_INFO_KEY"
+        internal const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
     }
 }

@@ -8,9 +8,8 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
@@ -22,6 +21,7 @@ import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.SetupConnectToServer
 import com.uit.party.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
@@ -48,15 +48,27 @@ class MainActivity : AppCompatActivity(){
 
     private fun setupNavigationDrawer() {
         headerBinding =
-            DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.nav_header_main, drawer_layout, false)
+            DataBindingUtil.inflate(
+                LayoutInflater.from(this),
+                R.layout.nav_header_main,
+                drawer_layout,
+                false
+            )
 
-        binding.navView.addHeaderView(headerBinding.root)
+        val navigationView = binding.navView
+        navigationView.addHeaderView(headerBinding.root)
 
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_user_home, R.id.nav_user_profile, R.id.nav_restaurant_address, R.id.nav_about_us), binding.drawerLayout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        binding.navView.setupWithNavController(navController)
+        appBarConfiguration = AppBarConfiguration.Builder(
+            R.id.nav_user_home,
+            R.id.nav_user_profile,
+            R.id.nav_restaurant_address,
+            R.id.nav_about_us
+        )
+            .setDrawerLayout(binding.drawerLayout)
+            .build()
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
+        NavigationUI.setupWithNavController(navigationView, navController)
         binding.drawerLayout.isDrawerOpen(GravityCompat.START)
     }
 
@@ -81,11 +93,11 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun checkLogin() {
-        val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
-        if (account?.token.isNullOrEmpty()) {
+        val temp = SharedPrefs().getInstance().get("ACCESS_TOKEN_KEY", String::class.java)
+        if (temp.isNullOrEmpty()) {
             goToSignIn()
         } else {
-            TOKEN_ACCESS = account?.token.toString()
+            TOKEN_ACCESS = temp
         }
     }
 

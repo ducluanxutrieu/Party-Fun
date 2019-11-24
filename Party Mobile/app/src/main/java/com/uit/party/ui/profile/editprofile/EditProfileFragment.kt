@@ -12,7 +12,7 @@ import com.uit.party.databinding.FragmentEditProfileBinding
 @Suppress("DEPRECATION")
 class EditProfileFragment : Fragment(){
     private lateinit var binding: FragmentEditProfileBinding
-    private lateinit var viewModel: EditProfileFragmentViewModel
+    private lateinit var mViewModel: EditProfileFragmentViewModel
 
 
     override fun onCreateView(
@@ -21,8 +21,8 @@ class EditProfileFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false)
-        viewModel = EditProfileFragmentViewModel()
-        binding.viewModel = viewModel
+        mViewModel = EditProfileFragmentViewModel()
+        binding.viewModel = mViewModel
         return binding.root
     }
 
@@ -34,9 +34,14 @@ class EditProfileFragment : Fragment(){
     private fun setupRadioButton(){
         binding.rgSex.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId){
-                R.id.rb_male -> viewModel.mSex = getString(R.string.sex_male)
-                R.id.rb_female -> viewModel.mSex = getString(R.string.sex_female)
+                R.id.rb_male -> mViewModel.mSex = getString(R.string.sex_male)
+                R.id.rb_female -> mViewModel.mSex = getString(R.string.sex_female)
             }
+        }
+
+        when (mViewModel.account?.sex){
+            "Male" -> binding.rbMale.isChecked = true
+            "Female" -> binding.rbFemale.isChecked = true
         }
     }
 }

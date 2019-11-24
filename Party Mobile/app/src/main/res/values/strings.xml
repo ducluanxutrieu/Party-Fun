@@ -20,7 +20,6 @@
     <string name="add_new_project">Add New Project</string>
     <string name="project_state">Project State: </string>
     <string name="add_new">Add New</string>
-    <string name="cancel" tools:ignore="PrivateResource">Cancel</string>
     <string name="title_activity_tasks" translatable="false">TasksActivity</string>
     <string name="add_new_task">Add New Task</string>
     <string name="description">Description</string>
@@ -173,4 +172,10 @@
     <string name="login_error">Login Error</string>
     <string name="login_successful">Login Successful</string>
     <string name="register_successful">Register success</string>
+    <string name="birthday_greater_than_now_day">Birthday need greater than now day</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="input_username_to_get_password">Input your username to get your password</string>
+    <string name="ok">Ok</string>
+    <string name="cancel" tools:ignore="PrivateResource">Cancel</string>
+    <string name="code_from_your_email">Code From Your Email</string>
 </resources>
