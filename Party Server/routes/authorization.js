@@ -190,7 +190,8 @@ module.exports = {
                     if (isNaN(req.body.numbertable)) respon(res);
                     else if (check(req.body.lishDishs, "string", 20)) respon(res);
                     else {
-                        req.body.lishDishs = JSON.parse(req.body.lishDishs);
+                        try {req.body.lishDishs = JSON.parse(req.body.lishDishs); }
+                        catch (e) {}
                         for (var i = 0; i < req.body.lishDishs.length; i++) {
                             req.body.lishDishs[i].numberDish = Number(req.body.lishDishs[i].numberDish);
                             if (isNaN(req.body.lishDishs[i].numberDish))
