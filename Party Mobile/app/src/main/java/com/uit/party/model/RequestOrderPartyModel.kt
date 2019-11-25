@@ -7,7 +7,7 @@ class RequestOrderPartyModel (
     val dateParty: String,
 
     @SerializedName("numbertable")
-    val numbertable: Int,
+    val numbertable: String,
 
     @SerializedName("lishDishs")
     val lishDishs: ArrayList<ListDishes>
@@ -15,7 +15,7 @@ class RequestOrderPartyModel (
 
 class ListDishes(
     @SerializedName("numberDish")
-    val numberDish: Int,
+    val numberDish: String,
 
     @SerializedName("_id")
     val _id: String

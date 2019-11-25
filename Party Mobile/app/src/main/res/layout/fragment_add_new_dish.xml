@@ -12,13 +12,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhile">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/colorWhile">
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -105,7 +105,8 @@
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:fontFamily="@font/museo_sans_cyrl"
                 android:text="@string/add_more_image"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp"
+                android:visibility="@{viewModel.mShowUploadImageDish}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,7 +114,8 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="horizontal"
-                android:weightSum="4">
+                android:weightSum="4"
+                android:visibility="@{viewModel.mShowUploadImageDish}">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/btn_add_more_image"
@@ -206,7 +208,7 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:enabled="@{viewModel.mEnableSendButton}"
                 android:onClick="@{(view) -> viewModel.onSendAddDishClicked(view)}"
-                android:text="@string/add_dish"
+                android:text="@{viewModel.mButtonField}"
                 app:cornerRadius="@dimen/corner_radius" />
         </LinearLayout>
     </ScrollView>

@@ -72,6 +72,10 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         rxBusListen()
         mViewModel.init()
         mDummyImgView = binding.ivCopy
+        setupToolbar()
+    }
+
+    private fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = activity!!.findViewById<View>(R.id.app_bar) as Toolbar
         toolbar.inflateMenu(R.menu.main_menu)

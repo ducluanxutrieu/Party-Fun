@@ -10,11 +10,9 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
 import androidx.databinding.library.baseAdapters.BR
+import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.model.CartModel
-import com.uit.party.model.DishModel
-import com.uit.party.model.ListDishes
-import com.uit.party.model.RequestOrderPartyModel
+import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.StringUtil
@@ -159,20 +157,27 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         val mListDishes = ArrayList<ListDishes>()
         for (row in mListCart){
             if (!row.dishModel._id.isNullOrEmpty())
-                mListDishes.add(ListDishes(row.numberDish, row.dishModel._id!!
+                mListDishes.add(ListDishes(row.numberDish.toString(), row.dishModel._id!!
             ))
         }
 
-        val bookModel = RequestOrderPartyModel(TimeFormatUtil.formatTimeToServer(calDatePartyPicker), mNumberTable, mListDishes)
+        val bookModel = RequestOrderPartyModel(TimeFormatUtil.formatTimeToServer(calDatePartyPicker), mNumberTable.toString(), mListDishes)
         serviceRetrofit.bookParty(TOKEN_ACCESS, bookModel)
-            /*.enqueue(object : Callback<Any>{
-                override fun onFailure(call: Call<Any>, t: Throwable) {
+            .enqueue(object : Callback<BillModel>{
+                override fun onFailure(call: Call<BillModel>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
                 }
 
-                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                override fun onResponse(call: Call<BillModel>, response: Response<BillModel>) {
+                    if (response.code() == 200){
+                        response.body()?.message?.let { ToastUtil.showToast(it) }
+                        if (response.body()?.success == true){
+                            view.findNavController().navigate(R.id.action_CartDetailFragment_to_BookingSuccessFragment)
+                        }
+                    }else{
+                        ToastUtil.showToast(response.message())
+                    }
                 }
-
-            })*/
+            })
     }
 }

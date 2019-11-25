@@ -181,4 +181,12 @@
     <string name="number_of_table">Number of Tables</string>
     <string name="date_booking_must_greater_than_day_now">Date party must greater than day now</string>
     <string name="date_party">Date Party</string>
+    <string name="reservation_completed_successfully">Reservation completed successfully</string>
+    <string name="your_reservation_with_a_mechanic_was_successful_nwe_will_process_payment_after_the_work_is_completed">Your reservation with a mechanic was successful. We will process payment after the work is completed.</string>
+    <string name="an_email_confirmation_will_be_sent_to_you_shortly_with_your_order_detail">An email confirmation will be sent to you shortly with your order detail.</string>
+    <string name="back_to_menu">Back to Menu</string>
+    <string name="reservation_success">Reservation Success</string>
+    <string name="edit_dish">Edit Dish</string>
+    <string name="update_dish_false">Update dish false</string>
+    <string name="update_dish">Update Dish</string>
 </resources>

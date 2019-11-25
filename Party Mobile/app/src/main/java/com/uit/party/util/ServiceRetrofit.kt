@@ -72,17 +72,22 @@ interface ServiceRetrofit {
         @Part("image") requestBody: RequestBody
     ): Call<AddDishResponse>
 
+    @POST("/product/updatedish")
+    fun updateDish(
+        @Header("authorization") token: String,
+        @Body body: UpdateDishRequestModel
+        ): Call<BaseResponse>
+
     @GET("product/finddish")
     fun getListDishes(
         @Header("authorization") token: String
     ): Call<DishesResponse>
 
-    @FormUrlEncoded
     @POST("/product/book")
     fun bookParty(
         @Header("authorization") token: String,
         @Body body: RequestOrderPartyModel
-    ): Call<Any>
+    ): Call<BillModel>
 }
 
 class SetupConnectToServer {

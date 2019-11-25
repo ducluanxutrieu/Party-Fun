@@ -28,8 +28,8 @@
         android:label="@string/dish_detail"
         tools:layout="@layout/fragment_detail_dish">
         <action
-            android:id="@+id/action_back_ListDishFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_DishDetailFragment_to_ModifyDishFragment"
+            app:destination="@id/fragment_add_new_dish" />
 
         <argument
             android:name="position"
@@ -50,6 +50,10 @@
         android:label="@string/add_dish"
         tools:layout="@layout/fragment_add_new_dish">
 
+        <argument
+            android:name="@string/dish_model"
+            app:argType="com.uit.party.model.DishModel"
+            app:nullable="true"/>
     </fragment>
 
     <fragment
@@ -61,6 +65,24 @@
         <argument
             android:name="@string/list_dish_selected_key"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_CartDetailFragment_to_BookingSuccessFragment"
+            app:destination="@id/fragment_book_success"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_book_success"
+        android:name="com.uit.party.ui.main.book_party_success.BookPartySuccessFragment"
+        android:label="@string/reservation_success"
+        tools:layout="@layout/fragment_book_party_success">
+
+        <action
+            android:id="@+id/action_BookingSuccessFragment_to_MenuFragment"
+            app:destination="@id/nav_user_home"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/nav_user_home"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -85,8 +107,8 @@
     <fragment
         android:id="@+id/nav_about_us"
         android:name="com.uit.party.ui.address.AboutUsFragment"
-        tools:layout="@layout/fragment_about_us"
-        android:label="@string/about_us"/>
+        android:label="@string/about_us"
+        tools:layout="@layout/fragment_about_us" />
 
     <fragment
         android:id="@+id/fragment_edit_profile"
@@ -98,9 +120,10 @@
         android:id="@+id/fragment_change_password"
         android:name="com.uit.party.ui.profile.change_password.ChangePasswordFragment"
         android:label="@string/toolbar_change_password"
-        tools:layout="@layout/fragment_change_password" >
+        tools:layout="@layout/fragment_change_password">
 
-        <argument android:name="OrderCode"
-            app:argType="string"/>
+        <argument
+            android:name="OrderCode"
+            app:argType="string" />
     </fragment>
 </navigation>

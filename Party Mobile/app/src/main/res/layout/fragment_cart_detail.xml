@@ -99,7 +99,8 @@
                 android:editable="false"
                 android:focusable="false"
                 android:onClick="@{(view) -> viewModel.onDatePartyClicked(view)}"
-                tools:text="22/11/2022" />
+                tools:text="22/11/2022"
+                tools:ignore="Deprecated" />
         </LinearLayout>
 
         <LinearLayout
