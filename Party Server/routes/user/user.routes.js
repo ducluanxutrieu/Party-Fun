@@ -37,4 +37,7 @@ module.exports = function (app) {
 
     // xem anh
     app.get('/open_image', controller.open_image);
+
+    // get danh sach username
+    app.get('/user/finduser', auth.isAuthenticated, auth.isStaff, controller.finduser);
 }
