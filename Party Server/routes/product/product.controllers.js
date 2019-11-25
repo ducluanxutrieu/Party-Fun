@@ -103,7 +103,7 @@ module.exports = {
 				if (err) console.log("Unable to connect")
 				var User = db.collection("User");
 				var Menu = db.collection("Menu");
-				console.log(req.connection.remoteAddress + "Update infor dish. Content: " + req.body);
+				console.log(req.connection.remoteAddress + "Update infor dish. Content: name " + req.body.name);
 
 				Menu.find({ name: req.body.name }).toArray(function (err, docs) {
 					if (Array.isArray(docs) && docs.length != 0) {
@@ -391,9 +391,33 @@ module.exports = {
 							totalMoney:1,
 							count_of_bill: 1,
 							totalorderdish:1,
-							IDDish: "$_id.lishDishsID",
+							IDDish: {
+								$toObjectId :"$_id.lishDishsID"
+							},
 						}
-					} 	
+					},
+					
+					{
+						$lookup: {
+							from: "Menu",
+							localField: "IDDish",
+							foreignField: "_id",
+							as: "outputMenu"
+						}
+					},
+					{
+						$project: {
+							_id:0,
+							dateDay: 1,
+							totalMoney:1,
+							count_of_bill:1,
+							totalorderdish:1,
+							namedish: "$outputMenu.name"
+						}
+					},
+					{
+						$unwind: "$namedish"
+					},
 					
 				]).toArray(function (err, data) {
 							console.log(data);
