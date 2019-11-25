@@ -354,9 +354,10 @@ module.exports = {
                         return res.status(500).send({ success: false, message: err2 });
                     else {
                         if (decoded[0].role == "Admin") {
-                            collection.update({ username: req.body.userupgrade }, { $set: { role: "nhanvien" } }, function (err, resl) {
+                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "nhanvien" } }, {returnOriginal: false}, function (err, resl) {
                                 if (err) res.status(500).send({ success: false, message: err });
-                                res.status(200).send({ success: true, message: "Upgrade Role success" });
+                                else if (resl.value==null) res.status(400).send({success: false, message:"Can't find user"}); 
+                                else res.status(200).send({ success: true, message: "Upgrade Role success" });
                             });
                         }
                         else res.status(400).send({ success: false, message: "You need signin with Administrator" });
@@ -378,9 +379,10 @@ module.exports = {
                         return res.status(500).send({ success: false, message: err2 });
                     else {
                         if (decoded[0].role == "Admin") {
-                            collection.update({ username: req.body.userupgrade }, { $set: { role: "khachhang" } }, function (err, resl) {
+                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "khachhang" } },{returnOriginal: false}, function (err, resl) {
                                 if (err) res.status(500).send({ success: false, message: err });
-                                res.status(200).send({ success: true, message: "Demotion Role success" });
+                                else if (resl.value==null) res.status(400).send({success: false, message:"Can't find user"});
+                                else res.status(200).send({ success: true, message: "Demotion Role success" });
                             });
                         }
                         else res.status(400).send({ success: false, message: "You need signin with Administrator" });
@@ -401,6 +403,19 @@ module.exports = {
         }
         res.writeHead(200, { "Content-Type": "image/jpeg" });
         return res.end(image);
+    },
+    finduser: function(req, res) {
+        MongoClient.connect(
+            'mongodb://localhost/Android_Lab',
+            function (err, db) {
+                if (err) console.log("Unable to connect")
+                var User = db.collection("User");
+                console.log(req.connection.remoteAddress + " request find all user");
+                User.find({$or: [{role: "nhanvien"},{role:"khachhang"}]}, {username:1, fullName:1, imageurl:1}).toArray(function(err, data) {
+                    if (err || data.length==0) res.status(400).send({success:false, message:"Can't find user", user:null});
+                    else res.status(200).send({success:true, message: "Find all user success", user: data});
+                })
+            })
     }
 
 }
