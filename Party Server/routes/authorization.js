@@ -130,7 +130,7 @@ module.exports = {
     // nâng cấp quyền user từ khách hàng lên nhân viên.
     // userupgrade: user được nâng cấp, phải đăng nhập bằng user role Admin
     checkinDateUpgraderole: function (req, res, next) {
-        if (check(req.body.userupgrade, "string", 6)) respon(res);
+        if (check(req.body.userupgrade, "string", 4)) respon(res);
         else return next();
     },
     // check in data cap nhatmon an
@@ -140,14 +140,12 @@ module.exports = {
     //price: giá tiền >0
     // discount: khuyến mãi. 0 <= discount < 100
     checkinDataDish: function (req, res, next) {
+        req.body.price = Number(req.body.price);
+        req.body.discount=Number(req.body.discount);
         if (check(req.body.name, "string", 1)) respon(res);
         else if (check(req.body.description, "string", 6)) respon(res);
         else if (check(req.body.type, "string", 2)) respon(res);
-        else if (check(req.body.price, "string", 1)) respon(res);
-        else if (check(req.body.discount), "string",1) respon(res);
-        {
-            req.body.price = Number(req.body.price);
-            req.body.discount=Number(req.body.discount);
+        else {
             if (isNaN(req.body.price)|| isNaN(req.body.discount) || req.body.discount <0 || req.body.discount>=100 || req.body.price<=0) respon(res);
             else {
                 var temp = new Object();
