@@ -76,12 +76,18 @@ interface ServiceRetrofit {
     fun updateDish(
         @Header("authorization") token: String,
         @Body body: UpdateDishRequestModel
-        ): Call<BaseResponse>
+        ): Call<UpdateDishResponse>
 
     @GET("product/finddish")
     fun getListDishes(
         @Header("authorization") token: String
     ): Call<DishesResponse>
+
+    @HTTP(method = "DELETE", path = "/product/deletedish", hasBody = true)
+    fun deleteDish(
+        @Header("authorization") token: String,
+        @Body body: HashMap<String, String>
+    ): Call<BaseResponse>
 
     @POST("/product/book")
     fun bookParty(

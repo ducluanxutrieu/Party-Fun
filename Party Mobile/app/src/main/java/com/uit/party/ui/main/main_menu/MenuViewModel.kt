@@ -6,8 +6,10 @@ import androidx.databinding.Bindable
 import androidx.databinding.ObservableInt
 import androidx.databinding.library.baseAdapters.BR
 import androidx.navigation.findNavController
-import com.uit.party.R
-import com.uit.party.model.*
+import com.uit.party.model.Account
+import com.uit.party.model.BaseResponse
+import com.uit.party.model.DishModel
+import com.uit.party.model.DishesResponse
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel
@@ -39,7 +41,8 @@ class MenuViewModel : BaseObservable(){
     }
 
     fun onAddDishClicked(view: View){
-        view.findNavController().navigate(R.id.action_ListDish_to_AddDish)
+        val action = MenuFragmentDirections.actionListDishToAddDish(null)
+        view.findNavController().navigate(action)
     }
 
     fun getListDishes(onComplete : (Boolean) -> Unit){

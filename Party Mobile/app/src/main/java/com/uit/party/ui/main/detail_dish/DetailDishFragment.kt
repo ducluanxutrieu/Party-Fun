@@ -7,12 +7,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.uit.party.R
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
 import com.uit.party.model.DishModel
 import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.SharedPrefs
+import com.uit.party.util.rxbus.RxBus
+import com.uit.party.util.rxbus.RxEvent
+import io.reactivex.disposables.Disposable
 
 class DetailDishFragment : Fragment() {
     private lateinit var mDishModel: DishModel
@@ -21,6 +25,7 @@ class DetailDishFragment : Fragment() {
     private lateinit var mDishType: String
     private lateinit var binding: FragmentDetailDishBinding
     private val mArgs: DetailDishFragmentArgs by navArgs()
+    private lateinit var mDisposable: Disposable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +45,7 @@ class DetailDishFragment : Fragment() {
         )
         binding.viewModel = viewModel
 
-        if (checkIsStaff()){
+        if (checkIsStaff()) {
             setupToolbar()
         }
     }
@@ -56,15 +61,38 @@ class DetailDishFragment : Fragment() {
         val toolbar = activity?.findViewById<View>(R.id.app_bar) as Toolbar
         toolbar.inflateMenu(R.menu.menu_dish_detail)
         toolbar.setOnMenuItemClickListener {
-            if (it.itemId == R.id.toolbar_edit_dish) {
-                val action = DetailDishFragmentDirections.actionDishDetailFragmentToModifyDishFragment(mDishModel)
-                this.findNavController()
-                    .navigate(action)
-                true
-            } else {
-                false
+            when (it.itemId) {
+                R.id.toolbar_edit_dish -> {
+                    val action =
+                        DetailDishFragmentDirections.actionDishDetailFragmentToModifyDishFragment(
+                            mDishModel
+                        )
+                    this.findNavController()
+                        .navigate(action)
+                    true
+                }
+                R.id.toolbar_delete_dish -> {
+                    deleteDish()
+                    true
+                }
+                else -> false
             }
         }
+    }
+
+    private fun deleteDish() {
+        MaterialAlertDialogBuilder(context)
+            .setIcon(resources.getDrawable(R.drawable.ic_alert, context?.theme))
+            .setTitle(getString(R.string.delete_dish))
+            .setMessage(getString(R.string.alert_delete_dish))
+            .setPositiveButton(getString(R.string.delete)){ dialog, _ ->
+                viewModel.deleteDish(binding.root)
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel)){ dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -75,8 +103,19 @@ class DetailDishFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initData()
-        viewModel.init(mDishModel)
+        if (viewModel.mDishModel == null) {
+            viewModel.init(mDishModel)
+        }
         setupRecyclerView()
+        listenDataChange()
+    }
+
+    private fun listenDataChange() {
+        mDisposable = RxBus.listen(RxEvent.UpdateDish::class.java).subscribe {
+            if (it.dishModel != null) {
+                viewModel.init(it.dishModel)
+            }
+        }
     }
 
     private fun setupRecyclerView() {

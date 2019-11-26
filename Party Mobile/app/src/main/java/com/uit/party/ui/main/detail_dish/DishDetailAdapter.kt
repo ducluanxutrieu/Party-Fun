@@ -29,6 +29,7 @@ class DishDetailAdapter : RecyclerView.Adapter<DishDetailAdapter.DishDetailViewH
 
     override fun setData(items: ArrayList<String>) {
         mListData = items
+        mListData.removeAt(0)
         notifyDataSetChanged()
     }
 

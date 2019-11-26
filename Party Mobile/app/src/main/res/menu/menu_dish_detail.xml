@@ -6,4 +6,10 @@
         android:icon="@drawable/ic_edit_black_24dp"
         android:title="@string/edit_dish"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/toolbar_delete_dish"
+        android:icon="@drawable/ic_delete_forever"
+        android:title="@string/delete_dish"
+        app:showAsAction="always" />
 </menu>

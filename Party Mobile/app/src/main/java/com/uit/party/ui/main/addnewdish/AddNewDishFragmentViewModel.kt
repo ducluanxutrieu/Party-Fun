@@ -22,6 +22,8 @@ import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.rxbus.RxBus
+import com.uit.party.util.rxbus.RxEvent
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -86,7 +88,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     fun onAddImageDescription(view: View) {
         PickImageDialog.build(PickSetup()).setOnPickResult { result ->
             val byteArrayOutputStream = ByteArrayOutputStream()
-            result.bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            result.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             listImagePath.add(result.path)
             Glide.with(GlobalApplication.appContext!!).load(File(result.path))
                 .apply { RequestOptions.fitCenterTransform() }.into(view as AppCompatImageView)
@@ -98,24 +100,28 @@ class AddNewDishFragmentViewModel : BaseObservable() {
         if (mDishModel == null) {
             uploadDishImages(view)
         } else {
-            updateDish()
+            updateDish(view)
         }
     }
 
-    private fun updateDish() {
+    private fun updateDish(view: View) {
         val mUpdateModel = UpdateDishRequestModel(mDishModel?._id.toString(), mTitleText, mDescriptionText, mPriceText, mTypeText)
         serviceRetrofit.updateDish(TOKEN_ACCESS, mUpdateModel)
-            .enqueue(object : Callback<BaseResponse>{
-                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+            .enqueue(object : Callback<UpdateDishResponse>{
+                override fun onFailure(call: Call<UpdateDishResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
                 }
 
                 override fun onResponse(
-                    call: Call<BaseResponse>,
-                    response: Response<BaseResponse>
+                    call: Call<UpdateDishResponse>,
+                    response: Response<UpdateDishResponse>
                 ) {
                     if (response.code() == 200){
-                        response.body()?.message?.let { ToastUtil.showToast(it) }
+                        val repo = response.body()
+                        repo?.message?.let { ToastUtil.showToast(it) }
+                        RxBus.publish(RxEvent.UpdateDish(repo?.dish))
+                        view.findNavController().popBackStack()
+
                     }else{
                         ToastUtil.showToast(StringUtil.getString(R.string.update_dish_false))
                     }
