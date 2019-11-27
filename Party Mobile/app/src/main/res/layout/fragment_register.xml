@@ -83,6 +83,7 @@
                         style="@style/TextInputLayout.TextInputEditText"
                         android:hint="@string/action_username"
                         android:inputType="textPersonName"
+                        android:singleLine="true"
                         android:text="@{viewModel.username}"
                         app:addTextChangedListener="@{viewModel.getUsernameTextChanged()}" />
                 </com.google.android.material.textfield.TextInputLayout>

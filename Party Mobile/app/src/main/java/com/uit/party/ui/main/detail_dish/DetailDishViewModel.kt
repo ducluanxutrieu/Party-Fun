@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.detail_dish
 
+import android.content.DialogInterface
 import android.view.View
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
@@ -47,13 +48,14 @@ class DetailDishViewModel : BaseObservable(){
         RxBus.publish(RxEvent.AddToCart(mDishModel!!, null))
     }
 
-    fun deleteDish(view: View) {
+    fun deleteDish(view: View, dialog: DialogInterface) {
         val map = HashMap<String, String>()
         map["_id"] = mDishModel?._id.toString()
         serviceRetrofit.deleteDish(TOKEN_ACCESS, map)
             .enqueue(object : Callback<BaseResponse>{
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
+                    dialog.dismiss()
                 }
 
                 override fun onResponse(
@@ -63,8 +65,10 @@ class DetailDishViewModel : BaseObservable(){
                     if (response.code() == 200){
                         response.body()?.message?.let { ToastUtil.showToast(it) }
                         view.findNavController().popBackStack()
+                        dialog.dismiss()
                     }else{
-                        ToastUtil.showToast(StringUtil.getString(R.string.delete_dish_success))
+                        ToastUtil.showToast(StringUtil.getString(R.string.delete_dish))
+                        dialog.dismiss()
                     }
                 }
             })

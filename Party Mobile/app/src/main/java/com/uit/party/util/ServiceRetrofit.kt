@@ -68,6 +68,7 @@ interface ServiceRetrofit {
         @Part("description") description: RequestBody?,
         @Part("price") price: RequestBody?,
         @Part("type") type: RequestBody?,
+        @Part("discount") discount: RequestBody?,
         @Part image: ArrayList<MultipartBody.Part>,
         @Part("image") requestBody: RequestBody
     ): Call<AddDishResponse>

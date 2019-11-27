@@ -86,8 +86,7 @@ class DetailDishFragment : Fragment() {
             .setTitle(getString(R.string.delete_dish))
             .setMessage(getString(R.string.alert_delete_dish))
             .setPositiveButton(getString(R.string.delete)){ dialog, _ ->
-                viewModel.deleteDish(binding.root)
-                dialog.dismiss()
+                viewModel.deleteDish(binding.root, dialog)
             }
             .setNegativeButton(getString(R.string.cancel)){ dialog, _ ->
                 dialog.dismiss()

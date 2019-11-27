@@ -61,7 +61,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                binding.fabAddDish.isExtended = dy > 0
+                binding.fabAddDish.isExtended = dy < 0
             }
         })
     }

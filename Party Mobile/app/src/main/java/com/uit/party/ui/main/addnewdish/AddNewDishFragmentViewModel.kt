@@ -98,7 +98,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
 
     fun onSendAddDishClicked(view: View) {
         if (mDishModel == null) {
-            uploadDishImages(view)
+            addNewDish(view)
         } else {
             updateDish(view)
         }
@@ -225,7 +225,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
         }
     }
 
-    private fun uploadDishImages(view: View) {
+    private fun addNewDish(view: View) {
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
 
@@ -251,6 +251,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
             mDescriptionText.toRequestBody(MultipartBody.FORM),
             mPriceText.toRequestBody(MultipartBody.FORM),
             mTypeText.toRequestBody(MultipartBody.FORM),
+            ("0").toRequestBody((MultipartBody.FORM)),
             multipartPath,
             description
         )
