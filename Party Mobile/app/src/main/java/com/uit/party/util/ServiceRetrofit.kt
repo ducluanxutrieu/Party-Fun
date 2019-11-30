@@ -2,19 +2,13 @@ package com.uit.party.util
 
 import com.uit.party.model.*
 import com.uit.party.ui.profile.editprofile.RequestUpdateProfile
-import okhttp3.Interceptor
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
-import okhttp3.RequestBody
-import retrofit2.http.POST
-import retrofit2.http.Multipart
 
 interface ServiceRetrofit {
     @HTTP(method = "POST", path = "user/signin", hasBody = true)
@@ -32,6 +26,19 @@ interface ServiceRetrofit {
         @Header("authorization") token: String
     ): Call<BaseResponse>
 
+    @POST("user/resetpassword")
+    @FormUrlEncoded
+    fun resetPassword(
+        @Field("username") username: String
+    ): Call<BaseResponse>
+
+    @POST("/user/resetconfirm")
+    @FormUrlEncoded
+    fun vertifyPassword(
+        @Field("resetpassword") resetpassword: String,
+        @Field("passwordnew") passwordnew: String
+    ): Call<BaseResponse>
+
     @POST("user/changepassword")
     @FormUrlEncoded
     fun changePassword(
@@ -39,6 +46,11 @@ interface ServiceRetrofit {
         @Field("password") password: String,
         @Field("newpassword") passwordchange: String
     ): Call<BaseResponse>
+
+    @GET("/user/profile")
+    fun getProfile(
+        @Header("authorization") token: String
+    ): Call<AccountResponse>
 
     @POST("user/updateuser")
     fun updateUser(
@@ -61,14 +73,39 @@ interface ServiceRetrofit {
         @Part("description") description: RequestBody?,
         @Part("price") price: RequestBody?,
         @Part("type") type: RequestBody?,
+        @Part("discount") discount: RequestBody?,
         @Part image: ArrayList<MultipartBody.Part>,
         @Part("image") requestBody: RequestBody
     ): Call<AddDishResponse>
+
+    @POST("/product/updatedish")
+    fun updateDish(
+        @Header("authorization") token: String,
+        @Body body: UpdateDishRequestModel
+        ): Call<UpdateDishResponse>
 
     @GET("product/finddish")
     fun getListDishes(
         @Header("authorization") token: String
     ): Call<DishesResponse>
+
+    @POST("/product/ratedish")
+    fun ratingDish(
+        @Header("authorization") token: String,
+        @Body body: RequestRatingModel
+    ): Call<BaseResponse>
+
+    @HTTP(method = "DELETE", path = "/product/deletedish", hasBody = true)
+    fun deleteDish(
+        @Header("authorization") token: String,
+        @Body body: HashMap<String, String>
+    ): Call<BaseResponse>
+
+    @POST("/product/book")
+    fun bookParty(
+        @Header("authorization") token: String,
+        @Body body: RequestOrderPartyModel
+    ): Call<BillModel>
 }
 
 class SetupConnectToServer {
@@ -86,7 +123,7 @@ class SetupConnectToServer {
 
 
         val builder = Retrofit.Builder()
-            .baseUrl("http://138.91.33.161:3000/")
+            .baseUrl("http://139.180.131.30:3000/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
         val retrofit = builder.build()

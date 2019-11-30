@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.BR
 import com.uit.party.R
 import com.uit.party.databinding.ItemMainMenuBinding
+import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
-import com.uit.party.util.BindableAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), BindableAdapter<MenuModel> {
-    private var mListDishMenuOrigin = ArrayList<MenuModel>()
-    private var mListDishMenuFiltered = ArrayList<MenuModel>()
+class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
+    private var mListDishMenuOrigin = ArrayList<DishModel>()
+    private var mListDishMenuFiltered = ArrayList<DishModel>()
+    private var mListMenuFiltered = ArrayList<MenuModel>()
     private lateinit var binding: ItemMainMenuBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
@@ -29,22 +30,60 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
     }
 
     override fun getItemCount(): Int {
-        return mListDishMenuFiltered.size
+        return mListMenuFiltered.size
     }
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
-        holder.bind(mListDishMenuFiltered[position])
+        holder.bind(mListMenuFiltered[position])
     }
 
-    override fun setData(items: ArrayList<MenuModel>) {
+    fun setData(items: ArrayList<DishModel>) {
         mListDishMenuOrigin.clear()
         mListDishMenuOrigin = items
 
         mListDishMenuFiltered.clear()
         mListDishMenuFiltered = items
+
+        mListMenuFiltered = menuAllocation(mListDishMenuOrigin)
         notifyDataSetChanged()
     }
 
+    private fun menuAllocation(dishes: java.util.ArrayList<DishModel>): java.util.ArrayList<MenuModel> {
+        val listMenu = ArrayList<MenuModel>()
+        val listHolidayOffers = ArrayList<DishModel>()
+        val listFirstDishes = ArrayList<DishModel>()
+        val listMainDishes = ArrayList<DishModel>()
+        val listSeafood = ArrayList<DishModel>()
+        val listDrink = ArrayList<DishModel>()
+        for (row in dishes) {
+            when (row.type) {
+                "Holiday Offers" -> listHolidayOffers.add(row)
+                "First Dishes" -> listFirstDishes.add(row)
+                "Main Dishes" -> listMainDishes.add(row)
+                "Seafood" -> listSeafood.add(row)
+                "Drinks" -> listDrink.add(row)
+            }
+        }
+        if (listHolidayOffers.size > 0) {
+            listMenu.add(MenuModel("Holiday Offers", listHolidayOffers))
+        }
+        if (listFirstDishes.size > 0) {
+            listMenu.add(MenuModel("First Dishes", listFirstDishes))
+        }
+        if (listMainDishes.size > 0) {
+            listMenu.add(MenuModel("Main Dishes", listMainDishes))
+        }
+        if (listSeafood.size > 0) {
+            listMenu.add(MenuModel("Seafood", listSeafood))
+        }
+        if (listDrink.size > 0) {
+            listMenu.add(MenuModel("Drinks", listDrink))
+        }
+
+        return listMenu
+    }
+
+    @Suppress("UNCHECKED_CAST")
     fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
@@ -52,18 +91,10 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
                 mListDishMenuFiltered = if (charString.isEmpty()) {
                     mListDishMenuOrigin
                 } else {
-                    val filteredList = ArrayList<MenuModel>()
+                    val filteredList = ArrayList<DishModel>()
                     for (row in mListDishMenuOrigin) {
-                        val menuItem = MenuModel(row.menuName, ArrayList())
-                        if (row.listDish.size != 0) {
-                            row.listDish.forEach { dish ->
-                                if (dish.name?.contains(charString.toLowerCase(Locale("vi"))) == true) {
-                                    menuItem.listDish.add(dish)
-                                }
-                            }
-                        }
-                        if (row.listDish.size > 0) {
-                            filteredList.add(menuItem)
+                        if (row.name?.toLowerCase(Locale("vi"))?.contains(charString.toLowerCase(Locale("vi"))) == true) {
+                            filteredList.add(row)
                         }
                     }
                     filteredList
@@ -74,9 +105,8 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
                 return filterResults
             }
 
-            @Suppress("UNCHECKED_CAST")
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                mListDishMenuFiltered = p1?.values as ArrayList<MenuModel>
+                mListMenuFiltered = menuAllocation(p1?.values as ArrayList<DishModel>)
                 notifyDataSetChanged()
             }
         }

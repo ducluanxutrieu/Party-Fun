@@ -14,6 +14,25 @@
         <action
             android:id="@+id/action_LoginFragment_to_RegisterFragment"
             app:destination="@id/nav_register" />
+
+        <action
+            android:id="@+id/action_LoginFragment_to_ResetPasswordFragment"
+            app:destination="@+id/nav_reset_password" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_reset_password"
+        android:name="com.uit.party.ui.signin.reset_password.ResetPasswordFragment"
+        android:label="@string/reset_password"
+        tools:layout="@layout/fragment_reset_password"
+        >
+
+        <action android:id="@+id/action_ResetPasswordFragment_to_ChangePasswordFragment"
+            app:destination="@id/fragment_change_password"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/sign_in_navigation"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
     <fragment
@@ -28,5 +47,22 @@
         <argument
             android:name="cY_FAB"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_change_password"
+        android:name="com.uit.party.ui.profile.change_password.ChangePasswordFragment"
+        android:label="@string/toolbar_change_password"
+        tools:layout="@layout/fragment_change_password" >
+
+        <argument android:name="OrderCode"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_ResetPasswordFragment_back_LoginFragment"
+            app:destination="@id/nav_login"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/nav_login"
+            app:popUpToInclusive="true"/>
+
     </fragment>
 </navigation>

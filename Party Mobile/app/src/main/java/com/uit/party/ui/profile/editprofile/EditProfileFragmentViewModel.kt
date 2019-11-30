@@ -6,8 +6,8 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.AccountResponse
@@ -16,6 +16,7 @@ import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
+import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.ToastUtil
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +24,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditProfileFragmentViewModel() : ViewModel() {
+class EditProfileFragmentViewModel : ViewModel() {
     private var fullNameValid = false
     private var phoneNumberValid = false
     private var emailValid = false
@@ -42,18 +43,23 @@ class EditProfileFragmentViewModel() : ViewModel() {
 
 
     private var calBirthdayPicker = Calendar.getInstance()
+    private val calDateNow = Calendar.getInstance()
 
     private val formatDateUI = "dd-MM-yyyy"
     private val sf = SimpleDateFormat(formatDateUI, Locale.US)
 
-    private val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
+    val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
 
     private val birthDaySetListener =
         DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            updateBirthdayInView()
             calBirthdayPicker.set(Calendar.YEAR, year)
             calBirthdayPicker.set(Calendar.MONTH, monthOfYear)
             calBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            if (calBirthdayPicker >= calDateNow){
+                ToastUtil.showToast(StringUtil.getString(R.string.birthday_greater_than_now_day))
+            }else{
+                updateBirthdayInView()
+            }
         }
 
     init {
@@ -75,6 +81,10 @@ class EditProfileFragmentViewModel() : ViewModel() {
             mFullName.set(account?.fullName)
             fullNameValid = true
             checkEnableButtonUpdate()
+        }
+
+        if (!account?.birthday.isNullOrEmpty()) {
+            mBirthday.set(TimeFormatUtil.formatDateToClient(account?.birthday))
         }
     }
 
@@ -197,12 +207,12 @@ class EditProfileFragmentViewModel() : ViewModel() {
         ).show()
     }
 
-    fun onUpdateClicked() {
+    fun onUpdateClicked(view: View) {
         val requestModel = RequestUpdateProfile(
             mEmail.get(),
             mFullName.get(),
             mPhoneNumber.get(),
-            mBirthday.get(),
+            TimeFormatUtil.formatDateToServer( mBirthday.get()),
             mSex
         )
         serviceRetrofit.updateUser(TOKEN_ACCESS, requestModel)
@@ -221,6 +231,7 @@ class EditProfileFragmentViewModel() : ViewModel() {
                     if (repo != null) {
                         saveToMemory(repo)
                         ToastUtil.showToast(StringUtil.getString(R.string.update_profile_success))
+                        view.findNavController().popBackStack()
                     }
                 }
             })

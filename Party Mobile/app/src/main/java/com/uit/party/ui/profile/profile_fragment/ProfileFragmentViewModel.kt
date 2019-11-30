@@ -53,7 +53,8 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
     }
 
     fun onChangePasswordClicked(view: View){
-        view.findNavController().navigate(R.id.action_ProfileFragment_to_ChangePasswordFragment)
+        val action = ProfileFragmentDirections.actionProfileFragmentToChangePasswordFragment("CHANGE")
+        view.findNavController().navigate(action)
     }
 
     fun avatarClicked(){

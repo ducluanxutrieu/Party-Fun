@@ -77,8 +77,8 @@
                         android:id="@+id/et_password"
                         style="@style/TextInputLayout.TextInputEditText"
                         android:hint="@string/action_password"
-                        android:singleLine="true"
                         android:inputType="textPassword"
+                        android:singleLine="true"
                         app:addTextChangedListener="@{viewModel.getPasswordTextChanged()}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,8 +86,8 @@
                     android:id="@+id/bt_go"
                     style="@style/MaterialButton"
                     android:layout_marginStart="@dimen/_30sdp"
-                    android:layout_marginEnd="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_30sdp"
                     android:enabled="@{viewModel.loginEnabled}"
                     android:onClick="@{(view) -> viewModel.onLoginClicked(view)}"
                     android:stateListAnimator="@drawable/state_list_animator_button"
@@ -98,17 +98,16 @@
                     android:id="@+id/tv_register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/create_account"
                     android:layout_gravity="center"
-                    android:padding="@dimen/_5sdp"
-                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/_20sdp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:selectableItemBackground"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    tools:ignore="UnusedAttribute"
                     android:onClick="@{(view) -> viewModel.onRegisterClicked(view)}"
-                    />
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/create_account"
+                    android:textStyle="bold"
+                    tools:ignore="UnusedAttribute" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -116,16 +115,19 @@
             android:id="@+id/loading_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_32sdp"
-            android:layout_marginTop="@dimen/_64sdp"
-            android:layout_marginEnd="@dimen/_32sdp"
+            android:visibility="@{viewModel.showLoading}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_your_password"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:textColor="@color/colorWhile"
             android:layout_marginBottom="@dimen/_30sdp"
-            android:visibility="@{viewModel.showLoading}"
-            app:layout_constraintVertical_bias="0.3"
+            android:onClick="@{(view) -> viewModel.onForgotPasswordClicked(view)}"
             />
     </RelativeLayout>
 

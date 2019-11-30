@@ -16,7 +16,7 @@ import java.util.*
 @BindingAdapter("app:gridRecyclerData")
 fun <T> setupGridRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
     recyclerView.setHasFixedSize(true)
-    val layoutManager = GridLayoutManager(recyclerView.context, 2)
+    val layoutManager = LinearLayoutManager(recyclerView.context, LinearLayoutManager.HORIZONTAL, false)
     recyclerView.layoutManager = layoutManager
 
     if (recyclerView.adapter is BindableAdapter<*>) {

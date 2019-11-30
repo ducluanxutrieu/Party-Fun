@@ -8,18 +8,22 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
-import com.uit.party.model.Account
-import com.uit.party.model.AddDishResponse
+import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity
+import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.rxbus.RxBus
+import com.uit.party.util.rxbus.RxEvent
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -32,10 +36,16 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() {
+class AddNewDishFragmentViewModel : BaseObservable() {
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
+    val mButtonField = ObservableField(StringUtil.getString(R.string.add_dish))
+    val mShowUploadImageDish = ObservableInt(View.VISIBLE)
+/*    val mImageDish1 = ObservableField("")
+    val mImageDish2 = ObservableField("")
+    val mImageDish3 = ObservableField("")
+    val mImageDish4 = ObservableField("")*/
 
     val mErrorTitle = ObservableField("")
     val mErrorDescription = ObservableField("")
@@ -56,19 +66,67 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
     private var mDescriptionValid = false
     private var mPriceValid = false
 
+    var mDishModel: DishModel? = null
+
+    fun initData() {
+        mTitle.set(mDishModel?.name)
+        mTitleText = mDishModel?.name.toString()
+
+        mDescription.set(mDishModel?.description)
+        mDescriptionText = mDishModel?.description.toString()
+
+        mPrice.set(mDishModel?.price)
+        mPriceText = mDishModel?.price.toString()
+
+        mTypeText = mDishModel?.type.toString()
+
+        mShowUploadImageDish.set(View.GONE)
+        mEnableSendButton.set(true)
+        mButtonField.set(StringUtil.getString(R.string.update_dish))
+    }
+
     fun onAddImageDescription(view: View) {
         PickImageDialog.build(PickSetup()).setOnPickResult { result ->
             val byteArrayOutputStream = ByteArrayOutputStream()
-            result.bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            result.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             listImagePath.add(result.path)
             Glide.with(GlobalApplication.appContext!!).load(File(result.path))
                 .apply { RequestOptions.fitCenterTransform() }.into(view as AppCompatImageView)
         }.setOnPickCancel { /*binding.loadingAvatar.visibility = View.GONE */ }
-            .show(context.supportFragmentManager)
+            .show((view.context as MainActivity).supportFragmentManager)
     }
 
-    fun onSendAddDishClicked() {
-        uploadDishImages()
+    fun onSendAddDishClicked(view: View) {
+        if (mDishModel == null) {
+            addNewDish(view)
+        } else {
+            updateDish(view)
+        }
+    }
+
+    private fun updateDish(view: View) {
+        val mUpdateModel = UpdateDishRequestModel(mDishModel?._id.toString(), mTitleText, mDescriptionText, mPriceText, mTypeText)
+        serviceRetrofit.updateDish(TOKEN_ACCESS, mUpdateModel)
+            .enqueue(object : Callback<UpdateDishResponse>{
+                override fun onFailure(call: Call<UpdateDishResponse>, t: Throwable) {
+                    t.message?.let { ToastUtil.showToast(it) }
+                }
+
+                override fun onResponse(
+                    call: Call<UpdateDishResponse>,
+                    response: Response<UpdateDishResponse>
+                ) {
+                    if (response.code() == 200){
+                        val repo = response.body()
+                        repo?.message?.let { ToastUtil.showToast(it) }
+                        RxBus.publish(RxEvent.UpdateDish(repo?.dish))
+                        view.findNavController().popBackStack()
+
+                    }else{
+                        ToastUtil.showToast(StringUtil.getString(R.string.update_dish_false))
+                    }
+                }
+            })
     }
 
     fun getTitleTextChanged(): TextWatcher {
@@ -167,7 +225,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
         }
     }
 
-    private fun uploadDishImages() {
+    private fun addNewDish(view: View) {
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
 
@@ -193,6 +251,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
             mDescriptionText.toRequestBody(MultipartBody.FORM),
             mPriceText.toRequestBody(MultipartBody.FORM),
             mTypeText.toRequestBody(MultipartBody.FORM),
+            ("0").toRequestBody((MultipartBody.FORM)),
             multipartPath,
             description
         )
@@ -207,7 +266,7 @@ class AddNewDishFragmentViewModel(val context: MainActivity) : BaseObservable() 
                 ) {
                     if (response.isSuccessful) {
                         response.body()?.message?.let { ToastUtil.showToast(it) }
-                        context.onBackPressed()
+                        view.findNavController().popBackStack()
                     }
                 }
             })

@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
@@ -30,11 +29,9 @@ import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
 
-class MenuFragment : Fragment(),
-    NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
+class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val mViewModel = MenuViewModel()
     private lateinit var binding: FragmentListDishBinding
-    private val mMenuAdapter = MenuAdapter()
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var mDisposableAddCart: Disposable
@@ -59,12 +56,11 @@ class MenuFragment : Fragment(),
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
 
         binding.viewModel = mViewModel
-        mViewModel.init()
-        binding.recyclerView.adapter = mMenuAdapter
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        binding.recyclerView.adapter = mViewModel.mMenuAdapter
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                binding.fabAddDish.isExtended = dy > 0
+                binding.fabAddDish.isExtended = dy < 0
             }
         })
     }
@@ -74,6 +70,10 @@ class MenuFragment : Fragment(),
         setPullToRefresh()
         rxBusListen()
         mDummyImgView = binding.ivCopy
+        setupToolbar()
+    }
+
+    private fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = activity!!.findViewById<View>(R.id.app_bar) as Toolbar
         toolbar.inflateMenu(R.menu.main_menu)
@@ -83,7 +83,7 @@ class MenuFragment : Fragment(),
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
         mSearchView = menu.findItem(R.id.toolbar_search).actionView as SearchView
-        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -92,7 +92,7 @@ class MenuFragment : Fragment(),
                 if (!newText.isNullOrEmpty()) {
                     Log.i(TAG, newText)
                 }
-                mMenuAdapter.getFilter().filter(newText)
+                mViewModel.mMenuAdapter.getFilter().filter(newText)
                 return true
             }
 
@@ -119,38 +119,31 @@ class MenuFragment : Fragment(),
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.toolbar_search -> {
                 Log.i("MenuFragment", "SearchClicked")
                 return true
             }
 
             R.id.toolbar_cart -> {
-                val action = MenuFragmentDirections.actionListDishFragmentToCartDetailFragment(Gson().toJson(mListDishesSelected))
+                val action = MenuFragmentDirections.actionListDishFragmentToCartDetailFragment(
+                    Gson().toJson(mListDishesSelected)
+                )
                 this.findNavController().navigate(action)
                 return true
             }
-        }
-        return  false
-    }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
             R.id.log_out -> {
                 logOut()
             }
-/*            R.id.naw_user_order -> {
-                ToastUtil.showToast("Your Order clicked")
-            }*/
         }
-        return true
+        return false
     }
 
     private fun logOut() {
-        SharedPrefs().getInstance().clear()
         mViewModel.logout {
             if (it) {
+                SharedPrefs().getInstance().clear()
                 val intent = Intent(context, SignInActivity::class.java)
                 startActivity(intent)
                 (context as MainActivity).finish()
@@ -163,15 +156,17 @@ class MenuFragment : Fragment(),
     private fun rxBusListen() {
         mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe {
             mListDishesSelected.add(it.dishModel)
-            val textFab = "${mListDishesSelected.size} Dishes Selected"
-            binding.fabAddDish.text = textFab
+//            val textFab = "${mListDishesSelected.size} Dishes Selected"
+//            binding.fabAddDish.text = textFab
 
-            val b = GlobalApplication().loadBitmapFromView(
-                it.cardDish,
-                it.cardDish.width,
-                it.cardDish.height
-            )
-            animateView(it.cardDish, b)
+            if (it.cardDish != null) {
+                val b = GlobalApplication().loadBitmapFromView(
+                    it.cardDish,
+                    it.cardDish.width,
+                    it.cardDish.height
+                )
+                animateView(it.cardDish, b)
+            }
         }
     }
 
@@ -179,33 +174,36 @@ class MenuFragment : Fragment(),
         mDummyImgView.setImageBitmap(b)
         mDummyImgView.visibility = View.VISIBLE
         val u = IntArray(2)
-        binding.fabAddDish.getLocationInWindow(u)
+        foodCardView.getLocationInWindow(u)
         mDummyImgView.left = foodCardView.left
         mDummyImgView.top = foodCardView.top
         val animSetXY = AnimatorSet()
+
         val y = ObjectAnimator.ofFloat(
             mDummyImgView,
             "translationY",
-            (mDummyImgView.top).toFloat(),
-            (u[1] - 2 * 220).toFloat()
+            (u[1] - 2 * 220).toFloat(),
+//            (mDummyImgView.top).toFloat()
+            0f
         )
         val x = ObjectAnimator.ofFloat(
             mDummyImgView,
             "translationX",
             (mDummyImgView.left).toFloat(),
-            (u[0] - 2 * 100).toFloat()
+//            (u[0] - 2 * 100).toFloat()
+            (binding.root.width - 200).toFloat()
         )
-        val sy = ObjectAnimator.ofFloat(mDummyImgView, "scaleY", 0.8f, 0.1f)
-        val sx = ObjectAnimator.ofFloat(mDummyImgView, "scaleX", 0.8f, 0.1f)
+        val sy = ObjectAnimator.ofFloat(mDummyImgView, "scaleY", 0.9f, 0f)
+        val sx = ObjectAnimator.ofFloat(mDummyImgView, "scaleX", 0.9f, 0f)
         animSetXY.playTogether(x, y, sx, sy)
         animSetXY.duration = 650
         animSetXY.start()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
+//    }
 
     companion object {
         private const val TAG = "MenuFragmentTag"

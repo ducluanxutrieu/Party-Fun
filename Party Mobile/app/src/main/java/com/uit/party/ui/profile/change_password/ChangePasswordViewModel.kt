@@ -24,6 +24,8 @@ class ChangePasswordViewModel : ViewModel() {
     var errorCurrentPassword = ObservableField("")
     var errorNewPassword = ObservableField("")
     var errorConfirmPassword = ObservableField("")
+    val mTitleActionPassword = ObservableField(StringUtil.getString(R.string.change_password))
+    val mHintCodeOrPassword = ObservableField(StringUtil.getString(R.string.action_current_password))
 
     private var currentPasswordValid = false
     private var newPasswordValid = false
@@ -33,6 +35,18 @@ class ChangePasswordViewModel : ViewModel() {
     private var newPasswordText = ""
 
     var showLoading = ObservableInt(View.GONE)
+    private var mOrderCode = "CHANGE"
+
+    fun init(orderCode: String) {
+        mOrderCode = orderCode
+        if (orderCode == "CHANGE"){
+            mTitleActionPassword.set(StringUtil.getString(R.string.change_password))
+            mHintCodeOrPassword.set(StringUtil.getString(R.string.action_current_password))
+        }else{
+            mTitleActionPassword.set(StringUtil.getString(R.string.reset_password))
+            mHintCodeOrPassword.set(StringUtil.getString(R.string.code_from_your_email))
+        }
+    }
 
     private fun sendChangePassword(onComplete: (Boolean) -> Unit) {
         MainActivity.serviceRetrofit.changePassword(
@@ -54,6 +68,7 @@ class ChangePasswordViewModel : ViewModel() {
                 ) {
                     if (model.code() == 200) {
                         onComplete(true)
+                        model.body()?.message?.let { ToastUtil.showToast(it) }
                     } else {
                         onComplete(false)
                         val repos = model.body()
@@ -77,10 +92,46 @@ class ChangePasswordViewModel : ViewModel() {
             })
     }
 
+    private fun sendConfirmPassword(onComplete: (Boolean) -> Unit) {
+        MainActivity.serviceRetrofit.vertifyPassword(currentPasswordText, newPasswordText)
+            .enqueue(object : Callback<BaseResponse> {
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+                    onComplete(false)
+                    if (t.message != null) {
+                        ToastUtil.showToast(t.message!!)
+                    }
+                }
+
+                override fun onResponse(
+                    call: Call<BaseResponse>,
+                    model: Response<BaseResponse>
+                ) {
+                    if (model.code() == 200) {
+                        onComplete(true)
+                        model.body()?.message?.let { ToastUtil.showToast(it) }
+                    } else {
+                        onComplete(false)
+                        val repos = model.body()
+                        if (repos != null) {
+                            ToastUtil.showToast(repos.message!!)
+                        }
+                    }
+                }
+            })
+    }
+
     fun onSendClicked(view: View) {
-        sendChangePassword {success ->
-            if (success){
-                view.findNavController().popBackStack()
+        if (mOrderCode == "CHANGE"){
+            sendChangePassword {success ->
+                if (success){
+                    view.findNavController().popBackStack()
+                }
+            }
+        }else{
+            sendConfirmPassword{ success ->
+                if (success){
+                    view.findNavController().navigate(R.id.action_ResetPasswordFragment_back_LoginFragment)
+                }
             }
         }
     }
