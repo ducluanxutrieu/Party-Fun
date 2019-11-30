@@ -63,7 +63,8 @@ class MainActivity : AppCompatActivity(){
             R.id.nav_user_home,
             R.id.nav_user_profile,
             R.id.nav_restaurant_address,
-            R.id.nav_about_us
+            R.id.nav_about_us,
+            R.id.naw_user_order
         )
             .setDrawerLayout(binding.drawerLayout)
             .build()

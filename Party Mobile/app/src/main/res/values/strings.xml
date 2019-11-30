@@ -192,4 +192,13 @@
     <string name="delete_dish">Delete Dish</string>
     <string name="delete_dish_success">Delete Dish successful</string>
     <string name="alert_delete_dish">Are you sure you want to delete this dish? After deletion cannot be restored</string>
+    <string name="write_your_review_here">Write your review here</string>
+    <string name="submit">Submit</string>
+    <string name="description_sample">Món nem cua bể rất thích hợp cho những buổi hội họp gia đình và bạn bè vào cuối tuần hay các dịp nghỉ lễ. Nem cua bể mang hương vị ấn tượng đến từ thịt của cộng vị chua ngọt của nước chấm, màu sắc tươi tắn và vị giòn ngon của bánh đa, tất cả cùng hòa quyện vào nhau tạo nên món ăn rất độc đáo. Món nem cua bể đòi hỏi sự khéo léo từ khâu sơ chế đến chế biến để sau khi hoàn thành nem vừa giòn ngon lại phải thêm bắt mắt. Nem cua bể mang đậm hương vị biển, nem giòn rụm quyện với thịt cua ngọt, chắc, dai và thơm ăn với nhiều loại rau thơm thanh mát và nước mắm chua ngọt, khiến thực khách ăn mãi không ngán. Định lượng: 6 cái / 1 đĩa</string>
+    <string name="list_rated">List rated</string>
+    <string name="rating">Rating</string>
+    <string name="history_booking">History Booking</string>
+    <string name="time_party">Time Party</string>
+    <string name="list_dished">List Dished</string>
+    <string name="number_of_dishes">Number of Dishes</string>
 </resources>

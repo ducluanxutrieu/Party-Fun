@@ -33,15 +33,15 @@
             android:icon="@drawable/ic_voucher"
             android:title="@string/my_vouchers"
             />
-    </group>
+    </group>-->
 
     <group>
         <item
             android:id="@+id/naw_user_order"
-            android:icon="@drawable/ic_order_food"
+            android:icon="@drawable/ic_booking_history"
             android:title="@string/your_ordered"
             />
-    </group>-->
+    </group>
 
     <item android:title="@string/communicate">
         <menu>

@@ -1,10 +1,8 @@
 package com.uit.party.ui.main.main_menu
 
 import android.view.View
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.databinding.ObservableInt
-import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
@@ -19,18 +17,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MenuViewModel : BaseObservable(){
+class MenuViewModel : ViewModel(){
     val mShowFab = ObservableInt(View.GONE)
+    val mMenuAdapter = MenuAdapter()
 
-    @get: Bindable
     var listMenu = ArrayList<DishModel>()
-        private set(value) {
-            field = value
-            notifyPropertyChanged(BR.listMenu)
-        }
 
-    fun init() {
-        getListDishes {}
+    init {
+        if (listMenu.isNullOrEmpty()) {
+            getListDishes {}
+        }else{
+            mMenuAdapter.setData(listMenu)
+        }
         setIsAdmin()
     }
 
@@ -62,6 +60,7 @@ class MenuViewModel : BaseObservable(){
                         val dishes = response.body()?.lishDishs
                         if (dishes != null){
                             listMenu = dishes
+                            mMenuAdapter.setData(listMenu)
                         }
                     }
                 }

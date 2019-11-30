@@ -32,7 +32,6 @@ import io.reactivex.disposables.Disposable
 class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val mViewModel = MenuViewModel()
     private lateinit var binding: FragmentListDishBinding
-    private val mMenuAdapter = MenuAdapter()
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var mDisposableAddCart: Disposable
@@ -57,7 +56,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
 
         binding.viewModel = mViewModel
-        binding.recyclerView.adapter = mMenuAdapter
+        binding.recyclerView.adapter = mViewModel.mMenuAdapter
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -70,7 +69,6 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         super.onActivityCreated(savedInstanceState)
         setPullToRefresh()
         rxBusListen()
-        mViewModel.init()
         mDummyImgView = binding.ivCopy
         setupToolbar()
     }
@@ -94,7 +92,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                 if (!newText.isNullOrEmpty()) {
                     Log.i(TAG, newText)
                 }
-                mMenuAdapter.getFilter().filter(newText)
+                mViewModel.mMenuAdapter.getFilter().filter(newText)
                 return true
             }
 

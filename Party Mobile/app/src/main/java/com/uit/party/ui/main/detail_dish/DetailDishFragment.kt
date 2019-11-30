@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.smarteist.autoimageslider.IndicatorAnimations
+import com.smarteist.autoimageslider.SliderAnimations
 import com.uit.party.R
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
@@ -118,7 +120,12 @@ class DetailDishFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding.rvImagesDish.adapter = viewModel.mAdapter
+        binding.imageSlider.sliderAdapter = viewModel.mAdapter
+        binding.imageSlider.startAutoCycle()
+        binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM)
+        binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+
+        binding.rvRating.adapter = viewModel.mRatingAdapter
     }
 
     private fun initData() {

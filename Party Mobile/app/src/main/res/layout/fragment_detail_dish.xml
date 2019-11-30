@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,81 +10,179 @@
             type="com.uit.party.ui.main.detail_dish.DetailDishViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:orientation="vertical">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_rating">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standard_spacing"
+                android:layout_marginRight="@dimen/standard_spacing"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_image_height"
+                    android:layout_marginTop="@dimen/standard_spacing"
+                    android:layout_marginBottom="@dimen/standard_spacing"
+                    app:cardCornerRadius="@dimen/corner_radius"
+                    app:cardElevation="@dimen/_5sdp">
+
+                    <com.smarteist.autoimageslider.SliderView
+                        android:id="@+id/imageSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:sliderAnimationDuration="600"
+                        app:sliderAutoCycleDirection="right"
+                        app:sliderAutoCycleEnabled="true"
+                        app:sliderCircularHandlerEnabled="true"
+                        app:sliderIndicatorAnimationDuration="600"
+                        app:sliderIndicatorGravity="center_horizontal|bottom"
+                        app:sliderIndicatorMargin="15dp"
+                        app:sliderIndicatorOrientation="horizontal"
+                        app:sliderIndicatorPadding="3dp"
+                        app:sliderIndicatorRadius="2dp"
+                        app:sliderIndicatorSelectedColor="#5A5A5A"
+                        app:sliderIndicatorUnselectedColor="#FFF"
+                        app:sliderScrollTimeInSec="3"
+                        app:sliderStartAutoCycle="true" />
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/standard_spacing"
-                    android:layout_marginRight="@dimen/standard_spacing"
                     android:orientation="vertical">
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/item_image_height"
-                        android:layout_margin="@dimen/standard_spacing"
-                        app:cardCornerRadius="@dimen/corner_radius">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/ProductTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/standard_spacing"
+                        android:layout_marginBottom="@dimen/standard_spacing"
+                        android:text="@{viewModel.nameDish}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                        android:textSize="@dimen/item_product_title_size"
+                        tools:text="Nem cua bể"/>
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/ProductImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/item_image_height"
-                            android:layout_gravity="center"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            app:dishUrl="@{viewModel.imageDish}" />
-                    </androidx.cardview.widget.CardView>
+                    <androidx.appcompat.widget.AppCompatRatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:numStars="5"
+                        android:rating="@{viewModel.mRatingShow}"
+                        android:layout_marginStart="@dimen/_5sdp"/>
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/large_margin_start"
-                        android:layout_marginBottom="@dimen/standard_spacing"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/museo_sans_cyrl"
+                        android:text="@{viewModel.mPrice}"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold"
+                        tools:text="Price: 500.000VND" />
 
-                        <TextView
-                            android:id="@+id/ProductTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/standard_spacing"
-                            android:layout_marginBottom="@dimen/standard_spacing"
-                            android:text="@{viewModel.nameDish}"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                            android:textSize="@dimen/item_product_title_size" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/ProductDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/standard_spacing"
+                        android:lineSpacingMultiplier="1.5"
+                        android:text="@{viewModel.descriptionDish}"
+                        tools:text="@string/description_sample"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                        <TextView
-                            android:id="@+id/ProductDescription"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/standard_spacing"
-                            android:lineSpacingMultiplier="1.5"
-                            android:text="@{viewModel.descriptionDish}"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-                    </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/list_rated"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:textStyle="italic"/>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_images_dish"
+                        android:id="@+id/rv_rating"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:linearRecyclerData="@{viewModel.listImages}" />
+                        android:layout_height="wrap_content"
+                        app:linearRecyclerData="@{viewModel.mListRates}"/>
                 </LinearLayout>
-        </ScrollView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/_40sdp"
+            android:layout_above="@id/ll_rating"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/_20sdp"
             android:backgroundTint="@color/colorAccentSecondary"
             android:onClick="@{() -> viewModel.addToCartClicked()}"
-            android:src="@drawable/ic_shopping_cart_vd_theme_24" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:src="@drawable/ic_add_dish_cart_24dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            >
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_15sdp"
+                android:text="@string/rating"
+                android:textColor="@color/colorAccent"
+                android:textStyle="italic|bold"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"/>
+
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layerType="hardware"
+                android:numStars="5"
+                android:rating="@={viewModel.mRating}"
+                android:layout_gravity="center_horizontal"
+                tools:rating="5" />
+
+            <LinearLayout
+                android:id="@+id/ll_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/write_your_review_here"
+                        android:text="@={viewModel.mCommentRating}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/MaterialButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:onClick="@{() -> viewModel.onSubmitClicked()}"
+                    android:text="@string/submit" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

@@ -10,9 +10,10 @@ import com.uit.party.R
 import com.uit.party.databinding.ItemMainMenuBinding
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
-import com.uit.party.util.BindableAdapter
+import java.util.*
+import kotlin.collections.ArrayList
 
-class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), BindableAdapter<DishModel> {
+class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
     private var mListDishMenuOrigin = ArrayList<DishModel>()
     private var mListDishMenuFiltered = ArrayList<DishModel>()
     private var mListMenuFiltered = ArrayList<MenuModel>()
@@ -36,7 +37,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
         holder.bind(mListMenuFiltered[position])
     }
 
-    override fun setData(items: ArrayList<DishModel>) {
+    fun setData(items: ArrayList<DishModel>) {
         mListDishMenuOrigin.clear()
         mListDishMenuOrigin = items
 
@@ -82,6 +83,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
         return listMenu
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
@@ -91,7 +93,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(), Bindable
                 } else {
                     val filteredList = ArrayList<DishModel>()
                     for (row in mListDishMenuOrigin) {
-                        if (row.name?.toLowerCase()?.contains(charString.toLowerCase()) == true) {
+                        if (row.name?.toLowerCase(Locale("vi"))?.contains(charString.toLowerCase(Locale("vi"))) == true) {
                             filteredList.add(row)
                         }
                     }

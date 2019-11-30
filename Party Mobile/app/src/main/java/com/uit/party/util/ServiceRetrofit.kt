@@ -47,6 +47,11 @@ interface ServiceRetrofit {
         @Field("newpassword") passwordchange: String
     ): Call<BaseResponse>
 
+    @GET("/user/profile")
+    fun getProfile(
+        @Header("authorization") token: String
+    ): Call<AccountResponse>
+
     @POST("user/updateuser")
     fun updateUser(
         @Header("authorization") token: String,
@@ -83,6 +88,12 @@ interface ServiceRetrofit {
     fun getListDishes(
         @Header("authorization") token: String
     ): Call<DishesResponse>
+
+    @POST("/product/ratedish")
+    fun ratingDish(
+        @Header("authorization") token: String,
+        @Body body: RequestRatingModel
+    ): Call<BaseResponse>
 
     @HTTP(method = "DELETE", path = "/product/deletedish", hasBody = true)
     fun deleteDish(

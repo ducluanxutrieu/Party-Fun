@@ -105,6 +105,12 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="clickableCard">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
+
     <color name="editTextColor">#f0f7f4</color>
     <color name="editTextHindColor">#c5c5c5</color>
     <dimen name="bottom_nav_view_height">56dp</dimen>

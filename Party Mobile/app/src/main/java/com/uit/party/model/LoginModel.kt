@@ -18,7 +18,7 @@ class RegisterModel(
 
 class AccountResponse(
     @SerializedName("account") val account: Account? = null
-):BaseResponse()
+) : BaseResponse()
 
 class Account {
     @SerializedName("_id")
@@ -47,6 +47,21 @@ class Account {
     var userCart: ArrayList<UserCart>? = null
 }
 
-class UserCart {
-    //make for future
-}
+class UserCart(
+    @SerializedName("_id") val _id: String? = null,
+    @SerializedName("lishDishs") val listDishesCart: ArrayList<ListDishesCart>? = null,
+    @SerializedName("dateParty") val dateParty: String? = null,
+    @SerializedName("numbertable") val numbertable: Int? = 0,
+    @SerializedName("username") val username: String? = null,
+    @SerializedName("createAt") val createAt: String? = null,
+    @SerializedName("paymentstatus") val paymentstatus: Boolean? = false,
+    @SerializedName("totalMoney") val totalMoney: Int? = 0,
+    @SerializedName("userpayment") val userpayment: String? = null,
+    @SerializedName("paymentAt") val paymentAt: String? = null
+)
+
+class ListDishesCart(
+    @SerializedName("_id") val _id: String,
+    @SerializedName("numberDish") val numberDish: Int,
+    @SerializedName("name") val name: String
+)

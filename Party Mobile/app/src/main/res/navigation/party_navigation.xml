@@ -126,4 +126,11 @@
             android:name="OrderCode"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/naw_user_order"
+        android:name="com.uit.party.ui.main.history_book.HistoryBookingFragment"
+        tools:layout="@layout/fragment_history_booking"
+        android:label="@string/history_booking"
+        />
 </navigation>
