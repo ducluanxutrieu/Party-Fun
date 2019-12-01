@@ -35,6 +35,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var mDisposableAddCart: Disposable
+    private lateinit var mDisposableUpdateDish: Disposable
     private var mListDishesSelected = ArrayList<DishModel>()
 
     private lateinit var mDummyImgView: AppCompatImageView
@@ -168,6 +169,12 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                 animateView(it.cardDish, b)
             }
         }
+
+        mDisposableUpdateDish = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
+            if (it.dishModel != null) {
+                mViewModel.mMenuAdapter.updateDish(it.dishModel, it.dishType, it.position)
+            }
+        }
     }
 
     private fun animateView(foodCardView: View, b: Bitmap) {
@@ -200,10 +207,10 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         animSetXY.start()
     }
 
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
+    }
 
     companion object {
         private const val TAG = "MenuFragmentTag"

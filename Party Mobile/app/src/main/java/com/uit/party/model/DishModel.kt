@@ -38,5 +38,5 @@ data class ListRate(
     @SerializedName("_iddish") val _iddish: String? = null,
     @SerializedName("scorerate") val scorerate: Float? = 5f,
     @SerializedName("content") val content: String? = null,
-    @SerializedName("createAt") val createAt: String? = null
+    @SerializedName("updateAt") val createAt: String? = null
 ) : Serializable

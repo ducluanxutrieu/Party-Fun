@@ -1,10 +1,6 @@
 package com.uit.party.util
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.uit.party.R
-
+/*
 class AddNewFragment {
     private var mCurrentFragment: Fragment? = null
     fun addFragment(
@@ -47,4 +43,4 @@ class AddNewFragment {
         }
         ft.commitAllowingStateLoss()
     }
-}
+}*/

@@ -42,10 +42,6 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     val mPrice = ObservableField("")
     val mButtonField = ObservableField(StringUtil.getString(R.string.add_dish))
     val mShowUploadImageDish = ObservableInt(View.VISIBLE)
-/*    val mImageDish1 = ObservableField("")
-    val mImageDish2 = ObservableField("")
-    val mImageDish3 = ObservableField("")
-    val mImageDish4 = ObservableField("")*/
 
     val mErrorTitle = ObservableField("")
     val mErrorDescription = ObservableField("")
@@ -55,6 +51,9 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     private var mDescriptionText = ""
     private var mPriceText = ""
     var mTypeText = ""
+
+    var mPositon = 0
+    var mDishType = ""
 
     val mEnableSendButton = ObservableBoolean(false)
 
@@ -119,7 +118,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                     if (response.code() == 200){
                         val repo = response.body()
                         repo?.message?.let { ToastUtil.showToast(it) }
-                        RxBus.publish(RxEvent.UpdateDish(repo?.dish))
+                        RxBus.publish(RxEvent.AddDish(repo?.dish, dishType = mDishType, position = mPositon))
                         view.findNavController().popBackStack()
 
                     }else{

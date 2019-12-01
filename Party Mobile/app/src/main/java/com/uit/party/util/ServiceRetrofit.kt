@@ -89,6 +89,11 @@ interface ServiceRetrofit {
         @Header("authorization") token: String
     ): Call<DishesResponse>
 
+    @HTTP(method = "POST", path = "product/getItemDish", hasBody = true)
+    fun getItemDish(
+        @Body body : HashMap<String, String?>
+    ): Call<DishItemResponse>
+
     @POST("/product/ratedish")
     fun ratingDish(
         @Header("authorization") token: String,

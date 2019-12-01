@@ -39,6 +39,8 @@ class AddNewDishFragment : Fragment() {
 
     private fun getData() {
         mViewModel.mDishModel = myArgs.StringDishModel
+        mViewModel.mDishType = myArgs.dishType
+        mViewModel.mPositon = myArgs.position
         if (mViewModel.mDishModel != null) {
             mViewModel.initData()
             for (i in Thumbnail.values().indices){

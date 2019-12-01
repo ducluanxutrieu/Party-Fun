@@ -22,7 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailDishViewModel : BaseObservable(){
+class DetailDishViewModel : BaseObservable() {
     var imageDish = ObservableField<String>()
     var priceDish = ObservableField<String>()
     var nameDish = ObservableField<String>()
@@ -34,6 +34,8 @@ class DetailDishViewModel : BaseObservable(){
     val mAdapter = DishDetailAdapter()
     val mRatingAdapter = DishRatingAdapter()
     var mDishModel: DishModel? = null
+    var mPosition: Int = 0
+    lateinit var mDishType: String
 
     var listImages = ArrayList<String>()
 
@@ -44,24 +46,26 @@ class DetailDishViewModel : BaseObservable(){
             notifyPropertyChanged(BR.mListRates)
         }
 
-    fun init(dishModel: DishModel){
-        imageDish.set(dishModel.image?.get(0))
-        priceDish.set(dishModel.price.toString())
-        nameDish.set(dishModel.name)
-        descriptionDish.set(dishModel.description)
-        if (dishModel.image != null)  listImages = dishModel.image
+    fun init() {
+        imageDish.set(mDishModel?.image?.get(0))
+        priceDish.set(mDishModel?.price.toString())
+        nameDish.set(mDishModel?.name)
+        descriptionDish.set(mDishModel?.description)
+        if (mDishModel?.image != null) {
+            listImages.clear()
+            listImages.addAll(mDishModel?.image!!)
+        }
         mAdapter.setData(listImages)
-        mPrice.set("Price: ${dishModel.price} VND")
-        dishModel.rate?.average?.let { mRatingShow.set(it) }
-        mListRates = dishModel.rate?.listRates ?: ArrayList()
+        mPrice.set("Price: ${mDishModel?.price} VND")
         setRatingContent()
-        mDishModel = dishModel
     }
 
     private fun setRatingContent() {
+        mDishModel?.rate?.average?.let { mRatingShow.set(it) }
+        mListRates = mDishModel?.rate?.listRates ?: ArrayList()
         val account = SharedPrefs()[USER_INFO_KEY, Account::class.java]
-        for (row in mListRates){
-            if (row.username == account?.username){
+        for (row in mListRates) {
+            if (row.username == account?.username) {
                 row.scorerate?.let { mRating.set(it) }
                 mCommentRating.set(row.content)
                 break
@@ -69,14 +73,15 @@ class DetailDishViewModel : BaseObservable(){
         }
     }
 
-    fun addToCartClicked(){
+    fun addToCartClicked() {
         RxBus.publish(RxEvent.AddToCart(mDishModel!!, null))
     }
 
-    fun onSubmitClicked(){
-        val requestModel = RequestRatingModel(mDishModel?._id, mRating.get().toDouble(), mCommentRating.get())
+    fun onSubmitClicked() {
+        val requestModel =
+            RequestRatingModel(mDishModel?._id, mRating.get().toDouble(), mCommentRating.get())
         serviceRetrofit.ratingDish(TOKEN_ACCESS, requestModel)
-            .enqueue(object : Callback<BaseResponse>{
+            .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
                 }
@@ -85,10 +90,42 @@ class DetailDishViewModel : BaseObservable(){
                     call: Call<BaseResponse>,
                     response: Response<BaseResponse>
                 ) {
-                    if (response.code() == 200){
+                    if (response.code() == 200) {
                         response.body()?.message?.let { ToastUtil.showToast(it) }
-                    }else{
+                        getItemDish()
+                    } else {
                         ToastUtil.showToast(response.message())
+                    }
+                }
+            })
+    }
+
+    fun getItemDish() {
+        val hashMap = HashMap<String, String?>()
+        hashMap["_id"] = mDishModel?._id
+        serviceRetrofit.getItemDish(hashMap)
+            .enqueue(object : Callback<DishItemResponse> {
+                override fun onFailure(call: Call<DishItemResponse>, t: Throwable) {
+                    t.message?.let { ToastUtil.showToast(it) }
+                }
+
+                override fun onResponse(
+                    call: Call<DishItemResponse>,
+                    response: Response<DishItemResponse>
+                ) {
+                    if (response.code() == 200) {
+                        val repo = response.body()
+                        if (repo != null) {
+                            mDishModel = repo.dish?.get(0)
+                            setRatingContent()
+                            RxBus.publish(
+                                RxEvent.AddDish(
+                                    repo.dish?.get(0),
+                                    dishType = mDishType,
+                                    position = mPosition
+                                )
+                            )
+                        }
                     }
                 }
             })
@@ -98,7 +135,7 @@ class DetailDishViewModel : BaseObservable(){
         val map = HashMap<String, String>()
         map["_id"] = mDishModel?._id.toString()
         serviceRetrofit.deleteDish(TOKEN_ACCESS, map)
-            .enqueue(object : Callback<BaseResponse>{
+            .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
                     dialog.dismiss()
@@ -108,11 +145,11 @@ class DetailDishViewModel : BaseObservable(){
                     call: Call<BaseResponse>,
                     response: Response<BaseResponse>
                 ) {
-                    if (response.code() == 200){
+                    if (response.code() == 200) {
                         response.body()?.message?.let { ToastUtil.showToast(it) }
                         view.findNavController().popBackStack()
                         dialog.dismiss()
-                    }else{
+                    } else {
                         ToastUtil.showToast(StringUtil.getString(R.string.delete_dish))
                         dialog.dismiss()
                     }
