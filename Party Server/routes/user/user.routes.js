@@ -39,5 +39,8 @@ module.exports = function (app) {
     app.get('/open_image', controller.open_image);
 
     // get danh sach username
-    app.get('/user/finduser', auth.isAuthenticated, auth.isStaff, controller.finduser);
+
+    app.get('/user/findusernv', auth.isAuthenticated, auth.isStaff, controller.findusernv);
+
+    app.get('/user/finduserkh', auth.isAuthenticated, auth.isStaff, controller.finduserkh);
 }
