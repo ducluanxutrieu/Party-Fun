@@ -404,14 +404,29 @@ module.exports = {
         res.writeHead(200, { "Content-Type": "image/jpeg" });
         return res.end(image);
     },
-    finduser: function(req, res) {
+    // in danh sach nhan vien
+    findusernv: function(req, res) {
         MongoClient.connect(
             'mongodb://localhost/Android_Lab',
             function (err, db) {
                 if (err) console.log("Unable to connect")
                 var User = db.collection("User");
                 console.log(req.connection.remoteAddress + " request find all user");
-                User.find({$or: [{role: "nhanvien"},{role:"khachhang"}]}, {username:1, fullName:1, imageurl:1}).toArray(function(err, data) {
+                User.find({role:"nhanvien"}, {username:1, fullName:1, imageurl:1}).toArray(function(err, data) {
+                    if (err || data.length==0) res.status(400).send({success:false, message:"Can't find user", user:null});
+                    else res.status(200).send({success:true, message: "Find all user success", user: data});
+                })
+            })
+    },
+    // in danh sach khachhang
+    finduserkh: function(req, res) {
+        MongoClient.connect(
+            'mongodb://localhost/Android_Lab',
+            function (err, db) {
+                if (err) console.log("Unable to connect")
+                var User = db.collection("User");
+                console.log(req.connection.remoteAddress + " request find all user");
+                User.find({role:"khachhang"}, {username:1, fullName:1, imageurl:1}).toArray(function(err, data) {
                     if (err || data.length==0) res.status(400).send({success:false, message:"Can't find user", user:null});
                     else res.status(200).send({success:true, message: "Find all user success", user: data});
                 })
