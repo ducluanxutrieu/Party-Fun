@@ -51,6 +51,14 @@
         tools:layout="@layout/fragment_add_new_dish">
 
         <argument
+            android:name="position"
+            app:argType="integer" />
+
+        <argument
+            android:name="dishType"
+            app:argType="string" />
+
+        <argument
             android:name="@string/dish_model"
             app:argType="com.uit.party.model.DishModel"
             app:nullable="true"/>

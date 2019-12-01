@@ -39,7 +39,7 @@ class MenuViewModel : ViewModel(){
     }
 
     fun onAddDishClicked(view: View){
-        val action = MenuFragmentDirections.actionListDishToAddDish(null)
+        val action = MenuFragmentDirections.actionListDishToAddDish(0, "", null)
         view.findNavController().navigate(action)
     }
 

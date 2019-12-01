@@ -48,7 +48,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
         notifyDataSetChanged()
     }
 
-    private fun menuAllocation(dishes: java.util.ArrayList<DishModel>): java.util.ArrayList<MenuModel> {
+    private fun menuAllocation(dishes: ArrayList<DishModel>): ArrayList<MenuModel> {
         val listMenu = ArrayList<MenuModel>()
         val listHolidayOffers = ArrayList<DishModel>()
         val listFirstDishes = ArrayList<DishModel>()
@@ -93,7 +93,12 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
                 } else {
                     val filteredList = ArrayList<DishModel>()
                     for (row in mListDishMenuOrigin) {
-                        if (row.name?.toLowerCase(Locale("vi"))?.contains(charString.toLowerCase(Locale("vi"))) == true) {
+                        if (row.name?.toLowerCase(Locale("vi"))?.contains(
+                                charString.toLowerCase(
+                                    Locale("vi")
+                                )
+                            ) == true
+                        ) {
                             filteredList.add(row)
                         }
                     }
@@ -110,6 +115,24 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
                 notifyDataSetChanged()
             }
         }
+    }
+
+    fun updateDish(dishModel: DishModel, dishType: String, positon: Int) {
+        for (row in mListMenuFiltered){
+            if (row.menuName == dishType){
+                row.listDish[positon] = dishModel
+            }
+        }
+/*        when (dishType) {
+            "Holiday Offers" -> {
+                mListDishMenuOrigin
+                listHolidayOffers.add(row)
+            }
+            "First Dishes" -> listFirstDishes.add(row)
+            "Main Dishes" -> listMainDishes.add(row)
+            "Seafood" -> listSeafood.add(row)
+            "Drinks" -> listDrink.add(row)
+        }*/
     }
 
     class MenuViewHolder(val binding: ItemMainMenuBinding) : RecyclerView.ViewHolder(binding.root) {

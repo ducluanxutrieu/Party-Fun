@@ -21,10 +21,7 @@ import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
 
 class DetailDishFragment : Fragment() {
-    private lateinit var mDishModel: DishModel
-    private var mPosition: Int = 0
     private var viewModel = DetailDishViewModel()
-    private lateinit var mDishType: String
     private lateinit var binding: FragmentDetailDishBinding
     private val mArgs: DetailDishFragmentArgs by navArgs()
     private lateinit var mDisposable: Disposable
@@ -67,7 +64,9 @@ class DetailDishFragment : Fragment() {
                 R.id.toolbar_edit_dish -> {
                     val action =
                         DetailDishFragmentDirections.actionDishDetailFragmentToModifyDishFragment(
-                            mDishModel
+                            position = viewModel.mPosition,
+                            dishType = viewModel.mDishType,
+                            StringDishModel = viewModel.mDishModel
                         )
                     this.findNavController()
                         .navigate(action)
@@ -87,10 +86,10 @@ class DetailDishFragment : Fragment() {
             .setIcon(resources.getDrawable(R.drawable.ic_alert, context?.theme))
             .setTitle(getString(R.string.delete_dish))
             .setMessage(getString(R.string.alert_delete_dish))
-            .setPositiveButton(getString(R.string.delete)){ dialog, _ ->
+            .setPositiveButton(getString(R.string.delete)) { dialog, _ ->
                 viewModel.deleteDish(binding.root, dialog)
             }
-            .setNegativeButton(getString(R.string.cancel)){ dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -104,19 +103,25 @@ class DetailDishFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initData()
-        if (viewModel.mDishModel == null) {
-            viewModel.init(mDishModel)
+        if (viewModel.mDishModel != null) {
+            viewModel.init()
         }
         setupRecyclerView()
         listenDataChange()
     }
 
     private fun listenDataChange() {
-        mDisposable = RxBus.listen(RxEvent.UpdateDish::class.java).subscribe {
+        mDisposable = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
             if (it.dishModel != null) {
-                viewModel.init(it.dishModel)
+                viewModel.mDishModel = it.dishModel
+                viewModel.init()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!mDisposable.isDisposed) mDisposable.dispose()
     }
 
     private fun setupRecyclerView() {
@@ -129,8 +134,8 @@ class DetailDishFragment : Fragment() {
     }
 
     private fun initData() {
-        mPosition = mArgs.position
-        mDishType = mArgs.dishType
-        mDishModel = mArgs.StringDishModel
+        viewModel.mPosition = mArgs.position
+        viewModel.mDishType = mArgs.dishType
+        viewModel.mDishModel = mArgs.StringDishModel
     }
 }
