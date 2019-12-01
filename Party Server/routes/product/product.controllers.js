@@ -35,47 +35,48 @@ module.exports = {
 				form.multiples = true; //cho phep gui nhieu file
 
 				form.parse(req, function (err2, fields, files) {
-					if (files["image"] == undefined || files["image"] == null )
+					if (files["image"] == undefined || files["image"] == null)
 						res.status(400).send({ success: false, message: "No image to upload" });
 					else {
 						console.log(req.connection.remoteAddress + "Add dish. Content: " + fields.name);
 						name = fields.name;
+						console.log(files["image"].type);
 						var arrayofFiles = files["image"];
 						if (arrayofFiles.length > 0) {
 							var filename = [];
 							arrayofFiles.forEach((eachFile) => {
-								if (eachFile.type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
+								if (eachFile.type.match(/.(jpg|jpeg|png|form-data)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
 								else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + eachFile.path.slice(8));
 							})
 						}
 						else {
 							var filename = [];
-							if (files["image"].type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
+							if (files["image"].type.match(/.(jpg|jpeg|png|form-data)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
 							else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + files["image"].path.slice(8));
 						}
 						Menu.find({ name: name }).toArray(function (err, docs) {
 							if (Array.isArray(docs) && docs.length == 0) {
 								var dish = new Object();
-								if (fields.name == undefined || fields.description == undefined || fields.price == undefined || fields.type == undefined || fields.discount==undefined ||
-									isNaN(Number(fields.discount)) || Number(fields.discount)<0 || Number(fields.discount >=100 ) || isNaN(Number(fields.price)) || Number(fields.price <=0) )
+								if (fields.name == undefined || fields.description == undefined || fields.price == undefined || fields.type == undefined || fields.discount == undefined ||
+									isNaN(Number(fields.discount)) || Number(fields.discount) < 0 || Number(fields.discount >= 100) || isNaN(Number(fields.price)) || Number(fields.price <= 0))
 									res.status(400).send({ success: false, message: "The submitted values ​​are not in the correct format", dish: null });
 								else {
 									dish.name = fields.name;
 									dish.description = fields.description;
 									dish.price = fields.price;
 									dish.type = fields.type;
-									dish.discount=fields.discount;
+									dish.discount = fields.discount;
 									dish.image = filename;
 									var date = new Date();
 									dish.updateAt = date.toLocaleString();
 									dish.createAt = dish.updateAt;
 									dish.usercreate = req.body.username;
 									dish.price = Number(dish.price);
-									dish.discount=Number(dish.discount);
-									dish.rate=new Object();
-									dish.rate.average=0;	// diem so trung binh danh gia, tu 1->5
-									dish.rate.lishRate=[];	// danh sach mang luu tru thong tin moi nguoi danh gia
-									dish.rate.totalpeople=0; // tong so nguoi danh gia
+									dish.discount = Number(dish.discount);
+									dish.rate = new Object();
+									dish.rate.average = 0;	// diem so trung binh danh gia, tu 1->5
+									dish.rate.lishRate = [];	// danh sach mang luu tru thong tin moi nguoi danh gia
+									dish.rate.totalpeople = 0; // tong so nguoi danh gia
 									Menu.insert(dish, function (err, rel) {
 										if (err) res.status(500).send({ success: "false", message: err, dish: null });
 										else Menu.find({
@@ -103,9 +104,10 @@ module.exports = {
 				if (err) console.log("Unable to connect")
 				var User = db.collection("User");
 				var Menu = db.collection("Menu");
-				console.log(req.connection.remoteAddress + "Update infor dish. Content: name " + req.body.name);
-
-				Menu.find({ name: req.body.name }).toArray(function (err, docs) {
+				console.log(req.connection.remoteAddress + "Update infor dish. Content:" + JSON.stringify(req.body));
+				var ObjectID = require('mongodb').ObjectID;
+				if (req.body._id == undefined || ObjectID.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal", dish: null });
+				else Menu.find({ _id: new ObjectID(req.body._id) }).toArray(function (err, docs) {
 					if (Array.isArray(docs) && docs.length != 0) {
 						var date = new Date();
 						var dish = req.body;
@@ -115,11 +117,16 @@ module.exports = {
 						for (let i = 0; i < entries.length; i++) {
 							updates[entries[i]] = Object.values(req.body)[i]
 						}
-						Menu.update({ name: req.body.name }, { $set: updates }, function (err, rel) {
-							if (err) res.status(500).send({ success: "false", message: err, dish: null });
-							Menu.find({ name: req.body.name }).toArray(function (err, docc) {
-								res.status(200).send({ success: true, message: "Update dish success", dish: docc[0] })
-							})
+						delete updates._id;
+						Menu.find({ name: req.body.name }).toArray(function (err, data) {
+							if (data.length == 0 || (data.length == 1 && data[0]._id.toString() == req.body._id)) {
+								Menu.findOneAndUpdate({ _id: new ObjectID(req.body._id) }, { $set: updates }, { returnOriginal: false }, function (err, rel) {
+									if (err) res.status(500).send({ success: "false", message: err, dish: null });
+									else if (rel.value == null) res.status({ success: false, message: "_ID not found", dish: null });
+									else res.status(200).send({ success: true, message: "Update dish success ", dish: rel.value });
+								})
+							}
+							else res.status(400).send({ success: false, message: "Dish's name has existed", dish: null })
 						})
 					}
 					else res.status(400).send({ success: false, message: "Dish's name has existed ", dish: null });
@@ -148,26 +155,27 @@ module.exports = {
 					if (files["image"] == undefined || files["image"] == null)
 						res.status(400).send({ success: false, message: "No image to upload" });
 					else {
-					var arrayofFiles = files["image"];
-					if (arrayofFiles.length > 0) {
-						var filename = [];
-						arrayofFiles.forEach((eachFile) => {
-							if (eachFile.type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
-							else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + eachFile.path.slice(8));
-						})
-					}
-					else {
-						var filename = [];
-						if (files["image"].type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
-						else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + files["image"].path.slice(8));
-					}
-					var ObjectID = require('mongodb').ObjectID;
-					if (fields._id == undefined || ObjectID.isValid(fields._id) == false) res.status(400).send({ success: false, message: "_ID illegal", bill: null });
-					else
-						Menu.update({ _id: new ObjectID(fields._id) }, { $push: { image: { "$each": filename } } }, function (err, data) {
-							if (err) res.status(400).send({ success: false, message: "Cannot update image. Error is " + err });
-							else res.status(200).send({ success: true, message: "Upload image dish success" })
-						})
+						var arrayofFiles = files["image"];
+						if (arrayofFiles.length > 0) {
+							var filename = [];
+							arrayofFiles.forEach((eachFile) => {
+								if (eachFile.type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
+								else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + eachFile.path.slice(8));
+							})
+						}
+						else {
+							var filename = [];
+							if (files["image"].type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
+							else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + files["image"].path.slice(8));
+						}
+						var ObjectID = require('mongodb').ObjectID;
+						if (fields._id == undefined || ObjectID.isValid(fields._id) == false) res.status(400).send({ success: false, message: "_ID illegal", bill: null });
+						else
+							Menu.update({ _id: new ObjectID(fields._id) }, { $push: { image: { "$each": filename } } }, function (err, data) {
+								if (err) res.status(400).send({ success: false, message: "Cannot update image. Error is " + err });
+								else if (data.value == null) res.status(400).send({ success: false, message: "_ID not found" });
+								else res.status(200).send({ success: true, message: "Upload image dish success" })
+							})
 					}
 				})
 			})
@@ -186,7 +194,8 @@ module.exports = {
 				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal" });
 				else {
 					Menu.remove({ _id: new ObjectId(req.body._id) }, function (err, data) {
-						res.status(200).send({ success: true, message: "Delete success" });
+						if (data.value == null) res.status(400).send({ success: false, message: "_ID not found" });
+						else res.status(200).send({ success: true, message: "Delete success" });
 					})
 				}
 			})
@@ -205,7 +214,21 @@ module.exports = {
 				})
 			})
 	},
-
+	getdish: function (req, res) {
+		MongoClient.connect(
+			'mongodb://localhost/Android_Lab',
+			function (err, db) {
+				if (err) console.log("Unable to connect")
+				var collection = db.collection("Menu");
+				console.log(req.connection.remoteAddress + "Xuat thong tin cua mon an do");
+				var ObjectId = require('mongodb').ObjectID;
+				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal", dish: null });
+				else collection.find({ _id: new ObjectId(req.body._id) }).toArray(function (err, docs) {
+					if (docs.length == 0) res.status(400).send({ success: false, message: "_id dish not found", dish: null });
+					else res.status(200).send({ success: true, message: "Get item dish success", dish: docs });
+				})
+			})
+	},
 	// dat ban
 	book: function (req, res) {
 		MongoClient.connect(
@@ -238,14 +261,26 @@ module.exports = {
 								.toArray(function (err, data) {
 									if (err) throw err;
 									if (data.length == 0) res.status(400).send({ success: false, message: "_ID Dish is not valid", bill: null });
-									else resolve(data[0].price- Math.floor(data[0].price*data[0].discount/100));
+									else resolve(data[0].price - Math.floor(data[0].price * data[0].discount / 100));
 								});
 						});
 					};
+					var insertname = (id) => {
+						return new Promise((resolve, reject) => {
+
+							Menu.find({ _id: new ObjectId(id) })
+								.toArray(function (err, data) {
+									if (err) throw err;
+									if (data.length == 0) res.status(400).send({ success: false, message: "_ID Dish is not valid", bill: null });
+									else resolve(data[0].name);
+								});
+						})
+					}
 					// tinh tong so tien tra
 					for (var i = 0; i < bill.lishDishs.length; i++) {
 						var numberDish = bill.lishDishs[i].numberDish;
 						var price = await myPromise(bill.lishDishs[i]._id);
+						bill.lishDishs[i].name = await insertname(bill.lishDishs[i]._id);
 						bill.totalMoney += Number(price) * Number(numberDish);
 					}
 					bill.totalMoney *= req.body.numbertable;
@@ -358,7 +393,7 @@ module.exports = {
 				var Bill = db.collection("Bill");
 				Bill.aggregate([
 					{
-						$match:{
+						$match: {
 							"paymentstatus": true
 						}
 					},
@@ -375,7 +410,8 @@ module.exports = {
 							},
 							totalMoney: { $sum: "$totalMoney" },	// tổng tiền thu được thống kê theo ngày
 							count_of_bill: { $sum: 1 },				//số bill thống kê theo ngày
-							totalorderdish: { $sum: {$multiply: ["$lishDishs.numberDish", "$numbertable"] }}, // số lần món ăn đó được gọi( đã nhân số bàn)
+							totalorderdish: { $sum: { $multiply: ["$lishDishs.numberDish", "$numbertable"] } }, // số lần món ăn đó được gọi( đã nhân số bàn)
+							namedish: { $first: "$lishDishs.name" }
 						},
 					},
 					{
@@ -388,41 +424,20 @@ module.exports = {
 									{ $substr: ["$_id.year", 0, 4] }
 								]
 							},
-							totalMoney:1,
+							totalMoney: 1,
 							count_of_bill: 1,
-							totalorderdish:1,
+							totalorderdish: 1,
 							IDDish: {
-								$toObjectId :"$_id.lishDishsID"
+								$toObjectId: "$_id.lishDishsID"
 							},
+							namedish: 1
 						}
 					},
-					
-					{
-						$lookup: {
-							from: "Menu",
-							localField: "IDDish",
-							foreignField: "_id",
-							as: "outputMenu"
-						}
-					},
-					{
-						$project: {
-							_id:0,
-							dateDay: 1,
-							totalMoney:1,
-							count_of_bill:1,
-							totalorderdish:1,
-							namedish: "$outputMenu.name"
-						}
-					},
-					{
-						$unwind: "$namedish"
-					},
-					
+
 				]).toArray(function (err, data) {
-							console.log(data);
-							res.status(200).send(data);
-						})
+					console.log(data);
+					res.status(200).send(data);
+				})
 			})
 	},
 	// danh gia mon an
@@ -431,41 +446,58 @@ module.exports = {
 	// muc do rate: scorerate: điểm số đánh giá, từ 1 đến 5
 	// nội dung đánh giá: content
 	// ngày tạo
-	rate: function(req, res ) {
+	rate: function (req, res) {
 		MongoClient.connect(
 			'mongodb://localhost/Android_Lab',
 			function (err, db) {
 				if (err) console.log("Unable to connect")
-				var User=db.collection('User');
-				var Menu=db.collection('Menu');
-				var ObjectId=require('mongodb').ObjectID;
-				if (req.body._id==undefined || ObjectId.isValid(req.body._id)==false) res.status(400).send({ success: false, message:"_ID illegal"});
+				var User = db.collection('User');
+				var Menu = db.collection('Menu');
+				var ObjectId = require('mongodb').ObjectID;
+				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal", dish: null });
 				else {
-					Menu.find({_id: new ObjectId(req.body._id)}).toArray(function(err, data) {
-						if (err || data.length==0) res.status(400).send({success:false, message:"Dish ID not found"});
+					Menu.find({ _id: new ObjectId(req.body._id) }).toArray(function (err, data) {
+						if (err || data.length == 0) res.status(400).send({ success: false, message: "Dish ID not found", dish: null });
 						else {
-							var objrate=data[0].rate;
-							var rate=new Object();
-							rate.username=req.body.username;
-							rate._iddish=data[0]._id;
-							if (req.body.scorerate==undefined || isNaN(Number(req.body.scorerate)) || 
-								Number(req.body.scorerate) <1 || Number(req.body.scorerate) >5) res.status(400).send({success:false, message: "Diem so danh gia phai la so nguyen, co gia tri tu 1 den 5"});
+							var objrate = data[0].rate;
+							var rate = new Object();
+							rate.username = req.body.username;
+							rate._iddish = data[0]._id;
+							if (req.body.scorerate == undefined || isNaN(Number(req.body.scorerate)) ||
+								Number(req.body.scorerate) < 1 || Number(req.body.scorerate) > 5) res.status(400).send({ success: false, message: "Diem so danh gia phai la so nguyen, co gia tri tu 1 den 5", dish:null });
 							else {
-								rate.scorerate=Number(req.body.scorerate);
-								rate.content=req.body.content;
-								var date=new Date();
-								rate.createAt=date.toLocaleString();
-								objrate.lishRate.push(rate);
-								objrate.average=Math.floor(100*(objrate.average*objrate.totalpeople+rate.scorerate)/(objrate.totalpeople+1))/100;
-								objrate.totalpeople++;
-								Menu.update({_id: new ObjectId(req.body._id)},{$set:{rate:objrate}}, function(err, data) {
-									if (err) res.status(500).send({success:false, message:"Error: "+err});
-									else res.status(200).send({success:true, message: "Success"});
+								rate.scorerate = Number(req.body.scorerate);
+								rate.content = req.body.content;
+								var date = new Date();
+
+								function isArr(fruit) {
+									return fruit.username == req.body.username;
+								}
+								var findindex = objrate.lishRate.findIndex(isArr);
+								var check = objrate.lishRate.find(isArr);
+								if (check == undefined) {
+									rate.createAt = date.toLocaleString();
+									rate.updateAt = date.toLocaleString();
+									objrate.lishRate.push(rate);
+									objrate.average = Math.floor(100 * (objrate.average * objrate.totalpeople + rate.scorerate) / (objrate.totalpeople + 1)) / 100;
+									objrate.totalpeople++;
+								}
+								else {
+									rate.updateAt = date.toLocaleString();
+									rate.createAt=check.createAt;
+									objrate.lishRate[findindex] = rate;
+									objrate.average = objrate.average + Math.floor(100 * (rate.scorerate-check.scorerate) / (objrate.totalpeople)) / 100;	
+								}
+								
+								// sua o day + them dish vao res
+								Menu.findOneAndUpdate({ _id: new ObjectId(req.body._id) }, { $set: { rate: objrate } }, { returnOriginal: false }, function (err, data) {
+									if (err) res.status(500).send({ success: false, message: "Error: " + err, dish: null });
+									else res.status(200).send({ success: true, message: "Success", dish: data.value });
 								})
-							}	
+							}
 						}
 					})
 				}
 			})
-	}
+	},
 }
