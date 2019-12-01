@@ -17,11 +17,14 @@ module.exports = function (app) {
     // in danh sach mon an
     app.get('/product/finddish', controller.finddish);
 
+    //in thong tin mon an
+    app.post('product/getItemDish' , controller.getdish);
+
     // dat ban
     app.post('/product/book', auth.isAuthenticated, auth.checkinDataBookDish, controller.book);
 
     // in ra id bill theo ten nguoi dung username
-    app.get('/product/findbill', controller.findbill);
+    app.get('/product/findbill',auth.isAuthenticated, auth.isStaff, controller.findbill);
 
     // thanh toan
     app.post('/product/pay', auth.isAuthenticated, auth.isStaff, controller.pay);
