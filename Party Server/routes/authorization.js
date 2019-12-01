@@ -154,6 +154,7 @@ module.exports = {
                 temp.price = Number(req.body.price);
                 temp.type = req.body.type;
                 temp.discount=Number(req.body.discount);
+                temp._id=req.body._id;
                 req.body = temp;
                 return next();
             }
@@ -190,8 +191,7 @@ module.exports = {
                     if (isNaN(req.body.numbertable)) respon(res);
                     else if (check(req.body.lishDishs, "string", 20)) respon(res);
                     else {
-                        try {req.body.lishDishs = JSON.parse(req.body.lishDishs); }
-                        catch (e) {}
+                        req.body.lishDishs = JSON.parse(req.body.lishDishs);
                         for (var i = 0; i < req.body.lishDishs.length; i++) {
                             req.body.lishDishs[i].numberDish = Number(req.body.lishDishs[i].numberDish);
                             if (isNaN(req.body.lishDishs[i].numberDish))
