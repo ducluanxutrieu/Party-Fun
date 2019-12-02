@@ -194,7 +194,7 @@ module.exports = {
 				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal" });
 				else {
 					Menu.remove({ _id: new ObjectId(req.body._id) }, function (err, data) {
-						if (data.value == null) res.status(400).send({ success: false, message: "_ID not found" });
+						if (data == undefined) res.status(400).send({ success: false, message: "_ID not found" });
 						else res.status(200).send({ success: true, message: "Delete success" });
 					})
 				}
