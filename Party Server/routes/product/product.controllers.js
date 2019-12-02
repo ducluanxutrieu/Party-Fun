@@ -458,10 +458,11 @@ module.exports = {
 				else {
 					Menu.find({ _id: new ObjectId(req.body._id) }).toArray(function (err, data) {
 						if (err || data.length == 0) res.status(400).send({ success: false, message: "Dish ID not found", dish: null });
-						else {
+						else User.find({ username: req.body.username }).toArray(function (err, datauser) {
 							var objrate = data[0].rate;
 							var rate = new Object();
 							rate.username = req.body.username;
+							rate.imageurl=datauser[0].imageurl;
 							rate._iddish = data[0]._id;
 							if (req.body.scorerate == undefined || isNaN(Number(req.body.scorerate)) ||
 								Number(req.body.scorerate) < 1 || Number(req.body.scorerate) > 5) res.status(400).send({ success: false, message: "Diem so danh gia phai la so nguyen, co gia tri tu 1 den 5", dish:null });
@@ -495,7 +496,7 @@ module.exports = {
 									else res.status(200).send({ success: true, message: "Success", dish: data.value });
 								})
 							}
-						}
+						})
 					})
 				}
 			})
