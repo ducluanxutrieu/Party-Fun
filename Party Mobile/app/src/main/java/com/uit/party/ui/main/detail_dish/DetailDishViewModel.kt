@@ -116,11 +116,11 @@ class DetailDishViewModel : BaseObservable() {
                     if (response.code() == 200) {
                         val repo = response.body()
                         if (repo != null) {
-                            mDishModel = repo.dish?.get(0)
+                            mDishModel = repo.dish
                             setRatingContent()
                             RxBus.publish(
                                 RxEvent.AddDish(
-                                    repo.dish?.get(0),
+                                    repo.dish,
                                     dishType = mDishType,
                                     position = mPosition
                                 )

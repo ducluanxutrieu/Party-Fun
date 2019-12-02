@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 class DishItemResponse : BaseResponse(){
     @SerializedName("dish")
-    val dish: ArrayList<DishModel>? = null
+    val dish: DishModel? = null
 }
