@@ -211,7 +211,7 @@ module.exports = {
 
                         form.parse(req, function (err2, fields, files) {
                             if (files["image"] == undefined || files["image"] == null ||
-                                files["image"].type.match(/.(jpg|jpeg|png)$/i) == null) // đuôi file chấp nhận
+                                files["image"].type.match(/.(jpg|jpeg|png|form-data)$/i) == null) // đuôi file chấp nhận
                                 res.status(400).send({ success: false, message: "No image to upload" });
                             else {
                                 var url = "http://" + ip + ":" + port + "/open_image?image_name=" + files["image"].path.split('\\')[1];
