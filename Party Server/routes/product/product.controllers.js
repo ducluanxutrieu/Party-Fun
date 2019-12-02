@@ -159,13 +159,13 @@ module.exports = {
 						if (arrayofFiles.length > 0) {
 							var filename = [];
 							arrayofFiles.forEach((eachFile) => {
-								if (eachFile.type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
+								if (eachFile.type.match(/.(jpg|jpeg|png|form-data)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
 								else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + eachFile.path.slice(8));
 							})
 						}
 						else {
 							var filename = [];
-							if (files["image"].type.match(/.(jpg|jpeg|png)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
+							if (files["image"].type.match(/.(jpg|jpeg|png|form-data)$/i) == null) res.status(400).send({ success: false, message: "You are only allowed to upload image files ending in .jpg .jpeg .png" });
 							else filename.push("http://" + ip + ":" + port + "/open_image?image_name=" + files["image"].path.slice(8));
 						}
 						var ObjectID = require('mongodb').ObjectID;
