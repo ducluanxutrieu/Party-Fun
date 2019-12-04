@@ -207,11 +207,6 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         animSetXY.start()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
-    }
-
     companion object {
         private const val TAG = "MenuFragmentTag"
     }
