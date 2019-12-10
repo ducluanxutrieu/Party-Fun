@@ -382,23 +382,23 @@ module.exports = {
 				else res.status(400).send({ success: false, message: "name is exists", bill: null });
 			})
 	},
-	// thống kê
-	statistical: function (req, res) {
+	// thống kê ngay nay thu duoc bao nhieu tien. In ra thoong tin tu ngay CN den ngay hien tai trong tuan. Sap xep giam dan
+	statisticalmoney: function (req, res) {
 		MongoClient.connect(
 			'mongodb://localhost/Android_Lab',
 			function (err, db) {
 				if (err) console.log("Unable to connect")
 				// thống kê xem trong vòng 1 ngày, số tiền thu được là bao nhiêu(totalMoney), tiền đó thu từ bao nhiêu bill(count_of_bill),
-				// _id món ăn có order trong ngày, tổng số lượt món ăn đó được order(totalorderdish), ngày thống kê.
+
 				var Bill = db.collection("Bill");
+				
 				Bill.aggregate([
+					
 					{
 						$match: {
-							"paymentstatus": true
+							"paymentstatus": true,
+							
 						}
-					},
-					{
-						$unwind: "$lishDishs"
 					},
 					{
 						$group: {
@@ -406,12 +406,10 @@ module.exports = {
 								day: { $dayOfMonth: "$paymentAt" },
 								month: { $month: "$paymentAt" },
 								year: { $year: "$paymentAt" },
-								lishDishsID: "$lishDishs._id",
+
 							},
 							totalMoney: { $sum: "$totalMoney" },	// tổng tiền thu được thống kê theo ngày
 							count_of_bill: { $sum: 1 },				//số bill thống kê theo ngày
-							totalorderdish: { $sum: { $multiply: ["$lishDishs.numberDish", "$numbertable"] } }, // số lần món ăn đó được gọi( đã nhân số bàn)
-							namedish: { $first: "$lishDishs.name" }
 						},
 					},
 					{
@@ -424,19 +422,80 @@ module.exports = {
 									{ $substr: ["$_id.year", 0, 4] }
 								]
 							},
+
 							totalMoney: 1,
 							count_of_bill: 1,
-							totalorderdish: 1,
-							IDDish: {
-								$toObjectId: "$_id.lishDishsID"
-							},
-							namedish: 1
 						}
 					},
+					{
+						$sort: { dateDay: -1 } // sx giam dan
+					},
+					{
+						$limit: 7 // gioi han =7
+					}
 
 				]).toArray(function (err, data) {
-					console.log(data);
-					res.status(200).send(data);
+					if (data == undefined || data.length == 0) res.status(200).send("No bill has been paid yet");
+					else res.status(200).send(data);
+				})
+			})
+	},
+	// thong ke trong ngay nay mon an duoc goi may lan, tu bao nhieu bill
+	statisticaldish: function (req, res) {
+		MongoClient.connect(
+			'mongodb://localhost/Android_Lab',
+			function (err, db) {
+				if (err) console.log("Unable to connect")
+				// thống kê xem trong vòng 1 ngày,
+				// _id món ăn có order trong ngày, tổng số lượt món ăn đó được order(totalorderdish), ngày thống kê.
+				var Bill = db.collection("Bill");
+				var datenow=new Date().toLocaleDateString();
+				console.log(datenow);
+				Bill.aggregate([
+					{
+						$match: {
+							"paymentstatus": true,
+							"paymentAt": {$gte: new Date(datenow)},
+						}
+					},
+					{
+						$unwind: "$lishDishs"
+					},
+					{
+						$group: {
+							_id: {
+								day: { $dayOfMonth: "$paymentAt" },
+								month: {$month: "$paymentAt"},
+								year: { $year: "$paymentAt" },
+								lishDishsID: "$lishDishs._id",
+								namedish: "$lishDishs.name"
+							},
+							count_of_bill: { $sum: 1 },				//số bill thống kê theo ngày
+							totalorderdish: { $sum: { $multiply: ["$lishDishs.numberDish", "$numbertable"] } }, // số lần món ăn đó được gọi( đã nhân số bàn)
+						},
+					},
+					{
+						$project: {
+							_id: 0,
+							count_of_bill: 1,
+							totalorderdish: 1,
+							dateDay: {
+								$concat: [
+									{ $substr: ["$_id.day", 0, 2] }, "-",
+									{ $substr: ["$_id.month", 0, 2] }, "-",
+									{ $substr: ["$_id.year", 0, 4] }
+								]
+							},
+							IDDish: "$_id.lishDishsID",
+							name: "$_id.namedish",
+						}
+					},
+					{
+						$sort: { totalorderdish: -1 }
+					},
+				]).toArray(function (err, data) {
+					if (data == undefined || data.length == 0) res.status(200).send("No bill has been paid yet");
+					else res.status(200).send(data);
 				})
 			})
 	},
@@ -458,45 +517,46 @@ module.exports = {
 				else {
 					Menu.find({ _id: new ObjectId(req.body._id) }).toArray(function (err, data) {
 						if (err || data.length == 0) res.status(400).send({ success: false, message: "Dish ID not found", dish: null });
-						else User.find({ username: req.body.username }).toArray(function (err, datauser) {
-							var objrate = data[0].rate;
-							var rate = new Object();
-							rate.username = req.body.username;
-							rate.imageurl=datauser[0].imageurl;
-							rate._iddish = data[0]._id;
-							if (req.body.scorerate == undefined || isNaN(Number(req.body.scorerate)) ||
-								Number(req.body.scorerate) < 1 || Number(req.body.scorerate) > 5) res.status(400).send({ success: false, message: "Diem so danh gia phai la so nguyen, co gia tri tu 1 den 5", dish:null });
-							else {
-								rate.scorerate = Number(req.body.scorerate);
-								rate.content = req.body.content;
-								var date = new Date();
-
-								function isArr(fruit) {
-									return fruit.username == req.body.username;
-								}
-								var findindex = objrate.lishRate.findIndex(isArr);
-								var check = objrate.lishRate.find(isArr);
-								if (check == undefined) {
-									rate.createAt = date.toLocaleString();
-									rate.updateAt = date.toLocaleString();
-									objrate.lishRate.push(rate);
-									objrate.average = Math.floor(100 * (objrate.average * objrate.totalpeople + rate.scorerate) / (objrate.totalpeople + 1)) / 100;
-									objrate.totalpeople++;
-								}
+						else
+							User.find({ username: req.body.username }).toArray(function (err, datauser) {
+								var objrate = data[0].rate;
+								var rate = new Object();
+								rate.username = req.body.username;
+								rate.imageurl = datauser[0].imageurl;
+								rate._iddish = data[0]._id;
+								if (req.body.scorerate == undefined || isNaN(Number(req.body.scorerate)) ||
+									Number(req.body.scorerate) < 1 || Number(req.body.scorerate) > 5) res.status(400).send({ success: false, message: "Diem so danh gia phai la so nguyen, co gia tri tu 1 den 5", dish: null });
 								else {
-									rate.updateAt = date.toLocaleString();
-									rate.createAt=check.createAt;
-									objrate.lishRate[findindex] = rate;
-									objrate.average = objrate.average + Math.floor(100 * (rate.scorerate-check.scorerate) / (objrate.totalpeople)) / 100;	
+									rate.scorerate = Number(req.body.scorerate);
+									rate.content = req.body.content;
+									var date = new Date();
+
+									function isArr(fruit) {
+										return fruit.username == req.body.username;
+									}
+									var findindex = objrate.lishRate.findIndex(isArr);
+									var check = objrate.lishRate.find(isArr);
+									if (check == undefined) {
+										rate.createAt = date.toLocaleString();
+										rate.updateAt = date.toLocaleString();
+										objrate.lishRate.push(rate);
+										objrate.average = Math.floor(100 * (objrate.average * objrate.totalpeople + rate.scorerate) / (objrate.totalpeople + 1)) / 100;
+										objrate.totalpeople++;
+									}
+									else {
+										rate.updateAt = date.toLocaleString();
+										rate.createAt = check.createAt;
+										objrate.lishRate[findindex] = rate;
+										objrate.average = objrate.average + Math.floor(100 * (rate.scorerate - check.scorerate) / (objrate.totalpeople)) / 100;
+									}
+
+									// tim va update
+									Menu.findOneAndUpdate({ _id: new ObjectId(req.body._id) }, { $set: { rate: objrate } }, { returnOriginal: false }, function (err, data) {
+										if (err) res.status(500).send({ success: false, message: "Error: " + err, dish: null });
+										else res.status(200).send({ success: true, message: "Success", dish: data.value });
+									})
 								}
-								
-								// sua o day + them dish vao res
-								Menu.findOneAndUpdate({ _id: new ObjectId(req.body._id) }, { $set: { rate: objrate } }, { returnOriginal: false }, function (err, data) {
-									if (err) res.status(500).send({ success: false, message: "Error: " + err, dish: null });
-									else res.status(200).send({ success: true, message: "Success", dish: data.value });
-								})
-							}
-						})
+							})
 					})
 				}
 			})
