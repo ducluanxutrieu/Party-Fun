@@ -11,13 +11,12 @@ app.use(bodyParser.json())
 app.use((req,res,next) => {
     
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET,DELETE");
+    res.setHeader("Access-Control-Allow-Method", "PUT, DELETE, GET, POST");
     res.setHeader("Access-Control-Allow-Headers",
     "Access-Control-Allow-Headers,Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,authorization,rbr")
     next();
 })
 
-require('./routes/user/user.routes')(app);
-require('./routes/product/product.routes')(app);
+app.use('/', require('./routes/routes'));
 
 app.listen(3000);
