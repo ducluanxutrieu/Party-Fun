@@ -1,37 +1,39 @@
-module.exports = function (app) {
+var app = require('express').Router();
+var controller = require('./product.controllers')
+var auth = require('../authorization')
+//tao mon an
+app.post('/adddish', auth.isAuthenticated, auth.isStaff, controller.adddish);
 
-    var controller = require('./product.controllers')
-    var auth=require('../authorization')
-    //tao mon an
-    app.post('/product/adddish',auth.isAuthenticated, auth.isStaff, controller.adddish);
+// cap nhat mon an
+app.post('/updatedish', auth.isAuthenticated, auth.isStaff, auth.checkinDataDish, controller.update);
 
-    // cap nhat mon an
-    app.post('/product/updatedish',auth.isAuthenticated, auth.isStaff, auth.checkinDataDish, controller.update);
+// upload anh, cong don vao danh sach anh hien tai
+app.post('/uploadimage', auth.isAuthenticated, auth.isStaff, controller.uploadimage);
 
-    // upload anh, cong don vao danh sach anh hien tai
-    app.post('/product/uploadimage', auth.isAuthenticated, auth.isStaff ,controller.uploadimage);
+//delete mon an
+app.delete('/deletedish', auth.isAuthenticated, auth.isStaff, controller.deletedish);
 
-    //delete mon an
-    app.delete('/product/deletedish', auth.isAuthenticated, auth.isStaff, controller.deletedish);
+// in danh sach mon an
+app.get('/finddish', controller.finddish);
 
-    // in danh sach mon an
-    app.get('/product/finddish', controller.finddish);
+//in thong tin mon an
+app.post('/getItemDish', controller.getdish);
 
-    //in thong tin mon an
-    app.post('product/getItemDish' , controller.getdish);
+// dat ban
+app.post('/book', auth.isAuthenticated, auth.checkinDataBookDish, controller.book);
 
-    // dat ban
-    app.post('/product/book', auth.isAuthenticated, auth.checkinDataBookDish, controller.book);
+// in ra id bill theo ten nguoi dung username
+app.get('/findbill', auth.isAuthenticated, auth.isStaff, controller.findbill);
 
-    // in ra id bill theo ten nguoi dung username
-    app.get('/product/findbill',auth.isAuthenticated, auth.isStaff, controller.findbill);
+// thanh toan
+app.post('/pay', auth.isAuthenticated, auth.isStaff, controller.pay);
 
-    // thanh toan
-    app.post('/product/pay', auth.isAuthenticated, auth.isStaff, controller.pay);
+// thong ke
+app.get('/statisticalmoney', auth.isAuthenticated, auth.isStaff, controller.statisticalmoney);
 
-    // thong ke
-    app.get('/product/statistical', auth.isAuthenticated, auth.isStaff, controller.statistical);
+app.get('/statisticaldish', auth.isAuthenticated, auth.isStaff, controller.statisticaldish);
 
-    // danh gia mon an
-    app.post('/product/ratedish', auth.isAuthenticated, controller.rate);
-}
+// danh gia mon an
+app.post('/ratedish', auth.isAuthenticated, controller.rate);
+
+module.exports = app;
