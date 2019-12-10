@@ -390,8 +390,7 @@ module.exports = {
                 })
             })
     },
-    // xem anh
-    open_image: function (req, res) {
+    open_image: function(req, res) {
         let imagename = "./uploads/" + req.query.image_name;
         try {
             var image = fs.readFileSync(imagename);
@@ -399,7 +398,6 @@ module.exports = {
         catch (e) {
             res.writeHead(400, { "Content-Type": "text/html" })
             return res.end("File not found");
-
         }
         res.writeHead(200, { "Content-Type": "image/jpeg" });
         return res.end(image);
