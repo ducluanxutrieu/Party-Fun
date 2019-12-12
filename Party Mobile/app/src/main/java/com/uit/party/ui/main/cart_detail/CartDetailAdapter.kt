@@ -77,6 +77,7 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
             mBinder.btnDeleteDish.setOnClickListener {
                 mListener.onDeleteDish(adapterPosition)
             }
+
         }
     }
 }

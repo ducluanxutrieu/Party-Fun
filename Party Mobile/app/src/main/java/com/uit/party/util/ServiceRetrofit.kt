@@ -34,7 +34,7 @@ interface ServiceRetrofit {
 
     @POST("/user/resetconfirm")
     @FormUrlEncoded
-    fun vertifyPassword(
+    fun verifyPassword(
         @Field("resetpassword") resetpassword: String,
         @Field("passwordnew") passwordnew: String
     ): Call<BaseResponse>

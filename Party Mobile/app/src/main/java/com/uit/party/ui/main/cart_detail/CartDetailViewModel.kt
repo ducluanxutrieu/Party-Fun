@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.library.baseAdapters.BR
 import androidx.navigation.findNavController
@@ -25,6 +26,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
+    val mShowCart = ObservableBoolean(false)
+    val mShowLoading = ObservableBoolean(false)
     val mCartAdapter = CartDetailAdapter(this)
     val mTotalPrice = ObservableField("")
     val mNumberTableField = ObservableField("1")
@@ -49,6 +52,13 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
             notifyPropertyChanged(BR.mListCart)
         }
 
+    init {
+        val time = Calendar.getInstance()
+        time.add(Calendar.DATE, 1)
+        val timeStart = TimeFormatUtil.formatTimeToClient(time)
+        mDatePartyField.set(timeStart)
+    }
+
     private fun setTimePicker(context: Context){
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
             calDatePartyPicker.set(Calendar.HOUR_OF_DAY,hour)
@@ -56,7 +66,7 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
             if (calDatePartyPicker <= calDateNow){
                 ToastUtil.showToast(StringUtil.getString(R.string.date_booking_must_greater_than_day_now))
             }else{
-                updateBirthdayInView()
+                updateDatePartyInView()
             }
         }
         TimePickerDialog(
@@ -87,7 +97,7 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         return totalPrice * mNumberTable
     }
 
-    private fun updateBirthdayInView() {
+    private fun updateDatePartyInView() {
         val timeStart = TimeFormatUtil.formatTimeToClient(calDatePartyPicker)
         mDatePartyField.set(timeStart)
     }
@@ -135,25 +145,30 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
     }
 
     fun initData(listDishModel: ArrayList<DishModel>) {
-        for (dish in listDishModel) {
-            var doubleCart = false
-            for (cart in mListCart) {
-                if (cart.dishModel._id == dish._id) {
-                    cart.numberDish++
-                    doubleCart = true
-                    break
+        if (listDishModel.isNullOrEmpty()){
+            mShowCart.set(false)
+        }else {
+            mShowCart.set(true)
+            for (dish in listDishModel) {
+                var doubleCart = false
+                for (cart in mListCart) {
+                    if (cart.dishModel._id == dish._id) {
+                        cart.numberDish++
+                        doubleCart = true
+                        break
+                    }
+                }
+
+                if (!doubleCart) {
+                    mListCart.add(CartModel(1, dish))
                 }
             }
-
-            if (!doubleCart) {
-                mListCart.add(CartModel(1, dish))
-            }
+            mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
         }
-
-        mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
     }
 
     fun onOrderNowClicked(view: View){
+        mShowLoading.set(true)
         val mListDishes = ArrayList<ListDishes>()
         for (row in mListCart){
             if (!row.dishModel._id.isNullOrEmpty())
@@ -166,9 +181,11 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
             .enqueue(object : Callback<BillModel>{
                 override fun onFailure(call: Call<BillModel>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
+                    mShowLoading.set(false)
                 }
 
                 override fun onResponse(call: Call<BillModel>, response: Response<BillModel>) {
+                    mShowLoading.set(false)
                     if (response.code() == 200){
                         response.body()?.message?.let { ToastUtil.showToast(it) }
                         if (response.body()?.success == true){

@@ -138,10 +138,12 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
     class MenuViewHolder(val binding: ItemMainMenuBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(menuModel: MenuModel) {
             val itemViewModel = ItemMenuViewModel()
-            binding.setVariable(BR.itemViewModel, itemViewModel)
-            binding.executePendingBindings()
+            binding.itemViewModel = itemViewModel
+//            binding.setVariable(BR.itemViewModel, itemViewModel)
+//            binding.executePendingBindings()
             itemViewModel.init(menuModel)
             binding.rvDishMain.adapter = itemViewModel.mDishesAdapter
+            binding.rvDishMain.setHasFixedSize(false)
         }
     }
 }

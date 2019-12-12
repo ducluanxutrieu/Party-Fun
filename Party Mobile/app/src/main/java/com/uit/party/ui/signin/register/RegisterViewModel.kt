@@ -2,10 +2,12 @@ package com.uit.party.ui.signin.register
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.RegisterModel
@@ -28,6 +30,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     private var confirmPasswordValid = false
 
     var btnRegisterEnabled: ObservableBoolean = ObservableBoolean()
+    val mShowLoading = ObservableBoolean(false)
 
     var errorFullName = ObservableField<String>()
     var errorUserName = ObservableField<String>()
@@ -277,12 +280,13 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         }
     }
 
-    fun onRegisterClicked() {
+    fun onRegisterClicked(view: View) {
         val model =
             RegisterModel(fullNameText, usernameText, emailText, phoneNumberText, passwordText)
         register(model) { registerResponse ->
             if (registerResponse?.success!!) {
                 ToastUtil.showToast(StringUtil.getString(R.string.register_successful))
+                view.findNavController().popBackStack()
             } else {
                 ToastUtil.showToast("Register false: ${registerResponse.message}")
             }
@@ -293,17 +297,20 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         model: RegisterModel,
         onComplete: (AccountResponse?) -> Unit
     ) {
+        mShowLoading.set(true)
         serviceRetrofit.register(model)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     Toast.makeText(context, "Register false: ${t.message}", Toast.LENGTH_LONG)
                         .show()
+                    mShowLoading.set(false)
                 }
 
                 override fun onResponse(
                     call: Call<AccountResponse>,
                     response: Response<AccountResponse>
                 ) {
+                    mShowLoading.set(false)
                     val repo = response.body()
                     if (repo != null) {
                         onComplete(repo)

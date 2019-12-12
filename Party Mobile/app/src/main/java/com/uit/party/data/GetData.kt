@@ -11,7 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object GetData {
-    fun getUserProfile(onComplete: (Account) -> Unit) {
+    fun getUserProfile(onComplete: (Account?) -> Unit) {
         MainActivity.serviceRetrofit.getProfile(MainActivity.TOKEN_ACCESS)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
@@ -24,9 +24,9 @@ object GetData {
                 ) {
                     if (response.code() == 200){
                         val repo = response.body()
-                        repo?.account?.let { onComplete(it) }
+                        onComplete(repo?.account)
                         SharedPrefs().getInstance().put(LoginViewModel.USER_INFO_KEY, repo?.account)
-                    }
+                    }else onComplete(null)
                 }
             })
     }

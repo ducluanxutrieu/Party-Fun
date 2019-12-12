@@ -4,22 +4,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.uit.party.ui.main.history_book.HistoryBookingViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/colorWhile">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_list_ordered"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:linearRecyclerData="@{viewModel.mListOrdered}"/>
-    </LinearLayout>
+            android:orientation="vertical"
+            android:background="@color/colorWhile">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_list_ordered"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:linearRecyclerData="@{viewModel.mListOrdered}"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorCrystalClear"
+            android:clickable="false"
+            android:elevation="@dimen/_5sdp"
+            android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
 </layout>

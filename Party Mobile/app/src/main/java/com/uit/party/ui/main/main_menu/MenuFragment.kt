@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.main_menu
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
@@ -22,7 +23,6 @@ import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.model.DishModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 import com.uit.party.util.rxbus.RxBus
@@ -49,21 +49,24 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         setupBinding(container, inflater)
-
+        setupRecyclerView()
         return binding.root
     }
 
-    private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
-
-        binding.viewModel = mViewModel
+    private fun setupRecyclerView() {
         binding.recyclerView.adapter = mViewModel.mMenuAdapter
+        binding.recyclerView.setHasFixedSize(false)
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 binding.fabAddDish.isExtended = dy < 0
             }
         })
+    }
+
+    private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
+        binding.viewModel = mViewModel
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -161,12 +164,14 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 //            binding.fabAddDish.text = textFab
 
             if (it.cardDish != null) {
-                val b = GlobalApplication().loadBitmapFromView(
+/*                val b = GlobalApplication().loadBitmapFromView(
                     it.cardDish,
                     it.cardDish.width,
                     it.cardDish.height
-                )
-                animateView(it.cardDish, b)
+                )*/
+
+                startAnimationAddToCard()
+                //animateView(it.cardDish, b)
             }
         }
 
@@ -175,6 +180,29 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                 mViewModel.mMenuAdapter.updateDish(it.dishModel, it.dishType, it.position)
             }
         }
+    }
+
+    private fun startAnimationAddToCard() {
+        binding.lavAddToCart.visibility = View.VISIBLE
+        binding.lavAddToCart.playAnimation()
+        binding.lavAddToCart.addAnimatorListener(object : Animator.AnimatorListener{
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                binding.lavAddToCart.cancelAnimation()
+                binding.lavAddToCart.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+//                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
     }
 
     private fun animateView(foodCardView: View, b: Bitmap) {

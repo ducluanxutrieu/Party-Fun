@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.uit.party.ui.signin.login.LoginViewModel" />
@@ -111,13 +111,23 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <ProgressBar
-            android:id="@+id/loading_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:visibility="@{viewModel.showLoading}" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorCrystalClear"
+            android:clickable="false"
+            android:elevation="@dimen/_5sdp"
+            android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"

@@ -5,7 +5,6 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
@@ -34,7 +33,7 @@ class ChangePasswordViewModel : ViewModel() {
     private var currentPasswordText = ""
     private var newPasswordText = ""
 
-    var showLoading = ObservableInt(View.GONE)
+    val mShowLoading = ObservableBoolean(false)
     private var mOrderCode = "CHANGE"
 
     fun init(orderCode: String) {
@@ -93,7 +92,7 @@ class ChangePasswordViewModel : ViewModel() {
     }
 
     private fun sendConfirmPassword(onComplete: (Boolean) -> Unit) {
-        MainActivity.serviceRetrofit.vertifyPassword(currentPasswordText, newPasswordText)
+        MainActivity.serviceRetrofit.verifyPassword(currentPasswordText, newPasswordText)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     onComplete(false)
@@ -121,14 +120,17 @@ class ChangePasswordViewModel : ViewModel() {
     }
 
     fun onSendClicked(view: View) {
+        mShowLoading.set(true)
         if (mOrderCode == "CHANGE"){
             sendChangePassword {success ->
+                mShowLoading.set(false)
                 if (success){
                     view.findNavController().popBackStack()
                 }
             }
         }else{
             sendConfirmPassword{ success ->
+                mShowLoading.set(false)
                 if (success){
                     view.findNavController().navigate(R.id.action_ResetPasswordFragment_back_LoginFragment)
                 }

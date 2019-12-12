@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
@@ -36,13 +35,13 @@ class LoginViewModel : ViewModel() {
     private var usernameText = ""
     private var passwordText = ""
 
-    var showLoading: ObservableInt = ObservableInt(View.GONE)
+    val mShowLoading = ObservableBoolean(false)
 
     fun onLoginClicked(view: View) {
-        showLoading.set(View.VISIBLE)
+        mShowLoading.set(true)
         val loginModel = LoginModel(usernameText, passwordText)
         login(loginModel) { success ->
-            showLoading.set(View.GONE)
+            mShowLoading.set(false)
             if (success != null) {
                 when (success) {
                     "Success" -> {

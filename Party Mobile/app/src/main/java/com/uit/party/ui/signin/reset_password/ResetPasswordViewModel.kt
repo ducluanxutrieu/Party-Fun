@@ -5,7 +5,6 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
@@ -20,7 +19,7 @@ import retrofit2.Response
 class ResetPasswordViewModel :ViewModel(){
     var errorUsername: ObservableField<String> = ObservableField()
     private var usernameText = ""
-    var mShowLoading: ObservableInt = ObservableInt(View.GONE)
+    val mShowLoading = ObservableBoolean(false)
     val mNextButtonEnabled: ObservableBoolean = ObservableBoolean()
 
 
@@ -58,7 +57,9 @@ class ResetPasswordViewModel :ViewModel(){
     }
 
     fun onSendClicked(view: View){
+        mShowLoading.set(true)
         resetPassword(usernameText){
+            mShowLoading.set(false)
             if (it) {
                 val action = ResetPasswordFragmentDirections.actionResetPasswordFragmentToChangePasswordFragment("RESET")
                 view.findNavController().navigate(action)

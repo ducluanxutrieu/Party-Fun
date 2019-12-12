@@ -1,6 +1,7 @@
 package com.uit.party.ui.main.main_menu
 
 import android.view.View
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
@@ -19,12 +20,15 @@ import retrofit2.Response
 
 class MenuViewModel : ViewModel(){
     val mShowFab = ObservableInt(View.GONE)
+    val mShowLoading = ObservableBoolean(false)
+    val mShowMenu = ObservableBoolean(false)
     val mMenuAdapter = MenuAdapter()
 
     var listMenu = ArrayList<DishModel>()
 
     init {
         if (listMenu.isNullOrEmpty()) {
+            mShowMenu.set(false)
             getListDishes {}
         }else{
             mMenuAdapter.setData(listMenu)
@@ -44,23 +48,27 @@ class MenuViewModel : ViewModel(){
     }
 
     fun getListDishes(onComplete : (Boolean) -> Unit){
+        mShowLoading.set(true)
         serviceRetrofit.getListDishes(TOKEN_ACCESS)
             .enqueue(object : Callback<DishesResponse>{
                 override fun onFailure(call: Call<DishesResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
                     onComplete(false)
+                    mShowLoading.set(false)
                 }
 
                 override fun onResponse(
                     call: Call<DishesResponse>,
                     response: Response<DishesResponse>
                 ) {
+                    mShowLoading.set(false)
                     onComplete(true)
                     if (response.isSuccessful){
                         val dishes = response.body()?.lishDishs
                         if (dishes != null){
                             listMenu = dishes
                             mMenuAdapter.setData(listMenu)
+                            mShowMenu.set(true)
                         }
                     }
                 }
@@ -68,17 +76,20 @@ class MenuViewModel : ViewModel(){
     }
 
     fun logout(onSuccess : (Boolean) -> Unit) {
+        mShowLoading.set(true)
         serviceRetrofit.logout(TOKEN_ACCESS)
             .enqueue(object : Callback<BaseResponse>{
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
                     onSuccess(false)
+                    mShowLoading.set(false)
                 }
 
                 override fun onResponse(
                     call: Call<BaseResponse>,
                     response: Response<BaseResponse>
                 ) {
+                    mShowLoading.set(false)
                     val repo = response.body()
                     if (repo != null && response.code() == 200){
                         onSuccess(true)

@@ -15,8 +15,9 @@ import java.util.*
 @Suppress("UNCHECKED_CAST")
 @BindingAdapter("app:gridRecyclerData")
 fun <T> setupGridRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
-    recyclerView.setHasFixedSize(true)
-    val layoutManager = LinearLayoutManager(recyclerView.context, LinearLayoutManager.HORIZONTAL, false)
+    recyclerView.setHasFixedSize(false)
+//    val layoutManager = LinearLayoutManager(recyclerView.context, LinearLayoutManager.HORIZONTAL, false)
+    val layoutManager = GridLayoutManager(recyclerView.context, 2)
     recyclerView.layoutManager = layoutManager
 
     if (recyclerView.adapter is BindableAdapter<*>) {
@@ -27,7 +28,7 @@ fun <T> setupGridRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
 @Suppress("UNCHECKED_CAST")
 @BindingAdapter("app:linearRecyclerData")
 fun <T> setupLinearRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
-    recyclerView.setHasFixedSize(true)
+    recyclerView.setHasFixedSize(false)
     val layoutManager = LinearLayoutManager(recyclerView.context)
     recyclerView.layoutManager = layoutManager
 

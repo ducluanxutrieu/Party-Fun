@@ -2,7 +2,7 @@
 <layout>
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.uit.party.ui.signin.register.RegisterViewModel" />
@@ -155,9 +155,27 @@
                     android:layout_marginEnd="@dimen/margin_field_form_horizontal"
                     android:layout_marginBottom="@dimen/margin_vertical_item_form"
                     android:enabled="@{viewModel.btnRegisterEnabled}"
-                    android:onClick="@{() -> viewModel.onRegisterClicked()}"
+                    android:onClick="@{(view) -> viewModel.onRegisterClicked(view)}"
                     android:text="@string/register" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorCrystalClear"
+            android:clickable="false"
+            android:elevation="@dimen/_5sdp"
+            android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
     </RelativeLayout>
 </layout>
