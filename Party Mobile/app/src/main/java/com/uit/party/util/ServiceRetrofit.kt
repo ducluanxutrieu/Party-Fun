@@ -62,7 +62,8 @@ interface ServiceRetrofit {
     @POST("user/uploadavatar")
     fun updateAvatar(
         @Header("authorization") token: String,
-        @Part image: MultipartBody.Part, @Part("image") requestBody: RequestBody
+        @Part image: MultipartBody.Part,
+        @Part("image") requestBody: RequestBody
     ): Call<BaseResponse>
 
     @Multipart

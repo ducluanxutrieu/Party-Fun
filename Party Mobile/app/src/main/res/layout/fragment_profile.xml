@@ -31,7 +31,7 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="50dp"
                 app:cardCornerRadius="75dp">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -63,8 +63,9 @@
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_edit_black_24dp"
-                    android:tint="@color/colorPrimaryDark" />
+                    app:srcCompat="@drawable/ic_edit_black_24dp"
+                    app:tint="@color/colorPrimaryDark"
+                    tools:ignore="PrivateResource" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_edit"
@@ -138,7 +139,7 @@
                 android:textSize="30sp"
                 tools:text="Trần Đức Luân" />
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tv_full_name">
@@ -198,13 +199,11 @@
                         android:text="@string/birthday" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_birthday"
                         style="@style/TextViewContent"
-                        android:text="@{viewModel.mBirthDay}"
+                        android:text="@{viewModel.MBirthDay}"
                         tools:text="01/01/1997" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
         </RelativeLayout>
 
         <ProgressBar
