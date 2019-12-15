@@ -13,8 +13,8 @@ import { api } from '../../../_api/apiUrl'
   styleUrls: ['./user-checkout.component.css']
 })
 export class UserCheckoutComponent implements OnInit {
-  private items: Item[] = [];
-  private total: number = 0;
+  items: Item[] = [];
+  total: number = 0;
   private numOfTable = 1;
   private deliveryDate;
   // private deliveryTime;
@@ -41,12 +41,12 @@ export class UserCheckoutComponent implements OnInit {
       var item = this.items[i];
       item_ordered.push(
         {
-          name: item.product.name,
+          _id: item.product._id,
           numberDish: item.quantity
         }
       )
     }
-    let body = `lishDishs=${JSON.stringify(item_ordered)}&dateParty=${this.deliveryDate}`;
+    let body = `lishDishs=${JSON.stringify(item_ordered)}&numbertable=${this.numOfTable}&dateParty=${this.deliveryDate}&discount="0"`;
     console.log(body);
     this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
       sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
@@ -65,7 +65,7 @@ export class UserCheckoutComponent implements OnInit {
   }
   changeOfDate(event: any) {
     this.deliveryDate = event.target.value;
-    this.deliveryDate = this.datepipe.transform(this.deliveryDate, 'dd/MM/yyyy HH:mm');
+    this.deliveryDate = this.datepipe.transform(this.deliveryDate, 'MM/dd/yyyy HH:mm');
   }
   // changeOfTime(event: any) {
   //   this.deliveryTime = event.target.value;

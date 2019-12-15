@@ -25,6 +25,7 @@ import { UserCartComponent } from './User/Cart/user-cart/user-cart.component';
 import { UserCheckoutComponent } from './User/Cart/user-checkout/user-checkout.component';
 import { ProductDetailComponent } from './Products/product-detail/product-detail.component';
 import { ProductCategoryComponent } from './Products/product-category/product-category.component';
+import { AboutComponent } from './about/about.component';
 
 
 const routes: Routes = [
@@ -68,9 +69,9 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'mainpage', component: MainpageComponent },
-  { path: 'productDetail', component: ProductDetailComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'category/:filter', component: ProductCategoryComponent },
+  { path: 'about', component: AboutComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];

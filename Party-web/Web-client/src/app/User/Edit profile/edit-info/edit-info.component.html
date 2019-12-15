@@ -73,20 +73,20 @@
             }
         </style>
     </head>
-    <body>
-        <div class="editinfo-container container">
-            <div class="settingPanel">
-                <div class="panel-title">Edit profile</div>
-                <hr>
-                <ul>
-                    <li class="navi-link"><a routerLink="/editProfile/profile"><div class="panel-icon"><img src="../../../../assets/icon/user-icon.png"></div>Sửa thông tin cá nhân</a></li>
-                    <li class="navi-link"><a routerLink="/editProfile/picture"><div class="panel-icon"><img src="../../../../assets/icon/avatar-icon.png"></div>Sửa avatar</a></li>
-                    <li class="navi-link"><a routerLink="/editProfile/password"><div class="panel-icon"><img src="../../../../assets/icon/password-icon.png"></div>Sửa mật khẩu</a></li>
-                </ul>
-            </div>
-            <div class="setting-content">
-                <router-outlet (activate)="changeOfRoutes()"></router-outlet>
-            </div>
+<body>
+    <div class="editinfo-container container">
+        <div class="settingPanel">
+            <div class="panel-title">Edit profile</div>
+            <hr>
+            <ul>
+                <li class="navi-link"><a href="/editProfile/profile"><div class="panel-icon"><img src="../../../../assets/icon/user-icon.png"></div>Sửa thông tin cá nhân</a></li>
+                <li class="navi-link"><a href="/editProfile/picture"><div class="panel-icon"><img src="../../../../assets/icon/avatar-icon.png"></div>Sửa avatar</a></li>
+                <li class="navi-link"><a href="/editProfile/password"><div class="panel-icon"><img src="../../../../assets/icon/password-icon.png"></div>Sửa mật khẩu</a></li>
+            </ul>
         </div>
-    </body>
+        <div class="setting-content">
+            <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+        </div>
+    </div>
+</body>
 </html>

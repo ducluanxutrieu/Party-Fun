@@ -11,11 +11,11 @@ import { ProductService } from '../../../_services/product.service';
   styleUrls: ['./user-cart.component.css']
 })
 export class UserCartComponent implements OnInit {
-  private items: Item[] = [];
-  private total: number = 0;
+  items: Item[] = [];
+  total: number = 0;
 
   constructor(
-    private productService: ProductService,
+    public productService: ProductService,
     private router: Router
   ) { }
 

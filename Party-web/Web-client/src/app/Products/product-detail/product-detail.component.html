@@ -11,6 +11,20 @@
             background: #eee;
             font-family: Roboto, Helvetica, sans-serif;
         }
+        .product-thumb{
+            overflow: hidden;
+            max-height: 3.5em;
+            width: auto;
+        }
+        .testimonial-group > .row {
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+            }
+        .testimonial-group > .row > .col-xs-2 {
+            display: inline-block;
+            float: none;
+        }
     </style>
 </head>
 <body>
@@ -20,32 +34,30 @@
                 <div class="wrapper row">
                     <div class="preview col-md-6">
                         <div class="preview-pic tab-content">
-                            <div class="tab-pane active" id="pic-1"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-2"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252" /></div>
+                            <!-- <div class="tab-pane" [attr.id]="i" [ngClass]="{'active' : i==0}"><img src={{image}} onError="http://placekitten.com/400/252" /></div> -->
+                            <div class="tab-pane active" id="pic-0"><img src={{product_data?.image[0]}}  onError="this.src='http://placekitten.com/400/252'" /></div>
+                            <div class="tab-pane" id="pic-1"><img src={{product_data?.image[1]}}/></div>
+                            <div class="tab-pane" id="pic-2"><img src={{product_data?.image[2]}} /></div>
+                            <div class="tab-pane" id="pic-3"><img src={{product_data?.image[3]}} /></div>
+                            <div class="tab-pane" id="pic-4"><img src={{product_data?.image[4]}} /></div>
                         </div>
-                        <ul class="preview-thumbnail nav nav-tabs">
-                            <li><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-2" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-3" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-5" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
+                        <ul class="preview-thumbnail nav nav-tabs" >
+                            <!-- <ng-container *ngFor="let image of product_data.image ; let i=index">
+                                <li [ngClass]="{'active' : i==0}"><a [attr.data-target]="'#'+i" data-toggle="tab" *ngIf="i<5"><img class="product-thumb" src={{image}} onError="http://placekitten.com/200/126"/></a></li>
+                            </ng-container> -->
+                            <li><a data-target="#pic-0" data-toggle="tab"><img src={{product_data?.image[0]}} /></a></li>
+                            <li><a data-target="#pic-1" data-toggle="tab"><img src={{product_data?.image[1]}} /></a></li>
+                            <li><a data-target="#pic-2" data-toggle="tab"><img src={{product_data?.image[2]}} /></a></li>
+                            <li><a data-target="#pic-3" data-toggle="tab"><img src={{product_data?.image[3]}} /></a></li>
+                            <li><a data-target="#pic-4" data-toggle="tab"><img src={{product_data?.image[4]}} /></a></li>
                         </ul>
                     </div>
                     <div class="details col-md-6" >
                         <h3 class="product-title">{{product_data.name}}</h3>
-                        <!-- <div class="rating">
-                            <div class="stars">
-                                <span class="fa fa-star checked"></span>
-                                <span class="fa fa-star checked"></span>
-                                <span class="fa fa-star checked"></span>
-                                <span class="fa fa-star"></span>
-                                <span class="fa fa-star"></span>
-                            </div>
-                            <span class="review-no">41 reviews</span>
-                        </div> -->
+                        <div class="rating">
+                            <bar-rating [rate]="product_data.rate.average" [max]="5" [theme]="'fontawesome'" [readOnly]="true"></bar-rating>
+                            <span (click)="scroll(review)" class="review-no review-link">{{product_data.rate.totalpeople}} nhận xét</span>
+                        </div>
                         <p style="font-weight: bold">Mô tả:</p>
                         <p class="product-description">{{product_data.description}}</p>
                         <p class="category">Loại: <a href="/category/{{product_data.type}}"><span>{{product_data.type}}</span></a></p>
@@ -65,9 +77,9 @@
         <h6 class="sub-header" *ngIf="suggest_list.length">Sản phẩm cùng loại</h6>
         <div class="card" *ngIf="suggest_list.length">
             <div class="row suggest-row">
-                <div class="col-lg-2 col-md-2 col-xs-2" *ngFor="let item of suggest_list; let i=index">
+                <div class="col-lg-2 col-md-2 col-xs-2 suggest-item" *ngFor="let item of suggest_list; let i=index">
                     <div class="card h-100" *ngIf="i<6">
-                        <a href="/product/{{item._id}}"><img class="item-image" class="card-img-top" src={{item.image[0]}} onError="this.src='../../../assets/images/dish-thumbnail-default.png';" alt=""></a>
+                        <a href="/product/{{item._id}}"><img class="card-img-top suggest-item-thumb" src={{item.image[0]}} onError="this.src='../../../assets/images/dish-thumbnail-default.png';" alt=""></a>
                         <div class="card-body">
                             <h6 class="card-title">
                                 <a href="/product/{{item._id}}">{{item.name}}</a>
@@ -78,6 +90,8 @@
                 </div>                
             </div>
         </div>
+        <h6 #review class="sub-header">Đánh giá sản phẩm</h6>
+        <app-product-rating [productId]="product_data._id"></app-product-rating>
     </div>
 </body>
 </html>

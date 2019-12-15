@@ -69,7 +69,7 @@
             width: 200px;
         }
         .info-group{
-            margin: 30px;
+            margin: 25px;
         }
     </style>
 </head>
@@ -81,7 +81,7 @@
             <label class="info1">Họ và tên: <span class="info-content">{{userInfo.fullName}}</span></label>
         </div>
         <div class="info-group">
-            <label class="info1">Giới tính: <span class="info-content">{{userInfo.sex}}</span></label>
+            <label class="info1">Giới tính: <span class="info-content" *ngIf="userInfo.sex=='Male'">Nam</span><span class="info-content" *ngIf="userInfo.sex=='Female'">Nữ</span></label>
         </div>
         <div class="info-group">
             <label class="info1">Ngày sinh: <span class="info-content">{{userInfo.birthday | date: 'dd/MM/yyyy'}}</span></label>
@@ -96,8 +96,8 @@
             <label class="info1">Ngày tham gia: <span class="info-content">{{userInfo.createAt}}</span></label>
         </div>
     </div>
-    <div class="user-avatar">
-        <img class="avatarinfo" src={{avtUrl}}>
+    <div class="user-avatar text-center">
+        <img class="rounded img-thumbnail img-fluid" src={{avtUrl}}>
     </div>
 </body>
 </html>

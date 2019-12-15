@@ -43,8 +43,9 @@ export class MainpageComponent implements OnInit {
     );
   }
   getNewProducts() {
-    for (var i = this.dishes_Data.length - 1; i > this.dishes_Data.length - 4; i--) {
-      this.new_products.push(this.dishes_Data[i]);
+    let temp_product_list = this.productService.findAll();
+    for (var i = temp_product_list.length - 1; i > temp_product_list.length - 4; i--) {
+      this.new_products.push(temp_product_list[i]);
     }
     console.log(this.new_products);
   }
@@ -71,7 +72,7 @@ export class MainpageComponent implements OnInit {
   }
   ngOnInit() {
     this.getDishList();
-    this.dishes_Data = JSON.parse(localStorage.getItem('dish-list'));
+    // this.dishes_Data = JSON.parse(localStorage.getItem('dish-list'));
     this.getNewProducts();
   }
 }

@@ -25,4 +25,4 @@ $project01-theme: mat-light-theme($project01-primary, $project01-accent, $projec
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($project01-theme);
-
+@import '~ngx-bar-rating/themes/br-fontawesome-theme';

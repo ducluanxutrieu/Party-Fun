@@ -92,13 +92,13 @@
                 <label for="gender">Giới tính</label>
                 <!--input id="gender" type="text" name="gender" ngModel-->
                 <select id="gender" name="gender" ngModel [(ngModel)]="userInfo.sex">
-                    <option value="Ẩn">Ẩn</option>
-                    <option value="Nam">Nam</option>
-                    <option value="Nữ">Nữ</option>
-                    <option value="undefined">?</option>
+                    <!-- <option value="Hide">Hide</option> -->
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                    <!-- <option value="undefined">?</option> -->
                 </select>
                 <label for="birthday">Ngày sinh</label>
-                <input id="birthday" type="date" name="birthday" ngModel [(ngModel)]="userInfo.birthday" #birthday="ngModel">
+                <input id="birthday" type="date" name="birthday" ngModel [ngModel]="userInfo.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" (change)="changeOfDate($event)">
                 <label for="phonenumber">Số điện thoại</label>
                 <input id="phonenumber" type="tel" name="phonenumber" ngModel required [(ngModel)]="userInfo.phoneNumber" maxlength="12" minlength="10" ngModel #phonenum="ngModel">
                 <div class="alert" role="alert" *ngIf="phonenum.invalid && phonenum.touched">Vui lòng điền Số điện thoại hợp lệ</div>

@@ -23,9 +23,10 @@ body {
   
   .preview-pic {
     -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
+    /* -webkit-flex-grow: 1; */
         -ms-flex-positive: 1;
-            flex-grow: 1; }
+            /* flex-grow: 1;  */
+          }
   
   .preview-thumbnail.nav-tabs {
     border: none;
@@ -43,7 +44,8 @@ body {
         margin-right: 0; }
   
   .tab-content {
-    overflow: hidden; }
+    overflow: hidden; 
+  }
     .tab-content img {
       width: 100%;
       -webkit-animation-name: opacity;
@@ -96,7 +98,14 @@ body {
     text-align: center;
     width: 5em;
   }
-
+  span.review-link:hover{
+    cursor: pointer;
+    color: #007BFF;
+  }
+  .suggest-item-thumb{
+    min-height: 6em;
+    max-height: 6em;
+  }
   .checked, .price span {
     color: #ff9f1a; }
   

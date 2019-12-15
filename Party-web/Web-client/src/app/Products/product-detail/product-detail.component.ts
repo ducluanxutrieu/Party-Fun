@@ -29,6 +29,7 @@ export class ProductDetailComponent implements OnInit {
     // if(this.product_data.type){
     //   this.product_filter(this.product_data.type);
     // }
+    // console.log(this.product_data);
     this.product_filter(this.product_data.type);
   }
 
@@ -45,5 +46,8 @@ export class ProductDetailComponent implements OnInit {
         this.suggest_list.push(this.products_list[i]);
       }
     }
+  }
+  scroll(el: HTMLElement) {
+    el.scrollIntoView();
   }
 }

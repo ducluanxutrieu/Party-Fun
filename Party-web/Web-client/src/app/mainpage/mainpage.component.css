@@ -5,3 +5,10 @@
 .category-row{
   padding: 1em;
 }
+.card-text{
+  height: 3em;
+  overflow: hidden;
+}
+.item-thumb{
+  max-height: 10em;
+}

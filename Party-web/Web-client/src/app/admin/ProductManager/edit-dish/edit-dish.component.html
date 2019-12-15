@@ -95,7 +95,7 @@
 </head>
 <body>
     <div class="content-container">
-        <form #editdishForm = "ngForm" (ngSubmit) = "onClickSubmit(editdishForm.value)" id="editDish">
+        <form #editdishForm = "ngForm" id="editDish">
             <header>Sửa món ăn</header>
             <label for="name">Tên món</label>
             <input id="name" type="text" name="name" ngModel required #dishname="ngModel">
@@ -117,8 +117,8 @@
             <label for="promotion">Khuyến mãi</label>
             <input id="promotion" type="number" name="promotion" ngModel>
             <label>Ảnh</label>
-            <input class="file-input" id="image1" type="file" accept="image/x-png,image/gif,image/jpeg" multiple="multiple" name="image1" (change)="fileChanged($event)" ngModel>
-            <input class="file-input" id="image2" type="file" accept="image/x-png,image/gif,image/jpeg" name="image2" (change)="fileChanged($event)" ngModel>
+            <input class="file-input" id="image1" type="file" accept="image/x-png,image/gif,image/jpeg" multiple="multiple" name="image1" ngModel>
+            <input class="file-input" id="image2" type="file" accept="image/x-png,image/gif,image/jpeg" name="image2" ngModel>
             <button type="submit" form="editDish" [disabled]="editdishForm.invalid">Thêm</button>
         </form>
     </div>

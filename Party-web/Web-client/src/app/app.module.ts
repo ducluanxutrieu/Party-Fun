@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -42,6 +41,10 @@ import { DatePipe } from '@angular/common';
 import { ProductDetailComponent } from './Products/product-detail/product-detail.component';
 import { ProductCategoryComponent } from './Products/product-category/product-category.component';
 import { SearchComponent } from './Products/search/search.component';
+import { UserService } from './_services/user.service';
+import { ProductRatingComponent } from './Products/product-rating/product-rating.component';
+import { BarRatingModule } from "ngx-bar-rating";
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +76,9 @@ import { SearchComponent } from './Products/search/search.component';
     UserCheckoutComponent,
     ProductDetailComponent,
     ProductCategoryComponent,
-    SearchComponent
+    SearchComponent,
+    ProductRatingComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,8 +88,9 @@ import { SearchComponent } from './Products/search/search.component';
     BrowserAnimationsModule,
     MatExpansionModule,
     MatTableModule,
+    BarRatingModule
   ],
-  providers: [AuthenticationService, AuthGuard, StoreService, ProductService, DatePipe],
+  providers: [AuthenticationService, AuthGuard, StoreService, ProductService, DatePipe, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

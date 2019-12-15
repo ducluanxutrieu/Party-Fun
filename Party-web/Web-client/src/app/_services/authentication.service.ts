@@ -32,7 +32,7 @@ export class AuthenticationService {
             this.router.navigate(['/mainpage']);
         },
             err => {
-                alert("Lỗi: " + err.status + " " + err.statusText);
+                alert("Lỗi: " + err.status + " " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             });
     }

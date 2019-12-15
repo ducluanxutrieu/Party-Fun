@@ -18,7 +18,7 @@ export class AppComponent {
   userName: string;
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     private http: HttpClient
   ) { }
   ngOnInit() {

@@ -1,1 +1,66 @@
-<p>user-cart-info works!</p>
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <div class="infoheader">Thông tin đơn hàng</div>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ngày đặt</th>
+            <th scope="col">Ngày tổ chức</th>
+            <th scope="col">Số bàn</th>
+            <th scope="col">Tổng giá</th>
+            <th scope="col">Thanh toán</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cart-table-item" *ngFor="let item of userData?.userCart; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(item)">
+            <th scope="row">{{i+1}}</th>
+            <td>{{item.createAt}}</td>
+            <td>{{item.dateParty}}</td>
+            <td>{{item.numbertable}}</td>
+            <td>{{item.totalMoney | number}}</td>
+            <td><span *ngIf="!item.paymentstatus">Chưa thanh toán</span><span *ngIf="item.paymentstatus">Đã thanh toán</span></td>
+            <!-- Cart Detail Modal-->
+            <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="CartDetailModalLabel">Danh sách món trong đơn</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let itemDetail of cartDetail; let i = index">
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{productService.find(itemDetail._id).name}}</td>
+                                <td>{{productService.find(itemDetail._id).price | number}}</td>
+                                <td>{{itemDetail.numberDish | number}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+      
+</body>
+</html>

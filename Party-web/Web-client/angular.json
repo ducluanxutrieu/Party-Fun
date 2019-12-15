@@ -28,8 +28,8 @@
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/jquery/jquery.min.js",
-              "node_modules/bootstrap/js/bootstrap.bundle.min.js"
+              "src/vendor/jquery/jquery.min.js",
+              "src/vendor/bootstrap/js/bootstrap.bundle.min.js"
             ]
           },
           "configurations": {
@@ -122,6 +122,10 @@
               "devServerTarget": "project01:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }

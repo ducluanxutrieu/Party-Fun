@@ -37,7 +37,7 @@ export class UserloginComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.authenticationService.loggedIn){
+    if(this.authenticationService.loggedIn()){
       this.router.navigate(['/mainpage']);
     }
    }
