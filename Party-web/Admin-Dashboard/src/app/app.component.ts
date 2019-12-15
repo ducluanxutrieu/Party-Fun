@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+
+//services
 import { AuthenticationService } from './_services/authentication.service';
 
 @Component({
@@ -14,14 +16,11 @@ export class AppComponent {
   avtUrl;
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    public authenticationService: AuthenticationService,
     private http: HttpClient
   ) { }
 
   ngOnInit() {
-    // if (!this.authenticationService.isAdmin()) {
-    //   this.router.navigate(['/login']);
-    // }
     this.getuserInfo();
   }
   changeOfRoutes() {
@@ -30,5 +29,9 @@ export class AppComponent {
   getuserInfo() {
     this.userInfo = JSON.parse(localStorage.getItem('userinfo'));
     this.avtUrl = localStorage.getItem('avatar');
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 }

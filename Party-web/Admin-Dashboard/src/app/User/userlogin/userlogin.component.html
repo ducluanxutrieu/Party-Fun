@@ -1,276 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
     <title>Đăng nhập</title>
-	<style>
-        html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,nav ul,nav li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
-        article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section {display: block;}
-        ol,ul{list-style:none;margin:0px;padding:0px;}
-        blockquote,q{quotes:none;}
-        blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
-        table{border-collapse:collapse;border-spacing:0;}
-        img{max-width:100%;}
-        html, body{
-            font-size: 100%;
-            font-family: Roboto, Helvetica, sans-serif;
-            background-size:cover;
-            background-attachment:fixed;
-            -webkit-background-size:cover;
-            -moz-background-size:cover;
-            -o-background-size:cover;
-            -ms-background-size:cover;
-        }
-        h1,h2,h3,h4,h5,h6,input,p,a,select,button,textarea{
-            font-family: 'Montserrat', sans-serif;
-            margin:0;
-        }
-        ul,label{
-            margin:0;
-            padding:0;
-        }
-        body a:hover,body a{
-            text-decoration:none;
-        }
-        .login {
-            min-height: 80vh;
-            width: 400px;
-            margin: 16px auto;
-            font-size: 16px;
-        }
-		.form_container{
-            margin : 55px auto;
-            width:400px;
-            background: rgb(234, 243, 255);
-            padding-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #33b5e5;
-        }
-        .login-form{
-            border-radius: 5px;
-        }
-        .login-form #username {
-            color:#ccc6c6;
-        }
-
-        .login-form #username:hover {
-            border-color: #f37d42;
-        }
-
-		form {
-            background: rgb(234, 243, 255);
-            width: 100%;
-            color: #333;
-        }
-        form header {
-            text-align: center;
-            background: #bb4e14;
-            padding: 15px 10px;
-            color: white;
-            font-size: 1.4em;
-            border-radius: 5px 5px 0px 0px;
-        }
-        form label {
-            font-weight: 500;
-            margin-left: 20px;
-            display: inline-block;
-            margin-top: 20px;
-            margin-bottom: 5px;
-        }
-        form input {
-            display: block;
-            width: 80%;
-            margin-left: 20px;
-            padding: 5px 20px;
-            font-size: 1em;
-            border-radius: 3px;
-            outline: none;
-			border: 1px solid #ccc;
-		}
-        form .checkbox{
-            display: inline;
-            width: 20px;
-            padding: 0px;
-            margin-left: 0px;
-        }
-		form input::placeholder{
-			font-size: 0.9em;
-		}
-        form .login-button {
-            width: 90%;
-            background-color:#ffae70;
-            color: white;
-            margin-left: 20px;
-            padding: 10px 20px;
-            border: none;
-            font-size:14px;
-            letter-spacing:1px;
-            cursor: pointer;
-            outline:none;
-            transition: .5s ease-in;
-            -webkit-transition: .5s ease-in;
-            -ms-transition: .5s ease-in;
-            -o-transition: .5s ease-in;
-            -moz-transition:.5s ease-in;
-        }
-        /* form .register{
-            margin-left: 40%;;
-            margin-top: 0px;
-            margin-bottom: 30px;
-            color: #14a6fa;
-            font-size: 1.1em;
-        } */
-        form button:hover {
-            background: #ef4d4d;
-        }
-        .form-link{
-            text-decoration: none;
-            font-size: 0.8em;
-            color: #14a6fa;
-            float:right;
-            margin-right: 20px;
-        }
-        .form-link:hover{
-            color: #ff5252;
-            text-decoration: underline;
-        }
-        form .showpass{
-            font-size: 0.8em;
-            margin-left: 46%;
-            margin-right: 5px;
-            text-align: right;
-        }
-        form .alert{
-            margin-top: 6px;
-            margin-left: 20px;
-            color: red;
-            font-size: 0.8em;
-        }
-        .bottom-text {
-            box-sizing: border-box;
-            color: #666666;
-            font-size: 12px;
-            text-align: center;
-        }
-        .bottom-text p  {
-            margin-top: 15px;
-            font-size:14px;
-        }
-        .bottom-text a {
-            color: #f37d42;
-            text-decoration: none;
-            font-size:14px;
-        }
-
-        .bottom-text p a{
-            color:#f37d42;
-            margin-left: 5px;
-            transition: .5s ease-in;
-            -webkit-transition: .5s ease-in;
-            -ms-transition: .5s ease-in;
-            -o-transition: .5s ease-in;
-            -moz-transition: .5s ease-in;
-        }
-        .bottom-text p a:hover {
-            color:#ef4d4d; 
-        }
-        .bottom-text h4 {
-            font-size:10px;
-            color:#f37d42;
-            margin-top: 10px;
-            transition: .5s ease-in;
-            -webkit-transition: .5s ease-in;
-            -ms-transition: .5s ease-in;
-            -o-transition: .5s ease-in;
-            -moz-transition: .5s ease-in;
-        }
-        .bottom-text h4 a:hover {
-            color:#ef4d4d;
-        }
-        .bottom-header h3 {
-            color: #f37d42;
-            text-align: center;
-            font-size:20px;
-            margin: 18px 0;
-        }
-        .social-links ul li {
-            display: inline-block;
-        }
-        .social-links {
-            margin: 0px 0px 18px 0px;
-            text-align: center;
-        }
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            text-align: center;
-            display: inline-block;
-            border-radius: 50%;
-            font-size: 24px;
-            color: #fff;
-            opacity: 0.75;
-            transition: opacity 0.15s linear;
-        }
-        .social-links a:hover {
-            opacity: 1;
-            cursor: pointer;
-        }
-        .social-links i {
-            line-height: 43px;
-            font-size: 18px;
-        }
-        .facebook {
-            background: #3b5998;
-        }
-
-        .twitter {
-            background: #55acee;
-        }
-
-        .googleplus {
-            background: #dd4b39;
-        }
-	</style>
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="../../../assets/css/fontastic.css">
+	<link rel="stylesheet" href="../../../assets/css/style.default.css" id="theme-stylesheet">
 </head>
 <body>
-    <div class="login">
-        <div class="form_container">
-            <form class="login-form" #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)" id="loginform">
-                <header>Đăng nhập</header>
-                <label for="username">Tên đăng nhập</label>
-                <br>
-                <input id="username" type="text" name="username" required placeholder="Nhập username" ngModel #username="ngModel">
-                <div class="alert" role="alert" *ngIf="username.invalid && username?.touched">Vui lòng điền Tên đăng nhập!</div>
-                <br>
-                <label for="password" >Mật khẩu</label><span class="showpass"><input class="checkbox" type="checkbox">Hiện mật khẩu</span>
-                <br>
-                <input id="password" type="password" name="pwd" placeholder="Nhập password" ngModel required #pw="ngModel">
-                <div class="alert" role="alert" *ngIf="pw.invalid && pw.touched">Vui lòng điền mật khẩu!</div>
-                <br>
-                <button name="login" class="login-button" type="submit" form="loginform" value="Đăng nhập" [disabled]="userlogin.invalid">Đăng nhập</button><br>
-            </form>
-            <div class="second-section">
-                <div class="bottom-header">
-                    <h3>OR</h3>
+    <div class="page login-page">
+        <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+            <div class="row">
+            <!-- Logo & Information Panel-->
+            <div class="col-lg-6">
+                <div class="info d-flex align-items-center">
+                <div class="content">
+                    <div class="logo">
+                    <h1>Dashboard</h1>
+                    </div>
+                    <p>PartyBooking</p>
                 </div>
-                <div class="social-links">
-                    <ul>
-                      <li><a class="facebook" (click)="login()" target="blank"><i class="fa fa-facebook"></i></a></li>
-        
-                      <li><a class="twitter" href="#" target="blank"><i class="fa fa-twitter"></i></a></li>
-        
-                      <li><a class="googleplus" href="#" target="blank"><i class="fa fa-google-plus"></i></a></li>
-                    </ul>
                 </div>
             </div>
-            <div class="bottom-text">
-                <p>Chưa có tài khoản?<a href="/user_register">Đăng ký</a></p>
-                <h4> <a href="/forgotpassword">Quên mật khẩu?</a></h4>
+            <!-- Form Panel    -->
+            <div class="col-lg-6 bg-white">
+                <div class="form d-flex align-items-center">
+                    <div class="content">
+                        <form #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)" id="loginform" class="form-validate">
+                        <div class="form-group">
+                            <label for="login-username" class="label-material">User Name</label>
+                            <input id="login-username" type="text" name="username" ngModel #username="ngModel" required data-msg="Please enter your username" class="input-material">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password" class="label-material">Password</label>
+                            <input id="login-password" type="password" name="pwd" ngModel required #pw="ngModel" data-msg="Please enter your password" class="input-material">
+                        </div><button id="login" type="submit" form="loginform" [disabled]="userlogin.invalid" class="btn btn-primary">Login</button>
+                        <!-- </form><a href="#" class="forgot-pass">Forgot Password?</a><br><small>Do not have an account? </small><a href="register.html" class="signup">Signup</a> -->
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
+        </div>
     </div>
-	
 </body>
 </html>

@@ -3,10 +3,12 @@ import { api } from '../_api/apiUrl';
 import { Product } from '../_models/product.model'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Item } from '../_models/item.model'
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class ProductService {
+    private apiProductData = new BehaviorSubject<any>(null);
+    public productList = this.apiProductData.asObservable();
     products = [];
     cartItems: Item[] = [];
 
@@ -15,26 +17,27 @@ export class ProductService {
     ) {
         this.getDishList();
         this.loadCartItems();
+        this.productList.subscribe(data => this.products = data);
     }
 
-    getDishList(): any {
+    getDishList() {
         this.http.get(api.getdishlist, { observe: 'response' }).subscribe(
             res_data => {
                 sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
                 var response_body = JSON.parse(sessionStorage.getItem('response_body'));
-                this.products = response_body.lishDishs;
+                this.apiProductData.next(response_body.lishDishs);
                 localStorage.setItem('dish-list', JSON.stringify(response_body.lishDishs));
-                // console.log(this.products);
-                return this.products;
+                //console.log(this.products);
             },
             err => {
-                console.log("Lỗi: " + err.status + " " + err.statusText);
+                console.log("Lỗi: " + err.status + " " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
         );
     }
 
     findAll(): any[] {
+        this.products = JSON.parse(localStorage.getItem('dish-list'));
         return this.products;
     }
 

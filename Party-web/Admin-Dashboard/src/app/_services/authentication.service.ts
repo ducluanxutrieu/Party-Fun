@@ -21,18 +21,19 @@ export class AuthenticationService {
             'Content-type': 'application/x-www-form-urlencoded'
         })
         var results;
-        return this.http.post(this.apiLogin, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
+        this.http.post(this.apiLogin, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
             results = res_data.body;
-            alert("Đăng nhập thành công!");
-            //    sessionStorage.setItem('info',JSON.stringify(res_data));
-            localStorage.setItem('currentUser', JSON.stringify(results));
-            localStorage.setItem('token', results.account.token);
-            localStorage.setItem('userinfo', JSON.stringify(results.account));
-            localStorage.setItem('avatar', results.account.imageurl);
-            this.router.navigate(['/mainpage']);
+            if (results.account.role == "Admin" || results.account.role == "nhanvien") {
+                sessionStorage.setItem('response_body', JSON.stringify(results));
+                localStorage.setItem('token', results.account.token);
+                localStorage.setItem('userinfo', JSON.stringify(results.account));
+                localStorage.setItem('avatar', results.account.imageurl);
+                this.router.navigate(['/dashboard']);
+            }
+            else alert("Must be staff or admin account!");
         },
             err => {
-                alert("Lỗi: " + err.status + " " + err.statusText);
+                alert("Error: " + err.status + " " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             });
     }
@@ -46,7 +47,7 @@ export class AuthenticationService {
             sessionStorage.setItem('response', JSON.stringify(res_data.body));
             localStorage.clear();
             sessionStorage.clear();
-            this.router.navigate(['/user_login']);
+            this.router.navigate(['/login']);
         },
             err => {
                 sessionStorage.setItem('error', JSON.stringify(err));
@@ -62,7 +63,14 @@ export class AuthenticationService {
             var currentUser = JSON.parse(userinfo);
             if (currentUser.role == "Admin") return true;
         }
-
+        return false;
+    }
+    isStaff() {
+        if (this.loggedIn() == true) {
+            var userinfo = localStorage.getItem('userinfo');
+            var currentUser = JSON.parse(userinfo);
+            if (currentUser.role == "nhanvien") return true;
+        }
         return false;
     }
 }

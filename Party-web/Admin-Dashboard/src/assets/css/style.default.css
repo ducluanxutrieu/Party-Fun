@@ -1843,7 +1843,7 @@ input.input-material:focus {
   border-color: #796AEE;
 }
 
-input.input-material ~ label {
+/* input.input-material ~ label {
   color: #aaa;
   position: absolute;
   top: 14px;
@@ -1862,8 +1862,11 @@ input.input-material ~ label.active {
 
 input.input-material.is-invalid ~ label {
   color: #dc3545;
-}
+} */
 
+.label-material{
+  color: #796AEE;
+}
 .form-group-material {
   position: relative;
   margin-bottom: 30px;
@@ -1911,7 +1914,7 @@ input.input-material.is-invalid ~ label {
   height: 100%;
   display: block;
   z-index: -1;
-  background: url(../img/bg.jpg);
+  background: url('../background/bg1.jpg');
   background-size: cover;
   -webkit-filter: blur(10px);
   filter: blur(10px);

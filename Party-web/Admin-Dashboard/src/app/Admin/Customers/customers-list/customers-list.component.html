@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../assets/css/style.default.css" id="theme-stylesheet">
+</head>
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+          <nav class="side-navbar">
+            <!-- Sidebar Header-->
+            <div class="sidebar-header d-flex align-items-center">
+              <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../../../../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+              <div class="title">
+                  <a href="/profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
+                  <p>{{userService.get_userInfo().role}}</p>
+              </div>
+            </div>
+            <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
+            <ul class="list-unstyled">
+              <li><a href="/dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
+              <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
+              <!-- <li><a href="login.html"> <i class="icon-interface-windows"></i>Login page </a></li> -->
+            </ul>
+            <span class="heading">Mangement</span>
+            <ul class="list-unstyled">
+              <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
+                <ul id="ProductDropdown" class="collapse list-unstyled ">
+                  <li><a href="/products/list"><i class="fa fa-list"></i>Products List</a></li>
+                  <li><a href="/products/add"><i class="fa fa-plus"></i>Add Product</a></li>
+                  <!-- <li><a href="#">Page</a></li> -->
+                </ul>
+              </li>
+              <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
+                <ul id="EmployeeDropdown" class="collapse list-unstyled ">
+                  <li><a href="/employees/list"><i class="fa fa-list"></i>Employees List</a></li>
+                  <li><a href="/employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
+                </ul>
+              </li>
+              <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
+                <ul id="CustomerDropdown" class="collapse list-unstyled ">
+                  <li><a href="/customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                  <li><a href="/customers/pay"><i class="fa fa-money"></i>Pay</a></li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+          <div class="content-inner">
+              <header class="page-header">
+                  <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Customers</h2>
+                  </div>
+              </header>
+              <!-- Breadcrumb-->
+              <div class="breadcrumb-holder container-fluid">
+              <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                  <li class="breadcrumb-item active">Customers list</li>
+              </ul>
+              </div>
+              <section class="tables">
+                  <div class="container-fluid">
+                      <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                          <h3 class="h4">Customers list</h3>
+                        </div>
+                        <div class="card-body">
+                          <!-- <input class="form-control" id="SearchInput" type="text" placeholder="Search.." (change)="seach($event)"> -->
+                          <div class="table-responsive">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Customer Name</th>
+                                  <th>Username</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody id="tableData">
+                                <tr *ngFor="let customer of customersList?.user; let i = index">
+                                  <th scope="row" class="align-middle">{{i+1}}</th>
+                                  <td class="align-middle">{{customer.fullName}}</td>
+                                  <td class="align-middle">{{customer.username}}</td>
+                                  <td><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Upgrade this user" (click)="upgrade(customer.username)"><i class="fa fa-angle-double-up"></i></button></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </section>
+          </div>
+        </div>
+    </div>
+</body>
+</html>

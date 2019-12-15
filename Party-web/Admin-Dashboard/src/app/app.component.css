@@ -1,7 +1,10 @@
 html, body{
-    font-family: Roboto, Helvetica, sans-serif;			
+    font-family: Poppins, Helvetica, sans-serif;			
     margin: 0px;
 }
 .navbar-custom{
-    background-color: #f37d42;
+    background-color: rgba(121, 106, 238, 0.9);
+}
+.logout{
+    cursor: pointer;
 }

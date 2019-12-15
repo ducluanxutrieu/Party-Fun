@@ -10,16 +10,19 @@
             <nav class="side-navbar">
                 <!-- Sidebar Header-->
                 <div class="sidebar-header d-flex align-items-center">
-                  <div class="avatar"><img src="img/avatar-1.jpg" onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+                  <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
                   <div class="title">
-                    <h1 class="h4">Cateye</h1>
-                    <p>Admin</p>
+                    <a href="/profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
+                    <p>{{userService.get_userInfo().role}}</p>
                   </div>
                 </div>
-                <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+                <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
                 <ul class="list-unstyled">
-                  <li><a href="/admin"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
-                  <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li>
+                  <li><a href="/dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
+                  <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
+                </ul>
+                <span class="heading">Mangement</span>
+                <ul class="list-unstyled">
                   <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
                     <ul id="ProductDropdown" class="collapse list-unstyled ">
                       <li><a href="/products/list"><i class="fa fa-list"></i>Products List</a></li>
@@ -33,15 +36,13 @@
                       <li><a href="/employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
                     </ul>
                   </li>
-                  <!-- <li><a href="login.html"> <i class="icon-interface-windows"></i>Login page </a></li> -->
+                  <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
+                    <ul id="CustomerDropdown" class="collapse list-unstyled ">
+                      <li><a href="/customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                      <li><a href="/customers/pay"><i class="fa fa-money"></i>Pay</a></li>
+                    </ul>
+                  </li>
                 </ul>
-                <!-- <span class="heading">Extras</span>
-                <ul class="list-unstyled">
-                  <li> <a href="#"> <i class="icon-flask"></i>Demo </a></li>
-                  <li> <a href="#"> <i class="icon-screen"></i>Demo </a></li>
-                  <li> <a href="#"> <i class="icon-mail"></i>Demo </a></li>
-                  <li> <a href="#"> <i class="icon-picture"></i>Demo </a></li>
-                </ul> -->
               </nav>
               <div class="content-inner">
                 <!-- Page Header-->
@@ -50,6 +51,68 @@
                     <h2 class="no-margin-bottom">Dashboard</h2>
                   </div>
                 </header>
+                <!-- Charts-->
+                <section class="charts">
+                  <div class="container-fluid">
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                  <div class="row">
+                                      <h3 class="h4 col-lg-12">Statistics of products ordered today</h3>
+                                      <!-- <div class="dropdown col-lg-12">
+                                          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Product
+                                          </button>
+                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="/dashboard">Product 1</a>
+                                            <a class="dropdown-item" (click)="changeProduct()">Product 2</a>
+                                          </div>
+                                      </div> -->
+                                  </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas baseChart
+                                      [datasets]="barChartData"
+                                      [labels]="productChartLabels"
+                                      [options]="barChartOptions"
+                                      [legend]="barChartLegend"
+                                      [chartType]="barChartType">
+                                    </canvas>                                  
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-12">
+                              <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                  <div class="row">
+                                      <h3 class="h4 col-lg-12">Statistics of money collected in the last 7 days</h3>
+                                      <!-- <div class="dropdown col-lg-12">
+                                          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Product
+                                          </button>
+                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">Product 1</a>
+                                            <a class="dropdown-item" href="#">Product 2</a>
+                                            <a class="dropdown-item" href="#">Product 3</a>
+                                          </div>
+                                      </div> -->
+                                  </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas baseChart
+                                      [datasets]="barChartData2"
+                                      [labels]="moneyChartLabels"
+                                      [options]="barChartOptions"
+                                      [legend]="barChartLegend"
+                                      [chartType]="barChartType">
+                                    </canvas>                                  
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                </section>
               </div>
         </div>
     </div>
