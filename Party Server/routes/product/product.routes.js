@@ -25,6 +25,12 @@ app.post('/book', auth.isAuthenticated, auth.checkinDataBookDish, controller.boo
 // in ra id bill theo ten nguoi dung username
 app.get('/findbill', auth.isAuthenticated, auth.isStaff, controller.findbill);
 
+// in danh sach bill
+app.get('/findallbill', auth.isAuthenticated, auth.isStaff, controller.findallbill);
+
+// xoa bill
+app.delete('/deletebill', auth.isAuthenticated, auth.isStaff, controller.deletebill);
+
 // thanh toan
 app.post('/pay', auth.isAuthenticated, auth.isStaff, controller.pay);
 
