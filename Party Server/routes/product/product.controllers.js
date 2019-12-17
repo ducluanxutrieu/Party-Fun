@@ -200,6 +200,23 @@ module.exports = {
 				}
 			})
 	},
+	deletebill: function (req, res) {
+		MongoClient.connect(
+			'mongodb://localhost/Android_Lab',
+			function (err, db) {
+				if (err) console.log("Unable to connect")
+				var Bill = db.collection("Bill");
+				console.log(req.connection.remoteAddress + "Delete bill. Content: " + req.body._id);
+				var ObjectId = require('mongodb').ObjectID;
+				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal" });
+				else {
+					Bill.remove({ _id: new ObjectId(req.body._id) }, function (err, data) {
+						if (data == undefined) res.status(400).send({ success: false, message: "_ID not found" });
+						else res.status(200).send({ success: true, message: "Delete bill success" });
+					})
+				}
+			})
+	},
 
 	// xuat thong tin danh sach mon an
 	finddish: function (req, res) {
@@ -221,6 +238,7 @@ module.exports = {
 				if (err) console.log("Unable to connect")
 				var collection = db.collection("Menu");
 				console.log(req.connection.remoteAddress + "Xuat thong tin cua mon an do");
+				
 				var ObjectId = require('mongodb').ObjectID;
 				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ success: false, message: "_ID illegal", dish: null });
 				else collection.find({ _id: new ObjectId(req.body._id) }).toArray(function (err, docs) {
@@ -289,19 +307,6 @@ module.exports = {
 					// them vao database bill
 					Bill.insert(bill, function (err, doc) {
 						if (err) res.status(500).send({ success: false, message: err, bill: null });
-						User.aggregate([{
-							$lookup: {
-								from: "Bill",
-								localField: "username",
-								foreignField: "username",
-								as: "userCart"
-							}
-						},
-						{
-							$out: "User"
-						}]).toArray(function (err, data) {
-							if (err) res.status(500).send({ success: false, message: err, bill: null });
-						})
 						var id = doc.insertedIds;
 						// xuat thong tin hoa don
 						Bill.find({ _id: id[0] }).toArray(function (err, reslt) {
@@ -382,6 +387,56 @@ module.exports = {
 				else res.status(400).send({ success: false, message: "name is exists", bill: null });
 			})
 	},
+
+	//in ra danh sach cac bill 
+	findallbill: function(req, res) {
+		MongoClient.connect(
+			'mongodb://localhost/Android_Lab',
+			function (err, db) {
+				if (err) console.log("Unable to connect")
+				var Bill = db.collection("Bill");
+				var User=db.collection("User");
+				Bill.aggregate([
+					{
+						$sort: {
+							createAt: -1,
+						}
+					},
+					{
+						$lookup: {
+							from: "User",
+							localField: "username",
+							foreignField: "username",
+							as: "user"
+						}
+					},
+					{
+						$addFields: {
+							phoneNumber: "$user.phoneNumber",
+							email: "$user.email",
+						}
+					},
+					{
+						$project: {
+							user: 0,
+						} 
+					},
+					{
+						$unwind: "$phoneNumber"
+					},
+					{
+						$unwind: "$email"
+					},
+					{
+						$limit: 20
+					}
+				]).toArray(function(err, data) {
+					if (data == undefined || data.length == 0) res.status(200).send("No bill has been paid yet");
+					else res.status(200).send(data);
+				})
+				})
+	},
+
 	// thống kê ngay nay thu duoc bao nhieu tien. In ra thoong tin tu ngay CN den ngay hien tai trong tuan. Sap xep giam dan
 	statisticalmoney: function (req, res) {
 		MongoClient.connect(
