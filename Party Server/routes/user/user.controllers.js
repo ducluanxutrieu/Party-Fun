@@ -20,7 +20,6 @@ module.exports = {
                 if (err) console.log("Unable to connect")
                 var collection = db.collection("User");
                 //kiem tra dang nhap bang token 
-
                 if (req.headers && req.headers.authorization) {
                     var tokenreq = req.headers.authorization;      // doc gia tri token
                     if (!tokenreq) return res.status(400).send({ success: false, message: 'No token provided', account: null });
@@ -107,7 +106,7 @@ module.exports = {
                         var date = new Date();
                         acc.createAt = date.toLocaleString();
                         acc.updateAt = acc.createAt;
-                        acc.userCart = [];
+                        //acc.userCart = [];  // ??????????
                         collection.insert(acc, (function (err, reslute) {
                             if (err) {
                                 res.status(500).send({ success: false, message: err, account: null });
@@ -332,14 +331,53 @@ module.exports = {
                 if (err) console.log("Unable to connect")
                 var collection = db.collection("User");
                 console.log(req.connection.remoteAddress + " request Get profile user. Content:" + JSON.stringify(req.body));
-                collection.find({ username: req.body.username }).toArray(function (err, docs) {
-                    if (err || docs.length == 0) res.status(400).send({ success: false, message: "User not found", account: null });
-                    delete docs[0].password;
-                    res.status(200).send({ success: true, message: "Profile User", account: docs[0] });
+                var request=require('request');
+                request.get({
+                    headers: {
+                        "content-type": "application/json",
+                        "authorization": req.headers.authorization,
+                    },
+                    url: "http://localhost:3000/user/getmyorder",
+                }, function(err, response, body) {
+                    if (err) res.status(500).send({success:false, message: err, account: null});
+                    else res.status(200).send({ success: true, message: "Profile User", account: JSON.parse(body) });
                 })
             })
     },
 
+    //xem lich su mua hang
+    getmyorder: function (req, res) {
+        MongoClient.connect('mongodb://localhost/Android_Lab', function (err, db) {
+            if (err) console.log("Unable to connect")
+            var User = db.collection("User");
+            User.aggregate([
+                {
+                    $match: {
+                        "username": req.body.username,
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "Bill",
+                        localField: "username",
+                        foreignField: "username",
+                        as: "userCart"
+                    }
+                },
+                {
+                    $project: {
+                        password: 0
+                    }
+                }
+            ]).toArray(function (err, data) {
+                if (err) res.status(500).send({ success: false, message: err, bill: null });
+                else 
+                {
+                    res.send(data);
+                }
+            })
+        })
+    },
     // nang cap quyen cho nhan vien
     // userupgrade: user được nâng quyền
     upgraderole: function (req, res) {
@@ -354,9 +392,9 @@ module.exports = {
                         return res.status(500).send({ success: false, message: err2 });
                     else {
                         if (decoded[0].role == "Admin") {
-                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "nhanvien" } }, {returnOriginal: false}, function (err, resl) {
+                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "nhanvien" } }, { returnOriginal: false }, function (err, resl) {
                                 if (err) res.status(500).send({ success: false, message: err });
-                                else if (resl.value==null) res.status(400).send({success: false, message:"Can't find user"}); 
+                                else if (resl.value == null) res.status(400).send({ success: false, message: "Can't find user" });
                                 else res.status(200).send({ success: true, message: "Upgrade Role success" });
                             });
                         }
@@ -379,9 +417,9 @@ module.exports = {
                         return res.status(500).send({ success: false, message: err2 });
                     else {
                         if (decoded[0].role == "Admin") {
-                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "khachhang" } },{returnOriginal: false}, function (err, resl) {
+                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "khachhang" } }, { returnOriginal: false }, function (err, resl) {
                                 if (err) res.status(500).send({ success: false, message: err });
-                                else if (resl.value==null) res.status(400).send({success: false, message:"Can't find user"});
+                                else if (resl.value == null) res.status(400).send({ success: false, message: "Can't find user" });
                                 else res.status(200).send({ success: true, message: "Demotion Role success" });
                             });
                         }
@@ -390,7 +428,7 @@ module.exports = {
                 })
             })
     },
-    open_image: function(req, res) {
+    open_image: function (req, res) {
         let imagename = "./uploads/" + req.query.image_name;
         try {
             var image = fs.readFileSync(imagename);
@@ -403,30 +441,30 @@ module.exports = {
         return res.end(image);
     },
     // in danh sach nhan vien
-    findusernv: function(req, res) {
+    findusernv: function (req, res) {
         MongoClient.connect(
             'mongodb://localhost/Android_Lab',
             function (err, db) {
                 if (err) console.log("Unable to connect")
                 var User = db.collection("User");
                 console.log(req.connection.remoteAddress + " request find all user");
-                User.find({role:"nhanvien"}, {username:1, fullName:1, imageurl:1}).toArray(function(err, data) {
-                    if (err || data.length==0) res.status(400).send({success:false, message:"Can't find user", user:null});
-                    else res.status(200).send({success:true, message: "Find all user success", user: data});
+                User.find({ role: "nhanvien" }, { username: 1, fullName: 1, imageurl: 1 }).toArray(function (err, data) {
+                    if (err || data.length == 0) res.status(400).send({ success: false, message: "Can't find user", user: null });
+                    else res.status(200).send({ success: true, message: "Find all user success", user: data });
                 })
             })
     },
     // in danh sach khachhang
-    finduserkh: function(req, res) {
+    finduserkh: function (req, res) {
         MongoClient.connect(
             'mongodb://localhost/Android_Lab',
             function (err, db) {
                 if (err) console.log("Unable to connect")
                 var User = db.collection("User");
                 console.log(req.connection.remoteAddress + " request find all user");
-                User.find({role:"khachhang"}, {username:1, fullName:1, imageurl:1}).toArray(function(err, data) {
-                    if (err || data.length==0) res.status(400).send({success:false, message:"Can't find user", user:null});
-                    else res.status(200).send({success:true, message: "Find all user success", user: data});
+                User.find({ role: "khachhang" }, { username: 1, fullName: 1, imageurl: 1 }).toArray(function (err, data) {
+                    if (err || data.length == 0) res.status(400).send({ success: false, message: "Can't find user", user: null });
+                    else res.status(200).send({ success: true, message: "Find all user success", user: data });
                 })
             })
     }
