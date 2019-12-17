@@ -7,9 +7,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class StatisticalService {
     private apiMoneyStatistics = new BehaviorSubject<any>(null);
     private apiProductStatistics = new BehaviorSubject<any>(null);
+    private apiBillStatistics = new BehaviorSubject<any>(null);
     public money_statistics = this.apiMoneyStatistics.asObservable();
     public product_statistics = this.apiProductStatistics.asObservable();
-
+    public bill_statistics = this.apiBillStatistics.asObservable();
 
     headers = new HttpHeaders({
         'Authorization': localStorage.getItem('token')
@@ -19,6 +20,7 @@ export class StatisticalService {
     ) {
         this.get_moneyStatistics();
         this.get_productStatistics();
+        this.get_billStatistics();
     }
 
     get_moneyStatistics() {
@@ -46,10 +48,25 @@ export class StatisticalService {
             }
         )
     }
+    get_billStatistics() {
+        this.http.get(api.billStatistics, { headers: this.headers, observe: 'response' }).subscribe(
+            res_data => {
+                sessionStorage.setItem('bill_statistics', JSON.stringify(res_data.body));
+                this.apiBillStatistics.next(res_data.body);
+            },
+            err => {
+                console.log("Error: " + err.status + " " + err.error.text);
+                sessionStorage.setItem('error', JSON.stringify(err));
+            }
+        )
+    }
     get_moneyData() {
         return JSON.parse(sessionStorage.getItem('money_statistics'));
     }
     get_productData() {
         return JSON.parse(sessionStorage.getItem('product_statistics'));
+    }
+    get_billData() {
+        return JSON.parse(sessionStorage.getItem('bill_statistics'));
     }
 }

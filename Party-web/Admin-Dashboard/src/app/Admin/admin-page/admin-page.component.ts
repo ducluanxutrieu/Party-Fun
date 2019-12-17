@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { api } from '../../_api/apiUrl';
+import { formatDate } from "@angular/common";
 
 //services
 import { StatisticalService } from '../../_services/statistical.service';
@@ -15,7 +16,23 @@ import { async, delay } from 'q';
 export class AdminPageComponent implements OnInit {
   money_statistics = [];
   product_statistics = [];
+  bill_statistics = [];
+
   public barChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+            callback: function (value) { if (value % 1 === 0) { return value; } }
+          }
+        }
+      ]
+    }
+  };
+  public barChartOptions2 = {
     scaleShowVerticalLines: false,
     responsive: true,
     scales: {
@@ -28,16 +45,18 @@ export class AdminPageComponent implements OnInit {
       ]
     }
   };
-  public barChartLabels = ['10-11', '11-11', '12-11', '13-11', '14-11', '15-11', '16-11'];
+  // public barChartLabels = ['10-11', '11-11', '12-11', '13-11', '14-11', '15-11', '16-11'];
   public moneyChartLabels = [];
   public productChartLabels = [];
+  public billChartLabels = [];
   public barChartType = 'bar';
   public barChartLegend = true;
   public barChartData = [
     { data: [0], label: 'Total Orders' },
     { data: [0], label: 'Total Bills' }
   ];
-  public barChartData2 = [];
+  public barChartData2 = [{ data: [0], label: 'Total Money' }];
+  public barChartData3 = [{ data: [0], label: 'Total Bills' }];
   constructor(
     public userService: UserService,
     private statisticalService: StatisticalService,
@@ -53,15 +72,17 @@ export class AdminPageComponent implements OnInit {
     // this.get_moneyStatistics();
     this.money_statistics = this.statisticalService.get_moneyData();
     this.product_statistics = this.statisticalService.get_productData();
+    this.bill_statistics = this.statisticalService.get_billData();
     this.create_moneyChart(this.money_statistics);
     this.create_productChart(this.product_statistics);
+    // this.create_billChart(this.bill_statistics);
     // this.statisticalService.product_statistics.subscribe(data => this.product_statistics = data);
   }
   create_moneyChart(moneyData: any[]) {
     var money_data = [];
     for (let i = 0; i < moneyData.length; i++) {
       money_data.push(moneyData[i].totalMoney);
-      this.moneyChartLabels.push(moneyData[i].dateDay);
+      this.moneyChartLabels.push(formatDate(moneyData[i].dateDay, 'dd-MM-yyyy', 'en-US'));
     }
     this.barChartData2 = [
       {
@@ -90,8 +111,26 @@ export class AdminPageComponent implements OnInit {
         }
       ]
     }
-    else{
+    else {
       this.productChartLabels.push('No product has been ordered');
     }
   }
+  // create_billChart(billData: any[]) {
+  //   if (bill_data) {
+  //     var bill_data = [];
+  //     for (let i = 0; i < billData.length; i++) {
+  //       bill_data.push(billData[i].totalMoney);
+  //       this.billChartLabels.push(billData[i].dateDay);
+  //     }
+  //     this.barChartData3 = [
+  //       {
+  //         data: bill_data,
+  //         label: 'Total bill'
+  //       }
+  //     ]
+  //   }
+  //   else {
+  //     this.billChartLabels.push('No bill found!');
+  //   }
+  // }
 }

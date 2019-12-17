@@ -15,6 +15,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ProfileComponent } from './User/profile/profile.component';
 import { CustomersListComponent } from './Admin/Customers/customers-list/customers-list.component';
 import { PayComponent } from './Admin/Customers/pay/pay.component';
+import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bills.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -46,7 +47,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       { path: 'list', component: CustomersListComponent },
-      { path: 'pay', component: PayComponent }
+      { path: 'pay', component: PayComponent },
+      { path: 'recent-bill', component: RecentBillsComponent }
     ],
     canActivate: [AuthGuard]
   },

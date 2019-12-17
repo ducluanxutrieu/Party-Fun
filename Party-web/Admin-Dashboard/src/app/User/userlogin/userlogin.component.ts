@@ -20,7 +20,7 @@ export class UserloginComponent implements OnInit {
   ) { }
   onClickSubmit(data: { username: string; pwd: string; }) {
     this.authenticationService.login(data.username, data.pwd);
-    this.thisForm.reset();
+    // this.thisForm.reset();
   }
 
   // login() {

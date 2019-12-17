@@ -34,7 +34,8 @@ export class MainpageComponent implements OnInit {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
         var response_body = JSON.parse(sessionStorage.getItem('response_body'));
         this.dishes_Data = response_body.lishDishs;
-        console.log(res_data.body);
+        this.getNewProducts();
+        // console.log(res_data.body);
       },
       err => {
         console.log("Lỗi: " + err.status + " " + err.statusText);
@@ -44,6 +45,7 @@ export class MainpageComponent implements OnInit {
   }
   getNewProducts() {
     let temp_product_list = this.productService.findAll();
+    // let temp_product_list = JSON.parse(localStorage.getItem('dish-list'));
     for (var i = temp_product_list.length - 1; i > temp_product_list.length - 4; i--) {
       this.new_products.push(temp_product_list[i]);
     }
@@ -73,6 +75,6 @@ export class MainpageComponent implements OnInit {
   ngOnInit() {
     this.getDishList();
     // this.dishes_Data = JSON.parse(localStorage.getItem('dish-list'));
-    this.getNewProducts();
+    // this.getNewProducts();
   }
 }

@@ -14,11 +14,15 @@ export const api = {
     upgraderole: `${apiUrl}/user/upgraderole`,              //upgrade from customer to staff
     downgraderole: `${apiUrl}/user/demotionrole`,           //downgrade from staff to customer
     getCustomerlist: `${apiUrl}/user/finduserkh`,           //get customers list
-    getStafflist: `${apiUrl}/user/findusernv`,              //get staffs list   
+    getStafflist: `${apiUrl}/user/findusernv`,              //get staffs list
+
     productStatistics: `${apiUrl}/product/statisticaldish`,        //get products statistics by week (current week)
     moneyStatistics: `${apiUrl}/product/statisticalmoney`,         //get money statistics by day (current day)
+    billStatistics: `${apiUrl}/product/findallbill`,               //get bill statistics in last 20 days 
+
     findbill: `${apiUrl}/product/findbill`,                 //find user bill info
     pay: `${apiUrl}/product/pay`,                           //pay bill
+    delete_bill: `${apiUrl}/product/deletebill`,            //delete bill
 
     adddish: `${apiUrl}/product/adddish`,                   //add new dish to database
     getdishlist: `${apiUrl}/product/finddish`,              //get list of all dishes

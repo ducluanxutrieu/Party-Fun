@@ -13,8 +13,8 @@
               <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../../../../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
               <div class="title">
                   <a href="/profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
-                  <p>{{userService.get_userInfo().role}}</p>
-              </div>
+                  <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
+                </div>
             </div>
             <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
             <ul class="list-unstyled">
@@ -40,6 +40,7 @@
               <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
                 <ul id="CustomerDropdown" class="collapse list-unstyled ">
                   <li><a href="/customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                  <li><a href="/customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
                   <li><a href="/customers/pay"><i class="fa fa-money"></i>Pay</a></li>
                 </ul>
               </li>
@@ -93,23 +94,25 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Ngày đặt</th>
-                                        <th scope="col">Ngày tổ chức</th>
-                                        <th scope="col">Số bàn</th>
-                                        <th scope="col">Tổng giá</th>
-                                        <th scope="col">Thanh toán</th>
+                                        <th scope="col">Username</th>
+                                        <th scope="col">Date created</th>
+                                        <th scope="col">Party date </th>
+                                        <th scope="col">Num of tables</th>
+                                        <th scope="col">Total</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let bill of bill_info; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(bill)">
                                         <th scope="row" class="align-middle">{{i+1}}</th>
-                                        <td class="align-middle">{{bill.createAt}}</td>
-                                        <td class="align-middle">{{bill.dateParty}}</td>
-                                        <td class="align-middle">{{bill.numbertable}}</td>
+                                        <td class="align-middle">{{bill.username}}</td>
+                                        <td class="align-middle">{{bill.createAt | date:'dd-MM-yyyy'}}</td>
+                                        <td class="align-middle">{{bill.dateParty | date:'dd-MM-yyyy, HH:mm'}}</td>
+                                        <td class="align-middle text-center">{{bill.numbertable}}</td>
                                         <td class="align-middle">{{bill.totalMoney | number}}</td>
                                         <td class="align-middle"><span *ngIf="bill.userpayment!=null">Paid</span><span *ngIf="bill.userpayment==null">Unpaid</span></td>
-                                        <td *ngIf="bill.userpayment==null"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button></td>
+                                        <td *ngIf="bill.userpayment==null"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button><span class="tab-space"></span><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Delete this bill" (click)="delete_bill(bill._id)"><i class="fa fa-trash"></i></button></td>
                                         <!-- Cart Detail Modal-->
                                         <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
@@ -121,6 +124,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <p>Items in each table</p>
                                                     <table class="table table-hover">
                                                         <thead>
                                                             <tr>

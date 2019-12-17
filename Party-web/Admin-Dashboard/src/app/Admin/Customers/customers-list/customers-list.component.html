@@ -13,8 +13,8 @@
               <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../../../../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
               <div class="title">
                   <a href="/profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
-                  <p>{{userService.get_userInfo().role}}</p>
-              </div>
+                  <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
+                </div>
             </div>
             <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
             <ul class="list-unstyled">
@@ -40,6 +40,7 @@
               <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
                 <ul id="CustomerDropdown" class="collapse list-unstyled ">
                   <li><a href="/customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                  <li><a href="/customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
                   <li><a href="/customers/pay"><i class="fa fa-money"></i>Pay</a></li>
                 </ul>
               </li>

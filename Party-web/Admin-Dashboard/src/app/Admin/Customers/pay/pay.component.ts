@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../_services/user.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { api } from '../../../_api/apiUrl';
+
 import { ProductService } from '../../../_services/product.service';
+import { UserService } from '../../../_services/user.service';
+import { PaymentService } from '../../../_services/payment.service';
 
 @Component({
   selector: 'app-pay',
@@ -21,6 +23,7 @@ export class PayComponent implements OnInit {
   constructor(
     public userService: UserService,
     public productService: ProductService,
+    public paymentService: PaymentService,
     private http: HttpClient
   ) { }
 
@@ -69,6 +72,11 @@ export class PayComponent implements OnInit {
         }
       )
     };
-
+  }
+  delete_bill(bill_id) {
+    if (confirm("Are you sure to delete this bill?")) {
+      this.paymentService.delete_bill(bill_id);
+      window.location.reload();
+    };
   }
 }
