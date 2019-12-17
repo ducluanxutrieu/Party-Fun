@@ -55,6 +55,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
         val listMainDishes = ArrayList<DishModel>()
         val listSeafood = ArrayList<DishModel>()
         val listDrink = ArrayList<DishModel>()
+        val listDessert = ArrayList<DishModel>()
         for (row in dishes) {
             when (row.type) {
                 "Holiday Offers" -> listHolidayOffers.add(row)
@@ -62,6 +63,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
                 "Main Dishes" -> listMainDishes.add(row)
                 "Seafood" -> listSeafood.add(row)
                 "Drinks" -> listDrink.add(row)
+                "Dessert" -> listDessert.add(row)
             }
         }
         if (listHolidayOffers.size > 0) {
@@ -78,6 +80,10 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
         }
         if (listDrink.size > 0) {
             listMenu.add(MenuModel("Drinks", listDrink))
+        }
+
+        if (listDessert.size > 0) {
+            listMenu.add(MenuModel("Dessert", listDessert))
         }
 
         return listMenu

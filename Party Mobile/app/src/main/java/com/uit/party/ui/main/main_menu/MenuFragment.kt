@@ -205,6 +205,11 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (!mDisposableAddCart.isDisposed) mDisposableAddCart.dispose()
+    }
+
     private fun animateView(foodCardView: View, b: Bitmap) {
         mDummyImgView.setImageBitmap(b)
         mDummyImgView.visibility = View.VISIBLE

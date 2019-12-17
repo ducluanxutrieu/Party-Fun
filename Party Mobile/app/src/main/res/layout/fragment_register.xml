@@ -166,7 +166,8 @@
             android:background="@color/colorCrystalClear"
             android:clickable="false"
             android:elevation="@dimen/_5sdp"
-            android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}">
+            android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}"
+            tools:elevation="0dp">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="@dimen/_150sdp"

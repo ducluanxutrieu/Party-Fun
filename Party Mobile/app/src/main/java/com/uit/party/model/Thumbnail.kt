@@ -8,5 +8,6 @@ enum class Thumbnail(val dishName: String, val image: Int) {
     Thumbnail2(getString(R.string.first_dishes), R.drawable.first_dishes),
     Thumbnail3(getString(R.string.main_dishes), R.drawable.main_dishes),
     Thumbnail4(getString(R.string.seafood), R.drawable.seafood),
-    Thumbnail5(getString(R.string.drinks), R.drawable.drinks);
+    Thumbnail5(getString(R.string.drinks), R.drawable.drinks),
+    Thumbnail6(getString(R.string.dessert), R.drawable.dessert);
 }
