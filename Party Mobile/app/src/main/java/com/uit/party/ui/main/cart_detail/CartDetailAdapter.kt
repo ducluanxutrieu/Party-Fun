@@ -12,7 +12,6 @@ import com.uit.party.util.BindableAdapter
 
 interface OnCartDetailListener {
     fun onChangeNumberDish(position: Int, cartModel: CartModel, isIncrease: Boolean)
-    fun onDeleteDish(position: Int)
 }
 
 class CartDetailAdapter(private val mListener: OnCartDetailListener) :
@@ -39,6 +38,15 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
 
     override fun onBindViewHolder(holder: CartDetailViewHolder, position: Int) {
         holder.bindData(mListCart[position])
+    }
+
+    fun getItem(position: Int): CartModel {
+        return mListCart[position]
+    }
+
+    fun restoreItem(cardModel: CartModel, position: Int) {
+        mListCart.add(position, cardModel)
+        notifyItemInserted(position)
     }
 
 
@@ -73,11 +81,6 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
                     mListener.onChangeNumberDish(adapterPosition, cartModel, true)
                 }
             }
-
-            mBinder.btnDeleteDish.setOnClickListener {
-                mListener.onDeleteDish(adapterPosition)
-            }
-
         }
     }
 }

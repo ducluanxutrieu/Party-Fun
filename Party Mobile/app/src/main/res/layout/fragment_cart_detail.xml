@@ -23,7 +23,7 @@
             android:orientation="vertical"
             android:visibility="@{viewModel.mShowCart ? View.VISIBLE : View.GONE}">
 
-            <LinearLayout
+           <!-- <LinearLayout
                 android:id="@+id/ll_title_column"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,22 +54,21 @@
                     android:gravity="center"
                     android:text="@string/dishes_price"
                     android:textSize="@dimen/_15sdp" />
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <View
+<!--            <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_below="@id/ll_title_column"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
-                android:background="@color/colorPrimaryDark" />
+                android:background="@color/colorPrimaryDark" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_cart_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/ll_date_party"
-                android:layout_below="@id/ll_title_column"
                 android:layout_marginTop="@dimen/_5sdp"
                 app:linearRecyclerData="@{viewModel.mListCart}" />
 

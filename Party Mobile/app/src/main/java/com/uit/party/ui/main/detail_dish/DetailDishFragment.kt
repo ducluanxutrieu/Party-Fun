@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.detail_dish
 
+import android.animation.Animator
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
@@ -13,7 +14,6 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.uit.party.R
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
-import com.uit.party.model.DishModel
 import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.rxbus.RxBus
@@ -44,9 +44,7 @@ class DetailDishFragment : Fragment() {
         )
         binding.viewModel = viewModel
 
-        if (checkIsStaff()) {
-            setupToolbar()
-        }
+        setupToolbar()
     }
 
     private fun checkIsStaff(): Boolean {
@@ -58,7 +56,9 @@ class DetailDishFragment : Fragment() {
     private fun setupToolbar() {
         setHasOptionsMenu(true)
         val toolbar = activity?.findViewById<View>(R.id.app_bar) as Toolbar
+
         toolbar.inflateMenu(R.menu.menu_dish_detail)
+
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_edit_dish -> {
@@ -76,9 +76,19 @@ class DetailDishFragment : Fragment() {
                     deleteDish()
                     true
                 }
+
+                R.id.toolbar_add_to_cart -> {
+                    addToCart()
+                    startAnimationAddToCard()
+                    true
+                }
                 else -> false
             }
         }
+    }
+
+    private fun addToCart() {
+        RxBus.publish(RxEvent.AddToCart(viewModel.mDishModel!!, null))
     }
 
     private fun deleteDish() {
@@ -97,6 +107,12 @@ class DetailDishFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_dish_detail, menu)
+        if (!checkIsStaff()) {
+            menu.findItem(R.id.toolbar_edit_dish).isVisible = false
+            menu.findItem(R.id.toolbar_delete_dish).isVisible = false
+        }else{
+            menu.findItem(R.id.toolbar_add_to_cart).isVisible = false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -117,6 +133,27 @@ class DetailDishFragment : Fragment() {
                 viewModel.init()
             }
         }
+    }
+
+    private fun startAnimationAddToCard() {
+        binding.lavAddToCart.visibility = View.VISIBLE
+        binding.lavAddToCart.playAnimation()
+        binding.lavAddToCart.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                binding.lavAddToCart.cancelAnimation()
+                binding.lavAddToCart.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+            }
+        })
     }
 
     override fun onDestroy() {

@@ -1,8 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Party</string>
     <string name="action_sign_in">Sign In</string>
-    <string name="prompt_email" translatable="false">Email</string>
-    <string name="prompt_password">Password</string>
     <string name="action_email" translatable="false">Email</string>
     <string name="action_password">Password</string>
     <string name="action_username">Username</string>
@@ -12,39 +10,15 @@
     <string name="full_name">Full Name</string>
     <string name="register">Register</string>
     <string name="logout">LogOut</string>
-    <string name="search">Search</string>
-    <string name="all_user">All User</string>
-    <string name="add_new">Add New</string>
-    <string name="title_activity_tasks" translatable="false">TasksActivity</string>
-    <string name="add_new_task">Add New Task</string>
     <string name="description">Description</string>
-    <string name="invite">Invite</string>
-    <string name="state">State</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="dd_mm_yy" translatable="false">dd/MM/yyyy</string>
-    <string name="edit">Edit Project</string>
     <string name="update">Update</string>
-    <string name="this_is_description" translatable="false">This is Description</string>
-    <string name="chose">Choose</string>
-    <string name="test_username" translatable="false">Thanh Quy</string>
     <string name="user_name">User Name</string>
-    <string name="test_email" translatable="false">quythanh24@gmail.com</string>
-    <string name="test_name" translatable="false">Thanh Quy</string>
-    <string name="you_not_voted_point">You have not voted point for this task</string>
-    <string name="date_end">Date End</string>
-    <string name="date_start">Date Start</string>
-    <string name="done">Done</string>
-    <string name="new_password">New Password</string>
     <string name="delete">Delete</string>
     <string name="change_password">Change Password</string>
     <string name="profile_change_password">Change\nPassword</string>
     <string name="upload_avatar">Upload Avatar</string>
-    <string name="save">Save</string>
-    <string name="assignee">Assignee</string>
-    <string name="deadline">Deadline: </string>
-    <string name="edit_task">Edit Task</string>
     <string name="email_not_valid">Email not valid</string>
-    <string name="password_is_required">Password is required</string>
     <string name="action_phone_number">Phone Number</string>
     <string name="create_account">Create account</string>
     <string name="this_field_required">This field required</string>
@@ -54,11 +28,6 @@
     <string name="not_matched_with_password">Not matched with password</string>
 
     <string name="icon_search_title">Search</string>
-    <string name="icon_filter_title">Filter</string>
-    <string name="bottom_nav_favorites">Favorite</string>
-    <string name="bottom_nav_home">Home</string>
-    <string name="bottom_nav_cart">Cart</string>
-    <string name="uit_party">UIT Party</string>
     <string name="action_current_password">Current Password</string>
     <string name="action_new_password">New Password</string>
     <string name="action_confirm_password">Confirm Password</string>
@@ -66,11 +35,8 @@
     <string name="wrong_password">Wrong Password</string>
     <string name="menu_home">Home</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">ducluanxutrieu</string>
     <string name="nav_header_subtitle">Trần Đức Luân</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="user_profile">Profile</string>
     <string name="version">Version</string>
     <string name="cannot_logout">Cannot logout - Please check your internet</string>
@@ -79,18 +45,12 @@
     <string name="sex_male">Male</string>
     <string name="sex_female">Female</string>
     <string name="birthday">Birthday</string>
-    <string name="example_name">Nguyen Van A</string>
-    <string name="example_phone_number">01234589</string>
-    <string name="example_birthday">10/10/2010</string>
     <string name="mobile">Mobile</string>
     <string name="email">Email</string>
     <string name="toolbar_edit_profile">Edit Profile</string>
     <string name="update_profile_success">Update profile successful</string>
     <string name="your_ordered">My Ordered</string>
-    <string name="my_vouchers">My Vouchers</string>
     <string name="address">Address</string>
-    <string name="version_1_0_alpha">Version 1.0 Alpha</string>
-    <string name="feedback">Feedback</string>
     <string name="about_us">About Us</string>
     <string name="dish_title">Dish Title</string>
     <string name="dish_description">Dish Description</string>
@@ -99,7 +59,6 @@
     <string name="price">Price: </string>
     <string name="_0">0</string>
     <string name="vnd">VND</string>
-    <string name="dish_avatar">Dish Avatar</string>
     <string name="type">Type</string>
     <string name="holiday_offers">Holiday Offers</string>
     <string name="first_dishes">First Dishes</string>
@@ -119,7 +78,6 @@
     <string name="home">Home</string>
     <string name="toolbar_change_password">Change Password</string>
     <string name="list_dish_selected_key">LIST_DISH_SELECTED</string>
-    <string name="title_activity_maps">Map</string>
     <string name="our_address">Our Address</string>
     <string name="default_address">Nhà AG4, KTX khu A mở rộng, ĐHQG TPHCM</string>
     <string name="our_address_">Our Address:</string>
@@ -141,8 +99,6 @@
     <string name="register_successful">Register success</string>
     <string name="birthday_greater_than_now_day">Birthday need greater than now day</string>
     <string name="reset_password">Reset Password</string>
-    <string name="input_username_to_get_password">Input your username to get your password</string>
-    <string name="ok">Ok</string>
     <string name="cancel" tools:ignore="PrivateResource">Cancel</string>
     <string name="code_from_your_email">Code From Your Email</string>
     <string name="number_of_table">Number of Tables</string>
@@ -157,7 +113,6 @@
     <string name="update_dish_false">Update dish false</string>
     <string name="update_dish">Update Dish</string>
     <string name="delete_dish">Delete Dish</string>
-    <string name="delete_dish_success">Delete Dish successful</string>
     <string name="alert_delete_dish">Are you sure you want to delete this dish? After deletion cannot be restored</string>
     <string name="write_your_review_here">Write your review here</string>
     <string name="submit">Submit</string>
@@ -168,4 +123,6 @@
     <string name="time_party">Time Party</string>
     <string name="list_dished">List Dished</string>
     <string name="number_of_dishes">Number of Dishes</string>
+    <string name="amount">Amount</string>
+    <string name="add_to_cart">Add to Cart</string>
 </resources>

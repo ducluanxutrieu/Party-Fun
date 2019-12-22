@@ -83,7 +83,7 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
     }
 
-    override fun onDeleteDish(position: Int) {
+    fun onDeleteDish(position: Int) {
         mListCart.removeAt(position)
         mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
         mCartAdapter.notifyItemRemoved(position)
@@ -144,25 +144,12 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
     }
 
-    fun initData(listDishModel: ArrayList<DishModel>) {
-        if (listDishModel.isNullOrEmpty()){
+    fun initData(listCartModel: ArrayList<CartModel>) {
+        if (listCartModel.isNullOrEmpty()){
             mShowCart.set(false)
         }else {
             mShowCart.set(true)
-            for (dish in listDishModel) {
-                var doubleCart = false
-                for (cart in mListCart) {
-                    if (cart.dishModel._id == dish._id) {
-                        cart.numberDish++
-                        doubleCart = true
-                        break
-                    }
-                }
-
-                if (!doubleCart) {
-                    mListCart.add(CartModel(1, dish))
-                }
-            }
+            mListCart = listCartModel
             mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
         }
     }

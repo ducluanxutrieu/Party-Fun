@@ -37,7 +37,7 @@ class DetailDishViewModel : BaseObservable() {
     var mPosition: Int = 0
     lateinit var mDishType: String
 
-    var listImages = ArrayList<String>()
+    private var listImages = ArrayList<String>()
 
     @get: Bindable
     var mListRates = ArrayList<ListRate>()
@@ -71,10 +71,6 @@ class DetailDishViewModel : BaseObservable() {
                 break
             }
         }
-    }
-
-    fun addToCartClicked() {
-        RxBus.publish(RxEvent.AddToCart(mDishModel!!, null))
     }
 
     fun onSubmitClicked() {

@@ -52,6 +52,7 @@
                     android:elevation="@dimen/_2sdp"
                     android:padding="@dimen/_5sdp"
                     android:src="@drawable/ic_add_dish_cart_24dp"
+                    android:tint="@color/colorAccent"
                     style="@style/clickableCard"/>
             </LinearLayout>
 

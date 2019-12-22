@@ -45,11 +45,11 @@
 
     <item android:title="@string/communicate">
         <menu>
-            <item
+            <!--<item
                 android:id="@+id/nav_feedback"
                 android:icon="@drawable/ic_email"
                 android:title="@string/feedback"
-                />
+                />-->
             <item
                 android:id="@+id/nav_about_us"
                 android:icon="@drawable/ic_info"

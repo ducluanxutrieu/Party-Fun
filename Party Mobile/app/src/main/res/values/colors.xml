@@ -12,4 +12,5 @@
     <color name="blackColor">#000000</color>
     <color name="textColorOrange">#fb8942</color>
     <color name="colorCrystalClear">#7f000000</color>
+    <color name="colorRed">#FF0000</color>
 </resources>
