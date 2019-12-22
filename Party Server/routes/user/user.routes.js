@@ -39,4 +39,8 @@ app.delete('/demotionrole', auth.isAuthenticated, auth.checkinDateUpgraderole, c
 app.get('/findusernv', auth.isAuthenticated, auth.isStaff, controller.findusernv);
 
 app.get('/finduserkh', auth.isAuthenticated, auth.isStaff, controller.finduserkh);
+
+// xem danh sach dat hang cua user
+app.get('/getmyorder', auth.isAuthenticated, controller.getmyorder);
+
 module.exports = app;
