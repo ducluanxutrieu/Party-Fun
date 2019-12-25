@@ -25,12 +25,14 @@
             ],
             "styles": [
               "src/custom-theme.scss",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/datatables.net-dt/css/jquery.dataTables.css"
             ],
             "scripts": [
               "src/vendor/jquery/jquery.min.js",
               "src/vendor/popper.js/umd/popper.min.js",
-              "src/vendor/bootstrap/js/bootstrap.min.js"
+              "src/vendor/bootstrap/js/bootstrap.min.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js"
 			]
           },
           "configurations": {

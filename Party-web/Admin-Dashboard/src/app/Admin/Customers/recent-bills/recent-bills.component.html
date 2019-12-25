@@ -68,16 +68,18 @@
                             </div>
                             <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table datatable [dtTrigger]="dtTrigger" class="table" id="billtable">
                                 <thead>
-                                    <th scope="col" class="text-center">#</th>
-                                    <th scope="col" class="text-center">Username</th>
-                                    <th scope="col" class="text-center">Date created</th>
-                                    <th scope="col" class="text-center">Party date </th>
-                                    <th scope="col" class="text-center">Num of tables</th>
-                                    <th scope="col" class="text-center">Total</th>
-                                    <th scope="col" class="text-center">Status</th>
-                                    <th scope="col"></th>
+                                    <tr>
+                                        <th scope="col" class="text-center">#</th>
+                                        <th scope="col" class="text-center">Username</th>
+                                        <th scope="col" class="text-center">Date created</th>
+                                        <th scope="col" class="text-center">Party date </th>
+                                        <th scope="col" class="text-center">Num of tables</th>
+                                        <th scope="col" class="text-center">Total</th>
+                                        <th scope="col" class="text-center">Status</th>
+                                        <th scope="col" class="text-center">Functions</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let bill of recent_billList; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(bill)">
@@ -88,7 +90,7 @@
                                         <td class="align-middle text-center">{{bill.numbertable}}</td>
                                         <td class="align-middle text-center">{{bill.totalMoney | number}}</td>
                                         <td class="align-middle text-center"><span *ngIf="bill.userpayment!=null">Paid</span><span *ngIf="bill.userpayment==null">Unpaid</span></td>
-                                        <td *ngIf="bill.userpayment==null"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button><span class="tab-space"></span><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Delete this bill" (click)="delete_bill(bill._id)"><i class="fa fa-trash"></i></button></td>
+                                        <td [hidden]="bill.userpayment!=null" class="text-center"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button><span class="tab-space"></span><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Delete this bill" (click)="delete_bill(bill._id)"><i class="fa fa-trash"></i></button></td>
                                         <!-- Cart Detail Modal-->
                                         <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
@@ -112,10 +114,10 @@
                                                     <table class="table table-hover">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Name</th>
-                                                                <th scope="col">Price</th>
-                                                                <th scope="col" class="text-center">Quantity</th>
+                                                                <th>#</th>
+                                                                <th>Name</th>
+                                                                <th>Price</th>
+                                                                <th class="text-center">Quantity</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>

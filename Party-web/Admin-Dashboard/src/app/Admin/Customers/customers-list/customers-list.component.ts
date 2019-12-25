@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { StaffService } from '../../../_services/staff.service';
+import { Subject } from 'rxjs';
 
-declare var jquery: any;
 declare var $: any;
+
 interface Customer {
   user: any[]
 }
@@ -12,10 +13,11 @@ interface Customer {
   templateUrl: './customers-list.component.html',
   styleUrls: ['./customers-list.component.css']
 })
-export class CustomersListComponent implements OnInit {
+export class CustomersListComponent implements OnDestroy, OnInit {
   // customersList = [];
   customersList: Customer;
 
+  dtTrigger: Subject<any> = new Subject();
   constructor(
     public userService: UserService,
     private staffService: StaffService
@@ -28,9 +30,17 @@ export class CustomersListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.staffService.customersList.subscribe(data => this.customersList = data);
+    this.staffService.customersList.subscribe(data => {
+      this.customersList = data;
+      this.dtTrigger.next();
+    });
+    // $(document).ready(function() {
+    //   $('#customertable').DataTable();
+    // } );
   }
-
+  ngOnDestroy(): void {
+    // this.dtTrigger.unsubscribe();
+  }
   // search(event) {
   //   var key = event.target.value;
   //   key.toLowerCase();
@@ -39,3 +49,4 @@ export class CustomersListComponent implements OnInit {
   //   });
   // }
 }
+

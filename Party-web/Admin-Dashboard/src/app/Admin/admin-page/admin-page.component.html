@@ -72,14 +72,18 @@
                                       </div> -->
                                   </div>
                                 </div>
-                                <div class="card-body">
-                                    <canvas baseChart
-                                      [datasets]="barChartData"
-                                      [labels]="productChartLabels"
-                                      [options]="barChartOptions"
-                                      [legend]="barChartLegend"
-                                      [chartType]="barChartType">
-                                    </canvas>                                  
+                                <div class="card-body" *ngIf="isProductDataAvailable">
+                                    <div style="overflow:scroll;overflow-y:auto;overflow-x:auto;">
+                                        <div class="chart-wrapper" style="width: 100wh">
+                                          <canvas baseChart id="productChart"
+                                            [datasets]="barChartData"
+                                            [labels]="productChartLabels"
+                                            [options]="barChartOptions"
+                                            [legend]="barChartLegend"
+                                            [chartType]="barChartType">
+                                          </canvas>
+                                        </div>                                         
+                                    </div>
                                 </div>
                               </div>
                           </div>
@@ -87,7 +91,7 @@
                               <div class="card">
                                 <div class="card-header d-flex align-items-center">
                                   <div class="row">
-                                      <h3 class="h4 col-lg-12">Statistics of money collected in the last 7 days</h3>
+                                      <h3 class="h4 col-lg-12">Statistics of money collected in the last 7 days (Not counting days without revenue)</h3>
                                       <!-- <div class="dropdown col-lg-12">
                                           <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Product
@@ -100,7 +104,7 @@
                                       </div> -->
                                   </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" *ngIf="isMoneyDataAvailable">
                                     <canvas baseChart
                                       [datasets]="barChartData2"
                                       [labels]="moneyChartLabels"

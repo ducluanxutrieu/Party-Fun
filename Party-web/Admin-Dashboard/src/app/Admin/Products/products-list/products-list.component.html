@@ -66,23 +66,23 @@
                         </div>
                         <div class="card-body">
                           <div class="table-responsive">
-                            <table class="table">
+                            <table datatable class="table">
                               <thead>
                                 <tr>
-                                  <th>#</th>
-                                  <th>Product Name</th>
-                                  <th>Type</th>
-                                  <th>Price</th>
-                                  <th></th>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">Product Name</th>
+                                  <th class="text-center">Type</th>
+                                  <th class="text-center">Price</th>
+                                  <th class="text-center">Functions</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr *ngFor="let product of product_data; let i = index">
-                                  <th scope="row" class="align-middle">{{i+1}}</th>
-                                  <td class="align-middle">{{product.name}}</td>
-                                  <td class="align-middle">{{product.type}}</td>
-                                  <td class="align-middle">{{product.price | number}}</td>
-                                  <td><a href="/products/edit/{{product._id}}"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></a><span class="tab-space"></span><button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" (click)="delete_clicked(product._id, product.name)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                  <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                                  <td class="align-middle text-center">{{product.name}}</td>
+                                  <td class="align-middle text-center">{{product.type}}</td>
+                                  <td class="align-middle text-center">{{product.price | number}}</td>
+                                  <td class="text-center"><a href="/products/edit/{{product._id}}"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></a><span class="tab-space"></span><button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" (click)="delete_clicked(product._id, product.name)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                 </tr>
                               </tbody>
                             </table>

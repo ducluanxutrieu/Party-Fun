@@ -3,10 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { api } from '../../_api/apiUrl';
 import { formatDate } from "@angular/common";
 
+interface MoneyStatisic {
+  dateDay: Date;
+}
 //services
 import { StatisticalService } from '../../_services/statistical.service';
 import { UserService } from '../../_services/user.service';
-import { async, delay } from 'q';
 
 @Component({
   selector: 'app-admin-page',
@@ -15,6 +17,7 @@ import { async, delay } from 'q';
 })
 export class AdminPageComponent implements OnInit {
   money_statistics = [];
+  // money_statistics: MoneyStatisic;
   product_statistics = [];
   bill_statistics = [];
 
@@ -22,6 +25,10 @@ export class AdminPageComponent implements OnInit {
     scaleShowVerticalLines: false,
     responsive: true,
     scales: {
+      xAxes: [{
+        barPercentage: 0.9,
+        maxBarThickness: 50
+      }],
       yAxes: [
         {
           ticks: {
@@ -30,12 +37,17 @@ export class AdminPageComponent implements OnInit {
           }
         }
       ]
-    }
+    },
+    maintainAspectRatio: false
   };
   public barChartOptions2 = {
     scaleShowVerticalLines: false,
     responsive: true,
     scales: {
+      xAxes: [{
+        barPercentage: 0.4,
+        maxBarThickness: 50,
+      }],
       yAxes: [
         {
           ticks: {
@@ -45,7 +57,6 @@ export class AdminPageComponent implements OnInit {
       ]
     }
   };
-  // public barChartLabels = ['10-11', '11-11', '12-11', '13-11', '14-11', '15-11', '16-11'];
   public moneyChartLabels = [];
   public productChartLabels = [];
   public billChartLabels = [];
@@ -57,26 +68,38 @@ export class AdminPageComponent implements OnInit {
   ];
   public barChartData2 = [{ data: [0], label: 'Total Money' }];
   public barChartData3 = [{ data: [0], label: 'Total Bills' }];
+
+  public isMoneyDataAvailable: boolean = false;
+  public isProductDataAvailable: boolean = false;
+
   constructor(
     public userService: UserService,
     private statisticalService: StatisticalService,
     private http: HttpClient
   ) { }
-  // changeProduct() {
-  //   this.barChartData = [
-  //     { data: [25, 49, 30, 61, 16, 35, 4], label: 'Total Orders' },
-  //     { data: [40, 25, 10, 39, 16, 87, 60], label: 'Total Bills' }
-  //   ];
-  // }
+
   ngOnInit() {
-    // this.get_moneyStatistics();
-    this.money_statistics = this.statisticalService.get_moneyData();
-    this.product_statistics = this.statisticalService.get_productData();
-    this.bill_statistics = this.statisticalService.get_billData();
-    this.create_moneyChart(this.money_statistics);
-    this.create_productChart(this.product_statistics);
+    this.statisticalService.money_statistics.subscribe(data => {
+      this.money_statistics = data;
+      this.isMoneyDataAvailable = true;
+      setTimeout(() => {
+        this.create_moneyChart(data);
+      })
+    })
+    this.statisticalService.product_statistics.subscribe(data => {
+      this.product_statistics = data;
+      this.isProductDataAvailable = true;
+      setTimeout(() => {
+        this.create_productChart(data);
+      })
+    });
+
+    // this.bill_statistics = this.statisticalService.get_billData();
+    // this.money_statistics.sort(function (a, b) {
+    //   return new Date(b.dateDay.split('-').reverse().join('-')) - new Date(a.dateDay.split('-').reverse().join('-'));
+    // });
+
     // this.create_billChart(this.bill_statistics);
-    // this.statisticalService.product_statistics.subscribe(data => this.product_statistics = data);
   }
   create_moneyChart(moneyData: any[]) {
     var money_data = [];
@@ -98,6 +121,8 @@ export class AdminPageComponent implements OnInit {
       for (let i = 0; i < productData.length; i++) {
         product_data1.push(productData[i].count_of_bill);
         product_data2.push(productData[i].totalorderbill);
+
+        // this.productChartLabels = [];
         this.productChartLabels.push(productData[i].name);
       }
       this.barChartData = [
@@ -112,7 +137,7 @@ export class AdminPageComponent implements OnInit {
       ]
     }
     else {
-      this.productChartLabels.push('No product has been ordered');
+      // this.productChartLabels.push('No product has been ordered');
     }
   }
   // create_billChart(billData: any[]) {

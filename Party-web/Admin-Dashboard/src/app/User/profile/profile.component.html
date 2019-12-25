@@ -12,7 +12,7 @@
                     <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
                     <div class="title">
                         <a href="/profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
-                        <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
+                        <p><span *ngIf="userService.get_userInfo()?.role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo()?.role=='Admin'">Admin</span></p>
                     </div>
                 </div>
                 <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
@@ -108,7 +108,7 @@
                                     </form>
                                 </div>
                                 <div class="col-lg-4">
-                                    <img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle img-thumbnail">
+                                    <img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="avatar" class="img-fluid rounded-circle img-thumbnail">
                                     <div class="text-center">
                                         <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="avatar" (change)="avatarChanged($event)" ngModel>
                                     </div>

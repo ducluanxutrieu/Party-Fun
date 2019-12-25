@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { DataTablesModule } from 'angular-datatables';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -60,7 +61,8 @@ import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bill
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    ChartsModule
+    ChartsModule,
+    DataTablesModule
   ],
   providers: [AuthenticationService, AuthGuard, ProductService, UserService, StaffService, StatisticalService, PaymentService, CookieService, DatePipe],
   bootstrap: [AppComponent]

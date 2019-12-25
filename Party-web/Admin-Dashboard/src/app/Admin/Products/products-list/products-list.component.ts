@@ -3,6 +3,7 @@ import { api } from '../../../_api/apiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProductService } from '../../../_services/product.service';
 import { UserService } from '../../../_services/user.service';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -12,6 +13,8 @@ import { UserService } from '../../../_services/user.service';
 })
 export class ProductsListComponent implements OnInit {
   product_data = [];
+
+  dtTrigger: Subject<any> = new Subject();
 
   constructor(
     private http: HttpClient,
@@ -50,7 +53,10 @@ export class ProductsListComponent implements OnInit {
   ngOnInit() {
     //this.product_data = JSON.parse(localStorage.getItem('dish-list'));
     this.product_data = this.productService.findAll();
-    this.productService.productList.subscribe(data => this.product_data = data);
+    this.productService.productList.subscribe(data => {
+      this.product_data = data;
+      this.dtTrigger.next();
+    });
   }
 
 }

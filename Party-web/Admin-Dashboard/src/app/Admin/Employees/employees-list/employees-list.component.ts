@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { StaffService } from '../../../_services/staff.service';
+import { Subject } from 'rxjs';
 
 interface Staff {
   user: any[]
@@ -13,6 +14,7 @@ interface Staff {
 export class EmployeesListComponent implements OnInit {
   // staffsList = [];
   staffsList: Staff;
+  dtTrigger: Subject<any> = new Subject();
   constructor(
     public userService: UserService,
     private staffService: StaffService
@@ -25,7 +27,10 @@ export class EmployeesListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.staffService.staffsList.subscribe(data => this.staffsList = data);
+    this.staffService.staffsList.subscribe(data => {
+    this.staffsList = data;
+      this.dtTrigger.next();
+    });
   }
 
 }
