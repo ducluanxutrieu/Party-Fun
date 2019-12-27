@@ -123,7 +123,7 @@
                     <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua sắm</a></td>
                     <td colspan="2" class="hidden-xs"></td>
                     <td class="hidden-xs text-center"><strong>Tổng: {{total | number}}</strong></td>
-                    <td><button class="btn btn-success btn-block" [disabled]= "productService.getTotalCount(null) < 1" (click)="checkout()">Thanh toán <i class="fa fa-angle-right"></i></button>
+                    <td><button class="btn btn-success btn-block" [disabled]= "productService.getTotalCount(null) < 1" (click)="checkout()">Đặt bàn <i class="fa fa-angle-right"></i></button>
                     </td>
                 </tr>
             </tfoot>

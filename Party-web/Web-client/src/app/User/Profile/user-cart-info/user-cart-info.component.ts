@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { ProductService } from '../../../_services/product.service';
 import { User } from '../../../_models/user.model';
+
+declare var $: any;
+
 @Component({
   selector: 'app-user-cart-info',
   templateUrl: './user-cart-info.component.html',
@@ -24,6 +27,11 @@ export class UserCartInfoComponent implements OnInit {
     // this.userCart = this.userService.get_userCart();
   }
   itemClicked(item: any) {
-    this.cartDetail = item.lishDishs;
+    if ($('#CartDetailModal').hasClass('show')) {
+      $('#CartDetailModal').modal('hide');
+    }
+    else {
+      this.cartDetail = item.lishDishs;
+    }
   }
 }

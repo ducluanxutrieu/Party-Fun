@@ -66,7 +66,7 @@
         }
         form header {
             text-align: center;
-            background: #bb4e14;
+            background: #f37d42;
             padding: 15px 10px;
             color: white;
             font-size: 1.4em;
@@ -244,14 +244,15 @@
                 <input id="username" type="text" name="username" required placeholder="Nhập username" ngModel #username="ngModel">
                 <div class="alert" role="alert" *ngIf="username.invalid && username?.touched">Vui lòng điền Tên đăng nhập!</div>
                 <br>
-                <label for="password" >Mật khẩu</label><span class="showpass"><input class="checkbox" type="checkbox">Hiện mật khẩu</span>
+                <label for="password" >Mật khẩu</label>
+                <!-- <span class="showpass"><input class="checkbox" type="checkbox">Hiện mật khẩu</span> -->
                 <br>
                 <input id="password" type="password" name="pwd" placeholder="Nhập password" ngModel required #pw="ngModel">
                 <div class="alert" role="alert" *ngIf="pw.invalid && pw.touched">Vui lòng điền mật khẩu!</div>
                 <br>
                 <button name="login" class="login-button" type="submit" form="loginform" value="Đăng nhập" [disabled]="userlogin.invalid">Đăng nhập</button><br>
             </form>
-            <div class="second-section">
+            <!-- <div class="second-section">
                 <div class="bottom-header">
                     <h3>OR</h3>
                 </div>
@@ -264,10 +265,10 @@
                       <li><a class="googleplus" href="#" target="blank"><i class="fa fa-google-plus"></i></a></li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
             <div class="bottom-text">
-                <p>Chưa có tài khoản?<a href="/user_register">Đăng ký</a></p>
-                <h4> <a href="/forgotpassword">Quên mật khẩu?</a></h4>
+                <p>Chưa có tài khoản?<a href="user_register">Đăng ký</a></p>
+                <h4> <a href="forgotpassword">Quên mật khẩu?</a></h4>
             </div>
         </div>
     </div>

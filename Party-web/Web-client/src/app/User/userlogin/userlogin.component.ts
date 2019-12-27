@@ -15,7 +15,7 @@ export class UserloginComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) { }
   onClickSubmit(data: { username: string; pwd: string; }) {
-    alert("Username bạn vừa nhập vào là: " + data.username + "\nPassword bạn vừa nhập là: " + data.pwd);
+    // alert("Username bạn vừa nhập vào là: " + data.username + "\nPassword bạn vừa nhập là: " + data.pwd);
     return this.authenticationService.login(data.username, data.pwd);
   }
 

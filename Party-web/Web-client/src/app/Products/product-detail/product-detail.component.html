@@ -60,7 +60,7 @@
                         </div>
                         <p style="font-weight: bold">Mô tả:</p>
                         <p class="product-description">{{product_data.description}}</p>
-                        <p class="category">Loại: <a href="/category/{{product_data.type}}"><span>{{product_data.type}}</span></a></p>
+                        <p class="category">Loại: <a href="category/{{product_data.type}}"><span>{{product_data.type}}</span></a></p>
                         <h4 class="price">Giá: <span>{{product_data.price | number}} VNĐ</span></h4>
                         <div class="action">
                             <div class="form-group">
@@ -79,10 +79,10 @@
             <div class="row suggest-row">
                 <div class="col-lg-2 col-md-2 col-xs-2 suggest-item" *ngFor="let item of suggest_list; let i=index">
                     <div class="card h-100" *ngIf="i<6">
-                        <a href="/product/{{item._id}}"><img class="card-img-top suggest-item-thumb" src={{item.image[0]}} onError="this.src='../../../assets/images/dish-thumbnail-default.png';" alt=""></a>
+                        <a href="product/{{item._id}}"><img class="card-img-top suggest-item-thumb" src={{item.image[0]}} onError="this.src='../../../assets/images/dish-thumbnail-default.png';" alt=""></a>
                         <div class="card-body">
                             <h6 class="card-title">
-                                <a href="/product/{{item._id}}">{{item.name}}</a>
+                                <a href="product/{{item._id}}">{{item.name}}</a>
                             </h6>
                             <h6>{{item.price}} VNĐ</h6>
                         </div>

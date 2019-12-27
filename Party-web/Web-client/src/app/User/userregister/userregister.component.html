@@ -20,7 +20,7 @@
         }
         form header {
             text-align: center;
-            background: #bb4e14;
+            background: #f37d42;
             padding: 15px 10px;
             color: white;
             font-size: 1.4em;
@@ -64,7 +64,7 @@
             background: #ef4d4d;
         }
         form .alert{
-            margin-top: 6px;
+            /* margin-top: 6px; */
             margin-left: 20px;
             color: red;
             font-size: 0.8em;
@@ -77,19 +77,19 @@
             <header>Đăng ký</header>
             <label for="name">Họ và tên</label>
             <input id="name" type="text" name="name" required ngModel #name="ngModel">
-            <div class="alert" role="alert" *ngIf="name.invalid && name.touched">Vui lòng điền Họ và tên</div>
+            <div class="alert" role="alert" *ngIf="name.invalid && name.dirty">Vui lòng điền Họ và tên</div>
             <label for="email">E-mail</label>
             <input id="email" type="email" name="email" email required ngModel #email="ngModel">
-            <div class="alert" role="alert" *ngIf="email.invalid && email.touched">Vui lòng điền email hợp lệ</div>
+            <div class="alert" role="alert" *ngIf="email.invalid && email.dirty">Vui lòng điền email hợp lệ</div>
             <label for="phone">Số điện thoại</label>
             <input id="phone" type="text" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel">
-            <div class="alert" role="alert" *ngIf="phone.invalid && phone.touched">Vui lòng điền Số điện thoại hợp lệ</div>
+            <div class="alert" role="alert" *ngIf="phone.invalid && phone.dirty">Vui lòng điền Số điện thoại hợp lệ</div>
             <label for="username">Username</label>
             <input id="username" type="text" name="username" required ngModel #username="ngModel">
-            <div class="alert" role="alert" *ngIf="username.invalid && username.touched">Vui lòng điền Username</div>
+            <div class="alert" role="alert" *ngIf="username.invalid && username.dirty">Vui lòng điền Username</div>
             <label for="password">Mật khẩu</label>
             <input id="password" type="password" name="pwd" required minlength="6" ngModel #pw="ngModel">
-            <div class="alert" role="alert" *ngIf="pw.invalid && pw.touched">Vui lòng điền mật khẩu ít nhất có 6 ký tự</div>
+            <div class="alert" role="alert" *ngIf="pw.invalid && pw.dirty">Vui lòng điền mật khẩu ít nhất có 6 ký tự</div>
             <button type="submit" form="regform" value="Đăng ký" [disabled]="userreg.invalid">Đăng ký</button>
         </form>
     </div>

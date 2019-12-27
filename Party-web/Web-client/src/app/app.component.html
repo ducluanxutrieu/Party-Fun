@@ -31,7 +31,7 @@
 	<div class="homepage">
 		<!-- <app-header></app-header> -->
 		<nav class="navbar navbar-custom navbar-expand-lg navbar-dark static-top">
-			<a class="navbar-brand" href="/mainpage">PartyBooking</a>
+			<a class="navbar-brand" href="mainpage">PartyBooking</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -42,15 +42,15 @@
 							<input class="form-control mr-sm-5" name="search" type="text" placeholder="Tìm kiếm" aria-label="Search">
 						</div>
 					</form> -->
-					<li class="nav-item">
+					<!-- <li class="nav-item">
 						<a class="nav-link" *ngIf="authenticationService.isAdmin()" href="/admin">Admin</a>
-					</li>
+					</li> -->
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
 						aria-haspopup="true" aria-expanded="false" *ngIf="authenticationService.loggedIn()" style="cursor:pointer">
 						<i class="fa fa-user"></i> {{userInfo.username}} </a>
 						<div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-							<a class="dropdown-item" *ngIf="authenticationService.loggedIn()" href="/profile">Tài khoản</a>
+							<a class="dropdown-item" *ngIf="authenticationService.loggedIn()" href="profile">Tài khoản</a>
 							<a class="dropdown-item" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Đăng xuất</a>
 						</div>
 						<!-- <img src={{avtUrl}} *ngIf="authenticationService.loggedIn()" routerLink="/profile" class="avatar"> -->
@@ -60,13 +60,13 @@
 						<a class="nav-link" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Đăng xuất</a>
 					</li> -->
 					<li class="nav-item">
-						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="/user_login">Đăng nhập</a>
+						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="user_login">Đăng nhập</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="/user_register">Đăng ký</a>
+						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="user_register">Đăng ký</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/cart"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a>
+						<a class="nav-link" href="cart"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a>
 					</li>
 				</ul>
 			</div>
