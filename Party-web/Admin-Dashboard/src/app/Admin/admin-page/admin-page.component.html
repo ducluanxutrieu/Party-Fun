@@ -12,35 +12,35 @@
                 <div class="sidebar-header d-flex align-items-center">
                   <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
                   <div class="title">
-                    <a href="/profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
+                    <a href="profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
                     <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
                   </div>
                 </div>
                 <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
                 <ul class="list-unstyled">
-                  <li><a href="/dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
+                  <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
                   <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
                 </ul>
                 <span class="heading">Mangement</span>
                 <ul class="list-unstyled">
                   <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
                     <ul id="ProductDropdown" class="collapse list-unstyled ">
-                      <li><a href="/products/list"><i class="fa fa-list"></i>Products List</a></li>
-                      <li><a href="/products/add"><i class="fa fa-plus"></i>Add Product</a></li>
+                      <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
+                      <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
                       <!-- <li><a href="#">Page</a></li> -->
                     </ul>
                   </li>
                   <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
                     <ul id="EmployeeDropdown" class="collapse list-unstyled ">
-                      <li><a href="/employees/list"><i class="fa fa-list"></i>Employees List</a></li>
-                      <li><a href="/employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
+                      <li><a href="employees/list"><i class="fa fa-list"></i>Employees List</a></li>
+                      <li><a href="employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
                     </ul>
                   </li>
                   <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
                     <ul id="CustomerDropdown" class="collapse list-unstyled ">
-                      <li><a href="/customers/list"><i class="fa fa-list"></i>Customers List</a></li>
-                      <li><a href="/customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
-                      <li><a href="/customers/pay"><i class="fa fa-money"></i>Pay</a></li>
+                      <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                      <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
+                      <li><a href="customers/pay"><i class="fa fa-money"></i>Pay</a></li>
                     </ul>
                   </li>
                 </ul>
