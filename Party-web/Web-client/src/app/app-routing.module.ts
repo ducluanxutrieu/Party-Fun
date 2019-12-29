@@ -27,7 +27,6 @@ import { ProductDetailComponent } from './Products/product-detail/product-detail
 import { ProductCategoryComponent } from './Products/product-category/product-category.component';
 import { AboutComponent } from './about/about.component';
 
-
 const routes: Routes = [
   { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
   { path: 'user_login', component: UserloginComponent },

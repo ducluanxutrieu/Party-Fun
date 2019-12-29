@@ -78,7 +78,7 @@ import { AboutComponent } from './about/about.component';
     ProductCategoryComponent,
     SearchComponent,
     ProductRatingComponent,
-    AboutComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
