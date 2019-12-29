@@ -10,7 +10,7 @@
             <header style="font-weight: 500">Profile</header>
             <label for="fullname">Họ và tên</label>
             <input id="fullname" type="text" name="fullname" ngModel required [(ngModel)]="userInfo.fullName" #fname="ngModel">
-            <div class="alert" role="alert" *ngIf="fname.invalid && fname.touched">Vui lòng điền Họ và tên</div>
+            <div class="invalid-alert" role="alert" *ngIf="fname.invalid && fname.touched">Vui lòng điền Họ và tên</div>
             <label for="gender">Giới tính</label>
             <!--input id="gender" type="text" name="gender" ngModel-->
             <select id="gender" name="gender" ngModel [(ngModel)]="userInfo.sex">
@@ -23,10 +23,10 @@
             <input id="birthday" type="date" name="birthday" ngModel [ngModel]="userInfo.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" (change)="changeOfDate($event)">
             <label for="phonenumber">Số điện thoại</label>
             <input id="phonenumber" type="tel" name="phonenumber" ngModel required [(ngModel)]="userInfo.phoneNumber" maxlength="12" minlength="10" ngModel #phonenum="ngModel">
-            <div class="alert" role="alert" *ngIf="phonenum.invalid && phonenum.touched">Vui lòng điền Số điện thoại hợp lệ</div>
+            <div class="invalid-alert" role="alert" *ngIf="phonenum.invalid && phonenum.touched">Vui lòng điền Số điện thoại hợp lệ</div>
             <label for="email">E-mail</label>
             <input id="email" type="email" name="email" ngModel email required [(ngModel)]="userInfo.email" #email="ngModel">
-            <div class="alert" role="alert" *ngIf="email.invalid && email.touched">Vui lòng điền E-mail hợp lệ</div>
+            <div class="invalid-alert" role="alert" *ngIf="email.invalid && email.touched">Vui lòng điền E-mail hợp lệ</div>
             <button type="submit" form="editprofileForm" value="Xác nhận" [disabled]="editProfile.invalid">Cập nhật</button>
         </form>
     </div>

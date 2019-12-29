@@ -10,7 +10,7 @@
             <div class="col-sm-4 text-center">
                 <div class="rating-block">
                     <h5>Đánh giá trung bình</h5>
-                    <h2 class="bold padding-bottom-5">{{currentProduct_Rating.average}} <span>/ 5</span></h2>
+                    <h2 class="bold padding-bottom-5">{{currentProduct_Rating.average | number}} <span>/ 5</span></h2>
                     <bar-rating [rate]="currentProduct_Rating.average" [max]="5" [theme]="'fontawesome'" [readOnly]="true" class="d-flex justify-content-center"></bar-rating>
                     <p>{{currentProduct_Rating.totalpeople}} nhận xét</p>
                 </div>
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.five/currentProduct_Rating.totalpeople*100 || "0"}}%</div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.five/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
                 </div>
                 <div class="pull-left">
                     <div class="pull-left" style="width:35px; line-height:1;">
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.four/currentProduct_Rating.totalpeople*100 || "0"}}%</div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.four/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
                 </div>
                 <div class="pull-left">
                     <div class="pull-left" style="width:35px; line-height:1;">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.three/currentProduct_Rating.totalpeople*100 || "0"}}%</div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.three/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
                 </div>
                 <div class="pull-left">
                     <div class="pull-left" style="width:35px; line-height:1;">
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.two/currentProduct_Rating.totalpeople*100 || "0"}}%</div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.two/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
                 </div>
                 <div class="pull-left">
                     <div class="pull-left" style="width:35px; line-height:1;">
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.one/currentProduct_Rating.totalpeople*100 || "0"}}%</div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.one/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
                 </div>
             </div>
             <div class="col-sm-4 text-center">

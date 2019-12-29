@@ -70,7 +70,7 @@ form button:hover {
     margin: 5px 20px;
     font-size: 0.9em;
 }
-form .alert{
+form .invalid-alert{
     margin-top: 6px;
     margin-left: 20px;
     color: red;
