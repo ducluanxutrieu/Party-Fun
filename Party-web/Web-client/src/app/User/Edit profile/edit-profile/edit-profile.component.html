@@ -1,113 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            .form_container{
-                margin: 0px 10px 10px;
-                width: 500px;
-            }
-            form {
-                /* background: white; */
-                font-family: Arial, Helvetica, sans-serif;
-                color: #333;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                border-radius: 5px;
-            }
-            form header {
-                text-align: left;
-                margin-left: 10px;
-                padding: 0px 10px 10px;
-                color: black;
-                font-size: 1.2em;
-                font-weight: 400;
-            }
-            form label {
-                font-weight: 400;
-                margin-left: 20px;
-                display: inline-block;
-                margin-top: 20px;
-                margin-bottom: 5px;
-            }
-            form input {
-                display: block;
-                width: 80%;
-                margin-left: 20px;
-                padding: 5px 20px;
-                font-size: 1em;
-                border-radius: 3px;
-                outline: none;
-                border: 1px solid #ccc;
-            }
-            form select{
-                display: block;
-                width: 20%;
-                margin-left: 20px;
-                padding: 5px 20px;
-                font-size: 1em;
-                border-radius: 3px;
-                outline: none;
-                border: 1px solid #ccc;
-            }
-            form button {
-                position: relative;
-                margin-top: 30px;
-                margin-bottom: 30px;
-                left: 50%;
-                transform: translate(-50%, 0);
-                font-family: inherit;
-                color: white;
-                background: #ffae70;
-                outline: none;
-                border: none;
-                padding: 5px 15px;
-                font-size: 1.3em;
-                font-weight: 400;
-                cursor: pointer;
-                transition: all 0.15s ease-in-out;
-            }
-            form button:hover {
-                background: #ff5252;
-            }
-            .form-text{
-                margin: 5px 20px;
-                font-size: 0.9em;
-            }
-            form .alert{
-                margin-top: 6px;
-                margin-left: 20px;
-                color: red;
-                font-size: 0.8em;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="form_container">
-            <form #editProfile = "ngForm" (ngSubmit) = "onClickSubmit(editProfile.value)" id="editprofileForm">
-                <header>Profile</header>
-                <label for="fullname">Họ và tên</label>
-                <input id="fullname" type="text" name="fullname" ngModel required [(ngModel)]="userInfo.fullName" #fname="ngModel">
-                <div class="alert" role="alert" *ngIf="fname.invalid && fname.touched">Vui lòng điền Họ và tên</div>
-                <label for="gender">Giới tính</label>
-                <!--input id="gender" type="text" name="gender" ngModel-->
-                <select id="gender" name="gender" ngModel [(ngModel)]="userInfo.sex">
-                    <!-- <option value="Hide">Hide</option> -->
-                    <option value="Male">Nam</option>
-                    <option value="Female">Nữ</option>
-                    <!-- <option value="undefined">?</option> -->
-                </select>
-                <label for="birthday">Ngày sinh</label>
-                <input id="birthday" type="date" name="birthday" ngModel [ngModel]="userInfo.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" (change)="changeOfDate($event)">
-                <label for="phonenumber">Số điện thoại</label>
-                <input id="phonenumber" type="tel" name="phonenumber" ngModel required [(ngModel)]="userInfo.phoneNumber" maxlength="12" minlength="10" ngModel #phonenum="ngModel">
-                <div class="alert" role="alert" *ngIf="phonenum.invalid && phonenum.touched">Vui lòng điền Số điện thoại hợp lệ</div>
-                <label for="email">E-mail</label>
-                <input id="email" type="email" name="email" ngModel email required [(ngModel)]="userInfo.email" #email="ngModel">
-                <div class="alert" role="alert" *ngIf="email.invalid && email.touched">Vui lòng điền E-mail hợp lệ</div>
-                <button type="submit" form="editprofileForm" value="Xác nhận" [disabled]="editProfile.invalid">Cập nhật</button>
-            </form>
-        </div>
-    </body>
-
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="form_container">
+        <form #editProfile = "ngForm" (ngSubmit) = "onClickSubmit(editProfile.value)" id="editprofileForm">
+            <header style="font-weight: 500">Profile</header>
+            <label for="fullname">Họ và tên</label>
+            <input id="fullname" type="text" name="fullname" ngModel required [(ngModel)]="userInfo.fullName" #fname="ngModel">
+            <div class="alert" role="alert" *ngIf="fname.invalid && fname.touched">Vui lòng điền Họ và tên</div>
+            <label for="gender">Giới tính</label>
+            <!--input id="gender" type="text" name="gender" ngModel-->
+            <select id="gender" name="gender" ngModel [(ngModel)]="userInfo.sex">
+                <!-- <option value="Hide">Hide</option> -->
+                <option value="Male">Nam</option>
+                <option value="Female">Nữ</option>
+                <!-- <option value="undefined">?</option> -->
+            </select>
+            <label for="birthday">Ngày sinh</label>
+            <input id="birthday" type="date" name="birthday" ngModel [ngModel]="userInfo.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" (change)="changeOfDate($event)">
+            <label for="phonenumber">Số điện thoại</label>
+            <input id="phonenumber" type="tel" name="phonenumber" ngModel required [(ngModel)]="userInfo.phoneNumber" maxlength="12" minlength="10" ngModel #phonenum="ngModel">
+            <div class="alert" role="alert" *ngIf="phonenum.invalid && phonenum.touched">Vui lòng điền Số điện thoại hợp lệ</div>
+            <label for="email">E-mail</label>
+            <input id="email" type="email" name="email" ngModel email required [(ngModel)]="userInfo.email" #email="ngModel">
+            <div class="alert" role="alert" *ngIf="email.invalid && email.touched">Vui lòng điền E-mail hợp lệ</div>
+            <button type="submit" form="editprofileForm" value="Xác nhận" [disabled]="editProfile.invalid">Cập nhật</button>
+        </form>
+    </div>
+</body>
 </html>

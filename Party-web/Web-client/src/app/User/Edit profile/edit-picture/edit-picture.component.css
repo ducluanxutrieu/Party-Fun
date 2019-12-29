@@ -1,0 +1,62 @@
+html, body{
+    font-family: Roboto, Helvetica, sans-serif;
+}
+header{
+    text-align: left;
+    padding: 0px 10px 10px;
+    color: black;
+    font-family: Roboto, Helvetica, sans-serif;
+    font-size: 1.4em;
+    font-weight: 500;
+}
+.editavatar-container{
+    width: 500px;
+    background-color: white;
+    float: left;
+    margin-left: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+.avatar{
+    float: left;
+    display: inline-block;
+    margin: 10px 10px;
+}
+.avatar img{
+    width: 200px;
+    height: 200px;
+}
+.updatePicture{
+    display: inline-block;
+    margin: 0px 10px 10px;
+}
+.updatePicture input{
+    margin: 5px 0px;
+}
+form {
+    background: white;
+    width: 100%;
+    font-family: Roboto, Helvetica, sans-serif;
+    color: #333;
+}
+form header {
+    margin: 0px 0px;
+    padding: 0px 0px;
+    color: black;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+form .formHeader{
+    margin: 10px 0px;
+}
+form p{
+    font-size: 0.8em;
+}
+form button{
+    color: white;
+    background: #ffae70;
+}
+form button:hover{
+    cursor: pointer;
+}

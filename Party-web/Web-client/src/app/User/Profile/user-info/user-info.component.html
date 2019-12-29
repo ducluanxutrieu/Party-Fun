@@ -1,113 +1,31 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        html, body{
-            background-color: #f1f1f1;
-            font-family: Helvetica, sans-serif;
-        }
-        .userprofile-container{
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            height: 100vh;
-            padding: 10px 0px 50px;
-        }
-        
-        .userPanel {
-            font-family: Roboto, Helvetica, sans-serif;
-            float: left;
-            background-color: #f1f1f1;
-            width: 15%;
-            height: 400px;
-            padding: 10px 10px;
-            margin-left: 30px;
-            margin-right: 30px;
-        }
-        .userPanel a{
-            cursor:pointer;
-            text-decoration: none;
-        }
-        .userPanel .edit-link{
-            margin: 5px 5px;
-            color: #888;
-            padding-left: 8px;
-        }
-        .userPanel .edit-link:hover{
-            text-decoration: underline;
-        }
-        .user-section{
-            width: 70%;
-            min-height: 400px;
-            float: left;
-            margin-left: 10px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 5px;
-            overflow: auto;
-            overflow-x: auto;
-            overflow-y: auto;
-        }
-        .infoheader{
-            font-size: 22px;
-            margin: 5px 5px;
-            font-weight: 500;
-        }
-        .panel-icon{
-            display: inline;
-            margin-right: 10px;
-            text-align: center;
-        }
-        .panel-icon img{
-            width: 1em;
-            height: 1em;
-        }
-        hr{
-            margin: 10px 10px;
-        }
-        
-        .navi-link{
-            display: block;
-            color: #000;
-            padding: 8px 8px;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-        .navi-link span{
-            color:rgba(0, 0, 0, 0.87);
-        }
-        .userPanel ul{
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            width: 200px;
-        }
-        .navi-link:hover{
-            background-color: rgba(0, 0, 0, 0.04);
-            color: white;
-        }
-        .panel-username{
-            padding: 8px;
-            font-weight: bold;
-        }
-    </style>
 </head>
-
 <body>
-    <div class="userprofile-container container">
-        <div class="userPanel">
+    <div class="container">
+        <div class="row">
+            <div class="userPanel col-12 col-lg-3">
             <div class="panel-username">{{userInfo.username}}'s profile</div>
-            <a class="edit-link"routerLink="/editProfile"><svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;"><path d="M8.54 0L6.987 1.56l3.46 3.48L12 3.48M0 8.52l.073 3.428L3.46 12l6.21-6.18-3.46-3.48" fill="#9B9B9B" fill-rule="evenodd"></path></svg>Edit profile</a>
+            <a class="edit-link" href="editProfile">
+                <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                    <path d="M8.54 0L6.987 1.56l3.46 3.48L12 3.48M0 8.52l.073 3.428L3.46 12l6.21-6.18-3.46-3.48" fill="#9B9B9B" fill-rule="evenodd"></path>
+                </svg>Edit profile</a>
             <hr>
             <ul>
-                <li class="navi-link"><a routerLink="/profile/yourprofile"><div class="panel-icon"><img src="../../../../assets/icon/user-icon.png"></div><span>Thông tin tài khoản</span></a></li>
-                <li class="navi-link"><a routerLink="/profile/yourcart"><div class="panel-icon"><img src="../../../../assets/icon/cart-icon.png"></div><span>Thông tin đơn hàng</span></a></li>
+                <li class="navi-link">
+                    <a routerLink="/profile/yourprofile">
+                        <div class="panel-icon"><img src="../../../../assets/icon/user-icon.png"></div>
+                        Thông tin tài khoản
+                    </a>
+                </li>
+                <li class="navi-link"><a routerLink="/profile/yourcart"><div class="panel-icon"><img src="../../../../assets/icon/cart-icon.png"></div>Thông tin đơn hàng</a></li>
             </ul>
-        </div>
-        <div class="card user-section">
-            <router-outlet></router-outlet>
+            </div>
+            <div class="card user-section col-12 col-lg-8">
+                <router-outlet></router-outlet>
+            </div>
         </div>
     </div>
 </body>
