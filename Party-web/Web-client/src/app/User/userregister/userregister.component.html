@@ -19,8 +19,8 @@
             <input id="phone" type="text" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel">
             <div class="invalid-alert" role="alert" *ngIf="phone.invalid && phone.dirty">Vui lòng điền Số điện thoại hợp lệ</div>
             <label for="username">Username</label>
-            <input id="username" type="text" name="username" required ngModel #username="ngModel">
-            <div class="invalid-alert" role="alert" *ngIf="username.invalid && username.dirty">Vui lòng điền Username</div>
+            <input id="username" type="text" name="username" minlength="4" required ngModel #username="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="username.invalid && username.dirty">Vui lòng điền Username với tối thiểu 4 ký tự</div>
             <label for="password">Mật khẩu</label>
             <input id="password" type="password" name="pwd" required minlength="6" ngModel #pw="ngModel">
             <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Vui lòng điền mật khẩu ít nhất có 6 ký tự</div>
