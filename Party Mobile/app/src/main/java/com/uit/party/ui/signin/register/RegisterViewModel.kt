@@ -122,6 +122,11 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                 usernameValid = false
                 checkShowButtonRegister()
             }
+            editable.trim().length < 6 -> {
+                errorUserName.set(StringUtil.getString(R.string.user_name_too_short))
+                usernameValid = false
+                checkShowButtonRegister()
+            }
             else -> {
                 usernameValid = true
                 errorUserName.set("")
