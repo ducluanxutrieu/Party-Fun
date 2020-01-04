@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { StaffService } from '../../../_services/staff.service';
 import { Subject } from 'rxjs';
@@ -13,7 +13,7 @@ interface Customer {
   templateUrl: './customers-list.component.html',
   styleUrls: ['./customers-list.component.css']
 })
-export class CustomersListComponent implements OnDestroy, OnInit {
+export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit {
   // customersList = [];
   customersList: Customer;
 
@@ -32,14 +32,19 @@ export class CustomersListComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.staffService.customersList.subscribe(data => {
       this.customersList = data;
-      this.dtTrigger.next();
     });
+    setTimeout(() => {
+      this.dtTrigger.next();
+    }, 1000)
     // $(document).ready(function() {
     //   $('#customertable').DataTable();
     // } );
   }
+  ngAfterViewInit(): void {
+    // this.dtTrigger.next();
+  }
   ngOnDestroy(): void {
-    // this.dtTrigger.unsubscribe();
+    this.dtTrigger.unsubscribe();
   }
   // search(event) {
   //   var key = event.target.value;

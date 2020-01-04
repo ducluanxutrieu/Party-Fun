@@ -40,7 +40,7 @@
                 <ul id="CustomerDropdown" class="collapse list-unstyled ">
                   <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
                   <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
-                  <li><a href="customers/pay"><i class="fa fa-money"></i>Pay</a></li>
+                  <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
                 </ul>
               </li>
             </ul>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="card-body">
                           <div class="table-responsive">
-                            <table datatable class="table">
+                            <table datatable [dtTrigger]="dtTrigger" class="table">
                               <thead>
                                 <tr>
                                   <th class="text-center">#</th>
@@ -82,7 +82,7 @@
                                   <td class="align-middle text-center">{{product.name}}</td>
                                   <td class="align-middle text-center">{{product.type}}</td>
                                   <td class="align-middle text-center">{{product.price | number}}</td>
-                                  <td class="text-center"><a href="/products/edit/{{product._id}}"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></a><span class="tab-space"></span><button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" (click)="delete_clicked(product._id, product.name)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                  <td class="text-center"><a href="products/edit/{{product._id}}"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></a><span class="tab-space"></span><button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" (click)="delete_clicked(product._id, product.name)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                 </tr>
                               </tbody>
                             </table>

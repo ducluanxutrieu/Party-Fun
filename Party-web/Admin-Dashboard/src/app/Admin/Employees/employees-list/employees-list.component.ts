@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { UserService } from '../../../_services/user.service';
 import { StaffService } from '../../../_services/staff.service';
 import { Subject } from 'rxjs';
@@ -11,7 +11,7 @@ interface Staff {
   templateUrl: './employees-list.component.html',
   styleUrls: ['./employees-list.component.css']
 })
-export class EmployeesListComponent implements OnInit {
+export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit {
   // staffsList = [];
   staffsList: Staff;
   dtTrigger: Subject<any> = new Subject();
@@ -28,9 +28,17 @@ export class EmployeesListComponent implements OnInit {
 
   ngOnInit() {
     this.staffService.staffsList.subscribe(data => {
-    this.staffsList = data;
-      this.dtTrigger.next();
+      this.staffsList = data;
+      // this.dtTrigger.next();
     });
+    setTimeout(() => {
+      this.dtTrigger.next();
+    }, 1000)
   }
-
+  ngAfterViewInit(): void {
+    // this.dtTrigger.next();
+  }
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
 }

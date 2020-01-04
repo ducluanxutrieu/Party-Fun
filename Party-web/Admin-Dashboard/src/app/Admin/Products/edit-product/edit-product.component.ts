@@ -36,7 +36,7 @@ export class EditProductComponent implements OnInit {
     promotion: number;
     // image1: File;
   }) {
-    let body = `_id=${this.product_data._id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.promotion}&type=${data.type}`;
+    let body = `_id=${this.product_data._id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=0&type=${data.type}`;
     //   this.createFormData(body, 'image', this.imgArr);
     // body.append('image', this.imgArr[0]);
     let headers = new HttpHeaders({

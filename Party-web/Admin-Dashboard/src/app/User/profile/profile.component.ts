@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     // this.profile_info = this.userService.get_userInfo();
-    console.log(this.profile_info);
+    // console.log(this.profile_info);
   }
   updateSubmit(data: {
     name: string;
@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit {
   }) {
     this.birthday = this.datepipe.transform(data.birthday, 'MM/dd/yyyy');
     let body = `fullName=${data.name}&sex=${data.gender}&birthday=${this.birthday}&phoneNumber=${data.phone}&email=${data.email}`;
+    console.log(body);
     let headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': localStorage.getItem('token')

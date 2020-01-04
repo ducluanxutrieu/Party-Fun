@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { api } from '../../../_api/apiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProductService } from '../../../_services/product.service';
@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css']
 })
-export class ProductsListComponent implements OnInit {
+export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   product_data = [];
 
   dtTrigger: Subject<any> = new Subject();
@@ -55,8 +55,15 @@ export class ProductsListComponent implements OnInit {
     this.product_data = this.productService.findAll();
     this.productService.productList.subscribe(data => {
       this.product_data = data;
-      this.dtTrigger.next();
     });
+    setTimeout(() => {
+      this.dtTrigger.next();
+    }, 1000)
   }
-
+  ngAfterViewInit(): void {
+    // this.dtTrigger.next();
+  }
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
 }
