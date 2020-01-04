@@ -86,6 +86,12 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                 fullNameValid = false
                 checkShowButtonRegister()
             }
+            editable.trim().length < 6 -> {
+                errorFullName.set(StringUtil.getString(R.string.full_name_too_short))
+                fullNameValid = false
+                checkShowButtonRegister()
+
+            }
             else -> {
                 fullNameValid = true
                 errorFullName.set("")
@@ -137,7 +143,6 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     }
 
 
-
     fun getPhoneNumberTextChanged(): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
@@ -149,7 +154,6 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-
         }
     }
 
@@ -165,6 +169,13 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                 phoneNumberValid = false
                 checkShowButtonRegister()
             }
+
+            editable.trim().length < 9 -> {
+                errorPhoneNumber.set(StringUtil.getString(R.string.phone_number_too_short))
+                phoneNumberValid = false
+                checkShowButtonRegister()
+            }
+
             else -> {
                 phoneNumberValid = true
                 errorPhoneNumber.set("")
@@ -185,7 +196,6 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
-
         }
     }
 

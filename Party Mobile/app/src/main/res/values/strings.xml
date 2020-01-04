@@ -9,7 +9,7 @@
     <string name="repeat_password">Repeat Password</string>
     <string name="full_name">Full Name</string>
     <string name="register">Register</string>
-    <string name="logout">LogOut</string>
+    <string name="logout">Logout</string>
     <string name="description">Description</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="update">Update</string>
@@ -126,4 +126,6 @@
     <string name="amount">Amount</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="user_name_too_short">Username too short</string>
+    <string name="full_name_too_short">Full name too short</string>
+    <string name="phone_number_too_short">Phone number too short</string>
 </resources>

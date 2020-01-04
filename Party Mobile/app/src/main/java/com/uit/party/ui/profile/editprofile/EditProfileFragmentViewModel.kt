@@ -189,6 +189,11 @@ class EditProfileFragmentViewModel : ViewModel() {
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
             }
+            editable.trim().length < 9 -> {
+                errorPhoneNumber.set(StringUtil.getString(R.string.phone_number_too_short))
+                phoneNumberValid = false
+                checkEnableButtonUpdate()
+            }
             else -> {
                 phoneNumberValid = true
                 errorPhoneNumber.set("")
