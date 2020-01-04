@@ -21,12 +21,12 @@ export class EditPasswordComponent implements OnInit {
     newpass: string;
   }) {
     var token = localStorage.getItem('token');
-    let body = `password=${data.pwd}&passwordchange=${data.newpass}`;
+    let body = `password=${data.pwd}&newpassword=${data.newpass}`;
     let headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': token
     })
-    alert("password: " + data.pwd + "newpass: " + data.newpass);
+    // alert("password: " + data.pwd + "newpass: " + data.newpass);
     return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
         alert("Thay đổi thành công!");
