@@ -32,7 +32,6 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_maps_address, container, false)
-//        val view = inflater.inflate(R.layout.fragment_maps_address, container, false)
         return mBinding.root
     }
 
@@ -100,7 +99,6 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
                     .title("Party Booking")
                     .icon(bitmapDescriptorFromVector(context!!, R.drawable.ic_location))
             )
-
         }
     }
 

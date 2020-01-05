@@ -121,6 +121,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                         RxBus.publish(RxEvent.AddDish(repo?.dish, dishType = mDishType, position = mPositon))
                         view.findNavController().popBackStack()
 
+
                     }else{
                         ToastUtil.showToast(StringUtil.getString(R.string.update_dish_false))
                     }

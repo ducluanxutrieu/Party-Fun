@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.Filter
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.uit.party.BR
 import com.uit.party.R
 import com.uit.party.databinding.ItemMainMenuBinding
 import com.uit.party.model.DishModel
@@ -123,22 +122,16 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
         }
     }
 
-    fun updateDish(dishModel: DishModel, dishType: String, positon: Int) {
-        for (row in mListMenuFiltered){
-            if (row.menuName == dishType){
-                row.listDish[positon] = dishModel
+    fun updateDish(dishModel: DishModel, dishType: String, position: Int) {
+        try {
+            for (row in mListMenuFiltered) {
+                if (row.menuName == dishType) {
+                    row.listDish[position] = dishModel
+                }
             }
+        }catch (e : Exception){
+            e.printStackTrace()
         }
-/*        when (dishType) {
-            "Holiday Offers" -> {
-                mListDishMenuOrigin
-                listHolidayOffers.add(row)
-            }
-            "First Dishes" -> listFirstDishes.add(row)
-            "Main Dishes" -> listMainDishes.add(row)
-            "Seafood" -> listSeafood.add(row)
-            "Drinks" -> listDrink.add(row)
-        }*/
     }
 
     class MenuViewHolder(val binding: ItemMainMenuBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -128,4 +128,5 @@
     <string name="user_name_too_short">Username too short</string>
     <string name="full_name_too_short">Full name too short</string>
     <string name="phone_number_too_short">Phone number too short</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
