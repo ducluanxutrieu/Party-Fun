@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:party_booking/res/assets.dart';
-import 'package:party_booking/res/colors.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:party_booking/data/network/model/login_request_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/screen/forgot_password_screen.dart';
+import 'package:party_booking/screen/register_screen.dart';
+import 'package:party_booking/widgets/common/app_button.dart';
+import 'package:party_booking/widgets/common/logo_app.dart';
+import 'package:party_booking/widgets/common/text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -8,109 +15,103 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: Image.asset(
-              Assets.imgSignInBackground,
-              fit: BoxFit.fill,
-            ),
-          ),
-          Positioned(
-            top: size.height * 0.2,
-            left: 50,
-            right: 50,
-            child: _buildLoginForm(context, size),
-          ),
-          Positioned(
-            bottom: size.height * 0.05,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: FlatButton(
-                onPressed: () {},
-                child: Text(
-                  "Forgot your password",
-                  style: TextStyle(color: AppColors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+
+  List<FormFieldValidator> listValidators = <FormFieldValidator>[
+    FormBuilderValidators.required(),
+  ];
+
+  void requestLogin(String username, String password)async{
+    var model = LoginRequestModel.fromString("ducluan", "123456");
+    var result = await AppApiService.create().requestSignIn(model: model);
+    print("RESULT ${result.isSuccessful}" );
+    Fluttertoast.showToast(
+        msg: result.body.message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
-  Widget _buildLoginForm(BuildContext context, Size size) {
-    return Card(
-      child: Container(
-        height: size.height * 0.55,
-        color: AppColors.white,
-        padding: EdgeInsets.all(32),
-        child: Form(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Login",
-                style: TextStyle(
-                    color: Colors.yellow,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "To cha bay",
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "To cha bay",
-                ),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              FractionallySizedBox(
-                widthFactor: 1,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  color: Colors.deepOrange,
-                  onPressed: () {},
-                  child: Text(
-                    "Sign in".toUpperCase(),
-                    style: TextStyle(
-                      color: AppColors.white,
+  @override
+  Widget build(BuildContext context) {
+    final createNewAccountButton = FlatButton(
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+      },
+      child: Text(
+        'Create New Account',
+        style: TextStyle(color: Colors.green, fontSize: 18),
+      ),
+    );
+
+    final forgotPasswordButton = FlatButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+      },
+      child: Text(
+        "Forgot your password",
+        style: TextStyle(color: Colors.blue, fontSize: 16),
+      ),
+    );
+
+    void onLoginPressed(){
+      String username = _fbKey.currentState.fields['username'].currentState.value;
+      String password = _fbKey.currentState.fields['password'].currentState.value;
+      requestLogin(username, password);
+    }
+
+    return Scaffold(
+      body: Center(
+        child: FormBuilder(
+          key: _fbKey,
+          autovalidate: true,
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(height: 80,),
+                    LogoAppWidget(
+                      mLogoSize: 150,
                     ),
-                  ),
+                    SizedBox(height: 75.0),
+                    TextFieldWidget(
+                      mHindText: 'Username',
+                      mAttribute: 'username',
+                      mTextInputType: TextInputType.emailAddress,
+                      mValidators: listValidators,
+                    ),
+                    SizedBox(height: 25.0),
+                    TextFieldWidget(
+                      mHindText: 'Password',
+                      mAttribute: 'password',
+                      mValidators: listValidators,
+                    ),
+                    SizedBox(
+                      height: 35.0,
+                    ),
+                    AppButtonWidget(
+                      buttonText: 'Login',
+                      buttonHandler: onLoginPressed,
+                    ),
+                    SizedBox(height: 5,),
+                    createNewAccountButton,
+                    SizedBox(height: 40,),
+                    forgotPasswordButton,
+                  ],
                 ),
               ),
-              Builder(
-                builder: (buildContext) => InkWell(
-                  onTap: () {
-                    Scaffold.of(buildContext)
-                        .showSnackBar(SnackBar(content: Text("Hello")));
-                  },
-                  child: Text(
-                    "Create account",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
