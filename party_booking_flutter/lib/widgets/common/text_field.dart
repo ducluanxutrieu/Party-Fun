@@ -23,9 +23,10 @@ class TextFieldWidget extends StatelessWidget {
     return FormBuilderTextField(
         attribute: mAttribute,
         obscureText: mShowObscureText,
-        maxLines: mShowObscureText ? 1 : null,
+        maxLines: 1,
         style: mStyle,
         keyboardType: mTextInputType,
+        textInputAction: TextInputAction.next,
         decoration: InputDecoration(
             hintText: mHindText,
             contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),

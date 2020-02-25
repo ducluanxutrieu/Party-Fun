@@ -29,7 +29,7 @@ abstract class LoginRequestModel
         LoginRequestModel.serializer, json.decode(jsonString));
   }
 
-  static LoginRequestModel fromString(String user, String pass) {
+  static LoginRequestModel fromModel(String user, String pass) {
     return _$LoginRequestModel._(username: user, password: pass);
   }
 

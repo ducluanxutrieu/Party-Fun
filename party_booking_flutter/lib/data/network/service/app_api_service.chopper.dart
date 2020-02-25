@@ -23,4 +23,22 @@ class _$AppApiService extends AppApiService {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<AccountResponseModel, AccountResponseModel>($request);
   }
+
+  @override
+  Future<Response<AccountResponseModel>> requestRegister(
+      {RegisterRequestModel model}) {
+    final $url = '/user/signup';
+    final $body = model;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<AccountResponseModel, AccountResponseModel>($request);
+  }
+
+  @override
+  Future<Response<ListDishesResponseModel>> getListDishes({String token}) {
+    final $url = '/product/finddish';
+    final $headers = {'authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client
+        .send<ListDishesResponseModel, ListDishesResponseModel>($request);
+  }
 }
