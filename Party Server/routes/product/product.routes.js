@@ -34,9 +34,10 @@ app.delete('/deletebill', auth.isAuthenticated, auth.isStaff, controller.deleteb
 // thanh toan
 app.post('/pay', auth.isAuthenticated, auth.isStaff, controller.pay);
 
-// thong ke
+// thong ke theo tien
 app.get('/statisticalmoney', auth.isAuthenticated, auth.isStaff, controller.statisticalmoney);
 
+// thong ke mon an
 app.get('/statisticaldish', auth.isAuthenticated, auth.isStaff, controller.statisticaldish);
 
 // danh gia mon an
