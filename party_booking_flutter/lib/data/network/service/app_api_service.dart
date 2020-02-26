@@ -2,10 +2,11 @@ import 'package:chopper/chopper.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
+import 'package:party_booking/data/network/model/login_response_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 
 import '../interceptor/network_interceptor.dart';
-import 'built_value_converter.dart';
+import 'json_serializable_converter.dart';
 
 part 'app_api_service.chopper.dart';
 
@@ -32,12 +33,24 @@ abstract class AppApiService extends ChopperService {
         services: [
           _$AppApiService(),
         ],
-        converter: BuiltValueConverter(),
+        converter: _converter,
         errorConverter: JsonConverter(),
         interceptors: [
           HttpLoggingInterceptor(),
           NetworkInterceptor(),
         ]);
     return _$AppApiService(client);
+  }
+
+  static JsonSerializableConverter get _converter {
+    return JsonSerializableConverter({
+      AccountResponseModel: AccountResponseModel.fromJsonFactory,
+      RegisterRequestModel: RegisterRequestModel.fromJsonFactory,
+      ListDishesResponseModel: ListDishesResponseModel.fromJsonFactory,
+      DishModel: DishModel.fromJsonFactory,
+      RateModel: RateModel.fromJsonFactory,
+      RateItemModel :RateItemModel.fromJsonFactory,
+      LoginResponseModel: LoginResponseModel.fromJsonFactory,
+    });
   }
 }

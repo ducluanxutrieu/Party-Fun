@@ -1,47 +1,35 @@
-import 'dart:convert';
+class RegisterRequestModel {
+  String fullName;
+  String username;
+  String email;
+  String phoneNumber;
+  String password;
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:party_booking/data/network/model/serializers.dart';
+  RegisterRequestModel(
+      {this.fullName,
+        this.username,
+        this.email,
+        this.phoneNumber,
+        this.password});
 
-part 'register_request_model.g.dart';
+  static RegisterRequestModel fromJsonFactory(Map<String, dynamic> json) =>
+      RegisterRequestModel.fromJson(json);
 
-abstract class RegisterRequestModel
-    implements Built<RegisterRequestModel, RegisterRequestModelBuilder> {
-  RegisterRequestModel._();
-
-  factory RegisterRequestModel([updates(RegisterRequestModelBuilder b)]) =
-      _$RegisterRequestModel;
-
-  @BuiltValueField(wireName: 'fullName')
-  String get fullName;
-
-  @BuiltValueField(wireName: 'username')
-  String get username;
-
-  @BuiltValueField(wireName: 'email')
-  String get email;
-
-  @BuiltValueField(wireName: 'phoneNumber')
-  String get phoneNumber;
-
-  @BuiltValueField(wireName: 'password')
-  String get password;
-
-  String toJson() {
-    return json.encode(
-        serializers.serializeWith(RegisterRequestModel.serializer, this));
+  RegisterRequestModel.fromJson(Map<String, dynamic> json) {
+    fullName = json['fullName'];
+    username = json['username'];
+    email = json['email'];
+    phoneNumber = json['phoneNumber'];
+    password = json['password'];
   }
 
-  static RegisterRequestModel fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        RegisterRequestModel.serializer, json.decode(jsonString));
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['fullName'] = this.fullName;
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['phoneNumber'] = this.phoneNumber;
+    data['password'] = this.password;
+    return data;
   }
-
-  static RegisterRequestModel fromModel(String fullName, String username, String email, String phoneNumber, String password){
-    return _$RegisterRequestModel._(fullName: fullName, password: password, username: username, email: email, phoneNumber: phoneNumber);
-  }
-
-  static Serializer<RegisterRequestModel> get serializer =>
-      _$registerRequestModelSerializer;
 }

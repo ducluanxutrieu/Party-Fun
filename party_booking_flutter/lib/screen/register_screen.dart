@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -18,6 +18,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
+
+  void onRegisterClicked() async {
+    final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
+    final username = _fbKey.currentState.fields['username'].currentState.value;
+    final email = _fbKey.currentState.fields['email'].currentState.value;
+    final phoneNumber =
+        _fbKey.currentState.fields['phonenumber'].currentState.value;
+    final password = _fbKey.currentState.fields['password'].currentState.value;
+    final model = RegisterRequestModel(
+        fullName: fullName,
+        username: username,
+        email: email,
+        password: password,
+        phoneNumber: phoneNumber);
+
+    final result = await AppApiService.create().requestRegister(model: model);
+    if(result.isSuccessful){
+      Navigator.pop(context);
+    }
+    UTiu.showToast(result.body.message);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,36 +53,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     var validatorRePassword = (dynamic value) {
-      if (value !=
-          _fbKey.currentState.fields['password'].currentState.value) {
+      if (value != _fbKey.currentState.fields['password'].currentState.value) {
         return 'Password is not matching';
       } else
         return null;
     };
-
-    void onRegisterClicked() async {
-      final fullName =
-          _fbKey.currentState.fields['fullname'].currentState.value;
-      final username =
-          _fbKey.currentState.fields['username'].currentState.value;
-      final email = _fbKey.currentState.fields['email'].currentState.value;
-      final phoneNumber =
-          _fbKey.currentState.fields['phonenumber'].currentState.value;
-      final password =
-          _fbKey.currentState.fields['password'].currentState.value;
-      final model = RegisterRequestModel.fromModel(
-          fullName, username, email, phoneNumber, password);
-
-      final result = await AppApiService.create().requestRegister(model: model);
-      Fluttertoast.showToast(
-          msg: result.body.message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
 
     return Scaffold(
       body: Center(

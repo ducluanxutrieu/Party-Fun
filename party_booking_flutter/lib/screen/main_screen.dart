@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:party_booking/data/network/model/account_model.dart';
-import 'package:party_booking/data/network/model/dish_model.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,31 +17,31 @@ class _MainScreenState extends State<MainScreen> {
   String _token = "";
   final _listDishesModel = List<DishModel>();
 
-  bool alredyInit = false;
+  bool alreadyInit = false;
 
   @override
   void initState() {
     super.initState();
+    getNameUser();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if(alredyInit == false){
-      alredyInit = true;
-      getNameUser();
+    if (alreadyInit == false) {
+      alreadyInit = true;
+//      getNameUser();
     }
   }
 
   void getNameUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    final AccountModel accountModel = AccountModel.fromJson(accountJson);
-    setState(() {
-      _fullNameUser = accountModel.fullName;
-      _token = accountModel.token;
-      print(_fullNameUser);
-    });
+    final AccountModel accountModel =
+        AccountModel.fromJson(json.decode(accountJson));
+    _fullNameUser = accountModel.fullName;
+    _token = accountModel.token;
+    getListDishes();
   }
 
 //  final items = List<String>.generate(10000, (i) => "Item $i");
@@ -50,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
   void getListDishes() async {
     var result = await AppApiService.create().getListDishes(token: _token);
     setState(() {
-      _listDishesModel.addAll(result.body.dishModel.toList());
+      _listDishesModel.addAll(result.body.listDishes);
     });
   }
 
@@ -101,18 +102,20 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            AppButtonWidget(
-              buttonText: "Temp",
-              buttonHandler: getListDishes,
+//            AppButtonWidget(
+//              buttonText: "Temp",
+//              buttonHandler: getListDishes,
+//            ),
+            Expanded(
+              child: listView,
             ),
-            Expanded(child: listView,),
           ],
         ),
       ),
     );
   }
 
-  Widget itemCard(DishModel model) {
+  Widget itemCard(DishModel dishModel) {
     return Card(
       color: Colors.white,
       elevation: 4,
@@ -122,9 +125,9 @@ class _MainScreenState extends State<MainScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text(model.price.toString()),
-              Image.network(model.image[0]),
-              Text(model.name),
+              Text(dishModel.price.toString()),
+              Image.network(dishModel.image[0]),
+              Text(dishModel.name),
             ],
           ),
         ),

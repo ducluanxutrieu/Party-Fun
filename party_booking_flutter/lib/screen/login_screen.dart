@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:party_booking/data/network/model/account_model.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
@@ -11,6 +13,7 @@ import 'package:party_booking/screen/register_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,21 +31,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   saveDataToPrefs(AccountModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(Constants.ACCOUNT_MODEL_KEY, model.toJson());
+    prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(model.toJson()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => MainScreen()));
   }
 
   void requestLogin(String username, String password) async {
-    var model = LoginRequestModel.fromModel(username, password);
+    var model = LoginRequestModel(username: username, password: password);
     var result = await AppApiService.create().requestSignIn(model: model);
     if(result.isSuccessful){
-      Fluttertoast.showToast(
-          msg: result.body.message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      UTiu.showToast(result.body.message);
       saveDataToPrefs(result.body.account);
     } else{
       Fluttertoast.showToast(
@@ -99,8 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
       String password = _fbKey.currentState.fields['password'].currentState
           .value;
       requestLogin(username, password);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainScreen()));
+
     }
 
     return Scaffold(
