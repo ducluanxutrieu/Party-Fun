@@ -8,7 +8,6 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AccountModel.serializer)
-      ..add(AccountResponseModel.serializer)
       ..add(LoginRequestModel.serializer))
     .build();
 

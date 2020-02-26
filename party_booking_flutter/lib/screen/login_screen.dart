@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-      saveDataToPrefs(result.body.account);
+//      saveDataToPrefs(result.body.account);
     } else{
       Fluttertoast.showToast(
           msg: result.error.toString(),
