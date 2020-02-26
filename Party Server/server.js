@@ -1,12 +1,9 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var mongodb = require("mongodb");
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
-//app.use('/uploads', express.static('uploads'));
 
 app.use((req,res,next) => {
     
@@ -19,4 +16,6 @@ app.use((req,res,next) => {
 
 app.use('/', require('./routes/routes'));
 
-app.listen(3000);
+var server=app.listen(3000, () => {
+    console.log('Server running port '+server.address().port);
+})
