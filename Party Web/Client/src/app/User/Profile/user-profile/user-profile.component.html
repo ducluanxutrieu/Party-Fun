@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="infoheader">Thông tin tài khoản</div>
+    <hr>
+    <div class="user-info-section">
+        <div class="info-group">
+            <label class="info-label">Họ và tên: <span class="info-content">{{userInfo.fullName}}</span></label>
+        </div>
+        <div class="info-group">
+            <label class="info-label">Giới tính: <span class="info-content" *ngIf="userInfo.sex=='Male'">Nam</span><span class="info-content" *ngIf="userInfo.sex=='Female'">Nữ</span></label>
+        </div>
+        <div class="info-group">
+            <label class="info-label">Ngày sinh: <span class="info-content">{{userInfo.birthday | date: 'dd/MM/yyyy'}}</span></label>
+        </div>
+        <div class="info-group">
+            <label class="info-label">Số điện thoại: <span class="info-content">{{userInfo.phoneNumber}}</span></label>
+        </div>
+        <div class="info-group">
+            <label class="info-label">Email: <span class="info-content">{{userInfo.email}}</span></label>
+        </div>
+        <div class="info-group">
+            <label class="info-label">Ngày tham gia: <span class="info-content">{{userInfo.createAt}}</span></label>
+        </div>
+    </div>
+    <div class="user-avatar text-center">
+        <img class="rounded img-thumbnail img-fluid" src={{avtUrl}} alt="avatar">
+    </div>
+</body>
+</html>

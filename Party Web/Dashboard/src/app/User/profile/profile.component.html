@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../../assets/css/style.default.css" id="theme-stylesheet">
+</head>
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <nav class="side-navbar">
+                <!-- Sidebar Header-->
+                <div class="sidebar-header d-flex align-items-center">
+                    <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+                    <div class="title">
+                        <a href="profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
+                        <p><span *ngIf="userService.get_userInfo()?.role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo()?.role=='Admin'">Admin</span></p>
+                    </div>
+                </div>
+                <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
+                <ul class="list-unstyled">
+                    <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
+                    <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
+                    <!-- <li><a href="login.html"> <i class="icon-interface-windows"></i>Login page </a></li> -->
+                </ul>
+                <span class="heading">Mangement</span>
+                <ul class="list-unstyled">
+                    <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
+                    <ul id="ProductDropdown" class="collapse list-unstyled ">
+                        <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
+                        <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
+                        <!-- <li><a href="#">Page</a></li> -->
+                    </ul>
+                    </li>
+                    <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
+                    <ul id="EmployeeDropdown" class="collapse list-unstyled ">
+                        <li><a href="employees/list"><i class="fa fa-list"></i>Employees List</a></li>
+                        <li><a href="employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
+                    </ul>
+                    </li>
+                    <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
+                    <ul id="CustomerDropdown" class="collapse list-unstyled ">
+                        <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                        <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
+                        <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
+                    </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                <h2 class="no-margin-bottom">Profile</h2>
+                </div>
+            </header>
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ul>
+            </div>
+            <!-- Forms Section-->
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Profile</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <form #updateinfo = "ngForm" (ngSubmit) = "updateSubmit(updateinfo.value)" id="updateForm">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Name</label>
+                                            <input type="text" placeholder="Enter Name" class="form-control" name="name" required ngModel #name="ngModel" [(ngModel)]="userService.get_userInfo().fullName">
+                                            <div class="invalid-feedback d-block" role="alert" *ngIf="name.invalid && name.dirty">
+                                            Please choose a name.
+                                            </div>
+                                        </div>
+                                        <div class="form-group">       
+                                            <label class="form-control-label">Email</label>
+                                            <input type="email" placeholder="mail@example.com" class="form-control" name="email" email required ngModel #email="ngModel" [(ngModel)]="userService.get_userInfo().email">
+                                            <div class="invalid-feedback d-block" role="alert" *ngIf="email.invalid && email.dirty">
+                                            Please enter a valid email.
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-control-label">Phone</label>
+                                            <input type="tel" placeholder="Phone" class="form-control" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel" [(ngModel)]="userService.get_userInfo().phoneNumber">
+                                            <div class="invalid-feedback d-block" role="alert" *ngIf="phone.invalid && phone.dirty">
+                                            Please enter a valid phone number.
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-control-label">Gender</label>
+                                            <br>
+                                            <select class="form-control" id="gender" name="gender" ngModel [(ngModel)]="userService.get_userInfo().sex">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>                         
+                                        </div>
+                                        <div class="form-group">
+                                        <label class="form-control-label">Birthday</label>
+                                        <input type="date" class="form-control" name="birthday" ngModel #birthday="ngModel" [ngModel]="userService.get_userInfo().birthday | date:'yyyy-MM-dd'" (change)="changeOfDate($event)">
+                                        </div>
+                                        <div class="form-group">       
+                                            <input type="submit" value="Comfirm" class="btn btn-primary" form="updateForm" [disabled]="updateinfo.invalid">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-4">
+                                    <img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="avatar" class="img-fluid rounded-circle img-thumbnail">
+                                    <div class="text-center">
+                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="avatar" (change)="avatarChanged($event)" ngModel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

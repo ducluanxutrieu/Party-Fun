@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 text-center">
+                <div class="rating-block">
+                    <h5>Đánh giá trung bình</h5>
+                    <h2 class="bold padding-bottom-5">{{currentProduct_Rating.average | number}} <span>/ 5</span></h2>
+                    <bar-rating [rate]="currentProduct_Rating.average" [max]="5" [theme]="'fontawesome'" [readOnly]="true" class="d-flex justify-content-center"></bar-rating>
+                    <p>{{currentProduct_Rating.totalpeople}} nhận xét</p>
+                </div>
+            </div>
+            <div class="col-sm-4 rating-overall">
+                <div class="pull-left">
+                    <div class="pull-left" style="width:35px; line-height:1;">
+                        <div style="height:9px; margin:5px 0;">5 <span class="fa fa-star"></span></div>
+                    </div>
+                    <div class="pull-left" style="width:180px;">
+                        <div class="progress" style="height:9px; margin:8px 0;">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="reviewOverall.five"
+                                aria-valuemin="0" aria-valuemax="currentProduct_Rating.totalpeople" [ngStyle]="{width: reviewOverall.five/currentProduct_Rating.totalpeople*100 +'%'}">
+                                <!-- <span class="sr-only">80% Complete (danger)</span> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.five/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
+                </div>
+                <div class="pull-left">
+                    <div class="pull-left" style="width:35px; line-height:1;">
+                        <div style="height:9px; margin:5px 0;">4 <span class="fa fa-star"></span></div>
+                    </div>
+                    <div class="pull-left" style="width:180px;">
+                        <div class="progress" style="height:9px; margin:8px 0;">
+                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="reviewOverall.four"
+                                aria-valuemin="0" aria-valuemax="currentProduct_Rating.totalpeople" [ngStyle]="{width: reviewOverall.four/currentProduct_Rating.totalpeople*100 +'%'}">
+                                <!-- <span class="sr-only">80% Complete (danger)</span> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.four/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
+                </div>
+                <div class="pull-left">
+                    <div class="pull-left" style="width:35px; line-height:1;">
+                        <div style="height:9px; margin:5px 0;">3 <span class="fa fa-star"></span></div>
+                    </div>
+                    <div class="pull-left" style="width:180px;">
+                        <div class="progress" style="height:9px; margin:8px 0;">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="reviewOverall.three"
+                                aria-valuemin="0" aria-valuemax="currentProduct_Rating.totalpeople" [ngStyle]="{width: reviewOverall.three/currentProduct_Rating.totalpeople*100 +'%'}">
+                                <!-- <span class="sr-only">80% Complete (danger)</span> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.three/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
+                </div>
+                <div class="pull-left">
+                    <div class="pull-left" style="width:35px; line-height:1;">
+                        <div style="height:9px; margin:5px 0;">2 <span class="fa fa-star"></span></div>
+                    </div>
+                    <div class="pull-left" style="width:180px;">
+                        <div class="progress" style="height:9px; margin:8px 0;">
+                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="reviewOverall.two"
+                                aria-valuemin="0" aria-valuemax="currentProduct_Rating.totalpeople" [ngStyle]="{width: reviewOverall.two/currentProduct_Rating.totalpeople*100 +'%'}">
+                                <!-- <span class="sr-only">80% Complete (danger)</span> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.two/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
+                </div>
+                <div class="pull-left">
+                    <div class="pull-left" style="width:35px; line-height:1;">
+                        <div style="height:9px; margin:5px 0;">1 <span class="fa fa-star"></span></div>
+                    </div>
+                    <div class="pull-left" style="width:180px;">
+                        <div class="progress" style="height:9px; margin:8px 0;">
+                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="reviewOverall.one"
+                                aria-valuemin="0" aria-valuemax="currentProduct_Rating.totalpeople" [ngStyle]="{width: reviewOverall.one/currentProduct_Rating.totalpeople*100 +'%'}">
+                                <!-- <span class="sr-only">80% Complete (danger)</span> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" style="margin-left:10px;">{{reviewOverall.one/currentProduct_Rating.totalpeople*100 || "0" | number:'1.0-0'}}%</div>
+                </div>
+            </div>
+            <div class="col-sm-4 text-center">
+                <h6>Viết nhận xét của bạn</h6>
+                <button type="button" data-toggle="collapse" data-target="#ratingField" class="btn btn-default btn-block">Nhận xét</button>
+            </div>
+            <div class="col-sm-12">
+                <div class="collapse" id="ratingField">
+                    <form #rating = "ngForm" (ngSubmit)="ratingSubmit(rating.value)" id="ratingForm" class="row">
+                        <div class="col-sm-12">
+                            <h6 class="sub-title">Nhận xét của bạn</h6>
+                            <textarea class="form-control animated" cols="50" id="new-review" name="comment" placeholder = "Viết nhận xét..." rows="5" ngModel required></textarea>
+                        </div>
+                        <div class="col-sm-12">
+                            <h6 style="margin-top: 1em">Đánh giá của bạn</h6>
+                            <bar-rating [(rate)]="rate" [max]="5" [theme]="'fontawesome'" name=rating ngModel required></bar-rating>
+                        </div>
+                        <div class="col align-self-end">
+                            <button class="btn btn-success" type="submit" [disabled]="rating.invalid">Gửi</button>
+                        </div>
+                    </form>
+                  </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <hr *ngIf="currentProduct_Rating.totalpeople != 0">
+                <div class="review-block" *ngIf="currentProduct_Rating.totalpeople != 0">
+                    <div *ngFor="let review of currentProduct_Rating.lishRate; let i = index">
+                        <div class="row review-item" *ngIf="i<11">
+                            <div class="col-sm-3 text-center">
+                            <img src={{review.imageurl}} onError="this.src='http://dummyimage.com/60x60/666/ffffff&text=No+Image';" class="img-rounded avt-thumb">
+                                <div class="review-block-name"><a>{{review.username}}</a></div>
+                                <div class="review-block-date">{{review.createAt | date: 'dd-MM-yyyy hh:mm a'}}</div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="review-block-rate">
+                                    <bar-rating [rate]="review.scorerate" [max]="5" [theme]="'fontawesome'" [readOnly]="true"></bar-rating>
+                                </div>
+                                <!-- <div class="review-block-title">this was nice in buy</div> -->
+                                <div class="review-block-description">{{review.content}}</div>
+                            </div>
+                        </div>
+                        <hr *ngIf="i!=currentProduct_Rating.lishRate.length-1 && i<11">                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký</title>
+</head>
+<body>
+    <div class="form_container">
+        <form #userreg = "ngForm" (ngSubmit) = "onClickSubmit(userreg.value)" id="regform">
+            <header>Đăng ký</header>
+            <label for="name">Họ và tên</label>
+            <input id="name" type="text" name="name" required ngModel #name="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="name.invalid && name.dirty">Vui lòng điền Họ và tên</div>
+            <label for="email">E-mail</label>
+            <input id="email" type="email" name="email" email required ngModel #email="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="email.invalid && email.dirty">Vui lòng điền email hợp lệ</div>
+            <label for="phone">Số điện thoại</label>
+            <input id="phone" type="text" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="phone.invalid && phone.dirty">Vui lòng điền Số điện thoại hợp lệ</div>
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" minlength="4" required ngModel #username="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="username.invalid && username.dirty">Vui lòng điền Username với tối thiểu 4 ký tự</div>
+            <label for="password">Mật khẩu</label>
+            <input id="password" type="password" name="pwd" required minlength="6" ngModel #pw="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Vui lòng điền mật khẩu ít nhất có 6 ký tự</div>
+            <button type="submit" form="regform" value="Đăng ký" [disabled]="userreg.invalid">Đăng ký</button>
+            <div class="bottom-text">
+                <p>Đã có tài khoản?<a style="font-weight: 500" href="user_login">Đăng nhập</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

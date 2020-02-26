@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: #eee;
+            font-family: Roboto, Helvetica, sans-serif;
+        }
+        .product-thumb{
+            overflow: hidden;
+            max-height: 3.5em;
+            width: auto;
+        }
+        .testimonial-group > .row {
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+            }
+        .testimonial-group > .row > .col-xs-2 {
+            display: inline-block;
+            float: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card card-custom">
+            <div class="container-fluid">
+                <div class="wrapper row">
+                    <div class="preview col-md-6">
+                        <div class="preview-pic tab-content">
+                            <!-- <div class="tab-pane" [attr.id]="i" [ngClass]="{'active' : i==0}"><img src={{image}} onError="http://placekitten.com/400/252" /></div> -->
+                            <div class="tab-pane active" id="pic-0"><img src={{product_data?.image[0]}}  onError="this.src='http://placekitten.com/400/252'" /></div>
+                            <div class="tab-pane" id="pic-1"><img src={{product_data?.image[1]}}/></div>
+                            <div class="tab-pane" id="pic-2"><img src={{product_data?.image[2]}} /></div>
+                            <div class="tab-pane" id="pic-3"><img src={{product_data?.image[3]}} /></div>
+                            <div class="tab-pane" id="pic-4"><img src={{product_data?.image[4]}} /></div>
+                        </div>
+                        <ul class="preview-thumbnail nav nav-tabs" >
+                            <!-- <ng-container *ngFor="let image of product_data.image ; let i=index">
+                                <li [ngClass]="{'active' : i==0}"><a [attr.data-target]="'#'+i" data-toggle="tab" *ngIf="i<5"><img class="product-thumb" src={{image}} onError="http://placekitten.com/200/126"/></a></li>
+                            </ng-container> -->
+                            <li><a data-target="#pic-0" data-toggle="tab"><img src={{product_data?.image[0]}} /></a></li>
+                            <li><a data-target="#pic-1" data-toggle="tab"><img src={{product_data?.image[1]}} /></a></li>
+                            <li><a data-target="#pic-2" data-toggle="tab"><img src={{product_data?.image[2]}} /></a></li>
+                            <li><a data-target="#pic-3" data-toggle="tab"><img src={{product_data?.image[3]}} /></a></li>
+                            <li><a data-target="#pic-4" data-toggle="tab"><img src={{product_data?.image[4]}} /></a></li>
+                        </ul>
+                    </div>
+                    <div class="details col-md-6" >
+                        <h3 class="product-title">{{product_data.name}}</h3>
+                        <div class="rating">
+                            <bar-rating [rate]="product_data.rate.average" [max]="5" [theme]="'fontawesome'" [readOnly]="true"></bar-rating>
+                            <span (click)="scroll(review)" class="review-no review-link">{{product_data.rate.totalpeople}} nhận xét</span>
+                        </div>
+                        <p style="font-weight: bold">Mô tả:</p>
+                        <p class="product-description">{{product_data.description}}</p>
+                        <p class="category">Loại: <a href="category/{{product_data.type}}"><span>{{product_data.type}}</span></a></p>
+                        <h4 class="price">Giá: <span>{{product_data.price | number}} VNĐ</span></h4>
+                        <div class="action">
+                            <div class="form-group">
+                                <label>Số lượng</label>
+                                <input type="number" value="1" class="form-control quantity" min="1" max="100" (change)="quantityChanged($event)">
+                            </div>
+                            <button class="btn btn-round btn-danger" type="button" (click)="addToCart()"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
+                            <!-- <button class="btn btn-round btn-danger" type="button"><i class="fa fa-heart"></i></button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h6 class="sub-header" *ngIf="suggest_list.length">Sản phẩm cùng loại</h6>
+        <div class="card" *ngIf="suggest_list.length">
+            <div class="row suggest-row">
+                <div class="col-lg-2 col-md-2 col-xs-2 suggest-item" *ngFor="let item of suggest_list; let i=index">
+                    <div class="card h-100" *ngIf="i<6">
+                        <a href="product/{{item._id}}"><img class="card-img-top suggest-item-thumb" src={{item.image[0]}} onError="this.src='../../../assets/images/dish-thumbnail-default.png';" alt=""></a>
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <a href="product/{{item._id}}">{{item.name}}</a>
+                            </h6>
+                            <h6>{{item.price}} VNĐ</h6>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+        <h6 #review class="sub-header">Đánh giá sản phẩm</h6>
+        <app-product-rating [productId]="product_data._id"></app-product-rating>
+    </div>
+</body>
+</html>

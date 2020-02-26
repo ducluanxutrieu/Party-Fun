@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="editavatar-container">
+        <header style="font-weight: 500">Avatar</header>
+        <div class="avatar">
+            <img src={{avtUrl}}>
+        </div>
+        <div class="updatePicture">
+            <form #updatepicture = "ngForm" (ngSubmit) = "onClickSubmit(updatepicture.value)" id="picUpdateForm">
+                <header class="formHeader">Upload avatar mới</header>
+                <p>Ảnh phải là định dạng jpg, png hoặc gif.</p>
+                <input type="file" accept="image/x-png,image/gif,image/jpeg" name="avt" (change)="fileChanged($event)" required ngModel>
+                <br>
+                <button type="submit" form="picUpdateForm" [disabled]="updatepicture.invalid">Cập nhật</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

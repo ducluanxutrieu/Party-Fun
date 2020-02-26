@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../assets/css/style.default.css" id="theme-stylesheet">
+</head>
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <nav class="side-navbar">
+                <!-- Sidebar Header-->
+                <div class="sidebar-header d-flex align-items-center">
+                <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+                <div class="title">
+                    <a href="profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
+                    <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
+                </div>
+                </div>
+                <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
+                <ul class="list-unstyled">
+                <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
+                <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
+                </ul>
+                <span class="heading">Mangement</span>
+                <ul class="list-unstyled">
+                <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
+                    <ul id="ProductDropdown" class="collapse list-unstyled ">
+                    <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
+                    <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
+                    <!-- <li><a href="#">Page</a></li> -->
+                    </ul>
+                </li>
+                <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
+                    <ul id="EmployeeDropdown" class="collapse list-unstyled ">
+                    <li><a href="employees/list"><i class="fa fa-list"></i>Employees List</a></li>
+                    <li><a href="employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
+                    </ul>
+                </li>
+                <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
+                    <ul id="CustomerDropdown" class="collapse list-unstyled ">
+                    <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                    <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
+                    <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
+                    </ul>
+                </li>
+                </ul>
+            </nav>
+            <div class="content-inner">
+                <!-- Page Header-->
+                <header class="page-header">
+                    <div class="container-fluid">
+                        <h2 class="no-margin-bottom">Customers</h2>
+                    </div>
+                </header>
+                <!-- Breadcrumb-->
+                <div class="breadcrumb-holder container-fluid">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Recent bills</li>
+                    </ul>
+                </div>
+                <section class="tables">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Recent bills</h3>
+                            </div>
+                            <div class="card-body">
+                            <div class="table-responsive">
+                                <table datatable [dtTrigger]="dtTrigger" class="table" id="billtable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center">#</th>
+                                        <th scope="col" class="text-center">Username</th>
+                                        <th scope="col" class="text-center">Date created</th>
+                                        <th scope="col" class="text-center">Party date </th>
+                                        <th scope="col" class="text-center">Num of tables</th>
+                                        <th scope="col" class="text-center">Total</th>
+                                        <th scope="col" class="text-center">Status</th>
+                                        <th scope="col" class="text-center">Functions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let bill of recent_billList; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(bill)">
+                                        <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                                        <td class="align-middle text-center">{{bill.username}}</td>
+                                        <td class="align-middle text-center">{{bill.createAt | date:'dd-MM-yyyy'}}</td>
+                                        <td class="align-middle text-center">{{bill.dateParty | date:'dd-MM-yyyy, HH:mm'}}</td>
+                                        <td class="align-middle text-center">{{bill.numbertable}}</td>
+                                        <td class="align-middle text-center">{{bill.totalMoney | number}}</td>
+                                        <td class="align-middle text-center"><span *ngIf="bill.userpayment!=null">Paid</span><span *ngIf="bill.userpayment==null">Unpaid</span></td>
+                                        <td [hidden]="bill.userpayment!=null" class="text-center"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button><span class="tab-space"></span><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Delete this bill" (click)="delete_bill(bill._id)"><i class="fa fa-trash"></i></button></td>
+                                        <!-- Cart Detail Modal-->
+                                        <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="CartDetailModalLabel">Bill detail</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Username: {{current_bill?.username}}</p>
+                                                    <P>Phone: {{current_bill?.phoneNumber}}</P>
+                                                    <p>Email: {{current_bill?.email}}</p>
+                                                    <p>Date created: {{current_bill?.createAt | date:'dd-MM-yyyy'}}</p>
+                                                    <p>Party date: {{current_bill?.dateParty | date:'dd-MM-yyyy, HH:mm'}}</p>
+                                                    <p>Num of tables: {{current_bill?.numbertable}}</p>
+                                                    <p>Total: {{current_bill?.totalMoney | number}} VND</p>
+                                                    <p>Status: <span *ngIf="current_bill?.userpayment!=null">Paid</span><span *ngIf="current_bill?.userpayment==null">Unpaid</span></p>
+                                                    <h6>Items in each table</h6>
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Name</th>
+                                                                <th>Price</th>
+                                                                <th class="text-center">Quantity</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let itemDetail of bill_detail; let i = index">
+                                                                <th scope="row">{{i+1}}</th>
+                                                                <td>{{itemDetail.name}}</td>
+                                                                <td>{{productService.find(itemDetail._id).price | number}}</td>
+                                                                <td class="text-center">{{itemDetail.numberDish | number}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

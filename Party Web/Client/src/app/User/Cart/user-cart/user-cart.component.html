@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        html,body{
+            min-height: 100vh;
+            font-family: Roboto, Helvetica, sans-serif;
+            background: #eee;
+        }
+        .container{
+            background: white;
+        }
+        .table>tbody>tr>td,
+        .table>tfoot>tr>td {
+            vertical-align: middle;
+        }
+
+        @media screen and (max-width: 600px) {
+            table#cart tbody td .form-control {
+                width: 20%;
+                display: inline !important;
+            }
+
+            .actions .btn {
+                width: 36%;
+                margin: 1.5em 0;
+            }
+
+            .actions .btn-info {
+                float: left;
+            }
+
+            .actions .btn-danger {
+                float: right;
+            }
+
+            table#cart thead {
+                display: none;
+            }
+
+            table#cart tbody td {
+                display: block;
+                padding: .6rem;
+                min-width: 320px;
+            }
+
+            table#cart tbody tr td:first-child {
+                background: #333;
+                color: #fff;
+            }
+
+            table#cart tbody td:before {
+                content: attr(data-th);
+                font-weight: bold;
+                display: inline-block;
+                width: 8rem;
+            }
+
+            table#cart tfoot td {
+                display: block;
+            }
+
+            table#cart tfoot td .btn {
+                display: block;
+            }
+        }
+        .product-text{
+            height: 3em;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <table id="cart" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th style="width:50%">Sản phẩm</th>
+                    <th style="width:10%">Giá</th>
+                    <th style="width:10%">Số lượng</th>
+                    <th style="width:22%" class="text-center">Tổng</th>
+                    <th style="width:10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of items">
+                    <td data-th="Sản phẩm">
+                        <div class="row">
+                            <div class="col-sm-2 hidden-xs"><img src="{{item.product.image[0]}}" onError="this.src='../../assets/images/place-holder100x100.png'" alt="..." class="d-block img-fluid"/></div>
+                            <div class="col-sm-10">
+                                <h4 class="nomargin"><a style="text-decoration: none" [routerLink]="['/product', item.product._id]">{{item.product.name}}</a></h4>
+                                <p class="product-text">{{item.product.description}}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-th="Giá">{{item.product.price | number}}</td>
+                    <td data-th="Số lượng">
+                        <input type="number" class="form-control text-center" min="1" value={{item.quantity}} (change)="quantityChanged(item.product._id, $event)" >
+                    </td>
+                    <td data-th="Tổng" class="text-center">{{item.product.price * item.quantity | number}}</td>
+                    <td class="actions" data-th="">
+                        <!-- <button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button> -->
+                        <button class="btn btn-danger btn-sm" (click)="remove(item.product._id)"><i class="fa fa-trash-o"></i></button>
+                    </td>
+                </tr>
+                <tr [ngStyle]="{display:productService.getTotalCount(null) > 0?'none':''}">
+                        <td class="text-center" colspan="4">
+                            Giỏ hàng của bạn trống.
+                        </td>
+                    </tr>
+            </tbody>
+            <tfoot>
+                <!-- <tr class="visible-xs">
+                    <td class="text-center"><strong>Total 1.99</strong></td>
+                </tr> -->
+                <tr>
+                    <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua sắm</a></td>
+                    <td colspan="2" class="hidden-xs"></td>
+                    <td class="hidden-xs text-center"><strong>Tổng: {{total | number}}</strong></td>
+                    <td><button class="btn btn-success btn-block" [disabled]= "productService.getTotalCount(null) < 1" (click)="checkout()">Đặt bàn <i class="fa fa-angle-right"></i></button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+
+</html>

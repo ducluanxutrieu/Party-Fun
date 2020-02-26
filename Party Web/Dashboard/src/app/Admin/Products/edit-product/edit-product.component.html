@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../assets/css/style.default.css" id="theme-stylesheet">
+</head>
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <nav class="side-navbar">
+                <!-- Sidebar Header-->
+                <div class="sidebar-header d-flex align-items-center">
+                    <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+                    <div class="title">
+                        <a href="profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
+                        <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
+                    </div>
+                </div>
+                <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
+                <ul class="list-unstyled">
+                  <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
+                  <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
+                  <!-- <li><a href="login.html"> <i class="icon-interface-windows"></i>Login page </a></li> -->
+                </ul>
+                <span class="heading">Mangement</span>
+                <ul class="list-unstyled">
+                  <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
+                    <ul id="ProductDropdown" class="collapse list-unstyled ">
+                      <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
+                      <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
+                      <!-- <li><a href="#">Page</a></li> -->
+                    </ul>
+                  </li>
+                  <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
+                    <ul id="EmployeeDropdown" class="collapse list-unstyled ">
+                      <li><a href="employees/list"><i class="fa fa-list"></i>Employees List</a></li>
+                      <li><a href="employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
+                    <ul id="CustomerDropdown" class="collapse list-unstyled ">
+                      <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
+                      <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
+                      <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
+                    </ul>
+                  </li>
+                </ul>
+            </nav>
+            <div class="content-inner">
+                <header class="page-header">
+                    <div class="container-fluid">
+                      <h2 class="no-margin-bottom">Products</h2>
+                    </div>
+                </header>
+                <!-- Breadcrumb-->
+                <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                    <li class="breadcrumb-item active">Edit Product</li>
+                </ul>
+                </div>
+                <!-- Forms Section-->
+                <section class="forms">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <h3 class="h4">Edit Product</h3>
+                            </div>
+                            <div class="card-body">
+                            <p>Please fill all the fields</p>
+                            <form #editdishForm = "ngForm" (ngSubmit) = "onClickSubmit(editdishForm.value)" id="editDish">
+                                <div class="form-group">
+                                    <label class="form-control-label">Product Name</label>
+                                    <input type="text" placeholder="Product Name" class="form-control" name="name" ngModel [(ngModel)]="product_data.name" required #productname="ngModel">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="productname.invalid && productname.dirty">
+                                        Please choose a name.
+                                    </div>
+                                </div>
+                                <div class="form-group">       
+                                    <label class="form-control-label">Description</label>
+                                    <textarea style="height: 5em" type="text" placeholder="Description" class="form-control" name="description" ngModel [(ngModel)]="product_data.description" minlength="6" required #productdescription="ngModel"></textarea>
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="productdescription.invalid && productdescription.dirty">
+                                        Please write a description with at least 6 characters.
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-1 form-control-label">Type</label>
+                                    <div class="col-sm-3">
+                                        <select name="account" class="form-control mb-3" name="type" ngModel [(ngModel)]="product_data.type" required #producttype="ngModel">
+                                            <option value="Holiday Offers">Holiday Offers</option>
+                                            <option value="First Dishes">First Dishes</option>
+                                            <option value="Main Dishes">Main Dishes</option>
+                                            <option value="Seafood">Seafood</option>
+                                            <option value="Dessert">Dessert</option>
+                                            <option value="Drinks">Drinks</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12 invalid-feedback d-block" role="alert" *ngIf="producttype.invalid && producttype.touched">
+                                        Please choose a type.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Price</label>
+                                    <input type="number" placeholder="Price" class="form-control" min="0" name="price" required ngModel [(ngModel)]="product_data.price" #price="ngModel">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="price.invalid && price.dirty">
+                                        Please enter price.
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <label class="form-control-label">Discount</label>
+                                    <input type="number" placeholder="Discount" class="form-control" [(ngModel)]="product_data.discount" min="0" max="100" name="promotion" ngModel>
+                                </div> -->
+                                <!-- <div class="form-group row">
+                                    <label for="fileInput" class="col-sm-1 form-control-label">Image</label>
+                                    <div class="col-sm-3">
+                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="image1" required (change)="fileChanged($event)" ngModel #image="ngModel">
+                                    </div>
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
+                                        Please choose a image.
+                                    </div>
+                                </div> -->
+                                <div class="form-group">       
+                                    <input type="submit" value="Comfirm" class="btn btn-primary" form="editDish" [disabled]="editdishForm.invalid">
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
