@@ -34,13 +34,10 @@ app.post('/upgraderole', auth.isAuthenticated, auth.checkinDateUpgraderole, cont
 // xoa quyen nhan vien
 app.delete('/demotionrole', auth.isAuthenticated, auth.checkinDateUpgraderole, controller.demotionrole);
 
-// get danh sach username
-
+// get danh sach username nhan vien
 app.get('/findusernv', auth.isAuthenticated, auth.isStaff, controller.findusernv);
 
+// get danh sach username khach hang
 app.get('/finduserkh', auth.isAuthenticated, auth.isStaff, controller.finduserkh);
-
-// xem danh sach dat hang cua user
-app.get('/getmyorder', auth.isAuthenticated, controller.getmyorder);
 
 module.exports = app;
