@@ -5,6 +5,7 @@ import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
@@ -30,23 +31,23 @@ class _MainScreenState extends State<MainScreen> {
     super.didChangeDependencies();
     if (alreadyInit == false) {
       alreadyInit = true;
-//      getNameUser();
     }
   }
 
   void getNameUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    final AccountModel accountModel =
-        AccountModel.fromJson(json.decode(accountJson));
-    _fullNameUser = accountModel.fullName;
-    _token = accountModel.token;
-    getListDishes();
+    if (accountJson.isNotEmpty) {
+      final AccountModel accountModel =
+          AccountModel.fromJson(json.decode(accountJson));
+      _fullNameUser = accountModel.fullName;
+      _token = accountModel.token;
+      getListDishes();
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
   }
-
-//  final items = List<String>.generate(10000, (i) => "Item $i");
-//  BuiltList<String> listImage = BuiltList<String>();
-//  final nameList = List<DishModel>.generate(10, (i) => DishModel.create("Name $i", "Description $i", i*1000, "Main", listImage));
 
   void getListDishes() async {
     var result = await AppApiService.create().getListDishes(token: _token);
@@ -57,12 +58,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final listView = ListView.builder(
-      itemCount: _listDishesModel.length,
-      itemBuilder: (context, index) {
-        return itemCard(_listDishesModel[index]);
-      },
-    );
     return Scaffold(
       appBar: AppBar(
         title: Text(_fullNameUser),
@@ -102,12 +97,17 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-//            AppButtonWidget(
-//              buttonText: "Temp",
-//              buttonHandler: getListDishes,
-//            ),
             Expanded(
-              child: listView,
+              child: GridView.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                physics: BouncingScrollPhysics(),
+                children:
+                    List<Widget>.generate(_listDishesModel.length, (index) {
+                  return itemCard(_listDishesModel[index]);
+                }),
+              ),
             ),
           ],
         ),
@@ -120,14 +120,25 @@ class _MainScreenState extends State<MainScreen> {
       color: Colors.white,
       elevation: 4,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32))),
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       child: Container(
-        child: SingleChildScrollView(
+        child: InkWell(
+          onTap: (){
+
+          },
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(dishModel.price.toString()),
-              Image.network(dishModel.image[0]),
-              Text(dishModel.name),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  dishModel.image[0],
+                  fit: BoxFit.cover,
+                  height: 95,
+                ),
+              ),
+              Text(dishModel.name, overflow: TextOverflow.ellipsis,),
             ],
           ),
         ),

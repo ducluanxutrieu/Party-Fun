@@ -20,24 +20,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
   ];
 
   void onRegisterClicked() async {
-    final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
-    final username = _fbKey.currentState.fields['username'].currentState.value;
-    final email = _fbKey.currentState.fields['email'].currentState.value;
-    final phoneNumber =
-        _fbKey.currentState.fields['phonenumber'].currentState.value;
-    final password = _fbKey.currentState.fields['password'].currentState.value;
-    final model = RegisterRequestModel(
-        fullName: fullName,
-        username: username,
-        email: email,
-        password: password,
-        phoneNumber: phoneNumber);
+    if(_fbKey.currentState.saveAndValidate()) {
+      final fullName = _fbKey.currentState.fields['fullname'].currentState
+          .value;
+      final username = _fbKey.currentState.fields['username'].currentState
+          .value;
+      final email = _fbKey.currentState.fields['email'].currentState.value;
+      final phoneNumber =
+          _fbKey.currentState.fields['phonenumber'].currentState.value;
+      final password = _fbKey.currentState.fields['password'].currentState
+          .value;
+      final model = RegisterRequestModel(
+          fullName: fullName,
+          username: username,
+          email: email,
+          password: password,
+          phoneNumber: phoneNumber);
 
-    final result = await AppApiService.create().requestRegister(model: model);
-    if(result.isSuccessful){
-      Navigator.pop(context);
+      final result = await AppApiService.create().requestRegister(model: model);
+      if (result.isSuccessful) {
+        Navigator.pop(context);
+      }
+      UTiu.showToast(result.body.message);
     }
-    UTiu.showToast(result.body.message);
   }
 
   @override
@@ -63,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Center(
         child: FormBuilder(
           key: _fbKey,
-          autovalidate: true,
+          autovalidate: false,
           child: Container(
             color: Colors.white,
             child: Padding(

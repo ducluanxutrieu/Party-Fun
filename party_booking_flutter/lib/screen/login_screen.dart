@@ -39,10 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void requestLogin(String username, String password) async {
     var model = LoginRequestModel(username: username, password: password);
     var result = await AppApiService.create().requestSignIn(model: model);
-    if(result.isSuccessful){
+    if (result.isSuccessful) {
       UTiu.showToast(result.body.message);
       saveDataToPrefs(result.body.account);
-    } else{
+    } else {
       Fluttertoast.showToast(
           msg: result.error.toString(),
           toastLength: Toast.LENGTH_SHORT,
@@ -56,10 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkAlreadyLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs
-        .getString(Constants.ACCOUNT_MODEL_KEY) != null && prefs
-        .getString(Constants.ACCOUNT_MODEL_KEY)
-        .isNotEmpty) {
+    if (prefs.getString(Constants.ACCOUNT_MODEL_KEY) != null &&
+        prefs.getString(Constants.ACCOUNT_MODEL_KEY).isNotEmpty) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
     }
@@ -80,31 +78,19 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
-    final forgotPasswordButton = FlatButton(
-      onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
-      },
-      child: Text(
-        "Forgot your password",
-        style: TextStyle(color: Colors.blue, fontSize: 16),
-      ),
-    );
-
     void onLoginPressed() {
-      String username = _fbKey.currentState.fields['username'].currentState
-          .value;
-      String password = _fbKey.currentState.fields['password'].currentState
-          .value;
+      String username =
+          _fbKey.currentState.fields['username'].currentState.value;
+      String password =
+          _fbKey.currentState.fields['password'].currentState.value;
       requestLogin(username, password);
-
     }
 
     return Scaffold(
       body: Center(
         child: FormBuilder(
           key: _fbKey,
-          autovalidate: true,
+          autovalidate: false,
           child: Container(
             color: Colors.white,
             child: Padding(
@@ -115,7 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SizedBox(height: 80,),
+                    SizedBox(
+                      height: 80,
+                    ),
                     LogoAppWidget(
                       mLogoSize: 150,
                     ),
@@ -130,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFieldWidget(
                       mHindText: 'Password',
                       mAttribute: 'password',
+                      mShowObscureText: true,
                       mValidators: listValidators,
                     ),
                     SizedBox(
@@ -139,10 +128,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       buttonText: 'Login',
                       buttonHandler: onLoginPressed,
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     createNewAccountButton,
-                    SizedBox(height: 40,),
-                    forgotPasswordButton,
+                    SizedBox(
+                      height: 40,
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen()));
+                      },
+                      child: Text(
+                        "Forgot your password",
+                        style: TextStyle(color: Colors.blue, fontSize: 16),
+                      ),
+                    ),
                   ],
                 ),
               ),
