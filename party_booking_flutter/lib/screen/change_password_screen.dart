@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:party_booking/data/network/model/change_password_request_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
+
+import 'login_screen.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -20,31 +24,34 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         errorText: 'Value must have at least 6 characters'),
   ];
 
-  void _popBackScreen(BuildContext context) {
+  void _popBackScreen(BuildContext context) async {
     if (_fbKey.currentState.saveAndValidate()) {
-      Fluttertoast.showToast(
-          msg: _fbKey.currentState.fields['old_password'].currentState.value,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      String code = _fbKey.currentState.fields['code'].currentState.value;
+      String newPassword =
+          _fbKey.currentState.fields['new_password'].currentState.value;
+
+      var result = await AppApiService.create().confirmResetPassword(
+          model: ConfirmResetPasswordRequestModel(
+              code: code, passwordNew: newPassword));
+      if (result.isSuccessful) {
+        UTiu.showToast(result.body.message);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+            (Route<dynamic> route) => false);
+      }
     }
-//    Navigator.pushAndRemoveUntil(
-//        context,
-//        MaterialPageRoute(builder: (context) => LoginScreen()),
-//        (Route<dynamic> route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    var validator = (dynamic value){
-      if(value != _fbKey.currentState.fields['new_password'].currentState.value) {
+    var validator = (dynamic value) {
+      if (value !=
+          _fbKey.currentState.fields['new_password'].currentState.value) {
         return 'Password is not matching';
-      } else return null;
+      } else
+        return null;
     };
-
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -55,10 +62,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             child: SingleChildScrollView(
               child: FormBuilder(
                 key: _fbKey,
-                initialValue: {
-                  'date': DateTime.now(),
-                  'accept_terms': false,
-                },
                 autovalidate: true,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,9 +75,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       height: 80.0,
                     ),
                     TextFieldWidget(
-                      mHindText: 'Old Password',
-                      mAttribute: 'old_password',
-                      mShowObscureText: true,
+                      mHindText: 'Code',
+                      mAttribute: 'code',
                       mValidators: listValidators,
                     ),
                     SizedBox(
@@ -89,7 +91,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     SizedBox(
                       height: 25,
                     ),
-
                     TextFieldWidget(
                       mAttribute: 'retype_password',
                       mHindText: 'Retype Password',
