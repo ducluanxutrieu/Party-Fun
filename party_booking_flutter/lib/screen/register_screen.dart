@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
+import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 
@@ -18,9 +21,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
+  int _stateRegisterButton = 0;
 
-  void onRegisterClicked() async {
+  void onRegisterClicked() {
     if(_fbKey.currentState.saveAndValidate()) {
+      setState(() {
+        _stateRegisterButton = 1;
+      });
+
       final fullName = _fbKey.currentState.fields['fullname'].currentState
           .value;
       final username = _fbKey.currentState.fields['username'].currentState
@@ -37,11 +45,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password: password,
           phoneNumber: phoneNumber);
 
-      final result = await AppApiService.create().requestRegister(model: model);
-      if (result.isSuccessful) {
-        Navigator.pop(context);
-      }
+      requestRegister(model);
+    }
+  }
+
+  void requestRegister(RegisterRequestModel model) async {
+    final result = await AppApiService.create().requestRegister(model: model);
+    if (result.isSuccessful) {
       UTiu.showToast(result.body.message);
+      setState(() {
+        _stateRegisterButton = 2;
+      });
+      Timer(Duration(milliseconds: 1500), () {
+        Navigator.pop(context);
+      });
+    }else {
+      setState(() {
+        _stateRegisterButton = 0;
+      });
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
     }
   }
 
@@ -82,13 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 40,
                     ),
-                    ClipOval(
-                      child: Image.asset(
-                        Assets.icLogoApp,
-                        fit: BoxFit.fill,
-                        height: 150.0,
-                      ),
-                    ),
+                    LogoAppWidget(mLogoSize: 150,),
                     SizedBox(height: 50.0),
                     TextFieldWidget(
                       mAttribute: 'fullname',
@@ -156,6 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     AppButtonWidget(
                       buttonText: 'Register',
                       buttonHandler: onRegisterClicked,
+                      stateButton: _stateRegisterButton,
                     ),
                     SizedBox(
                       height: 5,

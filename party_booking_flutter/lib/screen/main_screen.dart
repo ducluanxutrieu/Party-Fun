@@ -1,60 +1,66 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/login_screen.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'dish_detail_screen.dart';
+
+// ignore: must_be_immutable
 class MainScreen extends StatefulWidget {
+  AccountModel accountModel;
+
+  MainScreen({Key key, @required this.accountModel});
+
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _MainScreenState createState() =>
+      _MainScreenState(accountModel: accountModel);
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String _fullNameUser = "";
+  String _fullNameUser = "PartyBooking";
   String _token = "";
   final _listMenuFiltered = List<MenuModel>();
-  AccountModel _accountModel;
+  AccountModel accountModel;
 
-  bool alreadyInit = false;
+  _MainScreenState({@required this.accountModel});
 
   @override
   void initState() {
     super.initState();
-    getNameUser();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (alreadyInit == false) {
-      alreadyInit = true;
-    }
-  }
-
-  void getNameUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    if (accountJson != null && accountJson.isNotEmpty) {
-      _accountModel = AccountModel.fromJson(json.decode(accountJson));
-      _fullNameUser = _accountModel.fullName;
-      _token = _accountModel.token;
-      getListDishes();
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    }
+    _fullNameUser = accountModel.fullName;
+    _token = accountModel.token;
+    getListDishes();
   }
 
   void getListDishes() async {
     var result = await AppApiService.create().getListDishes(token: _token);
-    setState(() {
-      _listMenuFiltered.addAll(menuAllocation(result.body.listDishes));
-    });
+    if (result.isSuccessful) {
+      setState(() {
+        _listMenuFiltered.addAll(menuAllocation(result.body.listDishes));
+      });
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
+  }
+
+  void _signOut() async {
+    var result = await AppApiService.create().requestSignOut(token: _token);
+    if (result.isSuccessful) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove(Constants.ACCOUNT_MODEL_KEY);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (Route<dynamic> route) => false);
+    }
   }
 
   List<MenuModel> menuAllocation(List<DishModel> dishes) {
@@ -115,22 +121,6 @@ class _MainScreenState extends State<MainScreen> {
     return listMenu;
   }
 
-  Widget _createDrawerItem(
-      {IconData icon, String text, GestureTapCallback onTap}) {
-    return ListTile(
-      title: Row(
-        children: <Widget>[
-          Icon(icon, size: 28,),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(text),
-          )
-        ],
-      ),
-      onTap: onTap,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,15 +140,15 @@ class _MainScreenState extends State<MainScreen> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(
-                _accountModel.username,
+                _fullNameUser,
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(_accountModel.imageurl),
+                backgroundImage: NetworkImage(accountModel.imageurl),
                 backgroundColor: Colors.transparent,
               ),
               accountEmail: Text(
-                _accountModel.email,
+                accountModel.email,
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0),
               ),
             ),
@@ -170,31 +160,18 @@ class _MainScreenState extends State<MainScreen> {
             _createDrawerItem(
                 icon: Icons.history, text: 'My Ordered', onTap: null),
             Divider(),
-            ListTile(
-              title: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 38.0),
-                    child: Text('About Us'),
-                  )
-                ],
+            _createDrawerItem(
+                icon: FontAwesomeIcons.info, text: 'About Us', onTap: null),
+            _createDrawerItem(
+                icon: FontAwesomeIcons.signOutAlt,
+                text: 'Logout',
+                onTap: _signOut),
+            Center(
+              child: Text(
+                'Version\nAlpha 1.0.0',
+                textAlign: TextAlign.center,
               ),
-              onTap: (){},
             ),
-            ListTile(
-              title: Row(
-                children: <Widget>[
-                  Image.asset('assets/images/ic_logout.png', width: 30, height: 30, fit: BoxFit.fill, color: Colors.black,),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text('Logout'),
-                  )
-                ],
-              ),
-              onTap: (){},
-            ),
-            Center(child: Text(
-              'Version\nAlpha 1.0.0', textAlign: TextAlign.center,),),
           ],
         ),
       ),
@@ -228,21 +205,35 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            itemGridView(menuModel.listDish),
-          ],
-        ),
+        itemGridView(menuModel.listDish)
       ],
+    );
+  }
+
+  Widget _createDrawerItem(
+      {IconData icon, String text, GestureTapCallback onTap}) {
+    return ListTile(
+      title: Row(
+        children: <Widget>[
+          Icon(
+            icon,
+            size: 28,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(text),
+          )
+        ],
+      ),
+      onTap: onTap,
     );
   }
 
   Widget itemGridView(List<DishModel> dishes) {
     return GridView.count(
-      crossAxisCount: 3,
-      mainAxisSpacing: 3,
-      crossAxisSpacing: 3,
+      crossAxisCount: 2,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
       physics: BouncingScrollPhysics(),
       childAspectRatio: 0.9,
       shrinkWrap: true,
@@ -259,19 +250,31 @@ class _MainScreenState extends State<MainScreen> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: Container(
+        height: double.infinity,
         child: InkWell(
-          onTap: () {},
+          onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => DishDetailScreen(dishModel: dishModel,)));},
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(dishModel.price.toString(),
-                  style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+              Row(
+                children: <Widget>[
+                  SizedBox(width: 10,),
+                  Text(
+                    dishModel.price.toString(),
+                    style: new TextStyle(fontSize: 20.0, color: Colors.black),
+                  ),
+                  Spacer(),
+                  IconButton(icon: Icon(FontAwesomeIcons.cartPlus), onPressed: null,),
+                  SizedBox(width: 10,),
+                ],
+              ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
                   dishModel.image[0],
                   fit: BoxFit.cover,
-                  height: 100,
+                  width: double.infinity,
+                  height: 150,
                 ),
               ),
               SizedBox(

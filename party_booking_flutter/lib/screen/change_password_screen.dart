@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
@@ -17,6 +20,7 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  int _stateChangeButton = 0;
 
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
@@ -24,8 +28,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         errorText: 'Value must have at least 6 characters'),
   ];
 
-  void _popBackScreen(BuildContext context) async {
+  void _changePasswordClicked(BuildContext context) async {
     if (_fbKey.currentState.saveAndValidate()) {
+      setState(() {
+        _stateChangeButton = 1;
+      });
+
       String code = _fbKey.currentState.fields['code'].currentState.value;
       String newPassword =
           _fbKey.currentState.fields['new_password'].currentState.value;
@@ -39,6 +47,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             context,
             MaterialPageRoute(builder: (context) => LoginScreen()),
             (Route<dynamic> route) => false);
+      }else {
+        setState(() {
+          _stateChangeButton = 3;
+        });
+        Timer(Duration(milliseconds: 1500), () {
+          setState(() {
+            _stateChangeButton = 0;
+          });
+        });
+        BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+        UTiu.showToast(model.message);
       }
     }
   }
@@ -102,7 +121,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
                     AppButtonWidget(
                       buttonText: 'Change',
-                      buttonHandler: () => _popBackScreen(context),
+                      buttonHandler: () => _changePasswordClicked(context),
+                      stateButton: _stateChangeButton,
                     )
                   ],
                 ),

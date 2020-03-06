@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/screen/change_password_screen.dart';
@@ -15,10 +18,13 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  int _stateButton = 0;
 
   void onNextClicked() async {
     if (_fbKey.currentState.saveAndValidate()) {
-
+      setState(() {
+        _stateButton = 1;
+      });
       final String username =
           _fbKey.currentState.fields['username'].currentState.value;
 
@@ -28,6 +34,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         UTiu.showToast(result.body.message);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
+      }else {
+        setState(() {
+          _stateButton = 3;
+        });
+        Timer(Duration(milliseconds: 1500), () {
+          setState(() {
+            _stateButton = 0;
+          });
+        });
+        BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+        UTiu.showToast(model.message);
       }
     }
   }
@@ -68,6 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   AppButtonWidget(
                     buttonText: 'Next',
                     buttonHandler: onNextClicked,
+                    stateButton: _stateButton,
                   ),
                   SizedBox(
                     height: 5,

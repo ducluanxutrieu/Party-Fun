@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
@@ -24,48 +25,47 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  int _stateLoginButton = 0;
 
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
 
   saveDataToPrefs(AccountModel model) async {
+    setState(() {
+      _stateLoginButton = 2;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(model.toJson()));
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen()));
+        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: model,)));
   }
 
   void requestLogin(String username, String password) async {
+    setState(() {
+      _stateLoginButton = 1;
+    });
     var model = LoginRequestModel(username: username, password: password);
     var result = await AppApiService.create().requestSignIn(model: model);
     if (result.isSuccessful) {
       UTiu.showToast(result.body.message);
       saveDataToPrefs(result.body.account);
     } else {
-      Fluttertoast.showToast(
-          msg: result.error.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
-
-  checkAlreadyLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(Constants.ACCOUNT_MODEL_KEY) != null &&
-        prefs.getString(Constants.ACCOUNT_MODEL_KEY).isNotEmpty) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainScreen()));
+      setState(() {
+        _stateLoginButton = 3;
+      });
+      Timer(Duration(milliseconds: 1500), () {
+        setState(() {
+          _stateLoginButton = 0;
+        });
+      });
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    checkAlreadyLogin();
 
     final createNewAccountButton = FlatButton(
       onPressed: () {
@@ -79,11 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     void onLoginPressed() {
-      String username =
-          _fbKey.currentState.fields['username'].currentState.value;
-      String password =
-          _fbKey.currentState.fields['password'].currentState.value;
-      requestLogin(username, password);
+      if(_fbKey.currentState.saveAndValidate()){
+        String username =
+            _fbKey.currentState.fields['username'].currentState.value;
+        String password =
+            _fbKey.currentState.fields['password'].currentState.value;
+        requestLogin(username, password);
+      }
     }
 
     return Scaffold(
@@ -127,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     AppButtonWidget(
                       buttonText: 'Login',
                       buttonHandler: onLoginPressed,
+                      stateButton: _stateLoginButton,
                     ),
                     SizedBox(
                       height: 5,

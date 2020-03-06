@@ -25,12 +25,12 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<AccountResponseModel>> requestRegister(
+  Future<Response<BaseResponseModel>> requestRegister(
       {RegisterRequestModel model}) {
     final $url = 'user/signup';
     final $body = model;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<AccountResponseModel, AccountResponseModel>($request);
+    return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
 
   @override
@@ -57,6 +57,14 @@ class _$AppApiService extends AppApiService {
     final $url = 'user/resetconfirm';
     final $body = model;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<BaseResponseModel, BaseResponseModel>($request);
+  }
+
+  @override
+  Future<Response<BaseResponseModel>> requestSignOut({String token}) {
+    final $url = 'user/signout';
+    final $headers = {'authorization': token};
+    final $request = Request('POST', $url, client.baseUrl, headers: $headers);
     return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
 }
