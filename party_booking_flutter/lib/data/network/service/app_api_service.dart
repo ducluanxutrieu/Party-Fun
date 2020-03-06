@@ -20,7 +20,7 @@ abstract class AppApiService extends ChopperService {
   });
 
   @Post(path: 'user/signup')
-  Future<Response<AccountResponseModel>> requestRegister({
+  Future<Response<BaseResponseModel>> requestRegister({
     @body RegisterRequestModel model,
   });
 
@@ -37,6 +37,11 @@ abstract class AppApiService extends ChopperService {
   @Post(path: 'user/resetconfirm')
   Future<Response<BaseResponseModel>> confirmResetPassword({
   @body ConfirmResetPasswordRequestModel model,
+});
+
+  @Post(path: 'user/signout')
+  Future<Response<BaseResponseModel>> requestSignOut({
+    @Header('authorization') String token,
 });
 
   static AppApiService create() {
