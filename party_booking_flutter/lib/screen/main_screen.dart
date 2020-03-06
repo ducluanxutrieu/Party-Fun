@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
@@ -155,11 +156,13 @@ class _MainScreenState extends State<MainScreen> {
             ),
             _createDrawerItem(icon: Icons.home, text: 'Home', onTap: null),
             _createDrawerItem(
-                icon: Icons.account_circle, text: 'Profile', onTap: (){
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()));
-              //   Navigator.pop(profile);
-            }),
+                icon: Icons.account_circle,
+                text: 'Profile',
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                  //   Navigator.pop(profile);
+                }),
             _createDrawerItem(
                 icon: Icons.location_on, text: 'Address', onTap: null),
             _createDrawerItem(
@@ -235,16 +238,16 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget itemGridView(List<DishModel> dishes) {
-    return GridView.count(
+    return StaggeredGridView.countBuilder(
+      scrollDirection: Axis.vertical,
       crossAxisCount: 2,
+      itemCount: dishes.length,
+      itemBuilder: (BuildContext context, int index) => itemCard(dishes[index]),
+      staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
-      physics: BouncingScrollPhysics(),
-      childAspectRatio: 0.9,
+      primary: false,
       shrinkWrap: true,
-      children: List<Widget>.generate(dishes.length, (index) {
-        return itemCard(dishes[index]);
-      }),
     );
   }
 
@@ -255,31 +258,55 @@ class _MainScreenState extends State<MainScreen> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: Container(
-        height: double.infinity,
         child: InkWell(
-          onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => DishDetailScreen(dishModel: dishModel,)));},
+          onTap: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 500),
+                pageBuilder: (
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                ) =>
+                    DishDetailScreen(
+                  dishModel: dishModel,
+                ),
+              ),
+            );
+          },
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     dishModel.price.toString(),
                     style: new TextStyle(fontSize: 20.0, color: Colors.black),
                   ),
                   Spacer(),
-                  IconButton(icon: Icon(FontAwesomeIcons.cartPlus), onPressed: null,),
-                  SizedBox(width: 10,),
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.cartPlus),
+                    onPressed: null,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                 ],
               ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  dishModel.image[0],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 150,
+                child: Hero(
+                  tag: dishModel.id,
+                  child: Image.network(
+                    dishModel.image[0],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 150,
+                  ),
                 ),
               ),
               SizedBox(

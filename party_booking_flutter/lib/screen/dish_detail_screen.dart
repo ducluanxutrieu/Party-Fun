@@ -22,26 +22,28 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
       appBar: AppBar(
         title: Text(dishModel.name),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(20),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                dishModel.image[0],
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 250,
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(15),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Hero(
+                  tag: dishModel.id,
+                  child: Image.network(
+                    dishModel.image[0],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 250,
+                  ),
+                ),
               ),
             ),
-          ),
-          Row(
-            children: <Widget>[
-              SizedBox(
-                width: 30,
-              ),
-              Column(
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 20, 50, 30),
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -63,18 +65,17 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
                     dishModel.type,
                     style: TextStyle(fontFamily: 'Montserrat', fontSize: 22),
                   ),
-                  Expanded(
-                    child: Text(
-                      dishModel.description,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 10,
-                    ),
+                  SizedBox(height: 10,),
+                  Text(
+                    dishModel.description,
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 16),
                   ),
                 ],
-              )
-            ],
-          )
-        ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
