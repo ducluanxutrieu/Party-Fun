@@ -54,18 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  checkAlreadyLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(Constants.ACCOUNT_MODEL_KEY) != null &&
-        prefs.getString(Constants.ACCOUNT_MODEL_KEY).isNotEmpty) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainScreen()));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    checkAlreadyLogin();
 
     final createNewAccountButton = FlatButton(
       onPressed: () {

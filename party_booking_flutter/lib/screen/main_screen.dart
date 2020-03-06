@@ -7,6 +7,7 @@ import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/login_screen.dart';
+import 'package:party_booking/screen/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
@@ -120,7 +121,10 @@ class _MainScreenState extends State<MainScreen> {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Icon(icon, size: 28,),
+          Icon(
+            icon,
+            size: 28,
+          ),
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(text),
@@ -162,9 +166,18 @@ class _MainScreenState extends State<MainScreen> {
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0),
               ),
             ),
-            _createDrawerItem(icon: Icons.home, text: 'Home', onTap: null),
+            _createDrawerItem(icon: Icons.home, text: 'Home', onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+            }),
             _createDrawerItem(
-                icon: Icons.account_circle, text: 'Profile', onTap: null),
+              icon: Icons.account_circle,
+              text: 'Profile',
+              onTap: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => ProfileScreen()));
+                //   Navigator.pop(profile);
+              },
+            ),
             _createDrawerItem(
                 icon: Icons.location_on, text: 'Address', onTap: null),
             _createDrawerItem(
@@ -179,22 +192,32 @@ class _MainScreenState extends State<MainScreen> {
                   )
                 ],
               ),
-              onTap: (){},
+              onTap: () {},
             ),
             ListTile(
               title: Row(
                 children: <Widget>[
-                  Image.asset('assets/images/ic_logout.png', width: 30, height: 30, fit: BoxFit.fill, color: Colors.black,),
+                  Image.asset(
+                    'assets/images/ic_logout.png',
+                    width: 30,
+                    height: 30,
+                    fit: BoxFit.fill,
+                    color: Colors.black,
+                  ),
                   Padding(
                     padding: EdgeInsets.only(left: 8.0),
                     child: Text('Logout'),
                   )
                 ],
               ),
-              onTap: (){},
+              onTap: () {},
             ),
-            Center(child: Text(
-              'Version\nAlpha 1.0.0', textAlign: TextAlign.center,),),
+            Center(
+              child: Text(
+                'Version\nAlpha 1.0.0',
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
