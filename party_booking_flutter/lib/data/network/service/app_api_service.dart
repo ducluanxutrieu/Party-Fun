@@ -5,6 +5,7 @@ import 'package:party_booking/data/network/model/change_password_request_model.d
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
+import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 
 import '../interceptor/network_interceptor.dart';
@@ -44,6 +45,12 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
 });
 
+  @Post(path: 'product/ratedish')
+  Future<Response<BaseResponseModel>> requestRating({
+    @Header('authorization') String token,
+    @body RateDishRequestModel model,
+});
+
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',
@@ -69,6 +76,7 @@ abstract class AppApiService extends ChopperService {
       RateItemModel: RateItemModel.fromJsonFactory,
       LoginResponseModel: LoginResponseModel.fromJsonFactory,
       BaseResponseModel: BaseResponseModel.fromJsonFactory,
+      RateDishRequestModel: RateDishRequestModel.fromJsonFactory,
     });
   }
 }

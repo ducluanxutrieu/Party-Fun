@@ -67,4 +67,15 @@ class _$AppApiService extends AppApiService {
     final $request = Request('POST', $url, client.baseUrl, headers: $headers);
     return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
+
+  @override
+  Future<Response<BaseResponseModel>> requestRating(
+      {String token, RateDishRequestModel model}) {
+    final $url = 'product/ratedish';
+    final $headers = {'authorization': token};
+    final $body = model;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BaseResponseModel, BaseResponseModel>($request);
+  }
 }

@@ -119,18 +119,18 @@ class RateModel {
 
 class RateItemModel {
   String username;
-  String imageurl;
-  String iddish;
-  int scorerate;
+  String imageUrl;
+  String dishId;
+  int scoreRate;
   String content;
   String updateAt;
   String createAt;
 
   RateItemModel({
     this.username,
-    this.imageurl,
-    this.iddish,
-    this.scorerate,
+    this.imageUrl,
+    this.dishId,
+    this.scoreRate,
     this.content,
     this.updateAt,
     this.createAt,
@@ -141,9 +141,9 @@ class RateItemModel {
 
   factory RateItemModel.fromJson(Map<String, dynamic> json) => RateItemModel(
     username: json["username"],
-    imageurl: json["imageurl"] == null ? null : json["imageurl"],
-    iddish: json["_iddish"],
-    scorerate: json["scorerate"],
+    imageUrl: json["imageurl"] == null ? null : json["imageurl"],
+    dishId: json["_iddish"],
+    scoreRate: json["scorerate"],
     content: json["content"],
     updateAt: json["updateAt"],
     createAt: json["createAt"],
@@ -151,9 +151,9 @@ class RateItemModel {
 
   Map<String, dynamic> toJson() => {
     "username": username,
-    "imageurl": imageurl == null ? null : imageurl,
-    "_iddish": iddish,
-    "scorerate": scorerate,
+    "imageurl": imageUrl == null ? null : imageUrl,
+    "_iddish": dishId,
+    "scorerate": scoreRate,
     "content": content,
     "updateAt": updateAt,
     "createAt": createAt,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AccountResponseModel {
   bool success;
   String message;
@@ -26,6 +28,8 @@ class AccountResponseModel {
     return data;
   }
 }
+
+AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
 
 class AccountModel {
   String id;

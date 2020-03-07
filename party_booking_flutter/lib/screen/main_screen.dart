@@ -191,14 +191,14 @@ class _MainScreenState extends State<MainScreen> {
               scrollDirection: Axis.vertical,
               itemCount: _listMenuFiltered.length,
               itemBuilder: (BuildContext context, int index) {
-                return itemMenu(_listMenuFiltered[index]);
+                return _itemMenu(_listMenuFiltered[index]);
               }),
         ),
       ]),
     );
   }
 
-  Widget itemMenu(MenuModel menuModel) {
+  Widget _itemMenu(MenuModel menuModel) {
     return Column(
       children: <Widget>[
         Container(
@@ -213,7 +213,7 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
         ),
-        itemGridView(menuModel.listDish)
+        _itemGridView(menuModel.listDish)
       ],
     );
   }
@@ -237,12 +237,12 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget itemGridView(List<DishModel> dishes) {
+  Widget _itemGridView(List<DishModel> dishes) {
     return StaggeredGridView.countBuilder(
       scrollDirection: Axis.vertical,
       crossAxisCount: 2,
       itemCount: dishes.length,
-      itemBuilder: (BuildContext context, int index) => itemCard(dishes[index]),
+      itemBuilder: (BuildContext context, int index) => _itemCard(dishes[index]),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
@@ -251,7 +251,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget itemCard(DishModel dishModel) {
+  Widget _itemCard(DishModel dishModel) {
     return Card(
       color: Colors.white,
       elevation: 4,
