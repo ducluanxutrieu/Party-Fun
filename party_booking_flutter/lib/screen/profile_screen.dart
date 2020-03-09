@@ -7,6 +7,8 @@ import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/widgets/info_card.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
+import 'edit_profile_screen.dart';
+
 class ProfileScreen extends StatefulWidget {
   final AccountModel mAccountModel;
 
@@ -223,7 +225,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             InfoCard(
               text: 'Việt Nam',
               icon: Icons.location_city,
-              onPressed: null,
+              onPressed: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfileScreen()));
+                //   Navigator.pop(profile);
+              },
             ),
           ],
         ),
