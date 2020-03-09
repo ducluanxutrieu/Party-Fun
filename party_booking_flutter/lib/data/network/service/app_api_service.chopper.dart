@@ -69,6 +69,17 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
+  Future<Response<AccountResponseModel>> requestUpdateUser(
+      {String token, UpdateProfileRequestModel model}) {
+    final $url = 'user/updateuser';
+    final $headers = {'authorization': token};
+    final $body = model;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<AccountResponseModel, AccountResponseModel>($request);
+  }
+
+  @override
   Future<Response<BaseResponseModel>> requestRating(
       {String token, RateDishRequestModel model}) {
     final $url = 'product/ratedish';
