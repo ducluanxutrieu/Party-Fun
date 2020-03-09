@@ -1,3 +1,9 @@
+
+import 'dart:convert';
+
+AccountResponseModel accountResponseModelFromJson(String str) => AccountResponseModel.fromJson(json.decode(str));
+
+String accountResponseModelToJson(AccountResponseModel data) => json.encode(data.toJson());
 class AccountResponseModel {
   bool success;
   String message;
@@ -26,6 +32,10 @@ class AccountResponseModel {
     return data;
   }
 }
+
+AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
+
+String accountModelToJson(AccountModel data) => json.encode(data.toJson());
 
 class AccountModel {
   String id;

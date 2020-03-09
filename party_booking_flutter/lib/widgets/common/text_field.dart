@@ -25,6 +25,7 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: mShowObscureText,
         maxLines: 1,
         style: mStyle,
+
         keyboardType: mTextInputType,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(

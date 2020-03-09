@@ -9,6 +9,8 @@ import 'package:party_booking/widgets/info_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
+import 'edit_profile_screen.dart';
+
 
 
 class ProfileScreen extends StatefulWidget {
@@ -179,8 +181,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               text: 'Việt Nam',
               icon: Icons.location_city,
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => MainScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfileScreen()));
                 //   Navigator.pop(profile);
               },
             ),
