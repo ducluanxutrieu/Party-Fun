@@ -19,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    print(DateTime.now().millisecondsSinceEpoch);
     checkAlreadyLogin();
     super.initState();
   }
@@ -26,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkAlreadyLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
+    print(DateTime.now().millisecondsSinceEpoch);
     if (accountJson != null && accountJson.isNotEmpty) {
       AccountModel _accountModel =
           AccountModel.fromJson(json.decode(accountJson));

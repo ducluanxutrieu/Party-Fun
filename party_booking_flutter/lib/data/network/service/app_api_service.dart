@@ -51,6 +51,12 @@ abstract class AppApiService extends ChopperService {
     @body RateDishRequestModel model,
 });
 
+//  @Post(path: 'user/uploadavatar')
+//  Future<Response<BaseResponseModel>> requestUpdateAvatar({
+//    @Header('authorization') String token,
+//    @Part('image') FormData image,
+//});
+
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',

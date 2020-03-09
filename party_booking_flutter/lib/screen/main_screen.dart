@@ -11,6 +11,7 @@ import 'package:party_booking/screen/login_screen.dart';
 import 'package:party_booking/screen/profile.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math';
 
 import 'dish_detail_screen.dart';
 
@@ -56,7 +57,9 @@ class _MainScreenState extends State<MainScreen> {
   void _signOut() async {
     var result = await AppApiService.create().requestSignOut(token: _token);
     if (result.isSuccessful) {
+      print(DateTime.now().millisecondsSinceEpoch);
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(DateTime.now().millisecondsSinceEpoch);
       prefs.remove(Constants.ACCOUNT_MODEL_KEY);
       Navigator.pushAndRemoveUntil(
           context,
@@ -160,7 +163,7 @@ class _MainScreenState extends State<MainScreen> {
                 text: 'Profile',
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                      MaterialPageRoute(builder: (context) => ProfileScreen(mAccountModel: accountModel,)));
                   //   Navigator.pop(profile);
                 }),
             _createDrawerItem(
