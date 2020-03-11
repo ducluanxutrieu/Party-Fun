@@ -1,68 +1,36 @@
-import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/login_screen.dart';
-import 'package:party_booking/screen/main_screen.dart';
 import 'package:party_booking/widgets/info_card.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
+
 
 import 'edit_profile_screen.dart';
 
 
-
 class ProfileScreen extends StatefulWidget {
+  final AccountModel mAccountModel;
+
+
+  ProfileScreen({@required this.mAccountModel});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String _fullNameUser = "";
-  String _token = "";
-  String phone = "";
-
-  String email = "";
-  String url = "";
-
   AccountModel _accountModel;
-
-
-
-
-  bool alreadyInit = false;
+  File _image;
 
   @override
   void initState() {
     super.initState();
-    getNameUser();
+    _accountModel = widget.mAccountModel;
   }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (alreadyInit == false) {
-      alreadyInit = true;
-    }
-  }
-
-  void getNameUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    if (accountJson != null && accountJson.isNotEmpty) {
-      _accountModel = AccountModel.fromJson(json.decode(accountJson));
-      _fullNameUser = _accountModel.fullName;
-     // _token = _accountModel.token;
-      email = _accountModel.email;
-       phone = _accountModel.phoneNumber;
-      // getListDishes();
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    }
-  }
-
+  //int h;
   void _showDialog(BuildContext context, {String title, String msg}) {
     final dialog = AlertDialog(
       title: Text(title),
@@ -85,16 +53,96 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(context: context, builder: (x) => dialog);
   }
 
+  Future getImage() async {
+    Dio dio = new Dio();
+    dio.options.connectTimeout = 5000; //5s
+    dio.options.receiveTimeout = 3000;
+    var photoFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (photoFile != null &&
+        photoFile.path != null &&
+        photoFile.path.isNotEmpty) {
+      FormData formData = new FormData.fromMap({
+        'image': await MultipartFile.fromFile(photoFile.path)
+      });
+      var response = await dio.post(
+        "http://139.180.131.30:3000/user/uploadavatar",
+        data: formData,
+        options: Options(
+            headers: {
+              'authorization': _accountModel.token,
+            },
+            method: "POST"
+        ),
+      );
+      if(response.statusCode == 200){
+        print(response.headers);
+      }
+      // Create a FormData
+//      String fileName = basename(photoFile.path);
+//      print("File Name : $fileName");
+//      print("File Size : ${photoFile.lengthSync()}");
+//      formData.add("user_picture", new UploadFileInfo(photoFile, fileName));
+    }
+  }
+
+
+
+//    var result = await AppApiService.create().requestUpdateAvatar(token: _accountModel.token, image: formData);
+//    if(result.isSuccessful){
+//      UTiu.showToast(result.body.message);
+//      setState(() {
+//        _image = photoFile;
+//      });
+//    }else{
+//      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+//      UTiu.showToast(model.message);
+//    }
+//  }
+
+  Future<void> retrieveLostData() async {
+    final LostDataResponse response = await ImagePicker.retrieveLostData();
+    if (response == null) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        if (response.type == RetrieveType.video) {
+//          _handleVideo(response.file);
+        } else {
+//          _handleImage(response.file);
+        }
+      });
+    } else {
+//      _handleError(response.exception);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CircleAvatar(
+            InkWell(
+              onTap: getImage,
               radius: 50,
-              backgroundImage: NetworkImage(_accountModel.imageurl),
+              child: _image == null
+                  ? CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(_accountModel.imageurl))
+                  : ClipOval(
+                      child: Image.file(
+                        _image,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
             ),
             Text(
               _accountModel.username,
@@ -130,8 +178,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               text: _accountModel.phoneNumber,
               icon: Icons.phone,
               onPressed: () async {
-                String removeSpaceFromPhoneNumber =
-                phone.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
+                String removeSpaceFromPhoneNumber = _accountModel.phoneNumber
+                    .replaceAll(new RegExp(r"\s+\b|\b\s"), "");
                 final phoneCall = 'tel:$removeSpaceFromPhoneNumber';
 
                 if (await launcher.canLaunch(phoneCall)) {
@@ -149,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               text: _accountModel.email,
               icon: Icons.mail,
               onPressed: () async {
-                final emailAddress = 'mailto:$email';
+                final emailAddress = 'mailto:${_accountModel.email}';
 
                 if (await launcher.canLaunch(emailAddress)) {
                   await launcher.launch(emailAddress);
@@ -163,11 +211,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             InfoCard(
-              text: url,
+              text: _accountModel.imageurl,
               icon: Icons.web,
               onPressed: () async {
-                if (await launcher.canLaunch(url)) {
-                  await launcher.launch(url);
+                if (await launcher.canLaunch(_accountModel.imageurl)) {
+                  await launcher.launch(_accountModel.imageurl);
                 } else {
                   _showDialog(
                     context,
@@ -180,11 +228,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             InfoCard(
               text: 'Việt Nam',
               icon: Icons.location_city,
+//<<<<<<< HEAD:party_booking_flutter/lib/screen/profile_screen.dart
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => EditProfileScreen()));
                 //   Navigator.pop(profile);
               },
+//=======
+  //            onPressed: null,
+//>>>>>>> 35b956f99120260aceef179527e4afc1ecaf810c:party_booking_flutter/lib/screen/profile.dart
             ),
           ],
         ),

@@ -8,7 +8,7 @@ class AppButtonWidget extends StatelessWidget {
   AppButtonWidget(
       {this.buttonHandler,
       @required this.buttonText,
-      @required this.stateButton});
+      this.stateButton = 0});
 
   @override
   Widget build(BuildContext context) {

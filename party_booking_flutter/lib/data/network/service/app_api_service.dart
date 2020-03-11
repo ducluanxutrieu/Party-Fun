@@ -1,3 +1,6 @@
+import 'dart:core';
+
+
 import 'package:chopper/chopper.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
@@ -5,6 +8,7 @@ import 'package:party_booking/data/network/model/change_password_request_model.d
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
+import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 
@@ -45,12 +49,27 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
 });
 
+//<<<<<<< HEAD
   @Post(path: 'user/updateuser')
   Future<Response<AccountResponseModel>> requestUpdateUser({
     @Header('authorization') String token,
     @body UpdateProfileRequestModel model
 });
 
+//=======
+  @Post(path: 'product/ratedish')
+  Future<Response<BaseResponseModel>> requestRating({
+    @Header('authorization') String token,
+    @body RateDishRequestModel model,
+});
+
+//  @Post(path: 'user/uploadavatar')
+//  Future<Response<BaseResponseModel>> requestUpdateAvatar({
+//    @Header('authorization') String token,
+//    @Part('image') FormData image,
+//});
+
+//>>>>>>> 35b956f99120260aceef179527e4afc1ecaf810c
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',
@@ -76,7 +95,11 @@ abstract class AppApiService extends ChopperService {
       RateItemModel: RateItemModel.fromJsonFactory,
       LoginResponseModel: LoginResponseModel.fromJsonFactory,
       BaseResponseModel: BaseResponseModel.fromJsonFactory,
+//<<<<<<< HEAD
       UpdateProfileRequestModel: UpdateProfileRequestModel.fromJsonFactory,
+//=======
+      RateDishRequestModel: RateDishRequestModel.fromJsonFactory,
+//>>>>>>> 35b956f99120260aceef179527e4afc1ecaf810c
     });
   }
 }

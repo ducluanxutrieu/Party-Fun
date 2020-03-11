@@ -34,7 +34,7 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<ListDishesResponseModel>> getListDishes({String token}) {
+  Future<Response<ListDishesResponseModel>> getListDishes({dynamic token}) {
     final $url = 'product/finddish';
     final $headers = {'authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
@@ -61,7 +61,7 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<BaseResponseModel>> requestSignOut({String token}) {
+  Future<Response<BaseResponseModel>> requestSignOut({dynamic token}) {
     final $url = 'user/signout';
     final $headers = {'authorization': token};
     final $request = Request('POST', $url, client.baseUrl, headers: $headers);
@@ -70,12 +70,23 @@ class _$AppApiService extends AppApiService {
 
   @override
   Future<Response<AccountResponseModel>> requestUpdateUser(
-      {String token, UpdateProfileRequestModel model}) {
+      {dynamic token, UpdateProfileRequestModel model}) {
     final $url = 'user/updateuser';
     final $headers = {'authorization': token};
     final $body = model;
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<AccountResponseModel, AccountResponseModel>($request);
+  }
+
+  @override
+  Future<Response<BaseResponseModel>> requestRating(
+      {dynamic token, RateDishRequestModel model}) {
+    final $url = 'product/ratedish';
+    final $headers = {'authorization': token};
+    final $body = model;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
 }
