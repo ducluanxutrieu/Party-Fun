@@ -149,7 +149,7 @@ class _MainScreenState extends State<MainScreen> {
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(accountModel.imageurl),
+                backgroundImage: NetworkImage(accountModel.imageUrl),
                 backgroundColor: Colors.transparent,
               ),
               accountEmail: Text(

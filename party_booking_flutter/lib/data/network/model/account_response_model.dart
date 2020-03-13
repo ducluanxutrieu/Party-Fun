@@ -46,8 +46,7 @@ class AccountModel {
   String birthday;
   String sex;
   String role;
-  String imageurl;
-  String resetpassword;
+  String imageUrl;
   String createAt;
   String updateAt;
   String token;
@@ -61,8 +60,7 @@ class AccountModel {
     this.birthday,
     this.sex,
     this.role,
-    this.imageurl,
-    this.resetpassword,
+    this.imageUrl,
     this.createAt,
     this.updateAt,
     this.token,
@@ -77,8 +75,7 @@ class AccountModel {
         birthday: json["birthday"],
         sex: json["sex"],
         role: json["role"],
-        imageurl: json["imageurl"],
-        resetpassword: json["resetpassword"],
+        imageUrl: json["imageurl"],
         createAt: json["createAt"],
         updateAt: json["updateAt"],
         token: json["token"],
@@ -93,8 +90,7 @@ class AccountModel {
         "birthday": birthday,
         "sex": sex,
         "role": role,
-        "imageurl": imageurl,
-        "resetpassword": resetpassword,
+        "imageurl": imageUrl,
         "createAt": createAt,
         "updateAt": updateAt,
         "token": token,
