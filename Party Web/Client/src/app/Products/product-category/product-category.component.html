@@ -9,18 +9,18 @@
 </head>
 <body>
     <!-- Page Content -->
-    <div class="content-container container"> <!-- class container khiến content margin ra giữa-->
+    <div class="content-container container">
         <div class="row">
             <!-- Category -->
             <div class="left-panel col-12 col-lg-3">
-                <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Danh mục</div>
+                <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Category</div>
                 <div class="list-group">
                     <a href="category/Holiday Offers" class="list-group-item category">Holiday Offers</a>
-                    <a href="category/First Dishes" class="list-group-item category">Khai vị</a>
-                    <a href="category/Main Dishes" class="list-group-item category">Món chính</a>
-                    <a href="category/Seafood" class="list-group-item category">Hải sản</a>
-                    <a href="category/Drinks" class="list-group-item category">Đồ uống</a>
-                    <a href="category/Dessert" class="list-group-item category">Tráng miệng</a>
+                    <a href="category/First Dishes" class="list-group-item category">First Dishes</a>
+                    <a href="category/Main Dishes" class="list-group-item category">Main Dishes</a>
+                    <a href="category/Seafood" class="list-group-item category">Seafood</a>
+                    <a href="category/Drinks" class="list-group-item category">Drinks</a>
+                    <a href="category/Dessert" class="list-group-item category">Dessert</a>
                 </div>
             </div>
             <div class="main-content col-lg-9">
@@ -34,16 +34,16 @@
                                 <h4 class="card-title">
                                     <a href="product/{{item._id}}">{{item.name}}</a>
                                 </h4>
-                                <h5>{{item.price | number}} VNĐ</h5>
+                                <h5>{{item.price | number}} VND</h5>
                                 <p class="card-text">{{item.description}}</p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn btn-outline-secondary" (click)="addCart_clicked(item._id)">Thêm vào giỏ</a>
+                                <a class="btn btn-outline-secondary" (click)="addCart_clicked(item._id)">Add to cart</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="text-center" *ngIf="!filtered_products.length">Không có sản phẩm nào.</p>
+                <p class="text-center" *ngIf="!filtered_products.length">There is no product in this category.</p>
                 <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center">
                     <jw-pagination [items]="filtered_products" (changePage)="onChangePage($event)"></jw-pagination>
                 </div>

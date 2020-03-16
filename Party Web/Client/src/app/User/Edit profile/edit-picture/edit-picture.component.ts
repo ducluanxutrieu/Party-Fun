@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
 
 import { api } from '../../../_api/apiUrl'
 
@@ -9,6 +10,8 @@ import { api } from '../../../_api/apiUrl'
   styleUrls: ['./edit-picture.component.css']
 })
 export class EditPictureComponent implements OnInit {
+  @ViewChild('updatepicture', null) avatarForm: NgForm;
+
   apiUrl = api.uploadavatar;
   userInfo;
   avtUrl;
@@ -36,15 +39,21 @@ export class EditPictureComponent implements OnInit {
       sessionStorage.setItem('response', JSON.stringify(res_data.body));
       localStorage.setItem('avatar', result.message);
       location.reload();
-      alert("Cập nhật thành công!");
+      alert("Update success!");
     },
       err => {
-        alert("Lỗi: " + err.status);
+        alert("Error: " + err.status);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
   fileChanged(event: any) {
-    this.avatarFile = event.target.files;
+    if (event.target.files[0].type == "image/png" || event.target.files[0].type == "image/jpeg" || event.target.files[0].type == "image/gif") {
+      this.avatarFile = event.target.files;
+    }
+    else {
+      alert("Not a jpeg, png or gif file!");
+      this.avatarForm.reset();
+    }
   }
   getuserInfo() {
     this.userInfo = JSON.parse(localStorage.getItem('userinfo'));

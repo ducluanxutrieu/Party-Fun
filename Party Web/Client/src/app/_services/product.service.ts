@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Item } from '../_models/item.model'
 import { Observable, BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ProductService {
     private productDataSubject = new BehaviorSubject<any>(null);
     public productList = this.productDataSubject.asObservable();
@@ -32,7 +32,7 @@ export class ProductService {
                 return this.products;
             },
             err => {
-                console.log("Lỗi: " + err.status + " " + err.statusText);
+                console.log("Error: " + err.status + " " + err.statusText);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
         );
@@ -79,7 +79,7 @@ export class ProductService {
                 });
             }
             this.saveCartItems();
-            alert("Đã thêm vào giỏ hàng!")
+            alert("Added to cart!")
         }
         return false;
     };

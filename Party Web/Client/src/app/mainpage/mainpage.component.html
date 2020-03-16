@@ -9,22 +9,22 @@
 </head>
 <body>
     <!-- Page Content -->
-    <div class="content-container container"> <!-- class container khiến content margin ra giữa-->
+    <div class="content-container container">
         <div class="row">
             <!-- Category -->
             <div class="left-panel col-12 col-lg-3">
-                <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Danh mục</div>
+                <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Category</div>
                 <div class="list-group">
                     <a href="category/Holiday Offers" class="list-group-item category category-title" *ngIf="product_filter('Holiday Offers')?.length >0">Holiday Offers</a>
-                    <a href="category/First Dishes" class="list-group-item category category-title" *ngIf="product_filter('First Dishes')?.length >0">Khai vị</a>
-                    <a href="category/Main Dishes" class="list-group-item category category-title" *ngIf="product_filter('Main Dishes')?.length >0">Món chính</a>
-                    <a href="category/Seafood" class="list-group-item category category-title" *ngIf="product_filter('Seafood')?.length >0">Hải sản</a>
-                    <a href="category/Drinks" class="list-group-item category category-title" *ngIf="product_filter('Drinks')?.length >0">Đồ uống</a>
-                    <a href="category/Dessert" class="list-group-item category category-title" *ngIf="product_filter('Dessert')?.length >0">Tráng miệng</a>
+                    <a href="category/First Dishes" class="list-group-item category category-title" *ngIf="product_filter('First Dishes')?.length >0">First Dishes</a>
+                    <a href="category/Main Dishes" class="list-group-item category category-title" *ngIf="product_filter('Main Dishes')?.length >0">Main Dishes</a>
+                    <a href="category/Seafood" class="list-group-item category category-title" *ngIf="product_filter('Seafood')?.length >0">Seafood</a>
+                    <a href="category/Drinks" class="list-group-item category category-title" *ngIf="product_filter('Drinks')?.length >0">Drinks</a>
+                    <a href="category/Dessert" class="list-group-item category category-title" *ngIf="product_filter('Dessert')?.length >0">Dessert</a>
                 </div>
             </div>
             <div class="col-lg-9">
-                <h5 class="custom-title">Sản phẩm mới</h5>
+                <h5 class="custom-title">New dishes</h5>
                 <div id="newProductsCarousel" class="carousel slide my-4" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#newProductsCarousel" data-slide-to="0" class="active"></li>
@@ -33,13 +33,13 @@
                     </ol>
                     <div class="carousel-inner" role="listbox" >
                         <div class="carousel-item active">
-                        <a href="product/{{new_products[0]._id}}"><img class="d-block img-fluid big-thumb-img" src={{new_products[0].image[0]}} onError="this.src='../../assets/images/carousel-thumbnail-default.png';" alt="First slide"></a>
+                        <a href="product/{{new_products[0]?._id}}"><img class="d-block img-fluid big-thumb-img" src={{new_products[0]?.image[0]}} onError="this.src='../../assets/images/carousel-thumbnail-default.png';" alt="First slide"></a>
                         </div>
                         <div class="carousel-item">
-                            <a href="product/{{new_products[1]._id}}"><img class="d-block img-fluid big-thumb-img" src={{new_products[1].image[0]}} onError="this.src='../../assets/images/carousel-thumbnail-default.png';" alt="Second slide"></a>
+                            <a href="product/{{new_products[1]?._id}}"><img class="d-block img-fluid big-thumb-img" src={{new_products[1]?.image[0]}} onError="this.src='../../assets/images/carousel-thumbnail-default.png';" alt="Second slide"></a>
                         </div>
                         <div class="carousel-item">
-                            <a href="product/{{new_products[2]._id}}"><img class="d-block img-fluid big-thumb-img" src={{new_products[2].image[0]}} onError="this.src='../../assets/images/carousel-thumbnail-default.png';" alt="Third slide"></a>
+                            <a href="product/{{new_products[2]?._id}}"><img class="d-block img-fluid big-thumb-img" src={{new_products[2]?.image[0]}} onError="this.src='../../assets/images/carousel-thumbnail-default.png';" alt="Third slide"></a>
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#newProductsCarousel" role="button" data-slide="prev">
@@ -64,16 +64,16 @@
                                         <h5 class="card-title">
                                             <a [routerLink]="['/product', item._id]">{{item.name}}</a>
                                         </h5>
-                                        <h6>{{item.price | number}} VNĐ</h6>
+                                        <h6>{{item.price | number}} VND</h6>
                                         <p class="card-text">{{item.description}}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <a class="btn btn-outline-secondary add-cart-btn" (click)="addCart_clicked(item._id)">Thêm vào giỏ</a>
+                                        <a class="btn btn-outline-secondary add-cart-btn" (click)="addCart_clicked(item._id)">Add to cart</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center"><a href="category/{{category}}"><button type="button" class="btn btn-outline-primary view-more-btn">Xem thêm</button></a></div>
+                        <div class="text-center"><a href="category/{{category}}"><button type="button" class="btn btn-outline-primary view-more-btn">More</button></a></div>
                     </div>
                 </ng-container>
                 <!-- <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center">

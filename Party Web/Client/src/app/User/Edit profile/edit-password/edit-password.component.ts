@@ -29,12 +29,12 @@ export class EditPasswordComponent implements OnInit {
     // alert("password: " + data.pwd + "newpass: " + data.newpass);
     return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
-        alert("Thay đổi thành công!");
+        alert("Change success!");
         sessionStorage.setItem('response', JSON.stringify(res_data));
         this.router.navigate(['profile']);
       },
       err => {
-        alert("Lỗi: " + err.status);
+        alert("Error: " + err.status);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }

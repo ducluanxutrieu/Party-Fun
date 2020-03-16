@@ -4,26 +4,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div class="infoheader">Thông tin tài khoản</div>
+    <div class="infoheader">User infomation</div>
     <hr>
     <div class="user-info-section">
         <div class="info-group">
-            <label class="info-label">Họ và tên: <span class="info-content">{{userInfo.fullName}}</span></label>
+            <label class="info-label">Full name: <span class="info-content">{{userInfo.fullName}}</span></label>
         </div>
         <div class="info-group">
-            <label class="info-label">Giới tính: <span class="info-content" *ngIf="userInfo.sex=='Male'">Nam</span><span class="info-content" *ngIf="userInfo.sex=='Female'">Nữ</span></label>
+            <label class="info-label">Gender: <span class="info-content" *ngIf="userInfo.sex=='Male'">Male</span><span class="info-content" *ngIf="userInfo.sex=='Female'">Female</span></label>
         </div>
         <div class="info-group">
-            <label class="info-label">Ngày sinh: <span class="info-content">{{userInfo.birthday | date: 'dd/MM/yyyy'}}</span></label>
+            <label class="info-label">Birthday: <span class="info-content">{{userInfo.birthday | date: 'dd/MM/yyyy'}}</span></label>
         </div>
         <div class="info-group">
-            <label class="info-label">Số điện thoại: <span class="info-content">{{userInfo.phoneNumber}}</span></label>
+            <label class="info-label">Phone number: <span class="info-content">{{userInfo.phoneNumber}}</span></label>
         </div>
         <div class="info-group">
             <label class="info-label">Email: <span class="info-content">{{userInfo.email}}</span></label>
         </div>
         <div class="info-group">
-            <label class="info-label">Ngày tham gia: <span class="info-content">{{userInfo.createAt}}</span></label>
+            <label class="info-label">Date joined: <span class="info-content">{{userInfo.createAt}}</span></label>
         </div>
     </div>
     <div class="user-avatar text-center">

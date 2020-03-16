@@ -4,25 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
-    <title>Đăng nhập</title>
+    <title>Login</title>
 </head>
 <body>
     <div class="login">
         <div class="form_container">
             <form class="login-form" #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)" id="loginform">
-                <header>Đăng nhập</header>
-                <label for="username">Tên đăng nhập</label>
+                <header>Login</header>
+                <label for="username">Username</label>
                 <br>
-                <input id="username" type="text" name="username" required placeholder="Nhập username" ngModel #username="ngModel">
-                <div class="invalid-alert" role="alert" *ngIf="username.invalid && username?.dirty">Vui lòng điền Tên đăng nhập!</div>
-                <br>
-                <label for="password" >Mật khẩu</label>
+                <input id="username" type="text" name="username" required placeholder="Enter username" ngModel #username="ngModel">
+                <div class="invalid-alert" role="alert" *ngIf="username.invalid && username?.dirty">Please enter username!</div>
+                <label for="password">Password</label>
                 <!-- <span class="showpass"><input class="checkbox" type="checkbox">Hiện mật khẩu</span> -->
                 <br>
-                <input id="password" type="password" name="pwd" placeholder="Nhập password" ngModel required #pw="ngModel">
-                <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Vui lòng điền mật khẩu!</div>
+                <input id="password" type="password" name="pwd" placeholder="Enter password" ngModel required #pw="ngModel">
+                <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Please enter password!</div>
                 <br>
-                <button name="login" class="login-button" type="submit" form="loginform" value="Đăng nhập" [disabled]="userlogin.invalid">Đăng nhập</button><br>
+                <button name="login" class="login-button" type="submit" form="loginform" value="Login" [disabled]="userlogin.invalid">Login</button><br>
             </form>
             <!-- <div class="second-section">
                 <div class="bottom-header">
@@ -39,8 +38,8 @@
                 </div>
             </div> -->
             <div class="bottom-text">
-                <p>Chưa có tài khoản?<a style="font-weight: 500" href="user_register">Đăng ký</a></p>
-                <h4><a style="font-weight: 500" href="forgotpassword">Quên mật khẩu?</a></h4>
+                <p>Doesn't have a account?<a style="font-weight: 500" href="user_register">Register</a></p>
+                <h4><a style="font-weight: 500" href="forgotpassword">Forgot your password?</a></h4>
             </div>
         </div>
     </div>

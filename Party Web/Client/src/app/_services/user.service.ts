@@ -3,7 +3,7 @@ import { api } from '../_api/apiUrl';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserService {
     private userDataSubject = new BehaviorSubject<any>(null);
     public userData = this.userDataSubject.asObservable();
@@ -27,7 +27,7 @@ export class UserService {
                 this.userDataSubject.next(res_body.account);
             },
             err => {
-                console.log("Lỗi: " + err.status + " " + err.statusText);
+                console.log("Error: " + err.status + " " + err.statusText);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
         )

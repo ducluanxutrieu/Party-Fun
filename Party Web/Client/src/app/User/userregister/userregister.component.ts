@@ -32,12 +32,12 @@ export class UserregisterComponent implements OnInit {
     // alert("Name: " + data.name + "\nEmail:" + data.email + "\nPhone:" + data.phone + "\nUsername:" + data.username + "\nPassword: " + data.pwd);
     return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
       results = res_data.body;
-      alert("Đăng ký thành công!");
+      alert("Register success!");
       sessionStorage.setItem('full-response', JSON.stringify(res_data));
       this.router.navigate(['user_login']);
     },
       err => {
-        alert("Lỗi: " + err.status);
+        alert("Error: " + err.status);
         localStorage.setItem('error', JSON.stringify(err));
       })
   }

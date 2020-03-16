@@ -22,7 +22,7 @@ export class AuthenticationService {
         var results;
         return this.http.post(this.apiLogin, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
             results = res_data.body;
-            alert("Đăng nhập thành công!");
+            // alert("Login success!");
             //    sessionStorage.setItem('info',JSON.stringify(res_data));
             sessionStorage.setItem('response_body', JSON.stringify(results));
             localStorage.setItem('token', results.account.token);
@@ -31,7 +31,7 @@ export class AuthenticationService {
             this.router.navigate(['/mainpage']);
         },
             err => {
-                alert("Lỗi: " + err.status + " " + err.error.message);
+                alert("Error: " + err.status + " " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             });
     }
@@ -50,7 +50,7 @@ export class AuthenticationService {
         },
             err => {
                 sessionStorage.setItem('error', JSON.stringify(err));
-                alert("Không thể đăng xuất!");
+                alert("Cannot logout!");
             })
     }
 

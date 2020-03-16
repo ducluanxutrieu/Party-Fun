@@ -12,11 +12,11 @@
         </div>
         <div class="updatePicture">
             <form #updatepicture = "ngForm" (ngSubmit) = "onClickSubmit(updatepicture.value)" id="picUpdateForm">
-                <header class="formHeader">Upload avatar mới</header>
-                <p>Ảnh phải là định dạng jpg, png hoặc gif.</p>
+                <header class="formHeader">Upload new avatar</header>
+                <p>Image must be jpg, png or gif.</p>
                 <input type="file" accept="image/x-png,image/gif,image/jpeg" name="avt" (change)="fileChanged($event)" required ngModel>
                 <br>
-                <button type="submit" form="picUpdateForm" [disabled]="updatepicture.invalid">Cập nhật</button>
+                <button type="submit" form="picUpdateForm" [disabled]="updatepicture.invalid">Update</button>
             </form>
         </div>
     </div>

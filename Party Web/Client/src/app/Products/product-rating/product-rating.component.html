@@ -9,10 +9,10 @@
         <div class="row">
             <div class="col-sm-4 text-center">
                 <div class="rating-block">
-                    <h5>Đánh giá trung bình</h5>
+                    <h5>Average rating</h5>
                     <h2 class="bold padding-bottom-5">{{currentProduct_Rating.average | number}} <span>/ 5</span></h2>
                     <bar-rating [rate]="currentProduct_Rating.average" [max]="5" [theme]="'fontawesome'" [readOnly]="true" class="d-flex justify-content-center"></bar-rating>
-                    <p>{{currentProduct_Rating.totalpeople}} nhận xét</p>
+                    <p>{{currentProduct_Rating.totalpeople}} reviews</p>
                 </div>
             </div>
             <div class="col-sm-4 rating-overall">
@@ -88,22 +88,22 @@
                 </div>
             </div>
             <div class="col-sm-4 text-center">
-                <h6>Viết nhận xét của bạn</h6>
-                <button type="button" data-toggle="collapse" data-target="#ratingField" class="btn btn-default btn-block">Nhận xét</button>
+                <h6>Write your review</h6>
+                <button type="button" data-toggle="collapse" data-target="#ratingField" class="btn btn-default btn-block">Review</button>
             </div>
             <div class="col-sm-12">
                 <div class="collapse" id="ratingField">
                     <form #rating = "ngForm" (ngSubmit)="ratingSubmit(rating.value)" id="ratingForm" class="row">
                         <div class="col-sm-12">
-                            <h6 class="sub-title">Nhận xét của bạn</h6>
-                            <textarea class="form-control animated" cols="50" id="new-review" name="comment" placeholder = "Viết nhận xét..." rows="5" ngModel required></textarea>
+                            <h6 class="sub-title">Your review</h6>
+                            <textarea class="form-control animated" cols="50" id="new-review" name="comment" placeholder = "Write review..." rows="5" ngModel required></textarea>
                         </div>
                         <div class="col-sm-12">
-                            <h6 style="margin-top: 1em">Đánh giá của bạn</h6>
+                            <h6 style="margin-top: 1em">Your rating</h6>
                             <bar-rating [(rate)]="rate" [max]="5" [theme]="'fontawesome'" name=rating ngModel required></bar-rating>
                         </div>
                         <div class="col align-self-end">
-                            <button class="btn btn-success" type="submit" [disabled]="rating.invalid">Gửi</button>
+                            <button class="btn btn-success" type="submit" [disabled]="rating.invalid">Send</button>
                         </div>
                     </form>
                   </div>

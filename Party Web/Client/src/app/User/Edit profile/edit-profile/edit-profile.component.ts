@@ -43,12 +43,12 @@ export class EditProfileComponent implements OnInit {
       result = res_data.body;
       sessionStorage.setItem('response', JSON.stringify(res_data.body));
       localStorage.setItem('userinfo', JSON.stringify(result.account));
-      alert("Cập nhật thành công!");
+      alert("Update success!");
       this.router.navigate(['/profile']);
       
     },
       err => {
-        alert("Lỗi: " + err.status);
+        alert("Error: " + err.status);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }

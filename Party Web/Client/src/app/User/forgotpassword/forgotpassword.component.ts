@@ -29,7 +29,7 @@ export class ForgotpasswordComponent implements OnInit {
         this.authorized = true;
       },
         err => {
-          alert("Lỗi: " + err.status);
+          alert("Error: " + err.status);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
       //       alert(body);
@@ -37,12 +37,12 @@ export class ForgotpasswordComponent implements OnInit {
     if (this.authorized) {
       let body = `username=${this.username}&passnew=${data.newpass}&checkforgotpassword=${data.recoverycode}`;
       this.http.post(this.apiUrl1, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-        alert("Đổi mật khẩu thành công!");
+        alert("Change password success!");
         this.router.navigate(['/user_login']);
         this.authorized = false;
       },
         err => {
-          alert("Lỗi: " + err.status + " " + err.statusText + "\n" + err.error);
+          alert("Error: " + err.status + " " + err.statusText + "\n" + err.error);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }

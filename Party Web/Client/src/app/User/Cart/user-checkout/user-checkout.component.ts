@@ -50,12 +50,12 @@ export class UserCheckoutComponent implements OnInit {
     console.log(body);
     this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
       sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-      alert("Đặt hàng thành công!");
+      alert("Order success!");
       localStorage.removeItem('cart');
       this.router.navigate(['/cart']);
     },
       err => {
-        alert("Lỗi: " + err.status);
+        alert("Error: " + err.status);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
