@@ -1,38 +1,101 @@
+
 import 'dart:convert';
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:party_booking/data/network/model/account_model.dart';
-import 'package:party_booking/data/network/model/serializers.dart';
+AccountResponseModel accountResponseModelFromJson(String str) => AccountResponseModel.fromJson(json.decode(str));
 
-part 'account_response_model.g.dart';
+String accountResponseModelToJson(AccountResponseModel data) => json.encode(data.toJson());
+class AccountResponseModel {
+  bool success;
+  String message;
+  AccountModel account;
 
-abstract class AccountResponseModel
-    implements Built<AccountResponseModel, AccountResponseModelBuilder> {
-  AccountResponseModel._();
+  AccountResponseModel({this.success, this.message, this.account});
 
-  factory AccountResponseModel([updates(AccountResponseModelBuilder b)]) =
-      _$AccountResponseModel;
+  static AccountResponseModel fromJsonFactory(Map<String, dynamic> json) =>
+      AccountResponseModel.fromJson(json);
 
-  @BuiltValueField(wireName: 'success')
-  bool get success;
-
-  @BuiltValueField(wireName: 'message')
-  String get message;
-
-  @BuiltValueField(wireName: 'account')
-  AccountModel get account;
-
-  String toJson() {
-    return json.encode(
-        serializers.serializeWith(AccountResponseModel.serializer, this));
+  AccountResponseModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    account = json['account'] != null
+        ? new AccountModel.fromJson(json['account'])
+        : null;
   }
 
-  static AccountResponseModel fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        AccountResponseModel.serializer, json.decode(jsonString));
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.account != null) {
+      data['account'] = this.account.toJson();
+    }
+    return data;
   }
+}
 
-  static Serializer<AccountResponseModel> get serializer =>
-      _$accountResponseModelSerializer;
+AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
+
+String accountModelToJson(AccountModel data) => json.encode(data.toJson());
+
+class AccountModel {
+  String id;
+  String username;
+  String fullName;
+  String email;
+  String phoneNumber;
+  String birthday;
+  String sex;
+  String role;
+  String imageUrl;
+  String createAt;
+  String updateAt;
+  String token;
+
+  AccountModel({
+    this.id,
+    this.username,
+    this.fullName,
+    this.email,
+    this.phoneNumber,
+    this.birthday,
+    this.sex,
+    this.role,
+    this.imageUrl,
+    this.createAt,
+    this.updateAt,
+    this.token,
+  });
+
+  factory AccountModel.fromJson(Map<String, dynamic> json) => AccountModel(
+        id: json["id"]?? "jdfnj2e23r32",
+        username: json["username"],
+        fullName: json["fullName"],
+        email: json["email"],
+        phoneNumber: json["phoneNumber"],
+        birthday: json["birthday"],
+        sex: json["sex"],
+        role: json["role"],
+        imageUrl: json["imageurl"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        token: json["token"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "username": username,
+        "fullName": fullName,
+        "email": email,
+        "phoneNumber": phoneNumber,
+        "birthday": birthday,
+        "sex": sex,
+        "role": role,
+        "imageurl": imageUrl,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "token": token,
+      };
+
+  static AccountModel fromJsonFactory(Map<String, dynamic> json) =>
+      AccountModel.fromJson(json);
 }

@@ -1,13 +1,21 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/forgot_password_screen.dart';
+import 'package:party_booking/screen/main_screen.dart';
 import 'package:party_booking/screen/register_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,27 +25,49 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  int _stateLoginButton = 0;
 
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
 
-  void requestLogin(String username, String password)async{
-    var model = LoginRequestModel.fromString("ducluan", "123456");
+  saveDataToPrefs(AccountModel model) async {
+    setState(() {
+      _stateLoginButton = 2;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(model.toJson()));
+    prefs.setString(Constants.USER_TOKEN, model.token);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: model,)));
+  }
+
+  void requestLogin(String username, String password) async {
+    setState(() {
+      _stateLoginButton = 1;
+    });
+    var model = LoginRequestModel(username: username, password: password);
     var result = await AppApiService.create().requestSignIn(model: model);
-    print("RESULT ${result.isSuccessful}" );
-    Fluttertoast.showToast(
-        msg: result.body.message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+    if (result.isSuccessful) {
+      UTiu.showToast(result.body.message);
+      saveDataToPrefs(result.body.account);
+    } else {
+      setState(() {
+        _stateLoginButton = 3;
+      });
+      Timer(Duration(milliseconds: 1500), () {
+        setState(() {
+          _stateLoginButton = 0;
+        });
+      });
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
     final createNewAccountButton = FlatButton(
       onPressed: () {
         Navigator.push(
@@ -49,27 +79,21 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
-    final forgotPasswordButton = FlatButton(
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
-      },
-      child: Text(
-        "Forgot your password",
-        style: TextStyle(color: Colors.blue, fontSize: 16),
-      ),
-    );
-
-    void onLoginPressed(){
-      String username = _fbKey.currentState.fields['username'].currentState.value;
-      String password = _fbKey.currentState.fields['password'].currentState.value;
-      requestLogin(username, password);
+    void onLoginPressed() {
+      if(_fbKey.currentState.saveAndValidate()){
+        String username =
+            _fbKey.currentState.fields['username'].currentState.value;
+        String password =
+            _fbKey.currentState.fields['password'].currentState.value;
+        requestLogin(username, password);
+      }
     }
 
     return Scaffold(
       body: Center(
         child: FormBuilder(
           key: _fbKey,
-          autovalidate: true,
+          autovalidate: false,
           child: Container(
             color: Colors.white,
             child: Padding(
@@ -80,7 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SizedBox(height: 80,),
+                    SizedBox(
+                      height: 80,
+                    ),
                     LogoAppWidget(
                       mLogoSize: 150,
                     ),
@@ -95,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFieldWidget(
                       mHindText: 'Password',
                       mAttribute: 'password',
+                      mShowObscureText: true,
                       mValidators: listValidators,
                     ),
                     SizedBox(
@@ -103,11 +130,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     AppButtonWidget(
                       buttonText: 'Login',
                       buttonHandler: onLoginPressed,
+                      stateButton: _stateLoginButton,
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     createNewAccountButton,
-                    SizedBox(height: 40,),
-                    forgotPasswordButton,
+                    SizedBox(
+                      height: 40,
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen()));
+                      },
+                      child: Text(
+                        "Forgot your password",
+                        style: TextStyle(color: Colors.blue, fontSize: 16),
+                      ),
+                    ),
                   ],
                 ),
               ),

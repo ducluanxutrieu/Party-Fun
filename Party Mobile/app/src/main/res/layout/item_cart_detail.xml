@@ -33,8 +33,9 @@
                 android:id="@+id/iv_dish_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 app:dishUrl="@{itemViewModel.mAvatarDish}"
-                tools:src="@drawable/dish_sample" />
+                tools:src="@tools:sample/avatars" />
         </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatTextView

@@ -1,38 +1,21 @@
+class LoginRequestModel {
+  String username;
+  String password;
 
-import 'dart:convert';
+  LoginRequestModel({this.username, this.password});
 
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:party_booking/data/network/model/serializers.dart';
+  static LoginRequestModel fromJsonFactory(Map<String, dynamic> json) =>
+      LoginRequestModel.fromJson(json);
 
-part 'login_request_model.g.dart';
-
-abstract class LoginRequestModel
-    implements Built<LoginRequestModel, LoginRequestModelBuilder> {
-  LoginRequestModel._();
-
-  factory LoginRequestModel([updates(LoginRequestModelBuilder b)]) =
-  _$LoginRequestModel;
-
-  @BuiltValueField(wireName: 'username')
-  String get username;
-  @BuiltValueField(wireName: 'password')
-  String get password;
-  String toJson() {
-    return json
-        .encode(serializers.serializeWith(LoginRequestModel.serializer, this));
+  LoginRequestModel.fromJson(Map<String, dynamic> json) {
+    username = json['username'];
+    password = json['password'];
   }
 
-  static LoginRequestModel fromJson(String jsonString) {
-    return serializers.deserializeWith(
-        LoginRequestModel.serializer, json.decode(jsonString));
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['username'] = this.username;
+    data['password'] = this.password;
+    return data;
   }
-
-  static LoginRequestModel fromString(String user, String pass) {
-    return _$LoginRequestModel._(username: user, password: pass);
-  }
-
-  static Serializer<LoginRequestModel> get serializer =>
-      _$loginRequestModelSerializer;
 }
