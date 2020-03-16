@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/data/network/service/app_image_api_service.dart';
+import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:party_booking/widgets/info_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 import 'edit_profile_screen.dart';
@@ -24,10 +29,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AccountModel _accountModel;
   String avatarUrl;
 
+  void _updateUserProfile()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.USER_TOKEN);
+    var result = await AppApiService.create().getUserProfile(token: token);
+    if(result.isSuccessful){
+      setState(() {
+        _accountModel = result.body.account;
+      });
+      prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(_accountModel.toJson()));
+    }else{
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _accountModel = widget.mAccountModel;
+    _updateUserProfile();
   }
 
   void _showDialog(BuildContext context, {String title, String msg}) {
@@ -52,8 +73,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(context: context, builder: (x) => dialog);
   }
 
-  _getImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  void _showBottomSheet(context) async{
+    showModalBottomSheet(context: context, builder: (BuildContext bc){
+      return Container(
+        child: new Wrap(
+          children: <Widget>[
+            new ListTile(
+                leading: new Icon(Icons.camera),
+                title: new Text('Camera'),
+                onTap: () {
+                  _getImage(ImageSource.camera);
+                  Navigator.pop(context);
+                }
+            ),
+            new ListTile(
+              leading: new Icon(Icons.videocam),
+              title: new Text('Gallery'),
+              onTap: () {
+                _getImage(ImageSource.gallery);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  _getImage(source) async {
+    File image = await ImagePicker.pickImage(source: source);
 
     if (image != null && image.path != null && image.path.isNotEmpty) {
       var result = await AppImageAPIService.create().updateAvatar(image);
@@ -67,6 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       print(result.toString());
     }
+
   }
 
   Future<void> retrieveLostData() async {
@@ -87,14 +136,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void _goToEditProfileScreen() async {
+    AccountModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileScreen(mAccountModel: _accountModel,)));
+    if (result != null) {
+      setState(() {
+        _accountModel = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Profile'),),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: (){
+           _goToEditProfileScreen();
+        },
         child: Icon(Icons.edit),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: Colors.green,
       body: Container(
         child: SingleChildScrollView(
@@ -105,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 height: 20,
               ),
               InkWell(
-                  onTap: _getImage,
+                  onTap: () => _showBottomSheet(context),
                   radius: 50,
                   child: CircleAvatar(
                     radius: 50,
@@ -144,10 +204,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.account_box,
               ),
               InfoCard(
-                text: _accountModel.phoneNumber,
+                text: _accountModel.phoneNumber.toString(),
                 icon: Icons.phone,
                 onPressed: () async {
-                  String removeSpaceFromPhoneNumber = _accountModel.phoneNumber
+                  String removeSpaceFromPhoneNumber = _accountModel.phoneNumber.toString()
                       .replaceAll(new RegExp(r"\s+\b|\b\s"), "");
                   final phoneCall = 'tel:$removeSpaceFromPhoneNumber';
 
@@ -182,13 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               InfoCard(
                 text: _accountModel.birthday,
                 icon: Icons.date_range,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditProfileScreen()));
-                  //   Navigator.pop(profile);
-                },
+                onPressed: null,
               ),
               InfoCard(
                 text: _accountModel.sex,

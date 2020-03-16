@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/file_extention.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:party_booking/file_extention.dart';
 
 class AppImageAPIService {
   static String token;
@@ -14,9 +16,9 @@ class AppImageAPIService {
   AppImageAPIService({this.dio});
 
   Future<BaseResponseModel> updateAvatar(File imageToUpdate) async {
-    FormData formData = new FormData.from({
-      "image": new UploadFileInfo(imageToUpdate, imageToUpdate.name, contentType: ContentType('image', 'jpeg')),
-//    "image": MultipartFile.fromFile(imageToUpdate.path, filename: imageToUpdate.name, contentType: ContentType('image', 'jpeg'))
+    FormData formData = new FormData.fromMap({
+//      "image": new UploadFileInfo(imageToUpdate, imageToUpdate.name, contentType: ContentType('image', 'jpeg')),
+    "image": await MultipartFile.fromFile(imageToUpdate.path, filename: imageToUpdate.name, contentType: MediaType('image', 'jpeg'))
     });
 
     BaseResponseModel response;
@@ -37,7 +39,7 @@ class AppImageAPIService {
 
   static AppImageAPIService create() {
     var random = Random();
-    String boundary = '--dio-boundary-' +
+    String boundary = 'dio-boundary-' +
         random.nextInt(4294967296).toString().padLeft(10, '0');
     BaseOptions options = new BaseOptions(
         baseUrl: "http://139.180.131.30:3000/",
@@ -54,13 +56,11 @@ class AppImageAPIService {
         dio.interceptors.requestLock.lock();
         // We use a new Dio(to avoid dead lock) instance to request token.
         SharedPreferences preferences = await SharedPreferences.getInstance();
-        AccountModel accountModel = accountModelFromJson(
-            preferences.getString(Constants.ACCOUNT_MODEL_KEY));
-        token = accountModel.token;
+        token = preferences.getString(Constants.USER_TOKEN);
       }
       //Set the token to headers
       options.headers["authorization"] = token;
-      options.headers['content-type'] = "multipart/form-data; boundary=${boundary.substring(2)}";
+      options.headers['content-type'] = "multipart/form-data; boundary=$boundary";
       dio.interceptors.requestLock.unlock();
       return options; //continue
     }));

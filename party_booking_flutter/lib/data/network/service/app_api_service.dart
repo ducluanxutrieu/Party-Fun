@@ -57,6 +57,11 @@ abstract class AppApiService extends ChopperService {
     @body RateDishRequestModel model,
   });
 
+  @Get(path: 'user/profile')
+  Future<Response<AccountResponseModel>> getUserProfile({
+    @Header('authorization') String token,
+});
+
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',

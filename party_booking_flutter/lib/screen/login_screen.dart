@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(model.toJson()));
+    prefs.setString(Constants.USER_TOKEN, model.token);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: model,)));
   }

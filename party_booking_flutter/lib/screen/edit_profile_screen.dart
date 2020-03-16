@@ -1,9 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
@@ -12,17 +13,19 @@ import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:date_format/date_format.dart';
+
+import '../widgets/common/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
+  final AccountModel mAccountModel;
+
+  EditProfileScreen({@required this.mAccountModel});
+
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  DateTime _dateTime;
-  String _selectedGender=null;
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
@@ -30,36 +33,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   int _stateButton = 0;
 
   void _onUpdateClicked() {
-    if(_fbKey.currentState.saveAndValidate()) {
+    if (_fbKey.currentState.saveAndValidate()) {
       setState(() {
         _stateButton = 1;
       });
 
-      final fullName = _fbKey.currentState.fields['fullname'].currentState
-          .value;
+      final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
       final email = _fbKey.currentState.fields['email'].currentState.value;
-      final phoneNumber =
-          _fbKey.currentState.fields['phonenumber'].currentState.value;
-      final model = UpdateProfileRequestModel(email: email, birthday: '02/02/1990', fullName: fullName, phoneNumber: phoneNumber, sex: 'Female');
-
-      requestRegister(model);
+      final birthday = _fbKey.currentState.fields['birthday'].currentState.value;
+      final gender = _fbKey.currentState.fields['gender'].currentState.value;
+      final phoneNumber = _fbKey.currentState.fields['phonenumber'].currentState.value;
+      final model = UpdateProfileRequestModel(
+          email: email,
+          birthday: DateFormat('MM/dd/yyyy').format(birthday),
+          fullName: fullName,
+          phoneNumber: phoneNumber,
+          sex: gender);
+      _requestUpdateUserProfile(model);
     }
   }
 
-  void requestRegister(UpdateProfileRequestModel model) async {
+  void _requestUpdateUserProfile(UpdateProfileRequestModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    AccountModel accountModel = accountModelFromJson(prefs.getString(Constants.ACCOUNT_MODEL_KEY));
+    String userToken = prefs.getString(Constants.USER_TOKEN);
 
-    final result = await AppApiService.create().requestUpdateUser(token: accountModel.token, model: model);
+    final result = await AppApiService.create()
+        .requestUpdateUser(token: userToken, model: model);
     if (result.isSuccessful) {
       UTiu.showToast(result.body.message);
       setState(() {
         _stateButton = 2;
       });
+      prefs.setString(Constants.ACCOUNT_MODEL_KEY, accountModelToJson(result.body.account));
       Timer(Duration(milliseconds: 1500), () {
-        Navigator.pop(context);
+        Navigator.pop(context, result.body.account);
       });
-    }else {
+    } else {
       setState(() {
         _stateButton = 0;
       });
@@ -68,50 +77,54 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  Widget _selectGender() {
+    return FormBuilderDropdown(
+      attribute: "gender",
+      style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black),
+      decoration: InputDecoration(
+          labelText: "Gender",
+          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
+      // initialValue: 'Male',
+      hint: Text('Select Gender', style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),),
+      validators: [FormBuilderValidators.required()],
+      items: ['Male', 'Female', 'Other']
+          .map((gender) =>
+              DropdownMenuItem(value: gender, child: Text("$gender")))
+          .toList(),
+    );
+  }
+
+  Widget _showDatePicker() {
+    return FormBuilderDateTimePicker(
+      attribute: "birthday",
+      inputType: InputType.date,
+      format: DateFormat("MM/dd/yyyy"),
+      style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+      decoration: InputDecoration(
+          labelText: 'Select Gender',
+          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final loginButton = FlatButton(
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      child: Text(
-        'Login',
-        style: TextStyle(color: Colors.blue, fontSize: 18),
-      ),
-    );
-    final loginButton5  = DropdownButton(
-      value: _selectedGender,
-      items: _dropDownItem(),
-      onChanged: (value){
-        _selectedGender=value;
-        setState(() {
-        });
-      },
-      hint: Text('Select Gender'),
-    );
-    final loginButton1 = FlatButton(
-        onPressed: () {
-          showDatePicker(
-              context: context,
-              initialDate: _dateTime == null ? DateTime.now() : _dateTime,
-              firstDate: DateTime(2001),
-              lastDate: DateTime(2021)
-          ).then((date) {
-            setState(() {
-              _dateTime = date;
-            });
-          });
-        },
-      child: Text(
-        //_dateTime == null ? 'Nothing has been picked yet' : _dateTime.toString()
-          'Pick Time'
-      ),
-    );
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Profile'),
+      ),
       body: Center(
         child: FormBuilder(
           key: _fbKey,
           autovalidate: false,
+          initialValue: {
+            'fullname': widget.mAccountModel.fullName,
+            'email': widget.mAccountModel.email,
+            'phonenumber': (widget.mAccountModel.phoneNumber.toString() ?? 'Empty'),
+            'birthday': DateFormat("MM/dd/yyyy").parse(widget.mAccountModel.birthday),
+            'gender': widget.mAccountModel.sex,
+          },
           child: Container(
             color: Colors.white,
             child: Padding(
@@ -125,7 +138,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     SizedBox(
                       height: 40,
                     ),
-                    LogoAppWidget(mLogoSize: 130,),
+                    LogoAppWidget(
+                      mLogoSize: 130,
+                    ),
                     SizedBox(height: 50.0),
                     TextFieldWidget(
                       mAttribute: 'fullname',
@@ -133,20 +148,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       mValidators: [
                         ...listValidators,
                         FormBuilderValidators.minLength(6)
-                      ],
-                    ),
-                    SizedBox(height: 15.0),
-                    TextFieldWidget(
-                      mAttribute: 'username',
-                      mHindText: 'Username',
-                      mValidators: [
-                        ...listValidators,
-                            (dynamic value) {
-                          if ((value as String).contains(" ")) {
-                            return 'Username invalid';
-                          } else
-                            return null;
-                        }
                       ],
                     ),
                     SizedBox(height: 15.0),
@@ -170,38 +171,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             errorText: "Phone number invalid")
                       ],
                     ),
-
-
                     SizedBox(height: 15.0),
-                    TextFieldWidget(
-                      mHindText:  _dateTime == null ? 'Birthday':'${formatDate(_dateTime, [dd, '/', mm, '/', yyyy])}',
-                      // mTextInputType: TextInputType.phone,
-                      //  mValidators: [
-                      //  ...listValidators,
-                      //FormBuilderValidators.numeric(
-                      //  errorText: "Phone number invalid")
-                      //],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    loginButton1,
-
-
-
+                    _showDatePicker(),
                     SizedBox(height: 15.0),
-                    TextFieldWidget(
-                      //  mAttribute: 'email',
-                      //    mHindText: _selectedGender,
-                      mHindText:  _selectedGender == null ? 'Gender':_selectedGender,
-
-                    ),
-
-                    SizedBox(
-                      height: 5,
-                    ),
-                    loginButton5,
-
+                    _selectGender(),
                     SizedBox(
                       height: 35.0,
                     ),
@@ -213,7 +186,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     SizedBox(
                       height: 5,
                     ),
-                    loginButton
                   ],
                 ),
               ),
@@ -223,14 +195,4 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
-  List<DropdownMenuItem<String>> _dropDownItem(){
-    List<String> ddl=["Male","Female","Others"];
-    return ddl.map(
-            (value)=>DropdownMenuItem(
-          value: value,
-          child: Text(value),
-        )
-    ).toList();
-  }
-
 }

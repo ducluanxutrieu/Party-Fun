@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
@@ -11,7 +12,6 @@ import 'package:party_booking/screen/login_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
 
 import 'dish_detail_screen.dart';
 
@@ -29,29 +29,105 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String _fullNameUser = "PartyBooking";
   String _token = "";
-  final _listMenuFiltered = List<MenuModel>();
+  var _listMenuFiltered = List<MenuModel>();
+  final _listDishOrigin = List<DishModel>();
   AccountModel accountModel;
+  String _searchText = "";
+  Icon _searchIcon = new Icon(Icons.search);
+  Widget _appBarTitle;
+  final TextEditingController _filter = new TextEditingController();
 
   _MainScreenState({@required this.accountModel});
 
   @override
   void initState() {
     super.initState();
-    _fullNameUser = accountModel.fullName;
-    _token = accountModel.token;
+    _appBarTitle = Text(accountModel.fullName);
     getListDishes();
+    _initSearch();
+  }
+
+  void _initSearch(){
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+          _listMenuFiltered = menuAllocation(_listDishOrigin);
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
   }
 
   void getListDishes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _token = prefs.getString(Constants.USER_TOKEN);
+
     var result = await AppApiService.create().getListDishes(token: _token);
     if (result.isSuccessful) {
       setState(() {
         _listMenuFiltered.addAll(menuAllocation(result.body.listDishes));
+        _listDishOrigin.addAll(result.body.listDishes);
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UTiu.showToast(model.message);
     }
+  }
+
+  void _searchPressed() {
+    setState(() {
+      if (this._searchIcon.icon == Icons.search) {
+        this._searchIcon = new Icon(Icons.close);
+        this._appBarTitle = new TextField(
+          controller: _filter,
+          decoration: new InputDecoration(
+              prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+        );
+      } else {
+        this._searchIcon = new Icon(Icons.search);
+        this._appBarTitle = new Text(accountModel.fullName);
+        _listMenuFiltered = menuAllocation(_listDishOrigin);
+        _filter.clear();
+      }
+    });
+  }
+
+  Widget _buildList() {
+    if (_searchText.isNotEmpty) {
+      List<DishModel> tempList = new List();
+      for (int i = 0; i < _listDishOrigin.length; i++) {
+        if (_listDishOrigin[i]
+            .name
+            .toLowerCase()
+            .contains(_searchText.toLowerCase())) {
+          tempList.add(_listDishOrigin[i]);
+        }
+      }
+      setState(() {
+        _listMenuFiltered = menuAllocation(tempList);
+      });
+    } else {
+      setState(() {
+        _listMenuFiltered = menuAllocation(_listDishOrigin);
+      });
+    }
+    return
+    _listMenuFiltered.isNotEmpty ? ListView.separated(
+        separatorBuilder: (BuildContext context, int index) => Divider(),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: _listMenuFiltered.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _itemMenu(_listMenuFiltered[index]);
+        })
+    : Center(
+      child: Lottie.network('https://assets5.lottiefiles.com/datafiles/hYQRPx1PLaUw8znMhjLq2LdMbklnAwVSqzrkB4wG/bag_error.json',
+      repeat: true,),
+    );
   }
 
   void _signOut() async {
@@ -130,10 +206,11 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _fullNameUser,
-          style: TextStyle(color: Colors.white),
-        ),
+        title: _appBarTitle,
+        actions: <Widget>[Padding(
+          padding: const EdgeInsets.only(right: 35),
+          child: InkWell(onTap: _searchPressed, child: _searchIcon),
+        )],
       ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -157,13 +234,22 @@ class _MainScreenState extends State<MainScreen> {
                 style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0),
               ),
             ),
-            _createDrawerItem(icon: Icons.home, text: 'Home', onTap: null),
+            _createDrawerItem(
+                icon: Icons.home,
+                text: 'Home',
+                onTap: () {
+                  Navigator.pop(context);
+                }),
             _createDrawerItem(
                 icon: Icons.account_circle,
                 text: 'Profile',
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileScreen(mAccountModel: accountModel,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                                mAccountModel: accountModel,
+                              )));
                   //   Navigator.pop(profile);
                 }),
             _createDrawerItem(
@@ -188,14 +274,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Flex(direction: Axis.vertical, children: [
         Expanded(
-          child: ListView.separated(
-              separatorBuilder: (BuildContext context, int index) => Divider(),
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: _listMenuFiltered.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _itemMenu(_listMenuFiltered[index]);
-              }),
+          child: _buildList(),
         ),
       ]),
     );
@@ -245,7 +324,8 @@ class _MainScreenState extends State<MainScreen> {
       scrollDirection: Axis.vertical,
       crossAxisCount: 2,
       itemCount: dishes.length,
-      itemBuilder: (BuildContext context, int index) => _itemCard(dishes[index]),
+      itemBuilder: (BuildContext context, int index) =>
+          _itemCard(dishes[index]),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,

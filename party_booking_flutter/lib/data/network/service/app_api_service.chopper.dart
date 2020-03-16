@@ -89,4 +89,12 @@ class _$AppApiService extends AppApiService {
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
+
+  @override
+  Future<Response<AccountResponseModel>> getUserProfile({String token}) {
+    final $url = 'user/profile';
+    final $headers = {'authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<AccountResponseModel, AccountResponseModel>($request);
+  }
 }

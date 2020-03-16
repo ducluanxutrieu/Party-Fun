@@ -7,6 +7,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool mShowObscureText;
   final TextInputType mTextInputType;
   final List<FormFieldValidator> mValidators;
+  final bool readOnly;
 
   TextFieldWidget( // ignore: avoid_init_to_null
       {
@@ -15,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
     this.mShowObscureText = false,
     this.mTextInputType = TextInputType.text,
     this.mValidators,
+    this.readOnly = false,
   });
 
   @override
@@ -23,13 +25,13 @@ class TextFieldWidget extends StatelessWidget {
     return FormBuilderTextField(
         attribute: mAttribute,
         obscureText: mShowObscureText,
+        readOnly: readOnly,
         maxLines: 1,
         style: mStyle,
-
         keyboardType: mTextInputType,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-            hintText: mHindText,
+            labelText: mHindText,
             contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32))),

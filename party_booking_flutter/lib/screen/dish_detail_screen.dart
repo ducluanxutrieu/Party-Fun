@@ -341,10 +341,9 @@ class _DishDetailScreenState extends State<DishDetailScreen>
 
   void _requestRating(double rateScore, Function handle) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String jsonAccount = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    AccountModel accountModel = accountModelFromJson(jsonAccount);
+    String token = prefs.getString(Constants.USER_TOKEN);
     var result = await AppApiService.create().requestRating(
-      token: accountModel.token,
+      token: token,
       model: RateDishRequestModel(id: widget.dishModel.id,
           content: myController.text,
           rateScore: rateScore),);
