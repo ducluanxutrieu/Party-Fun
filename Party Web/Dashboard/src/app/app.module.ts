@@ -1,3 +1,4 @@
+//Modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -5,8 +6,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { DataTablesModule } from 'angular-datatables';
 import { AppRoutingModule } from './app-routing.module';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChartsModule } from 'ng2-charts';
+
+import { DatePipe } from '@angular/common';
+
+//Services
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from './_services/authentication.service';
 import { AuthGuard } from './security/auth.guard';
@@ -16,6 +21,7 @@ import { StaffService } from './_services/staff.service';
 import { StatisticalService } from './_services/statistical.service';
 import { PaymentService } from './_services/payment.service';
 
+//Components
 import { AppComponent } from './app.component';
 import { UserloginComponent } from './User/userlogin/userlogin.component';
 import { UserregisterComponent } from './User/userregister/userregister.component';
@@ -29,8 +35,6 @@ import { EditEmployeeComponent } from './Admin/Employees/edit-employee/edit-empl
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ProfileComponent } from './User/profile/profile.component';
 import { CustomersListComponent } from './Admin/Customers/customers-list/customers-list.component';
-import { ChartsModule } from 'ng2-charts';
-import { DatePipe } from '@angular/common';
 import { PayComponent } from './Admin/Customers/pay/pay.component';
 import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bills.component';
 

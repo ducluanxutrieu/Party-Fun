@@ -2,29 +2,9 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 	<title>Home</title>
-	<style>
-		html, body{
-			font-family: Roboto, Helvetica, sans-serif;			
-			/* height: 100vh; */
-			margin: 0px;
-		}
-		.homepage {
-			position: relative;
-			/* min-height: 100vh; */
-		}
-		/* .mainpage{
-    		height:100%;
-		} */
-
-		.navbar-custom{
-			background-color: #f37d42;
-		}
-	</style>
 </head>
 
 <body>
@@ -42,9 +22,6 @@
 							<input class="form-control mr-sm-5" name="search" type="text" placeholder="Tìm kiếm" aria-label="Search">
 						</div>
 					</form> -->
-					<!-- <li class="nav-item">
-						<a class="nav-link" *ngIf="authenticationService.isAdmin()" href="/admin">Admin</a>
-					</li> -->
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
 						aria-haspopup="true" aria-expanded="false" *ngIf="authenticationService.loggedIn()" style="cursor:pointer">
@@ -53,12 +30,7 @@
 							<a class="dropdown-item" *ngIf="authenticationService.loggedIn()" href="profile">Account</a>
 							<a class="dropdown-item" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Logout</a>
 						</div>
-						<!-- <img src={{avtUrl}} *ngIf="authenticationService.loggedIn()" routerLink="/profile" class="avatar"> -->
-						<!-- <a class="nav-link" *ngIf="authenticationService.loggedIn()" href="/profile">{{userInfo.username}}</a> -->
 					</li>
-					<!-- <li class="nav-item">
-						<a class="nav-link" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Đăng xuất</a>
-					</li> -->
 					<li class="nav-item">
 						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="user_login">Login</a>
 					</li>

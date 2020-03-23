@@ -38,7 +38,7 @@ export class MainpageComponent implements OnInit {
         // console.log(res_data.body);
       },
       err => {
-        console.log("Lỗi: " + err.status + " " + err.statusText);
+        console.log("Error: " + err.status + " " + err.statusText);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     );

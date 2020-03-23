@@ -29,7 +29,6 @@ export class UserregisterComponent implements OnInit {
     let headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded'
     })
-    // alert("Name: " + data.name + "\nEmail:" + data.email + "\nPhone:" + data.phone + "\nUsername:" + data.username + "\nPassword: " + data.pwd);
     return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
       results = res_data.body;
       alert("Register success!");

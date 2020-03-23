@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="../../../assets/css/style.default.css" id="theme-stylesheet">
-</head>
+
 <body>
     <div class="page">
         <div class="page-content d-flex align-items-stretch">
             <nav class="side-navbar">
                 <!-- Sidebar Header-->
                 <div class="sidebar-header d-flex align-items-center">
-                    <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+                    <div class="avatar">
+                        <img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle">
+                    </div>
                     <div class="title">
                         <a href="profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
                         <p><span *ngIf="userService.get_userInfo()?.role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo()?.role=='Admin'">Admin</span></p>
@@ -18,8 +18,6 @@
                 <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
                 <ul class="list-unstyled">
                     <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
-                    <!-- <li><a href="/chart"> <i class="fa fa-bar-chart"></i>Charts </a></li> -->
-                    <!-- <li><a href="login.html"> <i class="icon-interface-windows"></i>Login page </a></li> -->
                 </ul>
                 <span class="heading">Mangement</span>
                 <ul class="list-unstyled">
@@ -27,7 +25,6 @@
                     <ul id="ProductDropdown" class="collapse list-unstyled ">
                         <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
                         <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
-                        <!-- <li><a href="#">Page</a></li> -->
                     </ul>
                     </li>
                     <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>

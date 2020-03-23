@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
         private authenticationService: AuthenticationService
     ) { }
     canActivate(): boolean {
-        if (this.authenticationService.loggedIn()) {
+        if (this.authenticationService.loggedIn() && (this.authenticationService.isAdmin || this.authenticationService.isStaff)) {
             // logged in so return true
             return true;
         } else {

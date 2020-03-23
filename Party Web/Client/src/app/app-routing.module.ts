@@ -13,7 +13,7 @@ import { EditProfileComponent } from './User/Edit profile/edit-profile/edit-prof
 import { EditPictureComponent } from './User/Edit profile/edit-picture/edit-picture.component';
 import { UserProfileComponent } from './User/Profile/user-profile/user-profile.component';
 import { UserCartInfoComponent } from './User/Profile/user-cart-info/user-cart-info.component';
-import { NotFoundComponent } from './not-found-component/not-found-component.component';
+import { NotFoundComponent } from './not_found/not-found.component';
 import { UserCartComponent } from './User/Cart/user-cart/user-cart.component';
 import { UserCheckoutComponent } from './User/Cart/user-checkout/user-checkout.component';
 import { ProductDetailComponent } from './Products/product-detail/product-detail.component';
