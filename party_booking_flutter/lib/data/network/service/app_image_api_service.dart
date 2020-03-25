@@ -2,34 +2,41 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/file_extention.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppImageAPIService {
   static String token;
   final Dio dio;
+  ProgressDialog progressDialog;
 
-  AppImageAPIService({this.dio});
+  AppImageAPIService({this.dio, this.progressDialog});
 
   Future<BaseResponseModel> updateAvatar(File imageToUpdate) async {
     FormData formData = new FormData.fromMap({
 //      "image": new UploadFileInfo(imageToUpdate, imageToUpdate.name, contentType: ContentType('image', 'jpeg')),
-    "image": await MultipartFile.fromFile(imageToUpdate.path, filename: imageToUpdate.name, contentType: MediaType('image', 'jpeg'))
+      "image": await MultipartFile.fromFile(imageToUpdate.path,
+          filename: imageToUpdate.name, contentType: MediaType('image', 'jpeg'))
     });
 
     BaseResponseModel response;
     var result = await dio.post('user/uploadavatar', data: formData,
-        onSendProgress: (int sent, int total) {
+        /*onSendProgress: (int sent, int total) {
       print("Luan sent");
       print("$sent $total");
     }, onReceiveProgress: (int receive, int total) {
       print("Luan receive");
       print("$receive $total");
-    });
+    }*/);
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);
@@ -37,7 +44,56 @@ class AppImageAPIService {
     return response;
   }
 
-  static AppImageAPIService create() {
+  Future<BaseResponseModel> addNewDish(List<Asset> listImage, String name, String description, String type, String price) async {
+    var listMultiPath = List();
+
+    for(int i = 0; i < listImage.length; i++){
+      var path = await FlutterAbsolutePath.getAbsolutePath(listImage[i].identifier);
+      listMultiPath.add(await MultipartFile.fromFile(path,
+          filename: listImage[i].name, contentType: MediaType('image', 'jpeg')));
+    }
+
+    FormData formData = new FormData.fromMap({
+      'name': name,
+      'description': description,
+      'type': type,
+      'discount': '0',
+      'price': price,
+      'image': listMultiPath,
+    });
+
+    BaseResponseModel response;
+    var result = await dio.post('product/adddish', data: formData,
+    onSendProgress: (int sent, int total){
+      _updateProgress(sent, total);
+    });
+
+    progressDialog.dismiss();
+
+    if (result.statusCode == 200) {
+      response = BaseResponseModel.fromJson(result.data);
+    }else{
+      UTiu.showToast(BaseResponseModel.fromJson(result.data).message);
+    }
+    progressDialog.dismiss();
+    return response;
+  }
+
+  void _updateProgress(int sent, int total) {
+    progressDialog.update(
+      progress: (sent/total)*100,
+      message: "Please wait...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+  }
+
+  static AppImageAPIService create(BuildContext context) {
     var random = Random();
     String boundary = 'dio-boundary-' +
         random.nextInt(4294967296).toString().padLeft(10, '0');
@@ -60,7 +116,8 @@ class AppImageAPIService {
       }
       //Set the token to headers
       options.headers["authorization"] = token;
-      options.headers['content-type'] = "multipart/form-data; boundary=$boundary";
+      options.headers['content-type'] =
+          "multipart/form-data; boundary=$boundary";
       dio.interceptors.requestLock.unlock();
       return options; //continue
     }));
@@ -71,6 +128,24 @@ class AppImageAPIService {
         requestBody: true,
         requestHeader: true,
         responseHeader: true));
-    return AppImageAPIService(dio: dio);
+
+    //Progress
+    ProgressDialog progressDialog = new ProgressDialog(context,type: ProgressDialogType.Download, isDismissible: false, showLogs: true);
+    progressDialog.style(
+        message: 'Uploading images...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600)
+    );
+    progressDialog.show();
+    return AppImageAPIService(dio: dio, progressDialog: progressDialog);
   }
 }

@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     File image = await ImagePicker.pickImage(source: source);
 
     if (image != null && image.path != null && image.path.isNotEmpty) {
-      var result = await AppImageAPIService.create().updateAvatar(image);
+      var result = await AppImageAPIService.create(context).updateAvatar(image);
       if (result.success) {
         setState(() {
           UTiu.showToast('Change avatar successful');

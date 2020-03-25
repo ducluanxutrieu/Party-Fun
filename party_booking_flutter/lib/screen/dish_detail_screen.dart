@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -176,8 +176,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       children: <Widget>[
         Hero(
           tag: widget.dishModel.id,
-          child: Image.network(
-            'https://key.com.vn/upload/article/contents/hinh-nen-sinh-thai-xinh-xan-trong-photoshop-2.jpg',
+          child: Image.asset(Assets.imgDishDetail,
             fit: BoxFit.cover,
             width: MediaQuery
                 .of(context)
@@ -364,6 +363,12 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.dishModel.name),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: InkWell(child: Icon(FontAwesomeIcons.cartPlus), onTap: null,),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _dialogRating(context),
