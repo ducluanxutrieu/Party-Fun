@@ -2,9 +2,9 @@ html, body{
     font-family: Poppins, Helvetica, sans-serif;			
     margin: 0px;
 }
-.navbar-custom{
-    background-color: rgba(121, 106, 238, 0.9);
-}
+/* .navbar-custom{
+    background-color: #2F333E;
+} */
 .logout{
     cursor: pointer;
 }

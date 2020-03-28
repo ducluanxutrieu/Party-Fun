@@ -583,7 +583,7 @@ nav.side-navbar.shrinked .sidebar-header .title {
 }
 
 /* SIDEBAR MEDIAQUERIES ----------------------------------- */
-/* @media (max-width: 1199px) {
+@media (max-width: 1199px) {
   nav.side-navbar {
     margin-left: -90px;
     min-width: 90px;
@@ -649,7 +649,7 @@ nav.side-navbar.shrinked .sidebar-header .title {
   .content-inner.active {
     width: calc(100% - 90px);
   }
-} */
+}
 
 /*
 * ==========================================================

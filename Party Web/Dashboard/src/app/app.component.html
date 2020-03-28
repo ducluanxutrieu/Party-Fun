@@ -8,34 +8,36 @@
 </head>
 <body>
   <div class="page">
-    <nav class="navbar navbar-custom navbar-expand-lg navbar-dark static-top" *ngIf="authenticationService.loggedIn()">
-      <a class="navbar-brand" href="dashboard">
-          <span><strong>PartyBooking</strong></span>
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <!-- <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
-            </a>
-          </li> -->
-          <!-- Logout    -->
-          <li class="nav-item"><a class="nav-link logout" (click)="logout()"> <span class="d-none d-sm-inline" style="color: white;">Logout </span><i class="fa fa-sign-out"></i></a></li>
-          <!-- <li class="nav-item dropdown" *ngIf="authenticationService.isAdmin()">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false" style="cursor:pointer">
-            <i class="fa fa-user"></i> {{userInfo.username}} </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <a class="dropdown-item" *ngIf="authenticationService.loggedIn()" href="/profile">Account</a>
-              <a class="dropdown-item" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Logout</a>
+    <!-- Main Navbar-->
+    <header class="header">
+      <nav class="navbar" *ngIf="authenticationService.loggedIn()">
+        <div class="container-fluid">
+          <div class="navbar-holder d-flex align-items-center justify-content-between">
+            <div class="navbar-header">
+              <!-- Navbar Brand --><a class="navbar-brand d-none d-sm-inline-block" href="dashboard">
+                <div class="brand-text d-none d-lg-inline-block"><span>Party </span><strong>Dashboard</strong></div>
+                <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>PD</strong></div>
+              </a>
+              <!-- Toggle Button--><a id="toggle-btn" class="menu-btn active"><span></span><span></span><span></span></a>
             </div>
-          </li> -->
-        </ul>
-      </div>
-    </nav>
+            <!-- Navbar Menu -->
+            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+              <!-- Logout    -->
+              <li class="nav-item"><a class="nav-link logout" (click)="logout()"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link logout" (click)="logout()"> <span class="d-none d-sm-inline" style="color: white;">Logout </span><i class="fa fa-sign-out"></i></a></li>
+          </ul>
+        </div> -->
+      </nav>
+    </header>
     <ng-container>
       <router-outlet></router-outlet>
     </ng-container>
