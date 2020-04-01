@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -361,18 +360,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ],
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Hero(
-                  tag: dishModel.id,
-                  child: Image.network(
-                    dishModel.image[0],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 150,
-                  ),
-                ),
-              ),
+              _itemCardImage(dishModel.image[0], dishModel.id),
               SizedBox(
                 height: 5,
               ),
@@ -384,6 +372,27 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _itemCardImage(String image, String id){
+    image = image.replaceAll('localhost', '139.180.131.30');
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Hero(
+          tag: id,
+          child: CachedNetworkImage(
+            placeholder: (context, url) => Container(
+                width: double.infinity,
+                height: 150,
+                padding: EdgeInsets.all(50),
+                child: CircularProgressIndicator()),
+            imageUrl: image,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 150,
+          )
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -205,8 +206,13 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                   padding: EdgeInsets.all(10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      value,
+                    child: CachedNetworkImage(
+                      placeholder: (context, url) => Container(
+                          width: double.infinity,
+                          height: 150,
+                          padding: EdgeInsets.all(50),
+                          child: CircularProgressIndicator()),
+                      imageUrl: value,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 250,
