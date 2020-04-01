@@ -492,6 +492,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.6+3"
+  momo_payment_plugin:
+    dependency: "direct main"
+    description:
+      name: momo_payment_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1+1"
   multi_image_picker:
     dependency: "direct main"
     description:

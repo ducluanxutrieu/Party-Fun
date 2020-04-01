@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:momo_payment_plugin/momo_payment_data.dart';
+import 'package:momo_payment_plugin/momo_payment_plugin.dart';
+import 'package:momo_payment_plugin/momo_payment_result.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
@@ -204,7 +207,7 @@ class _MainScreenState extends State<MainScreen> {
                 //   Navigator.pop(profile);
               }),
           _createDrawerItem(
-              icon: Icons.location_on, text: 'Address', onTap: null),
+              icon: Icons.location_on, text: 'Address', onTap: onOpenMomoPayment),
           _createDrawerItem(
               icon: Icons.history, text: 'My Ordered', onTap: null),
           Divider(),
@@ -453,5 +456,24 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     return listMenu;
+  }
+
+  void onOpenMomoPayment() async{
+    MomoPaymentData momoPaymentData = MomoPaymentData(
+      appScheme: "[your_appScheme]",
+      merchantname: '[your_merchantname]',
+      merchantcode: '[your_merchantcode]',
+      amount: 2000,
+      orderId: 'orderId',
+      orderLabel: 'orderLabel',
+      merchantnamelabel: "sdsds",
+      fee: 200,
+      description: null,
+      requestId: 'requestId',
+      partnerCode: 'MOMOHF6420200401',
+    );
+
+    MomoPaymentResult momoPaymentResult =
+    await MomoPaymentPlugin().requestPayment(momoPaymentData);
   }
 }
