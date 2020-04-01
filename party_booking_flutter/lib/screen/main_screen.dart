@@ -16,38 +16,54 @@ import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dish_detail_screen.dart';
-
+import 'dart:convert';
+import 'package:scoped_model/scoped_model.dart';
 // ignore: must_be_immutable
 class MainScreen extends StatefulWidget {
-  AccountModel accountModel;
-
-  MainScreen({Key key, @required this.accountModel});
-
   @override
   _MainScreenState createState() =>
-      _MainScreenState(accountModel: accountModel);
+      _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   String _fullNameUser = "PartyBooking";
   String _token = "";
+  String _imgurl = "";
+  String _email = "";
   var _listMenuFiltered = List<MenuModel>();
   final _listDishOrigin = List<DishModel>();
-  AccountModel accountModel;
+  AccountModel _accountModel;
   String _searchText = "";
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
   final TextEditingController _filter = new TextEditingController();
 
-  _MainScreenState({@required this.accountModel});
-
   @override
   void initState() {
     super.initState();
+  //  _appBarTitle = Text(accountModel.fullName);
+    print(DateTime.now().millisecondsSinceEpoch);
+    checkAlreadyLogin();
     _getListDishesFromDB();
-    _appBarTitle = Text(accountModel.fullName);
+   // _appBarTitle = Text(_accountModel.fullName);
     _getListDishes();
     _initSearch();
+  }
+  void checkAlreadyLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
+    print(DateTime.now().millisecondsSinceEpoch);
+    if (accountJson != null && accountJson.isNotEmpty) {
+      _accountModel = AccountModel.fromJson(json.decode(accountJson));
+      _appBarTitle = Text(_accountModel.fullName);
+      _fullNameUser = _accountModel.fullName;
+      _imgurl = _accountModel.imageUrl;
+      _email = _accountModel.email;
+
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
   }
 
   void _initSearch(){
@@ -108,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text(accountModel.fullName);
+        this._appBarTitle = new Text(_accountModel.fullName);
         _listMenuFiltered = _menuAllocation(_listDishOrigin);
         _filter.clear();
       }
@@ -145,7 +161,12 @@ class _MainScreenState extends State<MainScreen> {
         actions: <Widget>[Padding(
           padding: const EdgeInsets.only(right: 35),
           child: InkWell(onTap: _searchPressed, child: _searchIcon),
-        )],
+        ),
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () => Navigator.pushNamed(context, '/cart'),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToAddDish,
@@ -177,11 +198,11 @@ class _MainScreenState extends State<MainScreen> {
               style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(accountModel.imageUrl),
+              backgroundImage: NetworkImage(_imgurl),
               backgroundColor: Colors.transparent,
             ),
             accountEmail: Text(
-              accountModel.email,
+              _email,
               style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0),
             ),
           ),
@@ -199,7 +220,7 @@ class _MainScreenState extends State<MainScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfileScreen(
-                          mAccountModel: accountModel,
+                          mAccountModel: _accountModel,
                         )));
                 //   Navigator.pop(profile);
               }),
@@ -221,7 +242,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
         ],
-      ),
+      )
     );
   }
 
@@ -315,6 +336,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _itemCard(DishModel dishModel) {
+   return ScopedModelDescendant<CartModel>(
+        builder: (context, child, model) {
     return Card(
       color: Colors.white,
       elevation: 4,
@@ -353,7 +376,11 @@ class _MainScreenState extends State<MainScreen> {
                   Spacer(),
                   IconButton(
                     icon: Icon(FontAwesomeIcons.cartPlus),
-                    onPressed: null,
+                    //   onPressed: () => model.addProduct(dishModel)
+                    onPressed: ()
+                    {model.addProduct(dishModel);
+
+                    },
                   ),
                   SizedBox(
                     width: 10,
@@ -374,6 +401,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+        });
   }
 
   Widget _itemCardImage(String image, String id){

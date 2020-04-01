@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(model.toJson()));
     prefs.setString(Constants.USER_TOKEN, model.token);
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: model,)));
+        context, MaterialPageRoute(builder: (context) => MainScreen()));
   }
 
   void requestLogin(String username, String password) async {

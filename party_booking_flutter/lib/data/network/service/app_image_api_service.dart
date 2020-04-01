@@ -24,8 +24,7 @@ class AppImageAPIService {
   Future<BaseResponseModel> updateAvatar(File imageToUpdate) async {
     FormData formData = new FormData.fromMap({
 //      "image": new UploadFileInfo(imageToUpdate, imageToUpdate.name, contentType: ContentType('image', 'jpeg')),
-      "image": await MultipartFile.fromFile(imageToUpdate.path,
-          filename: imageToUpdate.name, contentType: MediaType('image', 'jpeg'))
+    "image": await MultipartFile.fromFile(imageToUpdate.path, filename: imageToUpdate.path?.split("/")?.last, contentType: MediaType('image', 'jpeg'))
     });
 
     BaseResponseModel response;
