@@ -40,6 +40,7 @@ export class AdminPageComponent implements OnInit {
     },
     maintainAspectRatio: false
   };
+
   public moneyChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true,
@@ -57,6 +58,7 @@ export class AdminPageComponent implements OnInit {
       ]
     }
   };
+
   public moneyChartLabels = [];
   public productChartLabels = [];
   public billChartLabels = [];
@@ -67,6 +69,7 @@ export class AdminPageComponent implements OnInit {
     { data: [0], label: 'Total Orders' },
     { data: [0], label: 'Total Bills' }
   ];
+
   public moneyChartData = [{ data: [0], label: 'Total Money' }];
   // public barChartData3 = [{ data: [0], label: 'Total Bills' }];
 
@@ -102,6 +105,7 @@ export class AdminPageComponent implements OnInit {
 
     // this.create_billChart(this.bill_statistics);
   }
+
   create_moneyChart(moneyData: any[]) {
     var money_data = [];
     for (let i = 0; i < moneyData.length; i++) {
@@ -115,6 +119,7 @@ export class AdminPageComponent implements OnInit {
       }
     ]
   }
+
   create_productChart(productData: any[]) {
     if (productData) {
       var product_data1 = [];

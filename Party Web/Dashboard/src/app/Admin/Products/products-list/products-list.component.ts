@@ -5,6 +5,8 @@ import { ProductService } from '../../../_services/product.service';
 import { UserService } from '../../../_services/user.service';
 import { Subject } from 'rxjs';
 
+// declare jquery;
+declare var $: any;
 
 @Component({
   selector: 'app-products-list',
@@ -14,7 +16,7 @@ import { Subject } from 'rxjs';
 export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   product_data = [];
 
-  dtTrigger: Subject<any> = new Subject();
+  // dtTrigger: Subject<any> = new Subject();
 
   constructor(
     private http: HttpClient,
@@ -44,12 +46,27 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     )
   }
+
   delete_clicked(id: string, name: string) {
     if (confirm("Are you sure to delete this?\n" + name)) {
       this.product_delete(id);
       console.log(id);
     }
   }
+
+  //Generate datatable 
+  datatable_generate() {
+    var productTable = $('#productTable').DataTable();
+    var productTable_info = productTable.page.info();
+
+    if (productTable_info.pages == 1) {
+      productTable.destroy();
+      $('#productTable').DataTable({
+        "paging": false
+      });
+    }
+  }
+
   ngOnInit() {
     //this.product_data = JSON.parse(localStorage.getItem('dish-list'));
     this.product_data = this.productService.findAll();
@@ -57,13 +74,16 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
       this.product_data = data;
     });
     setTimeout(() => {
-      this.dtTrigger.next();
+      // this.dtTrigger.next();
+      this.datatable_generate();
     }, 1000)
   }
+
   ngAfterViewInit(): void {
     // this.dtTrigger.next();
   }
+
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+    // this.dtTrigger.unsubscribe();
   }
 }

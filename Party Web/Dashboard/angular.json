@@ -28,13 +28,19 @@
               "src/styles.css",
               "node_modules/datatables.net-dt/css/jquery.dataTables.css",
               "src/assets/css/bootstrap.min.css",
-              "src/assets/css/style.default.css"
+              "src/assets/css/style.default.css",
+              "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+              "node_modules/froala-editor/css/froala_style.min.css"
             ],
             "scripts": [
               "src/vendor/jquery/jquery.min.js",
               "src/vendor/popper.js/umd/popper.min.js",
               "src/vendor/bootstrap/js/bootstrap.min.js",
-              "node_modules/datatables.net/js/jquery.dataTables.js"
+              "src/vendor/jquery.cookie/jquery.cookie.js",
+              "src/vendor/jquery-validation/jquery.validate.min.js",
+              "src/assets/js/front.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js",
+              "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
 			]
           },
           "configurations": {

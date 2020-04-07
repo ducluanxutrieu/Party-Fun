@@ -15,6 +15,7 @@ import { ProfileComponent } from './User/profile/profile.component';
 import { CustomersListComponent } from './Admin/Customers/customers-list/customers-list.component';
 import { PayComponent } from './Admin/Customers/pay/pay.component';
 import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bills.component';
+import { PostComponent } from './Admin/posts/post/post.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -48,6 +49,14 @@ const routes: Routes = [
       { path: 'list', component: CustomersListComponent },
       { path: 'pay', component: PayComponent },
       { path: 'recent-bill', component: RecentBillsComponent }
+    ],
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'post',
+    children: [
+      { path: '', redirectTo: 'add', pathMatch: 'full' },
+      { path: 'create', component: PostComponent }
     ],
     canActivate: [AuthGuard]
   },

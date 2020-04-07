@@ -8,6 +8,8 @@ import { DataTablesModule } from 'angular-datatables';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
+import 'froala-editor/js/plugins.pkgd.min.js'; // Import all Froala Editor plugins.
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 import { DatePipe } from '@angular/common';
 
@@ -37,6 +39,7 @@ import { ProfileComponent } from './User/profile/profile.component';
 import { CustomersListComponent } from './Admin/Customers/customers-list/customers-list.component';
 import { PayComponent } from './Admin/Customers/pay/pay.component';
 import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bills.component';
+import { PostComponent } from './Admin/posts/post/post.component';
 
 
 @NgModule({
@@ -56,6 +59,7 @@ import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bill
     CustomersListComponent,
     PayComponent,
     RecentBillsComponent,
+    PostComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,9 +68,21 @@ import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bill
     FormsModule,
     HttpClientModule,
     ChartsModule,
-    DataTablesModule
+    DataTablesModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
   ],
-  providers: [AuthenticationService, AuthGuard, ProductService, UserService, StaffService, StatisticalService, PaymentService, CookieService, DatePipe],
+  providers: [
+    AuthenticationService,
+    AuthGuard,
+    ProductService,
+    UserService,
+    StaffService,
+    StatisticalService,
+    PaymentService,
+    CookieService,
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

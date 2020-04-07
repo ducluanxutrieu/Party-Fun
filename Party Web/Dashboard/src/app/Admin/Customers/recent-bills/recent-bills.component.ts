@@ -9,7 +9,7 @@ import { ProductService } from '../../../_services/product.service';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-// declare var jquery: any;
+// declare jquery;
 declare var $: any;
 
 interface RecentBill {
@@ -31,16 +31,18 @@ interface RecentBill {
   templateUrl: './recent-bills.component.html',
   styleUrls: ['./recent-bills.component.css']
 })
+
 export class RecentBillsComponent implements OnInit {
   recent_billList = [];
   bill_detail = [];
   current_bill: RecentBill;
 
-  dtTrigger: Subject<any> = new Subject();
+  // dtTrigger: Subject<any> = new Subject();
 
   headers = new HttpHeaders({
     'Authorization': localStorage.getItem('token')
   })
+
   constructor(
     public userService: UserService,
     public statisticalService: StatisticalService,
@@ -51,7 +53,20 @@ export class RecentBillsComponent implements OnInit {
 
   ngOnInit() {
     // this.recent_billList = this.statisticalService.get_billData();
-    this.get_recentBill();
+    this.get_recentBills();
+  }
+
+  //Generate datatable 
+  datatable_generate() {
+    var recentbillTable = $('#recentbillTable').DataTable();
+    var recentbillTable_info = recentbillTable.page.info();
+
+    if (recentbillTable_info.pages == 1) {
+      recentbillTable.destroy();
+      $('#recentbillTable').DataTable({
+        "paging": false
+      });
+    }
   }
 
   itemClicked(item: any) {
@@ -76,12 +91,15 @@ export class RecentBillsComponent implements OnInit {
     };
   }
 
-  get_recentBill() {
+  get_recentBills() {
     this.http.get(api.billStatistics, { headers: this.headers, observe: 'response' }).subscribe(
       res_data => {
-        sessionStorage.setItem('bill_statistics', JSON.stringify(res_data.body));
-        this.recent_billList = JSON.parse(sessionStorage.getItem('bill_statistics'));
-        this.dtTrigger.next();
+        sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
+        this.recent_billList = JSON.parse(sessionStorage.getItem('recent_bills'));
+        // this.dtTrigger.next();
+        setTimeout(() => {
+          this.datatable_generate();
+        }, 1000)
       },
       err => {
         console.log("Error: " + err.status + " " + err.error.text);

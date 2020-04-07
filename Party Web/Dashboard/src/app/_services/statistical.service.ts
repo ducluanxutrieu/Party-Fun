@@ -7,10 +7,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class StatisticalService {
     private moneyStatisticSubject = new BehaviorSubject<any>(null);
     private productStatisticSubject = new BehaviorSubject<any>(null);
-    private billStatisticSubject = new BehaviorSubject<any>(null);
+    private recentBillsSubject = new BehaviorSubject<any>(null);
     public money_statistics = this.moneyStatisticSubject.asObservable();
     public product_statistics = this.productStatisticSubject.asObservable();
-    public bill_statistics = this.billStatisticSubject.asObservable();
+    public recent_bills = this.recentBillsSubject.asObservable();
 
     headers = new HttpHeaders({
         'Authorization': localStorage.getItem('token')
@@ -20,7 +20,7 @@ export class StatisticalService {
     ) {
         this.get_moneyStatistics();
         this.get_productStatistics();
-        this.get_billStatistics();
+        this.get_recentBills();
     }
     //Lấy số liệu thống kê doanh thu gần đây
     get_moneyStatistics() {
@@ -49,11 +49,11 @@ export class StatisticalService {
         )
     }
     //Lấy số liệu thống kê đơn hàng
-    get_billStatistics() {
+    get_recentBills() {
         this.http.get(api.billStatistics, { headers: this.headers, observe: 'response' }).subscribe(
             res_data => {
-                sessionStorage.setItem('bill_statistics', JSON.stringify(res_data.body));
-                this.billStatisticSubject.next(res_data.body);
+                sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
+                this.recentBillsSubject.next(res_data.body);
             },
             err => {
                 console.log("Error: " + err.status + " " + err.error.text);
