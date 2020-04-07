@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void getListDishes(accountModel) async {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel,)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
 //    var result = await AppApiService.create().getListDishes(token: token);
 //    if(result.isSuccessful){
 //

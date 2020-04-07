@@ -1,6 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/book_party_request_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
@@ -62,6 +63,19 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
 });
 
+  @Post(path: 'product/book')
+  Future<Response<BaseResponseModel>> bookParty({
+    @Header('authorization') String token,
+    @body BookPartyRequestModel model,
+  });
+/*
+@POST("/product/book")
+    fun bookParty(
+        @Header("authorization") token: String,
+        @Body body: RequestOrderPartyModel
+    ): Call<BillModel>
+ */
+
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',
@@ -89,6 +103,8 @@ abstract class AppApiService extends ChopperService {
       BaseResponseModel: BaseResponseModel.fromJsonFactory,
       UpdateProfileRequestModel: UpdateProfileRequestModel.fromJsonFactory,
       RateDishRequestModel: RateDishRequestModel.fromJsonFactory,
+      BookPartyRequestModel: BookPartyRequestModel.fromJsonFactory,
+      ListDishes: ListDishes.fromJsonFactory
     });
   }
 }

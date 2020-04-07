@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+BaseResponseModel baseResponseModelFromJson(String str) => BaseResponseModel.fromJson(json.decode(str));
+
 class BaseResponseModel {
   bool success;
   String message;
