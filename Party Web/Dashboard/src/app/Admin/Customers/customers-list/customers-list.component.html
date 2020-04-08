@@ -73,15 +73,14 @@
                           <h3 class="h4">Customers list</h3>
                         </div>
                         <div class="card-body">
-                          <!-- <input class="form-control" id="SearchInput" type="text" placeholder="Search.." (change)="seach($event)"> -->
                           <div class="table-responsive">
                             <table class="table table-striped" id="customerTable">
-                              <thead>
+                              <thead class="thead-light">
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Customer Name</th>
                                   <th class="text-center">Username</th>
-                                  <th class="text-center">Functions</th>
+                                  <th class="text-center">Actions</th>
                                 </tr>
                               </thead>
                               <tbody id="tableData">
@@ -89,7 +88,11 @@
                                   <th scope="row" class="align-middle text-center">{{i+1}}</th>
                                   <td class="align-middle text-center">{{customer.fullName}}</td>
                                   <td class="align-middle text-center">{{customer.username}}</td>
-                                  <td class="text-center"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Upgrade this user" (click)="upgrade(customer.username)"><i class="fa fa-angle-double-up"></i></button></td>
+                                  <td class="text-center">
+                                    <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Upgrade this user" (click)="upgrade(customer.username)">
+                                      <i class="fa fa-angle-double-up"></i>
+                                    </button>
+                                  </td>
                                 </tr>
                               </tbody>
                             </table>

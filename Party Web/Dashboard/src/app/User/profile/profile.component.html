@@ -116,8 +116,8 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="avatar" class="img-fluid rounded-circle img-thumbnail">
-                                    <div class="text-center">
-                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="avatar" (change)="avatarChanged($event)" ngModel>
+                                    <div class="input-wrapper">
+                                        <input id="avatarInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file centered-input" name="avatar" (change)="avatarChanged($event)" ngModel>
                                     </div>
                                 </div>
                             </div>
