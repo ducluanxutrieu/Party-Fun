@@ -69,14 +69,35 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnInit() {
     //this.product_data = JSON.parse(localStorage.getItem('dish-list'));
-    this.product_data = this.productService.findAll();
-    this.productService.productList.subscribe(data => {
-      this.product_data = data;
-    });
-    setTimeout(() => {
-      // this.dtTrigger.next();
-      this.datatable_generate();
-    }, 1000)
+    // this.product_data = this.productService.findAll();
+    // this.productService.productList.subscribe(
+    //   data => {
+    //     this.product_data = data;
+    //   },
+    //   err => console.log(err),
+    //   () => {
+    //     setTimeout(() => {
+    //       // this.dtTrigger.next();
+    //       this.datatable_generate();
+    //     }, 1000)
+    //   });
+    this.productService.getDishList().subscribe(
+      res_data => {
+        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
+        var response_body = JSON.parse(sessionStorage.getItem('response_body'));
+        localStorage.setItem('dish-list', JSON.stringify(response_body.lishDishs));
+        this.product_data = response_body.lishDishs;
+      },
+      err => {
+        console.log("Error: " + err.status + " " + err.error.message);
+        sessionStorage.setItem('error', JSON.stringify(err));
+      },
+      () => {
+        setTimeout(() => {
+          this.datatable_generate();
+        }, 1000)
+      }
+    )
   }
 
   ngAfterViewInit(): void {

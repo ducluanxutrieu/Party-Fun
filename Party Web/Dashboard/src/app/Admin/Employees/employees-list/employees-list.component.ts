@@ -45,14 +45,20 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.staffService.staffsList.subscribe(data => {
-      this.staffsList = data;
-      // this.dtTrigger.next();
-    });
-    setTimeout(() => {
-      // this.dtTrigger.next();
-      this.datatable_generate();
-    }, 1000)
+    this.staffService.get_staffsList().subscribe(
+      res_data => {
+        this.staffsList = res_data.body as Staff;
+      },
+      err => {
+        console.log("Error: " + err.status + " " + err.error.message);
+        sessionStorage.setItem('error', JSON.stringify(err));
+      },
+      () => {
+        setTimeout(() => {
+          // this.dtTrigger.next();
+          this.datatable_generate();
+        })
+      });
   }
 
   ngAfterViewInit(): void {

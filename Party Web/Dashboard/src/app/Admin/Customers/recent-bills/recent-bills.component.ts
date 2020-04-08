@@ -97,13 +97,18 @@ export class RecentBillsComponent implements OnInit {
         sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
         this.recent_billList = JSON.parse(sessionStorage.getItem('recent_bills'));
         // this.dtTrigger.next();
-        setTimeout(() => {
-          this.datatable_generate();
-        }, 1000)
+        // setTimeout(() => {
+        //   this.datatable_generate();
+        // }, 1000)
       },
       err => {
         console.log("Error: " + err.status + " " + err.error.text);
         sessionStorage.setItem('error', JSON.stringify(err));
+      },
+      () => {
+        setTimeout(() => {
+          this.datatable_generate();
+        })
       }
     )
   }

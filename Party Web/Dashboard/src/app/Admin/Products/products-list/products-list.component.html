@@ -7,10 +7,10 @@
           <nav class="side-navbar">
             <!-- Sidebar Header-->
             <div class="sidebar-header d-flex align-items-center">
-                <div class="avatar"><img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
+                <div class="avatar"><img src={{userService?.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
                 <div class="title">
-                  <a href="profile"><h1 class="h4">{{userService.get_userInfo().username}}</h1></a>
-                  <p><span *ngIf="userService.get_userInfo().role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo().role=='Admin'">Admin</span></p>
+                  <a href="profile"><h1 class="h4">{{userService.get_userInfo()?.username}}</h1></a>
+                  <p><span *ngIf="userService.get_userInfo()?.role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo()?.role=='Admin'">Admin</span></p>
                 </div>
             </div>
             <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
@@ -89,7 +89,13 @@
                                   <td class="align-middle text-center">{{product.name}}</td>
                                   <td class="align-middle text-center">{{product.type}}</td>
                                   <td class="align-middle text-center">{{product.price | number}}</td>
-                                  <td class="text-center"><a href="products/edit/{{product._id}}"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button></a><span class="tab-space"></span><button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" (click)="delete_clicked(product._id, product.name)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                  <td class="text-center">
+                                    <a href="products/edit/{{product._id}}">
+                                      <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                    </a>
+                                    <span class="tab-space"></span>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" (click)="delete_clicked(product._id, product.name)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                  </td>
                                 </tr>
                               </tbody>
                             </table>

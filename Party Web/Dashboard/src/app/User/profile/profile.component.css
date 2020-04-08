@@ -1,13 +1,9 @@
 .input-wrapper{
     /* position:  absolute; */
     padding: 20px;
-    /* margin: auto;
-    text-align: center!important; */
+    /* text-align: center!important; */
 }
 .centered-input{
-    /* position: absolute;
-    display: block;
-    text-align: center;
-    margin: auto; */
-    margin-left : 12%;
+    /* display: block; */
+    margin-left: 12%;
 }

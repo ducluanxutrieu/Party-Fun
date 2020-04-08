@@ -45,13 +45,20 @@ export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.staffService.customersList.subscribe(data => {
-      this.customersList = data;
-    });
-    setTimeout(() => {
-      // this.dtTrigger.next();
-      this.datatable_generate();
-    }, 1000)
+    this.staffService.get_customersList().subscribe(
+      res_data => {
+        this.customersList = res_data.body as Customer;
+      },
+      err => {
+        console.log("Error: " + err.status + " " + err.error.message);
+        sessionStorage.setItem('error', JSON.stringify(err));
+      },
+      () => {
+        setTimeout(() => {
+          // this.dtTrigger.next();
+          this.datatable_generate();
+        })
+      });
   }
 
   ngAfterViewInit(): void {

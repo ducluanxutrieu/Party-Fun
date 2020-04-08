@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { api } from '../_api/apiUrl';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PaymentService {
