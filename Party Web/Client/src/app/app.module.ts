@@ -42,6 +42,7 @@ import { ProductCategoryComponent } from './Products/product-category/product-ca
 import { SearchComponent } from './Products/search/search.component';
 import { ProductRatingComponent } from './Products/product-rating/product-rating.component';
 import { AboutComponent } from './about/about.component';
+import { ScrollToTopComponent } from './component/scroll-to-top/scroll-to-top.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { AboutComponent } from './about/about.component';
     ProductCategoryComponent,
     SearchComponent,
     ProductRatingComponent,
-    AboutComponent
+    AboutComponent,
+    ScrollToTopComponent
   ],
   imports: [
     BrowserModule,

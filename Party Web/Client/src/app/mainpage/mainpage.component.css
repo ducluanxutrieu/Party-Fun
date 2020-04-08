@@ -32,9 +32,6 @@ html,body{
   padding: 10px;
   grid-gap:50px;
 } */
-.grid-item {
-  
-}
 .pagination-bar{
   text-align: center;
 }
@@ -57,7 +54,8 @@ html,body{
   color: black;
 }
 .add-cart-btn:hover{
-  background-color: #ffae70;
+  background-color: #ef4d4d;
+  color: white!important;
 }
 .view-more-btn{
   margin: 1em;
