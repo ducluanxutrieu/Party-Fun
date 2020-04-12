@@ -1,26 +1,27 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:party_booking/badges.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/dialogs.dart';
+import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/add_new_dish_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'add_new_dish_screen.dart';
 import 'dish_detail_screen.dart';
-import 'dart:convert';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:party_booking/dialogs.dart';
-import 'package:party_booking/badges.dart';
 
 // ignore: must_be_immutable
 class MainScreen extends StatefulWidget {
@@ -166,10 +167,9 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: _appBarTitle,
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 35),
-            child: InkWell(onTap: _searchPressed, child: _searchIcon),
-          ),
+
+             InkWell(onTap: _searchPressed, child: _searchIcon),
+
           //   IconButton(
           //   icon: Icon(Icons.shopping_cart),
           //    onPressed: () => Navigator.pushNamed(context, '/cart'),
@@ -280,8 +280,8 @@ class _MainScreenState extends State<MainScreen> {
               return _itemMenu(_listMenuFiltered[index]);
             })
         : Center(
-            child: Lottie.network(
-              'https://assets5.lottiefiles.com/datafiles/hYQRPx1PLaUw8znMhjLq2LdMbklnAwVSqzrkB4wG/bag_error.json',
+            child: Lottie.asset(
+              Assets.animBagError,
               repeat: true,
             ),
           );
@@ -415,14 +415,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _itemCardImage(String image, String id) {
-    image = image.replaceAll('localhost', '139.180.131.30');
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Hero(
           tag: id,
           child: CachedNetworkImage(
             placeholder: (context, url) => Container(
-                width: double.infinity,
+                width: 150,
                 height: 150,
                 padding: EdgeInsets.all(50),
                 child: CircularProgressIndicator()),
