@@ -5,11 +5,7 @@ html, body{
 }
 .homepage {
     position: relative;
-    /* min-height: 100vh; */
 }
-/* .mainpage{
-    height:100%;
-} */
 
 .navbar-custom{
     background-color: #f37d42;
