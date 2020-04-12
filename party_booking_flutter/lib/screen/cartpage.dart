@@ -50,8 +50,8 @@ class _CartPageState extends State<CartPage> {
                               rebuildOnChange: true)
                           .total,
                       itemBuilder: (context, index) {
-
                         return ScopedModelDescendant<CartModel>(
+
                           builder: (context, child, model) {
                             listDish.add(ListDishes(id: model.cart[index].id, numberDish: model.cart[index].qty.toString()));
                             return ListTile(

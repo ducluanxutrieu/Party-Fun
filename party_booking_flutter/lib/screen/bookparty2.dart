@@ -9,9 +9,6 @@ import 'dart:async';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:scoped_model/scoped_model.dart';
 class BookParty extends StatefulWidget {
 //  Note selectedNote;
   List<ListDishes> listDish;
@@ -31,8 +28,6 @@ class _BookParty extends State<BookParty> {
   List<ListDishes> listDish;
   _BookParty(this.listDish);
 
-
-
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
@@ -41,11 +36,8 @@ class _BookParty extends State<BookParty> {
   Widget _showDatePicker() {
     return FormBuilderDateTimePicker(
       attribute: "day",
-      inputType: InputType.both,
-      initialDate: DateTime.now().add(Duration(seconds: 1)),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-      format: DateFormat('MM/dd/yyyy hh:mm'),
+      inputType: InputType.date,
+      format: DateFormat('MM/dd/yyyy'),
       style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
       decoration: InputDecoration(
           labelText: 'Your booking Date',
@@ -94,29 +86,12 @@ class _BookParty extends State<BookParty> {
   }
 
   void _onUpdateClicked() {
-    final day = _fbKey.currentState.fields['day'].currentState.value;
-    final num = _fbKey.currentState.fields['num'].currentState.value;
-    if (day != null && num != null) {
-      requestBookParty();
-
-      ScopedModel.of<CartModel>(context).clearCart();
-
-
-      //    Navigator.push(context, MaterialPageRoute(builder: (context)=>BookParty(listDish)));
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => EditProfileScreen()));
-    }else{
-      Fluttertoast.showToast(
-          msg: "Please fill all fields",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }
+    requestBookParty();
+    //    Navigator.push(context, MaterialPageRoute(builder: (context)=>BookParty(listDish)));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => EditProfileScreen()));
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
