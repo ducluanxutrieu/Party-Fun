@@ -1,38 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/book_party_request_model.dart';
-import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/res/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:party_booking/screen/main_screen.dart';
-class BookParty extends StatefulWidget {
-//  Note selectedNote;
-  List<ListDishes> listDish;
-  BookParty(this.listDish);
+import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/book_party_request_model.dart';
+import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/book_party_success_screen.dart';
+import 'package:party_booking/widgets/common/app_button.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
- // @override
-  //_BookParty createState() => _BookParty();
+class BookPartyScreen extends StatefulWidget {
+//  Note selectedNote;
+  BookPartyScreen();
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _BookParty(listDish);
+    return _BookPartyScreenState();
   }
 }
 
-class _BookParty extends State<BookParty> {
-  List<ListDishes> listDish ;
-  _BookParty(this.listDish);
-
+class _BookPartyScreenState extends State<BookPartyScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
 
-
+  final List<ListDishes> listDish = new List();
 
   Widget _showDatePicker() {
     return FormBuilderDateTimePicker(
@@ -46,42 +43,40 @@ class _BookParty extends State<BookParty> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
     );
   }
+
   Widget _selectGender() {
     return FormBuilderDropdown(
       attribute: "num",
-      style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black),
+      style: TextStyle(
+          fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black),
       decoration: InputDecoration(
           labelText: "NumberTable",
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
       // initialValue: 'Male',
-      hint: Text('Number Tables', style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),),
+      hint: Text(
+        'Number Tables',
+        style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+      ),
       validators: [FormBuilderValidators.required()],
-      items: ['1', '2', '3','4','5', '6', '7','8','9', '10', '11','12','12', '13', '14','15']
-          .map((gender) =>
-          DropdownMenuItem(value: gender, child: Text("$gender")))
+      items: List.generate(15, (generator) => generator + 1)
+          .map((item) => DropdownMenuItem(value: item, child: Text("$item")))
           .toList(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
-
 
     return Scaffold(
       appBar: AppBar(
-        title: Text( 'MORE INFORMATION'),
-
-        backgroundColor: Colors.green,
+        title: Text('Book Party'),
       ),
-
       body: Center(
         child: FormBuilder(
           key: _fbKey,
           autovalidate: true,
-
           child: Container(
             color: Colors.white,
             child: Padding(
@@ -92,28 +87,18 @@ class _BookParty extends State<BookParty> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-
                     SizedBox(height: 15.0),
                     _selectGender(),
-
                     SizedBox(height: 15.0),
                     _showDatePicker(),
                     SizedBox(height: 15.0),
                     SizedBox(height: 15.0),
-                    SizedBox(
-                        width: double.infinity,
-                        child: RaisedButton(
-                          color: Colors.lightGreen,
-                          textColor: Colors.white,
-                          elevation: 0,
-                          child: Text("BUY"),
-                          onPressed: () {
-                               requestBookParty();
-                        //    Navigator.push(context, MaterialPageRoute(builder: (context)=>BookParty(listDish)));
-                               Navigator.pushReplacement(
-                                   context, MaterialPageRoute(builder: (context) => MainScreen()));
-                          },
-                        ))
+                    AppButtonWidget(
+                      buttonText: 'Book',
+                      buttonHandler: () {
+                        requestBookParty();
+                      },
+                    )
                   ],
                 ),
               ),
@@ -123,18 +108,34 @@ class _BookParty extends State<BookParty> {
       ),
     );
   }
-  Future<BaseResponseModel> requestBookParty() async {
+
+  void requestBookParty() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // List<ListDishes> listDish = new List();
     final day = _fbKey.currentState.fields['day'].currentState.value;
     final num = _fbKey.currentState.fields['num'].currentState.value;
     // listDish.add(ListDishes(id: ))
+
+    ScopedModel.of<CartModel>(context, rebuildOnChange: true).cart.forEach(
+        (item) =>
+            {listDish.add(ListDishes(numberDish: item.qty, id: item.id))});
+
     var model = BookPartyRequestModel(
-        dateParty: day.toString(), numbertable: num, lishDishs: listDish);
-    var result = AppApiService.create().bookParty(
+        dateParty: DateFormat(Constants.DATE_TIME_FORMAT_SERVER).format(day),
+        numberTable: num,
+        lishDishs: listDish);
+    var result = await AppApiService.create().bookParty(
       token: prefs.getString(Constants.USER_TOKEN),
-      model:  BookPartyRequestModel(
-          dateParty: DateFormat('MM/dd/yyyy hh:mm').format(day), numbertable: num, lishDishs: listDish),
+      model: model,
     );
+    if (result.isSuccessful) {
+      UTiu.showToast(result.body.message);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BookPartySuccessScreen(result.body.bill)));
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
   }
 }

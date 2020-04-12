@@ -6,6 +6,7 @@ import 'package:party_booking/data/network/model/change_password_request_model.d
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
+import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
@@ -61,10 +62,10 @@ abstract class AppApiService extends ChopperService {
   @Get(path: 'user/profile')
   Future<Response<AccountResponseModel>> getUserProfile({
     @Header('authorization') String token,
-});
+  });
 
   @Post(path: 'product/book')
-  Future<Response<BaseResponseModel>> bookParty({
+  Future<Response<PartyBookResponseModel>> bookParty({
     @Header('authorization') String token,
     @body BookPartyRequestModel model,
   });
@@ -104,7 +105,8 @@ abstract class AppApiService extends ChopperService {
       UpdateProfileRequestModel: UpdateProfileRequestModel.fromJsonFactory,
       RateDishRequestModel: RateDishRequestModel.fromJsonFactory,
       BookPartyRequestModel: BookPartyRequestModel.fromJsonFactory,
-      ListDishes: ListDishes.fromJsonFactory
+      ListDishes: ListDishes.fromJsonFactory,
+      PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
     });
   }
 }

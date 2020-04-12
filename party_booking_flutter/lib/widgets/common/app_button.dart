@@ -6,9 +6,7 @@ class AppButtonWidget extends StatelessWidget {
   final int stateButton;
 
   AppButtonWidget(
-      {this.buttonHandler,
-      @required this.buttonText,
-      this.stateButton = 0});
+      {this.buttonHandler, @required this.buttonText, this.stateButton = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +15,10 @@ class AppButtonWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(30.0),
       color: Colors.green,
       child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: buttonHandler,
-        child: setUpButtonChild()
-      ),
+          minWidth: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+          onPressed: buttonHandler,
+          child: setUpButtonChild()),
     );
   }
 

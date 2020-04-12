@@ -55,11 +55,10 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     return ListView.builder(
         shrinkWrap: true,
         itemCount: listRate.length + 1,
-        itemBuilder: (context, index) =>
-            Container(
-                child: (index == 0)
-                    ? _titleDish()
-                    : _itemListRating(listRate[index - 1])));
+        itemBuilder: (context, index) => Container(
+            child: (index == 0)
+                ? _titleDish()
+                : _itemListRating(listRate[index - 1])));
   }
 
   Widget _ratingBar(double coreRating, double itemSize, void onRating(value)) {
@@ -87,11 +86,10 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           allowHalfRating: true,
           direction: Axis.horizontal,
           itemSize: 30,
-          itemBuilder: (context, _) =>
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
+          itemBuilder: (context, _) => Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
           onRatingUpdate: null,
         ),
         SizedBox(
@@ -131,16 +129,16 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           children: <Widget>[
             (itemModel.imageUrl != null)
                 ? CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(
-                itemModel.imageUrl,
-              ),
-              backgroundColor: Colors.transparent,
-            )
+                    radius: 20,
+                    backgroundImage: NetworkImage(
+                      itemModel.imageUrl,
+                    ),
+                    backgroundColor: Colors.transparent,
+                  )
                 : Icon(
-              FontAwesomeIcons.userCircle,
-              size: 40,
-            ),
+                    FontAwesomeIcons.userCircle,
+                    size: 40,
+                  ),
             SizedBox(
               width: 20,
             ),
@@ -177,12 +175,10 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       children: <Widget>[
         Hero(
           tag: widget.dishModel.id,
-          child: Image.asset(Assets.imgDishDetail,
+          child: Image.asset(
+            Assets.imgDishDetail,
             fit: BoxFit.cover,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            width: MediaQuery.of(context).size.width,
             height: 250,
           ),
         ),
@@ -201,24 +197,23 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           scrollDirection: Axis.horizontal,
           items: UTiu.mapIndexed(
             widget.dishModel.image,
-                (index, value) =>
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => Container(
-                          width: double.infinity,
-                          height: 150,
-                          padding: EdgeInsets.all(50),
-                          child: CircularProgressIndicator()),
-                      imageUrl: value,
-                      fit: BoxFit.cover,
+            (index, value) => Container(
+              padding: EdgeInsets.all(10),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Container(
                       width: double.infinity,
-                      height: 250,
-                    ),
-                  ),
+                      height: 150,
+                      padding: EdgeInsets.all(50),
+                      child: CircularProgressIndicator()),
+                  imageUrl: value,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 250,
                 ),
+              ),
+            ),
           ).toList(),
         ),
       ],
@@ -274,74 +269,77 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   void _dialogRating(BuildContext context) {
-    showDialog(context: context, builder: (bCtx) {
-      double rateScore = 3;
-      return AlertDialog(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        content: Container(
-          width: MediaQuery
-              .of(bCtx)
-              .size
-              .width * 2 / 3,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Lottie.network(
-                      'https://assets8.lottiefiles.com/packages/lf20_1KjmRZ.json',
-                      repeat: true),
-                  Text(
-                    'Review this dish',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: myController,
-                    decoration: InputDecoration(
-                        hintText: 'Write your review',
-                        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(32))),
-                  ),
-                  SizedBox(height: 5,),
-                  Text(
-                    'Rating this dish',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 18,),
-                  ),
-                  _ratingBar(3, 40, (value) {
-                    rateScore = value;
-                  })
-                ],
+    showDialog(
+        context: context,
+        builder: (bCtx) {
+          double rateScore = 3;
+          return AlertDialog(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
               ),
             ),
-          ),
-        ),
-        actions: <Widget>[
-          _actionButton('Cancel', () {
-            Navigator.of(bCtx).pop();
-          }),
-          _actionButton('Review', () {
-            _requestRating(rateScore, (){
-              Navigator.of(bCtx).pop();
-            });
-          })
-        ],
-      );
-    });
+            content: Container(
+              width: MediaQuery.of(bCtx).size.width * 2 / 3,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Lottie.asset(
+                        Assets.animReviewDish,
+                        repeat: true,
+                      ),
+                      Text(
+                        'Review this dish',
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: myController,
+                        decoration: InputDecoration(
+                            hintText: 'Write your review',
+                            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32))),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Rating this dish',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 18,
+                        ),
+                      ),
+                      _ratingBar(3, 40, (value) {
+                        rateScore = value;
+                      })
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              _actionButton('Cancel', () {
+                Navigator.of(bCtx).pop();
+              }),
+              _actionButton('Review', () {
+                _requestRating(rateScore, () {
+                  Navigator.of(bCtx).pop();
+                });
+              })
+            ],
+          );
+        });
   }
 
   void _requestRating(double rateScore, Function handle) async {
@@ -349,13 +347,15 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     String token = prefs.getString(Constants.USER_TOKEN);
     var result = await AppApiService.create().requestRating(
       token: token,
-      model: RateDishRequestModel(id: widget.dishModel.id,
+      model: RateDishRequestModel(
+          id: widget.dishModel.id,
           content: myController.text,
-          rateScore: rateScore),);
-    if(result.isSuccessful){
+          rateScore: rateScore),
+    );
+    if (result.isSuccessful) {
       UTiu.showToast(result.body.message);
       handle();
-    }else{
+    } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UTiu.showToast(model.message);
     }
@@ -372,7 +372,10 @@ class _DishDetailScreenState extends State<DishDetailScreen>
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: InkWell(child: Icon(FontAwesomeIcons.cartPlus), onTap: null,),
+            child: InkWell(
+              child: Icon(FontAwesomeIcons.cartPlus),
+              onTap: null,
+            ),
           )
         ],
       ),
