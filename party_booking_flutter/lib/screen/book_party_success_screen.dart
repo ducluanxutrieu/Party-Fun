@@ -1,8 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
+import 'package:party_booking/res/assets.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 class BookPartySuccessScreen extends StatefulWidget {
   final Bill mBill;
+
   BookPartySuccessScreen(this.mBill);
 
   @override
@@ -10,28 +16,214 @@ class BookPartySuccessScreen extends StatefulWidget {
 }
 
 class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
+  Token _paymentToken;
+  PaymentMethod _paymentMethod;
+//  PaymentIntentResult _paymentIntent;
+//  CreditCard testCard;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  var cardInfo = CardFormPaymentRequest(
+      prefilledInformation: PrefilledInformation(
+          billingAddress: BillingAddress(
+              name: 'PartyBooking',
+              city: 'HCM',
+              country: 'VietNam',
+              line1: 'KTX Khu A',
+              postalCode: '70000')),
+      requiredBillingAddressFields: 'KTX Khu A');
+
+  @override
+  initState() {
+    super.initState();
+    StripePayment.setOptions(StripeOptions(
+        publishableKey: "pk_test_JAMtZa7BVlk7wXRM3aUtsg3H00rFK1TwPR",
+        merchantId: "Test",
+        androidPayMode: 'test'));
+  }
+
+  void setError(dynamic error) {
+    _scaffoldKey.currentState
+        .showSnackBar(SnackBar(content: Text(error.toString())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Purchase order'),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            height: 300,
-            child: ListView.builder(
-                itemCount: widget.mBill.listDishes.length,
-                itemBuilder: (bCtx, index) {
-                  var dish = widget.mBill.listDishes[index];
-                  return ListTile(
-                    title: Text(dish.name),
-                    onTap: null,
-                  );
-                }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+          label: Text(' Pay Now'),
+          icon: Icon(FontAwesomeIcons.creditCard),
+          onPressed: () {
+/*            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyApp()) */
+            requestPaymentNative();
+          }),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 10),
+              child: Text(
+                'Customer: ${widget.mBill.username}',
+                style: TextStyle(
+                    fontFamily: 'Pacifico', color: Colors.orange, fontSize: 20),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
+              child: Card(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10)),
+                ),
+                child: Container(
+                  margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text('Total bill'),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                '\$${widget.mBill.totalMoney}',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text('Number of Tables'),
+                              Text(
+                                '${widget.mBill.numberTable}',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25),
+                              ),
+                            ],
+                          ),
+                          Container(
+                              width: 190,
+                              height: 100,
+                              child: Lottie.asset(Assets.animPayment)),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('Party time'),
+                      Text(
+                        '${widget.mBill.dateParty}',
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                'List dishes',
+                style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple,
+                    fontSize: 20),
+              ),
+            ),
+            Container(
+              height: 300,
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: ListView.builder(
+                  itemCount: widget.mBill.listDishes.length,
+                  itemBuilder: (bCtx, index) {
+                    var dish = widget.mBill.listDishes[index];
+                    return Container(
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            dish.name,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          Spacer(),
+                          Text(dish.numberDish.toString(),
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                              ))
+                        ],
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void requestPaymentNative() {
+    StripePayment.paymentRequestWithNativePay(
+      androidPayOptions: AndroidPayPaymentRequest(
+        total_price: widget.mBill.totalMoney.toString(),
+        currency_code: "VND",
+      ),
+      applePayOptions: ApplePayPaymentOptions(
+        countryCode: 'VN',
+        currencyCode: 'VND',
+        items: [
+          ApplePayItem(
+            label: 'Test',
+            amount: widget.mBill.totalMoney.toString(),
           )
         ],
       ),
-    );
+    ).then((token) {
+      setState(() {
+        _paymentToken = token;
+      });
+    }).catchError((setError) => {createPaymentWithCard()});
+  }
+
+  void createPaymentWithCard() {
+    StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest())
+        .then((paymentMethod) {
+      StripePayment.createTokenWithCard(
+        paymentMethod.card,
+      ).then((token) {
+        setState(() {
+          _paymentToken = token;
+        });
+      }).catchError(setError);
+      _scaffoldKey.currentState.showSnackBar(
+          SnackBar(content: Text('Received ${paymentMethod.id}')));
+      setState(() {
+        _paymentMethod = paymentMethod;
+      });
+    }).catchError(setError);
   }
 }

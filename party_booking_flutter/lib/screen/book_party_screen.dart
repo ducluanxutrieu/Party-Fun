@@ -8,7 +8,6 @@ import 'package:party_booking/data/network/model/list_dishes_response_model.dart
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/book_party_success_screen.dart';
-import 'package:party_booking/screen/book_success.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -40,7 +39,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       initialDate: DateTime.now().add(Duration(seconds: 1)),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
-      format: DateFormat('MM/dd/yyyy hh:mm'),
+      format: DateFormat(Constants.DATE_TIME_FORMAT_SERVER),
       style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
       decoration: InputDecoration(
           labelText: 'Your booking Date',
@@ -55,7 +54,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       style: TextStyle(
           fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black),
       decoration: InputDecoration(
-          labelText: "NumberTable",
+          labelText: "Number of Table",
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
       // initialValue: 'Male',
@@ -70,17 +69,11 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
   }
 
-  void _onUpdateClicked() async { //Hieu, ben kia chua xu ly xong maf dong duoi em xoa roi. Clear
+  void _onUpdateClicked() async {
     final day = _fbKey.currentState.fields['day'].currentState.value;
     final num = _fbKey.currentState.fields['num'].currentState.value;
     if (day != null && num != null) {
       await requestBookParty(day, num); //em check xong mà kh4ng truyền qua à
-
-      ScopedModel.of<CartModel>(context).clearCart();
-
-      //    Navigator.push(context, MaterialPageRoute(builder: (context)=>BookParty(listDish)));
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => EditProfileScreen())); //Sao
     } else {
       Fluttertoast.showToast(
           msg: "Please fill all fields",
@@ -151,6 +144,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       model: model,
     );
     if (result.isSuccessful) {
+      ScopedModel.of<CartModel>(context).clearCart();
       UTiu.showToast(result.body.message);
       Navigator.pushReplacement(
           context,

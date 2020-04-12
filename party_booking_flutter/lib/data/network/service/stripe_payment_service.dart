@@ -19,7 +19,11 @@ class _MyAppState extends State<MyApp> {
 
   ScrollController _controller = ScrollController();
 
-  CreditCard testCard;
+  CreditCard testCard = CreditCard(
+    number: '5372072203248685',
+    expMonth: 03,
+    expYear: 26,
+  );
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -106,7 +110,7 @@ class _MyAppState extends State<MyApp> {
                 }).catchError(setError);
               },
             ),
-            /*RaisedButton(
+            RaisedButton(
               child: Text("Create Token with Card"),
               onPressed: () {
                 StripePayment.createTokenWithCard(
@@ -119,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                   });
                 }).catchError(setError);
               },
-            ),*/
+            ),
             Divider(),
             RaisedButton(
               child: Text("Create Payment Method with Card"),
