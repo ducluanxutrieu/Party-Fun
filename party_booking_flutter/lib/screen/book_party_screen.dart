@@ -49,7 +49,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
   }
 
-  Widget _selectGender() {
+  Widget _selectNumberTable() {
     return FormBuilderDropdown(
       attribute: "num",
       style: TextStyle(
@@ -70,11 +70,12 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
   }
 
-  void _onUpdateClicked() {
+  void _onUpdateClicked() async { //Hieu, ben kia chua xu ly xong maf dong duoi em xoa roi. Clear
     final day = _fbKey.currentState.fields['day'].currentState.value;
     final num = _fbKey.currentState.fields['num'].currentState.value;
     if (day != null && num != null) {
-      requestBookParty();
+      await requestBookParty(day, num); //em check xong mà kh4ng truyền qua à
+
       ScopedModel.of<CartModel>(context).clearCart();
 
       //    Navigator.push(context, MaterialPageRoute(builder: (context)=>BookParty(listDish)));
@@ -114,7 +115,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SizedBox(height: 15.0),
-                    _selectGender(),
+                    _selectNumberTable(),
                     SizedBox(height: 15.0),
                     _showDatePicker(),
                     SizedBox(height: 15.0),
@@ -134,11 +135,8 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
   }
 
-  void requestBookParty() async {
+  Future requestBookParty(day, int num) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final day = _fbKey.currentState.fields['day'].currentState.value;
-    final num = _fbKey.currentState.fields['num'].currentState.value;
-    // listDish.add(ListDishes(id: ))
 
     ScopedModel.of<CartModel>(context, rebuildOnChange: true).cart.forEach(
         (item) =>
