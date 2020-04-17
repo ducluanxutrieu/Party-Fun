@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { api } from '../../../_api/apiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProductService } from '../../../_services/product.service';
-import { UserService } from '../../../_services/user.service';
-import { Subject } from 'rxjs';
 
 // declare jquery;
 declare var $: any;
@@ -20,8 +18,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(
     private http: HttpClient,
-    private productService: ProductService,
-    public userService: UserService
+    private productService: ProductService
   ) { }
 
   product_delete(id: string) {

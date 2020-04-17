@@ -33,13 +33,13 @@
               "node_modules/froala-editor/css/froala_style.min.css"
             ],
             "scripts": [
-              "src/vendor/jquery/jquery.min.js",
-              "src/vendor/popper.js/umd/popper.min.js",
-              "src/vendor/bootstrap/js/bootstrap.min.js",
-              "src/vendor/jquery.cookie/jquery.cookie.js",
-              "src/vendor/jquery-validation/jquery.validate.min.js",
+              "src/assets/vendor/jquery/jquery.min.js",
+              "src/assets/vendor/popper.js/umd/popper.min.js",
+              "src/assets/vendor/bootstrap/js/bootstrap.min.js",
+              "src/assets/vendor/jquery.cookie/jquery.cookie.js",
+              "src/assets/vendor/jquery-validation/jquery.validate.min.js",
               "src/assets/js/front.js",
-              "node_modules/datatables.net/js/jquery.dataTables.js",
+              "node_modules/datatables.net/js/jquery.dataTables.min.js",
               "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
 			]
           },

@@ -4,7 +4,6 @@ import { formatDate } from "@angular/common";
 
 //services
 import { StatisticalService } from '../../_services/statistical.service';
-import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-admin-page',
@@ -72,7 +71,6 @@ export class AdminPageComponent implements OnInit {
   public isProductDataAvailable: boolean = false;
 
   constructor(
-    public userService: UserService,
     private statisticalService: StatisticalService,
     private http: HttpClient
   ) { }

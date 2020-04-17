@@ -3,148 +3,106 @@
 <body>
     <div class="page">
         <div class="page-content d-flex align-items-stretch">
-          <nav class="side-navbar">
-            <!-- Sidebar Header-->
-            <div class="sidebar-header d-flex align-items-center">
-              <div class="avatar"><img src={{userService?.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
-              <div class="title">
-                  <a href="profile"><h1 class="h4">{{userService.get_userInfo()?.username}}</h1></a>
-                  <p><span *ngIf="userService.get_userInfo()?.role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo()?.role=='Admin'">Admin</span></p>
-                </div>
-            </div>
-            <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
-            <ul class="list-unstyled">
-              <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
-            </ul>
-            <span class="heading">Mangement</span>
-            <ul class="list-unstyled">
-              <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
-                <ul id="ProductDropdown" class="collapse list-unstyled ">
-                  <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
-                  <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
-                </ul>
-              </li>
-              <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
-                <ul id="EmployeeDropdown" class="collapse list-unstyled ">
-                  <li><a href="employees/list"><i class="fa fa-list"></i>Employees List</a></li>
-                  <li><a href="employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
-                </ul>
-              </li>
-              <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
-                <ul id="CustomerDropdown" class="collapse list-unstyled ">
-                  <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
-                  <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
-                  <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
-                </ul>
-              </li>
-            </ul>
-            <span class="heading">Others</span>
-            <ul class="list-unstyled">
-              <li><a href="#PostDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-sticky-note"></i>Posts </a>
-                <ul id="PostDropdown" class="collapse list-unstyled ">
-                  <li><a href="post/create"><i class="fa fa-plus"></i>Create post</a></li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
+          <!-- Sidebar -->
+          <app-sidebar></app-sidebar>
 
           <!-- Page content-->
           <div class="content-inner">
-              <header class="page-header">
-                  <div class="container-fluid">
-                    <h2 class="no-margin-bottom">Employees</h2>
-                  </div>
-              </header>
-              <!-- Breadcrumb-->
-              <div class="breadcrumb-holder container-fluid">
-              <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-                  <li class="breadcrumb-item active">Add Employee</li>
-              </ul>
-              </div>
-              <!-- Forms Section-->
-              <section class="forms">
+            <header class="page-header">
                 <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h3 class="h4">Add Employee</h3>
-                        </div>
-                        <div class="card-body">
-                          <div class="row">
-                              <p class="col-sm-9 align-middle">Please fill all the fields</p>
-                              <button type="button" class="btn btn-outline-primary col-sm-2" data-toggle="modal" data-target="#AddEmployeeModal">Add existed user</button>
-                          </div>
-                        <div class="modal fade" id="AddEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="AddEmployeeModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="AddEmployeeModalLabel">Add Employee from existed user</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <div class="modal-body">
-                                  <form #addExisted = "ngForm" (ngSubmit) = "AddExistedUser(addExisted.value)" id="addform">
-                                    <div class="form-group">
-                                      <label for="username" class="col-form-label">Username:</label>
-                                      <input type="text" class="form-control" id="username" name="username" required ngModel #usernameData="ngModel">
-                                      <div class="invalid-feedback d-block" role="alert" *ngIf="usernameData.invalid && usernameData.dirty">
-                                        Please choose a username.
-                                      </div>
-                                    </div>
-                                  </form>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn btn-primary" form="addform" [disabled]="addExisted.invalid">Confirm</button>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                        <form #userreg = "ngForm" (ngSubmit) = "onClickSubmit(userreg.value)" id="regform">
-                          <div class="form-group">
-                              <label class="form-control-label">Employee Name</label>
-                              <input type="text" placeholder="Enter Name" class="form-control" name="name" required ngModel #name="ngModel">
-                              <div class="invalid-feedback d-block" role="alert" *ngIf="name.invalid && name.dirty">
-                                Please choose a name.
-                              </div>
-                          </div>
-                          <div class="form-group">       
-                              <label class="form-control-label">Email</label>
-                              <input type="email" placeholder="mail@example.com" class="form-control" name="email" email required ngModel #email="ngModel">
-                              <div class="invalid-feedback d-block" role="alert" *ngIf="email.invalid && email.dirty">
-                                Please enter a valid email.
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <label class="form-control-label">Phone</label>
-                              <input type="text" placeholder="Phone" class="form-control" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel">
-                              <div class="invalid-feedback d-block" role="alert" *ngIf="phone.invalid && phone.dirty">
-                                Please enter a valid phone number.
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <label class="form-control-label">Username</label>
-                              <input type="text" placeholder="Username" class="form-control" name="username" required minlength="4" ngModel #username="ngModel">
-                              <div class="invalid-feedback d-block" role="alert" *ngIf="username.invalid && username.dirty">
-                                Please enter a username with at least 4 characters.
-                              </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-control-label">Password</label>
-                            <input type="password" placeholder="Password" class="form-control" name="pwd" required minlength="6" ngModel #pw="ngModel">
-                            <div class="invalid-feedback d-block" role="alert" *ngIf="pw.invalid && pw.dirty">
-                              Please enter a valid password with at least 6 characters.
-                            </div>
-                          </div>
-                          <div class="form-group">       
-                              <input type="submit" value="Comfirm" class="btn btn-primary" form="regform" [disabled]="userreg.invalid">
-                          </div>
-                        </form>
-                    </div>
-                    </div>
+                  <h2 class="no-margin-bottom">Employees</h2>
                 </div>
-              </section>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                <li class="breadcrumb-item active">Add Employee</li>
+            </ul>
+            </div>
+            <!-- Forms Section-->
+            <section class="forms">
+              <div class="container-fluid">
+                  <div class="card">
+                      <div class="card-header d-flex align-items-center">
+                          <h3 class="h4">Add Employee</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                            <p class="col-sm-9 align-middle">Please fill all the fields</p>
+                            <button type="button" class="btn btn-outline-primary col-sm-2" data-toggle="modal" data-target="#AddEmployeeModal">Add existed user</button>
+                        </div>
+                      <div class="modal fade" id="AddEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="AddEmployeeModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="AddEmployeeModalLabel">Add Employee from existed user</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form #addExisted = "ngForm" (ngSubmit) = "AddExistedUser(addExisted.value)" id="addform">
+                                  <div class="form-group">
+                                    <label for="username" class="col-form-label">Username:</label>
+                                    <input type="text" class="form-control" id="username" name="username" required ngModel #usernameData="ngModel">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="usernameData.invalid && usernameData.dirty">
+                                      Please choose a username.
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" form="addform" [disabled]="addExisted.invalid">Confirm</button>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <form #userreg = "ngForm" (ngSubmit) = "onClickSubmit(userreg.value)" id="regform">
+                        <div class="form-group">
+                            <label class="form-control-label">Employee Name</label>
+                            <input type="text" placeholder="Enter Name" class="form-control" name="name" required ngModel #name="ngModel">
+                            <div class="invalid-feedback d-block" role="alert" *ngIf="name.invalid && name.dirty">
+                              Please choose a name.
+                            </div>
+                        </div>
+                        <div class="form-group">       
+                            <label class="form-control-label">Email</label>
+                            <input type="email" placeholder="mail@example.com" class="form-control" name="email" email required ngModel #email="ngModel">
+                            <div class="invalid-feedback d-block" role="alert" *ngIf="email.invalid && email.dirty">
+                              Please enter a valid email.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Phone</label>
+                            <input type="text" placeholder="Phone" class="form-control" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel">
+                            <div class="invalid-feedback d-block" role="alert" *ngIf="phone.invalid && phone.dirty">
+                              Please enter a valid phone number.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Username</label>
+                            <input type="text" placeholder="Username" class="form-control" name="username" required minlength="4" ngModel #username="ngModel">
+                            <div class="invalid-feedback d-block" role="alert" *ngIf="username.invalid && username.dirty">
+                              Please enter a username with at least 4 characters.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-control-label">Password</label>
+                          <input type="password" placeholder="Password" class="form-control" name="pwd" required minlength="6" ngModel #pw="ngModel">
+                          <div class="invalid-feedback d-block" role="alert" *ngIf="pw.invalid && pw.dirty">
+                            Please enter a valid password with at least 6 characters.
+                          </div>
+                        </div>
+                        <div class="form-group">       
+                            <input type="submit" value="Comfirm" class="btn btn-primary" form="regform" [disabled]="userreg.invalid">
+                        </div>
+                      </form>
+                  </div>
+                  </div>
+              </div>
+            </section>
           </div>
         </div>
     </div>

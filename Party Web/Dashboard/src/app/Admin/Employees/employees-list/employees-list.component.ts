@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { UserService } from '../../../_services/user.service';
 import { StaffService } from '../../../_services/staff.service';
-import { Subject } from 'rxjs';
 
 // declare jquery;
 declare var $: any;
@@ -21,7 +19,6 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
-    public userService: UserService,
     private staffService: StaffService
   ) { }
 

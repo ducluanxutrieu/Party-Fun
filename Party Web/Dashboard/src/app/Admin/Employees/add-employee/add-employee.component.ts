@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserService } from '../../../_services/user.service';
 
 import { api } from '../../../_api/apiUrl';
 import { NgForm } from '@angular/forms';
@@ -15,8 +14,7 @@ export class AddEmployeeComponent implements OnInit {
   existed_username: string;
 
   constructor(
-    private http: HttpClient,
-    public userService: UserService
+    private http: HttpClient
   ) { }
 
   ngOnInit() {

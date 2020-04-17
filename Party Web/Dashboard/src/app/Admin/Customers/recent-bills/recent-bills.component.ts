@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { api } from '../../../_api/apiUrl';
 
 import { StatisticalService } from '../../../_services/statistical.service';
-import { UserService } from '../../../_services/user.service';
 import { PaymentService } from '../../../_services/payment.service';
 import { ProductService } from '../../../_services/product.service';
-import { Subject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // declare jquery;
 declare var $: any;
@@ -44,7 +42,6 @@ export class RecentBillsComponent implements OnInit {
   })
 
   constructor(
-    public userService: UserService,
     public statisticalService: StatisticalService,
     public paymentService: PaymentService,
     public productService: ProductService,

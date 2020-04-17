@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../_services/user.service';
 
 @Component({
   selector: 'app-post',
@@ -9,9 +8,7 @@ import { UserService } from '../../../_services/user.service';
 export class PostComponent implements OnInit {
   public postContent: string
 
-  constructor(
-    public userService: UserService
-  ) { }
+  constructor() { }
 
   ngOnInit() { }
 

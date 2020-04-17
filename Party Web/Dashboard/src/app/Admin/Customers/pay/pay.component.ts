@@ -3,7 +3,6 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { api } from '../../../_api/apiUrl';
 
 import { ProductService } from '../../../_services/product.service';
-import { UserService } from '../../../_services/user.service';
 import { PaymentService } from '../../../_services/payment.service';
 
 @Component({
@@ -21,7 +20,6 @@ export class PayComponent implements OnInit {
   })
 
   constructor(
-    public userService: UserService,
     public productService: ProductService,
     public paymentService: PaymentService,
     private http: HttpClient

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { api } from '../../../_api/apiUrl';
-import { UserService } from '../../../_services/user.service';
 
 
 @Component({
@@ -14,8 +13,7 @@ export class AddProductsComponent implements OnInit {
   @ViewChild('adddishForm', null) thisForm: NgForm;
   imgArr = [];
   constructor(
-    private http: HttpClient,
-    public userService: UserService
+    private http: HttpClient
   ) { }
 
   ngOnInit() { }

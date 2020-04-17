@@ -4,101 +4,58 @@
 <body>
     <div class="page">
         <div class="page-content d-flex align-items-stretch">
-          <nav class="side-navbar">
-            <!-- Sidebar Header-->
-            <div class="sidebar-header d-flex align-items-center">
-              <div class="avatar"><img src={{userService?.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="..." class="img-fluid rounded-circle"></div>
-              <div class="title">
-                  <a href="profile"><h1 class="h4">{{userService.get_userInfo()?.username}}</h1></a>
-                  <p><span *ngIf="userService.get_userInfo()?.role=='nhanvien'">Staff</span><span *ngIf="userService.get_userInfo()?.role=='Admin'">Admin</span></p>
-                </div>
-            </div>
-            <!-- Sidebar Navidation Menus--><span class="heading">Statistic</span>
-            <ul class="list-unstyled">
-              <li><a href="dashboard"><i class="fa fa-home" aria-hidden="true"></i>Home </a></li>
-            </ul>
-            <span class="heading">Mangement</span>
-            <ul class="list-unstyled">
-              <li><a href="#ProductDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-product-hunt"></i>Products </a>
-                <ul id="ProductDropdown" class="collapse list-unstyled ">
-                  <li><a href="products/list"><i class="fa fa-list"></i>Products List</a></li>
-                  <li><a href="products/add"><i class="fa fa-plus"></i>Add Product</a></li>
-                  <!-- <li><a href="#">Page</a></li> -->
-                </ul>
-              </li>
-              <li><a href="#EmployeeDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-users" aria-hidden="true"></i>Employees </a>
-                <ul id="EmployeeDropdown" class="collapse list-unstyled ">
-                  <li><a href="employees/list"><i class="fa fa-list"></i>Employees List</a></li>
-                  <li><a href="employees/add"><i class="fa fa-plus"></i>Add Employee</a></li>
-                </ul>
-              </li>
-              <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
-                <ul id="CustomerDropdown" class="collapse list-unstyled ">
-                  <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
-                  <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
-                  <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
-                </ul>
-              </li>
-            </ul>
-            <span class="heading">Others</span>
-            <ul class="list-unstyled">
-              <li><a href="#PostDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-sticky-note"></i>Posts </a>
-                <ul id="PostDropdown" class="collapse list-unstyled ">
-                  <li><a href="post/create"><i class="fa fa-plus"></i>Create post</a></li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
+          <!-- Sidebar -->
+          <app-sidebar></app-sidebar>
 
           <!-- Page content-->
           <div class="content-inner">
-              <header class="page-header">
-                  <div class="container-fluid">
-                    <h2 class="no-margin-bottom">Employees</h2>
-                  </div>
-              </header>
-              <!-- Breadcrumb-->
-              <div class="breadcrumb-holder container-fluid">
-              <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-                  <li class="breadcrumb-item active">Employees list</li>
-              </ul>
-              </div>
-              <section class="tables">
-                  <div class="container-fluid">
-                      <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                          <h3 class="h4">Employees list</h3>
-                        </div>
-                        <div class="card-body">
-                          <div class="table-responsive">
-                            <table id="employeTable" class="table table-bordered table-striped employee-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="text-center">Employee Name</th>
-                                  <th class="text-center">Username</th>
-                                  <th class="text-center">Actions</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let staff of staffsList?.user; let i = index">
-                                  <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                                  <td class="align-middle text-center">{{staff.fullName}}</td>
-                                  <td class="align-middle text-center">{{staff.username}}</td>
-                                  <td class="text-center">
-                                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Downgrade this user" (click)="downgrade(staff.username)">
-                                      <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-                                    </button>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
+            <header class="page-header">
+                <div class="container-fluid">
+                  <h2 class="no-margin-bottom">Employees</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                <li class="breadcrumb-item active">Employees list</li>
+            </ul>
+            </div>
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="card">
+                      <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Employees list</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table id="employeTable" class="table table-bordered table-striped employee-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Employee Name</th>
+                                <th class="text-center">Username</th>
+                                <th class="text-center">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let staff of staffsList?.user; let i = index">
+                                <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                                <td class="align-middle text-center">{{staff.fullName}}</td>
+                                <td class="align-middle text-center">{{staff.username}}</td>
+                                <td class="text-center">
+                                  <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Downgrade this user" (click)="downgrade(staff.username)">
+                                    <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
-                  </div>
-              </section>
+                    </div>
+                </div>
+            </section>
           </div>
         </div>
     </div>
