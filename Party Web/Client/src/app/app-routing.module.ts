@@ -2,7 +2,9 @@
 import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuard } from './security/auth.guard';
+//Guard
+import { AuthGuard } from './_guard/auth.guard';
+import { PaymentGuard } from './_guard/payment.guard';
 
 //Components
 import { AppComponent } from './app.component';
@@ -23,6 +25,9 @@ import { UserCheckoutComponent } from './pages/User/Cart/user-checkout/user-chec
 import { ProductDetailComponent } from './pages/Products/product-detail/product-detail.component';
 import { ProductCategoryComponent } from './pages/Products/product-category/product-category.component';
 import { AboutComponent } from './pages/about/about.component';
+import { ReceiptComponent } from './pages/User/payment/receipt/receipt.component';
+import { PaymentComponent } from './pages/User/payment/payment/payment.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
@@ -51,6 +56,8 @@ const routes: Routes = [
   { path: 'homepage', component: AppComponent },
   { path: 'cart', component: UserCartComponent },
   { path: 'checkout', component: UserCheckoutComponent, canActivate: [AuthGuard] },
+  { path: 'receipt', component: ReceiptComponent, canActivate: [AuthGuard, PaymentGuard] },
+  { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard, PaymentGuard] },
   { path: 'mainpage', component: MainpageComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'category/:filter', component: ProductCategoryComponent },

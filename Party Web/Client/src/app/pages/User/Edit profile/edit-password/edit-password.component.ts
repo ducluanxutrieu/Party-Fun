@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, JsonpInterceptor } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { api } from '../../../../_api/apiUrl'
+import { api } from '../../../../_api/apiUrl';
+
+declare var toastr;
+
 @Component({
   selector: 'app-edit-password',
   templateUrl: './edit-password.component.html',
@@ -29,12 +32,12 @@ export class EditPasswordComponent implements OnInit {
     // alert("password: " + data.pwd + "newpass: " + data.newpass);
     return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
-        alert("Change success!");
+        toastr.success("Change success!");
         sessionStorage.setItem('response', JSON.stringify(res_data));
         this.router.navigate(['profile']);
       },
       err => {
-        alert("Error: " + err.status);
+        toastr.error("Error: " + err.status + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }

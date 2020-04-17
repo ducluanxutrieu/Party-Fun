@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { api } from '../../../_api/apiUrl';
 import { AuthenticationService } from '../../../_services/authentication.service';
 
+declare var toastr;
 @Component({
   selector: 'app-userregister',
   templateUrl: './userregister.component.html',
@@ -32,12 +33,12 @@ export class UserregisterComponent implements OnInit {
     })
     return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
       results = res_data.body;
-      alert("Register success!");
+      toastr.success("Register success!");
       sessionStorage.setItem('full-response', JSON.stringify(res_data));
       this.router.navigate(['user_login']);
     },
       err => {
-        alert("Error: " + err.status);
+        toastr.error("Error: " + err.status + " " + err.error.message);
         localStorage.setItem('error', JSON.stringify(err));
       })
   }

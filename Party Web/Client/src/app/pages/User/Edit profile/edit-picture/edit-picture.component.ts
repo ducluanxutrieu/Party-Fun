@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 
 import { api } from '../../../../_api/apiUrl'
 
+declare var toastr;
+
 @Component({
   selector: 'app-edit-picture',
   templateUrl: './edit-picture.component.html',
@@ -39,10 +41,10 @@ export class EditPictureComponent implements OnInit {
       sessionStorage.setItem('response', JSON.stringify(res_data.body));
       localStorage.setItem('avatar', result.message);
       location.reload();
-      alert("Update success!");
+      toastr.success("Update success!");
     },
       err => {
-        alert("Error: " + err.status);
+        toastr.error("Error: " + err.status + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
@@ -51,7 +53,7 @@ export class EditPictureComponent implements OnInit {
       this.avatarFile = event.target.files;
     }
     else {
-      alert("Not a jpeg, png or gif file!");
+      toastr.warning("Not a jpeg, png or gif file!");
       this.avatarForm.reset();
     }
   }

@@ -5,6 +5,8 @@ import { DatePipe } from '@angular/common';
 import { api } from '../../../../_api/apiUrl';
 import { Router } from '@angular/router';
 
+declare var toastr;
+
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
@@ -43,12 +45,12 @@ export class EditProfileComponent implements OnInit {
       result = res_data.body;
       sessionStorage.setItem('response', JSON.stringify(res_data.body));
       localStorage.setItem('userinfo', JSON.stringify(result.account));
-      alert("Update success!");
+      toastr.success("Update success!");
       this.router.navigate(['/profile']);
       
     },
       err => {
-        alert("Error: " + err.status);
+        toastr.error("Error: " + err.status + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }

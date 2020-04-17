@@ -5,6 +5,8 @@ import { ProductService } from '../../../_services/product.service';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { Product } from '../../../_models/product.model';
 
+declare var toastr;
+
 interface rateOverall {
   one: number;
   two: number;
@@ -77,17 +79,17 @@ export class ProductRatingComponent implements OnInit {
         res_data => {
           this.productService.getDishList();
           sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-          alert("Đăng nhận xét thành công!");
+          toastr.success("Posted comment successfully!");
           window.location.reload();
         },
         err => {
-          alert("Lỗi: " + err.status + " " + err.error.message);
+          toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         }
       )
     }
     else {
-      alert("Bạn phải đăng nhập để đăng nhận xét!");
+      toastr.warning("You must be logged in to post a comment!");
     }
   }
 }

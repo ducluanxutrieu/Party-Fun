@@ -10,7 +10,7 @@
   overflow: hidden;
 }
 .item-thumb{
-  max-height: 10em;
+  height: 10em;
 }
 html,body{
   min-height: 100vh;

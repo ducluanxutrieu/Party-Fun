@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { api } from '../_api/apiUrl';
 
+declare var toastr;
+
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     private apiLogin = api.signin;
@@ -31,7 +33,7 @@ export class AuthenticationService {
             this.router.navigate(['/mainpage']);
         },
             err => {
-                alert("Error: " + err.status + " " + err.error.message);
+                toastr.error("Error: " + err.status + " " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             });
     }
@@ -50,7 +52,7 @@ export class AuthenticationService {
         },
             err => {
                 sessionStorage.setItem('error', JSON.stringify(err));
-                alert("Cannot logout!");
+                toastr.error("Cannot logout!");
             })
     }
 

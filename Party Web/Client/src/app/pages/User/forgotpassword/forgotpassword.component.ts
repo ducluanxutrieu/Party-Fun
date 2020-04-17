@@ -3,6 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { api } from '../../../_api/apiUrl';
+
+declare var toastr;
+
 @Component({
   selector: 'app-forgotpassword',
   templateUrl: './forgotpassword.component.html',
@@ -26,19 +29,19 @@ export class ForgotpasswordComponent implements OnInit {
         this.authorized = true;
       },
         err => {
-          alert("Error: " + err.status);
+          toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }
     if (this.authorized) {
       let body = `username=${this.username}&passnew=${data.newpass}&checkforgotpassword=${data.recoverycode}`;
       this.http.post(api.resetpassword, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-        alert("Change password success!");
+        toastr.success("Change password success!");
         this.router.navigate(['/user_login']);
         this.authorized = false;
       },
         err => {
-          alert("Error: " + err.status + " " + err.statusText + "\n" + err.error);
+          toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }

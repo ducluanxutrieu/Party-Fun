@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Item } from '../_models/item.model'
 import { Observable, BehaviorSubject } from 'rxjs';
 
+declare var toastr;
+
 @Injectable({ providedIn: 'root' })
 export class ProductService {
     private productDataSubject = new BehaviorSubject<any>(null);
@@ -79,7 +81,7 @@ export class ProductService {
                 });
             }
             this.saveCartItems();
-            alert("Added to cart!")
+            toastr.success("Added to cart!")
         }
         return false;
     };

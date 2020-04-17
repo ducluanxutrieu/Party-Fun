@@ -1,0 +1,94 @@
+<head>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous"> -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+</head>
+<body>
+    <div class="container content">
+        <div class="d-flex justify-content-center">
+            <div class="card col-xs-12 col-sm-12 col-md-6 pb-2">
+                <div class="card-body p-2">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <address>
+                                <strong>PartyBooking</strong>
+                                <br>
+                                UIT
+                                <br>
+                               Thủ Đức, Hồ Chí Minh city
+                                <br>
+                                <abbr title="Phone">P:</abbr> 0392615412
+                            </address>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                            <p>
+                                <em>Date: {{receipt.dateParty | date: 'dd-MM-yyyy'}}</em>
+                            </p>
+                            <p>
+                                <em>Receipt #: 34522677W</em>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-center col-md-12">
+                            <h1>Receipt</h1>
+                        </div>
+                        <table class="table table-hover col-md-12">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>#</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of receipt_items">
+                                    <td class="col-md-9"><em>{{item.product.name}}</em></td>
+                                    <td class="col-md-1" style="text-align: center"> {{item.quantity}} </td>
+                                    <td class="col-md-1 text-center">{{item.product.price | number}}</td>
+                                    <td class="col-md-1 text-center">{{item.product.price * item.quantity | number}}</td>
+                                </tr>                                
+                                <!-- <tr>
+                                    <td>   </td>
+                                    <td>   </td>
+                                    <td class="text-right">
+                                    <p>
+                                        <strong>Subtotal: </strong>
+                                    </p>
+                                    <p>
+                                        <strong>Discount: </strong>
+                                    </p></td>
+                                    <td class="text-center">
+                                    <p>
+                                        <strong>$6.94</strong>
+                                    </p>
+                                    <p>
+                                        <strong>$6.94</strong>
+                                    </p></td>
+                                </tr> -->
+                                <tr>
+                                    <td>   </td>
+                                    <td>   </td>
+                                    <td class="text-right"><h4><strong>Total: </strong></h4></td>
+                                    <td class="text-center text-danger"><h4><strong>{{receipt.total_price | number}}</strong></h4></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-md-12">
+                            <a routerLink="/payment" type="button" class="btn btn-success btn-lg btn-block nav-btn">
+                                    Pay Now <i class="fa fa-angle-right fa-bold"></i>
+                            </a>
+                            <a routerLink="/mainpage" type="button" class="btn btn-danger btn-lg btn-block nav-btn">
+                                <i class="fa fa-angle-left"></i> Back to main page 
+                            </a>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

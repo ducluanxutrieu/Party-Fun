@@ -15,8 +15,11 @@ import { DatePipe } from '@angular/common';
 import { AuthenticationService } from './_services/authentication.service';
 import { ProductService } from './_services/product.service';
 import { UserService } from './_services/user.service';
-import { AuthGuard } from './security/auth.guard';
 // import { StoreService } from './_services/store.service';
+
+//Guard
+import { AuthGuard } from './_guard/auth.guard';
+import { PaymentGuard } from './_guard/payment.guard';
 
 //Components
 import { AppComponent } from './app.component';
@@ -43,7 +46,8 @@ import { SearchComponent } from './pages/Products/search/search.component';
 import { ProductRatingComponent } from './pages/Products/product-rating/product-rating.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ScrollToTopComponent } from './component/scroll-to-top/scroll-to-top.component';
-import { ReceiptComponent } from './pages/receipt/receipt.component';
+import { ReceiptComponent } from './pages/User/payment/receipt/receipt.component';
+import { PaymentComponent } from './pages/User/payment/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +75,8 @@ import { ReceiptComponent } from './pages/receipt/receipt.component';
     ProductRatingComponent,
     AboutComponent,
     ScrollToTopComponent,
-    ReceiptComponent
+    ReceiptComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +93,8 @@ import { ReceiptComponent } from './pages/receipt/receipt.component';
     AuthGuard,
     ProductService,
     DatePipe,
-    UserService
+    UserService,
+    PaymentGuard
   ],
   bootstrap: [AppComponent]
 })
