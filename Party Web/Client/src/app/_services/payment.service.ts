@@ -12,4 +12,7 @@ export class PaymentService {
         private http: HttpClient,
         private router: Router
     ) { }
+
+    pay(){
+    }
 }

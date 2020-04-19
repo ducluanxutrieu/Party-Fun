@@ -101,9 +101,20 @@ body {
     cursor: pointer;
     color: #007BFF;
   }
+  .suggest-item-thumb-wrapper{
+    overflow: hidden;
+  }
   .suggest-item-thumb{
     min-height: 6em;
     max-height: 6em;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+  }
+  .suggest-item-thumb:hover{
+    -webkit-transform: scale(1.3);
+	  transform: scale(1.3);
   }
   .checked, .price span {
     color: #ff9f1a; }

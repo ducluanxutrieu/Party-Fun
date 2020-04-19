@@ -49,18 +49,19 @@ export class UserCheckoutComponent implements OnInit {
       )
     }
     let body = `lishDishs=${JSON.stringify(item_ordered)}&numbertable=${this.numOfTable}&dateParty=${this.deliveryDate}&discount="0"`;
-    this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-      sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-      toastr.success("Order success!");
-      localStorage.removeItem('cart');
-      sessionStorage.setItem('current_receipt', JSON.stringify({
-        items: this.items,
-        numOfTable: this.numOfTable,
-        dateParty: this.deliveryDate,
-        total_price: this.total
-      }))
-      this.router.navigate(['/receipt']);
-    },
+    this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(
+      res_data => {
+        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
+        toastr.success("Order success!");
+        localStorage.removeItem('cart');
+        sessionStorage.setItem('current_receipt', JSON.stringify({
+          items: this.items,
+          numOfTable: this.numOfTable,
+          dateParty: this.deliveryDate,
+          total_price: this.total
+        }))
+        this.router.navigate(['/receipt']);
+      },
       err => {
         console.log(err);
         if (err.status == 400) {

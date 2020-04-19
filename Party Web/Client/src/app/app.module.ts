@@ -2,12 +2,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
 import { BarRatingModule } from "ngx-bar-rating";
+import { NgxStripeModule } from 'ngx-stripe';
 
 import { DatePipe } from '@angular/common';
 
@@ -15,7 +16,6 @@ import { DatePipe } from '@angular/common';
 import { AuthenticationService } from './_services/authentication.service';
 import { ProductService } from './_services/product.service';
 import { UserService } from './_services/user.service';
-// import { StoreService } from './_services/store.service';
 
 //Guard
 import { AuthGuard } from './_guard/auth.guard';
@@ -86,7 +86,9 @@ import { PaymentComponent } from './pages/User/payment/payment/payment.component
     BrowserAnimationsModule,
     MatExpansionModule,
     MatTableModule,
-    BarRatingModule
+    BarRatingModule,
+    NgxStripeModule.forRoot('pk_test_nafFmrU6vtMnntsadEQGqWzk00t6j6yIsy'), 
+    ReactiveFormsModule
   ],
   providers: [
     AuthenticationService,

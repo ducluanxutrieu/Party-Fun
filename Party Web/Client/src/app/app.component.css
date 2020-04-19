@@ -1,4 +1,9 @@
-html, body{
+@font-face {
+    font-family: ReadMyHandLL;
+    src: url("/assets/fonts/ReadMyHandLL_Bold.ttf") format("truetype");
+    font-weight: bold;
+}
+html, body {
     font-family: Roboto, Helvetica, sans-serif;			
     /* height: 100vh; */
     margin: 0px;
@@ -6,7 +11,10 @@ html, body{
 .homepage {
     position: relative;
 }
-
 .navbar-custom{
     background-color: #f37d42;
+}
+.brand-name{
+    font-family: ReadMyHandLL, Roboto, Helvetica;
+    font-weight: bold;
 }

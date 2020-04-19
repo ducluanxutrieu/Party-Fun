@@ -8,3 +8,6 @@ body{
 .creditcard-wrapper{
     letter-spacing: 2px;
 }
+.field{
+    padding-bottom: 1em;
+}
