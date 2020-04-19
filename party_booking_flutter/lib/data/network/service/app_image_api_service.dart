@@ -8,7 +8,6 @@ import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/file_extention.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:progress_dialog/progress_dialog.dart';

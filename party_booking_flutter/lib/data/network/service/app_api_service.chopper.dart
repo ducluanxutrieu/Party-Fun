@@ -97,15 +97,16 @@ class _$AppApiService extends AppApiService {
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<AccountResponseModel, AccountResponseModel>($request);
   }
+
   @override
-  Future<Response<BaseResponseModel>> bookParty(
+  Future<Response<PartyBookResponseModel>> bookParty(
       {String token, BookPartyRequestModel model}) {
     final $url = 'product/book';
     final $headers = {'authorization': token};
     final $body = model;
     final $request =
-    Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<BaseResponseModel, BaseResponseModel>($request);
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client
+        .send<PartyBookResponseModel, PartyBookResponseModel>($request);
   }
-
 }

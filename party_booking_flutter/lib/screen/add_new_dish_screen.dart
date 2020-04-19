@@ -46,14 +46,18 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
                     children: <Widget>[
                       _buildForm(),
                       _pickImageButton(),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       ConstrainedBox(
                           constraints: BoxConstraints(
                             maxHeight: 500,
                             maxWidth: double.infinity,
                           ),
                           child: buildGridView()),
-                      SizedBox(height: 80,)
+                      SizedBox(
+                        height: 80,
+                      )
                     ],
                   ),
                 ),
@@ -68,7 +72,9 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
                         stateButton: 0,
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
               ],
@@ -79,15 +85,17 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     );
   }
 
-  void _addNewDishClicked(BuildContext context) async{
-    if(_fbKey.currentState.saveAndValidate()){
+  void _addNewDishClicked(BuildContext context) async {
+    if (_fbKey.currentState.saveAndValidate()) {
       String name = _fbKey.currentState.fields['name'].currentState.value;
       String price = _fbKey.currentState.fields['price'].currentState.value;
       String type = _fbKey.currentState.fields['type'].currentState.value;
-      String description = _fbKey.currentState.fields['description'].currentState.value;
+      String description =
+          _fbKey.currentState.fields['description'].currentState.value;
 //      BaseResponseModel baseResponseModel= await addNewDish(name, description, type, price);
-    BaseResponseModel result = await AppImageAPIService.create(context).addNewDish(images, name, description, type, price);
-      if(result != null){
+      BaseResponseModel result = await AppImageAPIService.create(context)
+          .addNewDish(images, name, description, type, price);
+      if (result != null) {
         UTiu.showToast(result.message);
         Navigator.pop(context, result);
       }
@@ -121,7 +129,8 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     });
   }
 
-  Future<BaseResponseModel> addNewDish(String name, String description, String type, String price) async {
+  Future<BaseResponseModel> addNewDish(
+      String name, String description, String type, String price) async {
     // string to uri
     Uri uri = Uri.parse('http://139.180.131.30:3000/product/adddish');
 
@@ -130,20 +139,22 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     MultipartRequest request = http.MultipartRequest("POST", uri);
     request.headers['authorization'] = prefs.getString(Constants.USER_TOKEN);
 
-    images.map((item) => () async {
-    ByteData byteData = await item.getByteData();
-    List<int> imageData = byteData.buffer.asUint8List();
+    images
+        .map((item) => () async {
+              ByteData byteData = await item.getByteData();
+              List<int> imageData = byteData.buffer.asUint8List();
 
-    MultipartFile multipartFile = MultipartFile.fromBytes(
-      'image',
-      imageData,
-      filename: 'dish_images.jpg',
-      contentType: MediaType("image", "jpg"),
-    );
+              MultipartFile multipartFile = MultipartFile.fromBytes(
+                'image',
+                imageData,
+                filename: 'dish_images.jpg',
+                contentType: MediaType("image", "jpg"),
+              );
 
 // add file to multipart
-    request.files.add(multipartFile);
-    }).toList();
+              request.files.add(multipartFile);
+            })
+        .toList();
     request.fields['name'] = name;
     request.fields['description'] = description;
     request.fields['price'] = price;
@@ -156,9 +167,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     return baseResponseModelFromJson(response.toString());
   }
 
-
-
-  Widget _pickImageButton(){
+  Widget _pickImageButton() {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -173,8 +182,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
-          )
-      ),
+          )),
     );
   }
 
@@ -250,7 +258,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
         'Dessert'
       ]
           .map((gender) =>
-          DropdownMenuItem(value: gender, child: Text("$gender")))
+              DropdownMenuItem(value: gender, child: Text("$gender")))
           .toList(),
     );
   }

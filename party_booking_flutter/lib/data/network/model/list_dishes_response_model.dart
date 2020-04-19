@@ -140,6 +140,15 @@ class CartModel extends Model {
       totalCartValue += f.price * f.qty;
     });
   }
+  int calculateTotal1() {
+   int totalCartValue = 0;
+    cart.forEach((f) {
+      totalCartValue += f.qty;
+    }
+    );
+   return totalCartValue;
+  }
+
 }
 
 class RateModel {
