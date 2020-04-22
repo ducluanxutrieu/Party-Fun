@@ -1,0 +1,14 @@
+html,body{
+    font-family: Roboto, Helvetica, sans-serif;
+}
+.infoheader{
+    font-size: 22px;
+    margin: 5px 5px;
+    font-weight: 500;
+}
+.hr{
+    margin: 10px 10px;
+}
+.cart-table-item:hover{
+    cursor: pointer;
+}

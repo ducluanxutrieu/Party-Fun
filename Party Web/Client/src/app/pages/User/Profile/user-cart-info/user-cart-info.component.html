@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div class="infoheader">Order history</div>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Order day</th>
+            <th scope="col" class="text-center">Party day</th>
+            <th scope="col" class="text-center">Num of table</th>
+            <th scope="col" class="text-center">Total price</th>
+            <th scope="col" class="text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cart-table-item" *ngFor="let item of userData?.userCart; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(item)">
+            <th scope="row" class="text-center">{{i+1}}</th>
+            <td class="text-center">{{item.createAt | date:'dd-MM-yyyy'}}</td>
+            <td class="text-center">{{item.dateParty | date:'dd-MM-yyyy, HH:mm'}}</td>
+            <td class="text-center">{{item.numbertable}}</td>
+            <td class="text-center">{{item.totalMoney | number}}</td>
+            <td class="text-center"><span *ngIf="!item.paymentstatus">Unpaid</span><span *ngIf="item.paymentstatus">Paid</span></td>
+            <!-- Cart Detail Modal-->
+            <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="CartDetailModalLabel">List of dishes</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Name</th>
+                                <th scope="col" class="text-center">Price</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let itemDetail of cartDetail; let i = index">
+                                <th scope="row" class="text-center">{{i+1}}</th>
+                                <td class="text-center">{{productService.find(itemDetail._id).name}}</td>
+                                <td class="text-center">{{productService.find(itemDetail._id).price | number}}</td>
+                                <td class="text-center">{{itemDetail.numberDish | number}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+      
+</body>
+</html>

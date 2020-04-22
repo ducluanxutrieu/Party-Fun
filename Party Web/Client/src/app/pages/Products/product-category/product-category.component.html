@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <!-- Page Content -->
+    <div class="content-container container">
+        <div class="row">
+            <!-- Category -->
+            <div class="left-panel col-12 col-lg-3">
+                <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Category</div>
+                <div class="list-group">
+                    <a href="category/Holiday Offers" class="list-group-item category">Holiday Offers</a>
+                    <a href="category/First Dishes" class="list-group-item category">First Dishes</a>
+                    <a href="category/Main Dishes" class="list-group-item category">Main Dishes</a>
+                    <a href="category/Seafood" class="list-group-item category">Seafood</a>
+                    <a href="category/Drinks" class="list-group-item category">Drinks</a>
+                    <a href="category/Dessert" class="list-group-item category">Dessert</a>
+                </div>
+            </div>
+            <div class="main-content col-lg-9">
+                <!--div class="sorting-panel"></div-->
+                <h3 class="category-title">{{cat_filter}}</h3>
+                <div class="grid-container row">
+                    <div class="grid-item col-lg-4 col-md-6 mb-4" *ngFor="let item of pageOfItems">
+                        <div class="card h-100">
+                            <a href="product/{{item._id}}"><img class="card-img-top item-thumb" src={{item.image[0]}} onError="this.src='../../assets/images/dish-thumbnail-default.png';" alt=""></a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <a href="product/{{item._id}}">{{item.name}}</a>
+                                </h4>
+                                <h5>{{item.price | number}} VND</h5>
+                                <p class="card-text">{{item.description}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-secondary" (click)="addCart_clicked(item._id)">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center" *ngIf="!filtered_products.length">There is no product in this category.</p>
+                <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center">
+                    <jw-pagination [items]="filtered_products" (changePage)="onChangePage($event)"></jw-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <!-- Sidebar -->
+            <app-sidebar></app-sidebar>
+
+            <!-- Page content -->
+            <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                <h2 class="no-margin-bottom">Profile</h2>
+                </div>
+            </header>
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ul>
+            </div>
+            <!-- Forms Section-->
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Profile</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <form #updateinfo = "ngForm" (ngSubmit) = "updateSubmit(updateinfo.value)" id="updateForm">
+                                        <div class="form-group">
+                                            <label class="form-control-label">Name</label>
+                                            <input type="text" placeholder="Enter Name" class="form-control" name="name" required ngModel #name="ngModel" [(ngModel)]="userService.get_userInfo().fullName">
+                                            <div class="invalid-feedback d-block" role="alert" *ngIf="name.invalid && name.dirty">
+                                            Please choose a name.
+                                            </div>
+                                        </div>
+                                        <div class="form-group">       
+                                            <label class="form-control-label">Email</label>
+                                            <input type="email" placeholder="mail@example.com" class="form-control" name="email" email required ngModel #email="ngModel" [(ngModel)]="userService.get_userInfo().email">
+                                            <div class="invalid-feedback d-block" role="alert" *ngIf="email.invalid && email.dirty">
+                                            Please enter a valid email.
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-control-label">Phone</label>
+                                            <input type="tel" placeholder="Phone" class="form-control" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel" [(ngModel)]="userService.get_userInfo().phoneNumber">
+                                            <div class="invalid-feedback d-block" role="alert" *ngIf="phone.invalid && phone.dirty">
+                                            Please enter a valid phone number.
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-control-label">Gender</label>
+                                            <br>
+                                            <select class="form-control" id="gender" name="gender" ngModel [(ngModel)]="userService.get_userInfo().sex">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>                         
+                                        </div>
+                                        <div class="form-group">
+                                        <label class="form-control-label">Birthday</label>
+                                        <input type="date" class="form-control" name="birthday" ngModel #birthday="ngModel" [ngModel]="userService.get_userInfo().birthday | date:'yyyy-MM-dd'" (change)="changeOfDate($event)">
+                                        </div>
+                                        <div class="form-group">       
+                                            <input type="submit" value="Comfirm" class="btn btn-primary" form="updateForm" [disabled]="updateinfo.invalid">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-4">
+                                    <img src={{userService.get_userAvatar()}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="avatar" class="img-fluid rounded-circle img-thumbnail">
+                                    <div class="input-wrapper">
+                                        <input id="avatarInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file centered-input" name="avatar" (change)="avatarChanged($event)" ngModel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

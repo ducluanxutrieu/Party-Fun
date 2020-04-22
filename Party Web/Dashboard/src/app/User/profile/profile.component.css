@@ -1,0 +1,9 @@
+.input-wrapper{
+    /* position:  absolute; */
+    padding: 20px;
+    /* text-align: center!important; */
+}
+.centered-input{
+    /* display: block; */
+    margin-left: 12%;
+}

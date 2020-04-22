@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div class="form_container">
+        <form #userreg = "ngForm" (ngSubmit) = "onClickSubmit(userreg.value)" id="regform">
+            <header>Register</header>
+            <label for="name">Full name</label>
+            <input id="name" type="text" name="name" required ngModel #name="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="name.invalid && name.dirty">Please enter full name.</div>
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" email required ngModel #email="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="email.invalid && email.dirty">Please enter a valid email.</div>
+            <label for="phone">Phone number</label>
+            <input id="phone" type="text" name="phone" required pattern="[0-9]*" maxlength="11" ngModel #phone="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="phone.invalid && phone.dirty">Please enter a valid phone number.</div>
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" minlength="4" required ngModel #username="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="username.invalid && username.dirty">Please enter username with at least 4 characters.</div>
+            <label for="password">Password</label>
+            <input id="password" type="password" name="pwd" required minlength="6" ngModel #pw="ngModel">
+            <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Please enter password with at least 6 characters.</div>
+            <button type="submit" form="regform" value="Đăng ký" [disabled]="userreg.invalid">Register</button>
+            <div class="bottom-text">
+                <p>Already have an account?<a style="font-weight: 500" href="user_login">Login</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

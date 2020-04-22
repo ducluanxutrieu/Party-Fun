@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <!-- Sidebar -->
+            <app-sidebar></app-sidebar>
+
+            <!-- Page content -->
+            <div class="content-inner">
+              <header class="page-header">
+                  <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Post</h2>
+                  </div>
+              </header>
+              <!-- Breadcrumb-->
+              <div class="breadcrumb-holder container-fluid">
+              <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                  <li class="breadcrumb-item active">Create Post</li>
+              </ul>
+              </div>
+              <!-- Forms Section-->
+              <section class="forms">
+                  <div class="container-fluid">
+                      <div class="card">
+                          <div class="card-header d-flex align-items-center">
+                              <h3 class="h4">Create Post</h3>
+                          </div>
+                          <div class="card-body">
+                            <form #postEditorForm = "ngForm" id="postEditor" (ngSubmit)="createClicked(postEditorForm.value)">
+                              <!-- Post title -->
+                              <div class="form-group">
+                                <label class="form-control-label">Post title</label>
+                                <input type="text" placeholder="Post title" class="form-control" name="title" ngModel required #postTitle="ngModel">
+                                <div class="invalid-feedback d-block" role="alert" *ngIf="postTitle.invalid && postTitle.dirty">
+                                  Please write a title.
+                                </div>
+                              </div>
+                              <!-- Post summary -->
+                              <div class="form-group">
+                                <label class="form-control-label">Post summary</label>
+                                <input type="text" placeholder="Post summary" class="form-control" name="summary" ngModel required #postSummary="ngModel">
+                                <div class="invalid-feedback d-block" role="alert" *ngIf="postSummary.invalid && postSummary.dirty">
+                                  Please write a summary.
+                                </div>
+                              </div>
+                              <!-- Post content -->
+                              <div class="form-group">
+                                <label class="form-control-label">Post content</label>
+                                <div id="postEditor" [froalaEditor]="options" [(froalaModel)]="postContent"></div>
+                              </div>
+                              <div class="form-group">       
+                                <input type="submit" value="Create" class="btn btn-primary" form="postEditor" 
+                                [disabled]="postEditorForm.invalid">
+                              </div>
+                            </form>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
