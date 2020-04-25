@@ -47,7 +47,10 @@ import { ProductRatingComponent } from './pages/Products/product-rating/product-
 import { AboutComponent } from './pages/about/about.component';
 import { ScrollToTopComponent } from './component/scroll-to-top/scroll-to-top.component';
 import { ReceiptComponent } from './pages/User/payment/receipt/receipt.component';
-import { PaymentComponent } from './pages/User/payment/payment/payment.component';
+import { PaymentComponent } from './pages/User/payment/payment-layout/payment-layout.component';
+import { PaymentSuccessComponent } from './pages/User/payment/payment-success/payment-success.component';
+import { PaymentFailComponent } from './pages/User/payment/payment-fail/payment-fail.component';
+import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-info.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +79,10 @@ import { PaymentComponent } from './pages/User/payment/payment/payment.component
     AboutComponent,
     ScrollToTopComponent,
     ReceiptComponent,
-    PaymentComponent
+    PaymentComponent,
+    PaymentSuccessComponent,
+    PaymentFailComponent,
+    PaymentInfoComponent
   ],
   imports: [
     BrowserModule,

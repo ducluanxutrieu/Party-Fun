@@ -19,7 +19,10 @@ export class ProductService {
     ) {
         this.getDishList();
         this.loadCartItems();
-        this.productList.subscribe(data => this.products = data)
+        this.productList.subscribe(data => this.products = data);
+        toastr.options = {
+            "closeDuration": "300"
+        }
     }
     //Lấy danh sách sản phẩm
     getDishList(): any {
