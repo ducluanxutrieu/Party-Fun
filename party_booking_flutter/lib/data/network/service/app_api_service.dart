@@ -3,6 +3,8 @@ import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
+import 'package:party_booking/data/network/model/get_payment_request_mode.dart';
+import 'package:party_booking/data/network/model/get_payment_response_mode.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
@@ -69,6 +71,13 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
     @body BookPartyRequestModel model,
   });
+
+  @Get(path: 'payment/get_payment')
+  Future<Response<GetPaymentResponseModel>> getPayment({
+    @Header('authorization') String token,
+    @body GetPaymentRequestModel mode,
+  });
+
 /*
 @POST("/product/book")
     fun bookParty(
@@ -107,6 +116,11 @@ abstract class AppApiService extends ChopperService {
       BookPartyRequestModel: BookPartyRequestModel.fromJsonFactory,
       ListDishes: ListDishes.fromJsonFactory,
       PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
+      GetPaymentResponseModel: GetPaymentResponseModel.fromJsonFactory,
+      GetPaymentRequestModel: GetPaymentRequestModel.fromJsonFactory,
+      DisplayItem: DisplayItem.fromJsonFactory,
+      Custom: Custom.fromJsonFactory,
+      Data: Data.fromJsonFactory,
     });
   }
 }

@@ -20,9 +20,10 @@ class _MyAppState extends State<MyApp> {
   ScrollController _controller = ScrollController();
 
   CreditCard testCard = CreditCard(
-    number: '5372072203248685',
+    number: '5555555555554444',
     expMonth: 03,
     expYear: 26,
+    cvc: "232",
   );
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -119,6 +120,7 @@ class _MyAppState extends State<MyApp> {
                   _scaffoldKey.currentState.showSnackBar(
                       SnackBar(content: Text('Received ${token.tokenId}')));
                   setState(() {
+                    print(token.tokenId);
                     _paymentToken = token;
                   });
                 }).catchError(setError);

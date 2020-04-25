@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/get_payment_request_mode.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
+import 'package:party_booking/res/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 
 class BookPartySuccessScreen extends StatefulWidget {
@@ -18,6 +25,7 @@ class BookPartySuccessScreen extends StatefulWidget {
 class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
   Token _paymentToken;
   PaymentMethod _paymentMethod;
+
 //  PaymentIntentResult _paymentIntent;
 //  CreditCard testCard;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -60,7 +68,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MyApp()) */
-            requestPaymentNative();
+            requestSource(widget.mBill);
           }),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -160,22 +168,25 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                   itemCount: widget.mBill.listDishes.length,
                   itemBuilder: (bCtx, index) {
                     var dish = widget.mBill.listDishes[index];
-                    return Container(
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            dish.name,
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                            ),
-                          ),
-                          Spacer(),
-                          Text(dish.numberDish.toString(),
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                              ))
-                        ],
+                    return Card(
+                      color: Colors.white70,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        onTap: null,
+                        contentPadding: EdgeInsets.all(10),
+                        title: Text(
+                          dish.name,
+                          style: TextStyle(fontSize: 17, color: Colors.blue),
+                        ),
+                        selected: false,
+                        trailing: Text(dish.numberDish.toString()),
+                        dense: true,
+                        leading: CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(dish.image),
+                          backgroundColor: Colors.transparent,
+                        ),
                       ),
                     );
                   }),
@@ -186,44 +197,74 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
     );
   }
 
-  void requestPaymentNative() {
-    StripePayment.paymentRequestWithNativePay(
-      androidPayOptions: AndroidPayPaymentRequest(
-        total_price: widget.mBill.totalMoney.toString(),
-        currency_code: "VND",
-      ),
-      applePayOptions: ApplePayPaymentOptions(
-        countryCode: 'VN',
-        currencyCode: 'VND',
-        items: [
-          ApplePayItem(
-            label: 'Test',
-            amount: widget.mBill.totalMoney.toString(),
-          )
-        ],
-      ),
-    ).then((token) {
-      setState(() {
-        _paymentToken = token;
-      });
-    }).catchError((setError) => {createPaymentWithCard()});
+  void getPayment(String id, String token, int totalMoney, AccountModel accountModel) async{
+    var model = GetPaymentRequestModel(id: id);
+    await AppApiService.create().getPayment(mode: model, token: token).then((onValue){
+      StripePayment.createSourceWithParams(SourceParams(
+        type: 'ideal',
+        amount: totalMoney,
+        country: 'vn',
+        email: accountModel.email,
+        name: accountModel.fullName,
+        currency: 'VND',
+        returnURL: onValue.body.data.successUrl,
+      )).then((source) {
+        _scaffoldKey.currentState
+            .showSnackBar(SnackBar(content: Text('Received ${source.sourceId}')));
+      }).catchError(setError);
+    }, onError: setError);
   }
 
-  void createPaymentWithCard() {
-    StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest())
-        .then((paymentMethod) {
-      StripePayment.createTokenWithCard(
-        paymentMethod.card,
-      ).then((token) {
-        setState(() {
-          _paymentToken = token;
-        });
-      }).catchError(setError);
-      _scaffoldKey.currentState.showSnackBar(
-          SnackBar(content: Text('Received ${paymentMethod.id}')));
-      setState(() {
-        _paymentMethod = paymentMethod;
-      });
-    }).catchError(setError);
+  void requestSource(Bill mBill) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String accountJson = preferences.getString(Constants.ACCOUNT_MODEL_KEY);
+    AccountModel accountModel = AccountModel.fromJson(json.decode(accountJson));
+    getPayment(mBill.id, preferences.getString(Constants.USER_TOKEN), mBill.totalMoney, accountModel);
   }
 }
+
+//  void requestPaymentNative() async{
+//    bool isSupportNativePay = await StripePayment.deviceSupportsNativePay();
+//    if(isSupportNativePay){
+//      StripePayment.paymentRequestWithNativePay(
+//        androidPayOptions: AndroidPayPaymentRequest(
+//          total_price: widget.mBill.totalMoney.toString(),
+//          currency_code: "VND",
+//        ),
+//        applePayOptions: ApplePayPaymentOptions(
+//          countryCode: 'VN',
+//          currencyCode: 'VND',
+//          items: [
+//            ApplePayItem(
+//              label: 'Test',
+//              amount: widget.mBill.totalMoney.toString(),
+//            )
+//          ],
+//        ),
+//      ).then((token) {
+//        setState(() {
+//          _paymentToken = token;
+//        });
+//      }).catchError((setError) => {);
+//    }else{
+//
+//    }
+//  }
+
+//  void createPaymentWithCard() {
+//    StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest())
+//        .then((paymentMethod) {
+//      StripePayment.createTokenWithCard(
+//        paymentMethod.card,
+//      ).then((token) {
+//        setState(() {
+//          _paymentToken = token;
+//        });
+//      }).catchError(setError);
+//      _scaffoldKey.currentState.showSnackBar(
+//          SnackBar(content: Text('Received ${paymentMethod.id}')));
+//      setState(() {
+//        _paymentMethod = paymentMethod;
+//      });
+//    }).catchError(setError);
+//  }
