@@ -6,16 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-info.component.css']
 })
 export class EditInfoComponent implements OnInit {
-  userInfo;
   constructor() { }
 
-  ngOnInit() {
-  }
-  changeOfRoutes() {
-    this.getuserInfo();
-  }
-  getuserInfo() {
-    this.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-  }
+  ngOnInit() { }
 
 }

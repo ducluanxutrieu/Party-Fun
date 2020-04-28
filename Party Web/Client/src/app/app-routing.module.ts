@@ -30,7 +30,7 @@ import { PaymentComponent } from './pages/User/payment/payment-layout/payment-la
 import { PaymentSuccessComponent } from './pages/User/payment/payment-success/payment-success.component';
 import { PaymentFailComponent } from './pages/User/payment/payment-fail/payment-fail.component';
 import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-info.component';
-
+import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/payment-mobile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
@@ -59,14 +59,15 @@ const routes: Routes = [
   { path: 'homepage', component: AppComponent },
   { path: 'cart', component: UserCartComponent },
   { path: 'checkout', component: UserCheckoutComponent, canActivate: [AuthGuard] },
-  { path: 'receipt', component: ReceiptComponent, canActivate: [AuthGuard, PaymentGuard] },
+  { path: 'receipt/:bill_id', component: ReceiptComponent, canActivate: [AuthGuard, PaymentGuard] },
   {
     path: 'payment', component: PaymentComponent,
     children: [
-      { path: '', redirectTo: 'info', pathMatch: 'full' },
+      { path: '', redirectTo: '/404', pathMatch: 'full' },
       { path: 'info', component: PaymentInfoComponent },
       { path: 'success', component: PaymentSuccessComponent },
-      { path: 'cancel', component: PaymentFailComponent }
+      { path: 'cancel', component: PaymentFailComponent },
+      { path: 'mobile/:session_id', component: PaymentMobileComponent }
     ]
   },
   { path: 'mainpage', component: MainpageComponent },

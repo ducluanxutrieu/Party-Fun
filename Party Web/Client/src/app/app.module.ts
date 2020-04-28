@@ -51,6 +51,7 @@ import { PaymentComponent } from './pages/User/payment/payment-layout/payment-la
 import { PaymentSuccessComponent } from './pages/User/payment/payment-success/payment-success.component';
 import { PaymentFailComponent } from './pages/User/payment/payment-fail/payment-fail.component';
 import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-info.component';
+import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/payment-mobile.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-
     PaymentComponent,
     PaymentSuccessComponent,
     PaymentFailComponent,
-    PaymentInfoComponent
+    PaymentInfoComponent,
+    PaymentMobileComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +95,7 @@ import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-
     MatExpansionModule,
     MatTableModule,
     BarRatingModule,
-    NgxStripeModule.forRoot('pk_test_nafFmrU6vtMnntsadEQGqWzk00t6j6yIsy'), 
+    NgxStripeModule.forRoot('pk_test_28owFDjd02mGhWN5XUDoq1S700UciXGH9F'), 
     ReactiveFormsModule
   ],
   providers: [

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { api } from '../../_api/apiUrl';
 import { ProductService } from '../../_services/product.service';
@@ -25,7 +24,6 @@ export class MainpageComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
     private productService: ProductService
   ) { }
 

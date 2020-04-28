@@ -14,9 +14,8 @@ declare var toastr;
 export class EditPictureComponent implements OnInit {
   @ViewChild('updatepicture', null) avatarForm: NgForm;
 
-  apiUrl = api.uploadavatar;
   userInfo;
-  avtUrl;
+  avtUrl: string;
   avatarFile: any[];
   constructor(
     private http: HttpClient,
@@ -36,7 +35,7 @@ export class EditPictureComponent implements OnInit {
       'Authorization': token
     })
     var result;
-    return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
+    return this.http.post(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
       result = res_data.body;
       sessionStorage.setItem('response', JSON.stringify(res_data.body));
       localStorage.setItem('avatar', result.message);

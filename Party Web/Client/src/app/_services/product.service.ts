@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { api } from '../_api/apiUrl';
 import { Product } from '../_models/product.model'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Item } from '../_models/item.model'
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 declare var toastr;
 
@@ -21,7 +21,8 @@ export class ProductService {
         this.loadCartItems();
         this.productList.subscribe(data => this.products = data);
         toastr.options = {
-            "closeDuration": "300"
+            "timeOut": "1500",
+            "positionClass": "toast-top-center"
         }
     }
     //Lấy danh sách sản phẩm

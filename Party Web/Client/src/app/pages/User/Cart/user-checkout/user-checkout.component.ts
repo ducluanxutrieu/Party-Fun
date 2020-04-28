@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 
 import { Item } from '../../../../_models/item.model';
 import { ProductService } from '../../../../_services/product.service';
-import { api } from '../../../../_api/apiUrl'
+import { api } from '../../../../_api/apiUrl';
+
+import { Bill } from '../../../../_models/bill.model';
 
 declare var toastr;
 
@@ -51,6 +53,7 @@ export class UserCheckoutComponent implements OnInit {
     let body = `lishDishs=${JSON.stringify(item_ordered)}&numbertable=${this.numOfTable}&dateParty=${this.deliveryDate}&discount="0"`;
     this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
+        let temp = res_data.body as Bill;
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
         toastr.success("Order success!");
         localStorage.removeItem('cart');
@@ -60,7 +63,7 @@ export class UserCheckoutComponent implements OnInit {
           dateParty: this.deliveryDate,
           total_price: this.total
         }))
-        this.router.navigate(['/receipt']);
+        this.router.navigate(['/receipt/' + temp.bill._id]);
       },
       err => {
         console.log(err);
