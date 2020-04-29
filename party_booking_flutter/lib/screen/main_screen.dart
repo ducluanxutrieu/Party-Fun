@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,7 +12,6 @@ import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/dialogs.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/login_screen.dart';
@@ -53,6 +53,83 @@ class _MainScreenState extends State<MainScreen> {
     // _appBarTitle = Text(_accountModel.fullName);
     _getListDishes();
     _initSearch();
+  }
+
+  void dialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (bCtx) {
+          return AlertDialog(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            content: Container(
+              width: MediaQuery.of(bCtx).size.width * 2 / 3,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Added to your Cart',
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Do you want to check your Cart ?',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              _actionButton('Cancel', () {
+                Navigator.of(bCtx).pop();
+              }),
+              _actionButton('Yes', () {
+                Navigator.of(bCtx).pop();
+                Navigator.pushNamed(context, '/cart');
+              }),
+            ],
+          );
+        });
+  }
+
+  Widget _actionButton(String text, Function handle) {
+    return FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        color: Colors.green,
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        onPressed: handle,
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+        ));
   }
 
   void checkAlreadyLogin() async {
@@ -219,14 +296,16 @@ class _MainScreenState extends State<MainScreen> {
             text: 'Profile',
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfileScreen(
-                            mAccountModel: _accountModel,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(
+                    mAccountModel: _accountModel,
+                  ),
+                ),
+              );
             }),
         _createDrawerItem(
-            icon: Icons.location_on, text: 'Address', onTap: null),
+            icon: Icons.location_on, text: 'Address', onTap: null,),
         _createDrawerItem(icon: Icons.history, text: 'My Ordered', onTap: null),
         Divider(),
         _createDrawerItem(
@@ -375,14 +454,48 @@ class _MainScreenState extends State<MainScreen> {
                     IconButton(
                       icon: Icon(FontAwesomeIcons.cartPlus),
                       //   onPressed: () => model.addProduct(dishModel)
-                      onPressed: () async {
-                        final action = await Dialogs.yesAbortDialog(
-                            context,
-                            'Added to your cart',
-                            'Do you want to check your cart?');
-                        if (action == DialogAction.yes) {
-                          Navigator.pushNamed(context, '/cart');
-                        } else {}
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (bCtx) {
+                              Timer(Duration(seconds: 3), () {
+                                Navigator.pop(context);
+                                dialog(context);
+                              });
+                              return AlertDialog(
+                                backgroundColor: Colors.white.withOpacity(0.5),
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                content: Container(
+                                  width: MediaQuery.of(bCtx).size.width * 2 / 3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10.0, 10, 10, 0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Lottie.asset(
+                                            Assets.animaddtocart,
+                                            repeat: true,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
                         model.addProduct(dishModel);
                       },
                     ),
