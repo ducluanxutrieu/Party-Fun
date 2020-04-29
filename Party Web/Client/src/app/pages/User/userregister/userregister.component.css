@@ -1,8 +1,13 @@
-.form_container{
-    margin : 50px auto;
-    width:500px;
+.content_wrapper {
+    background-color: #f1f1f1;
+}
+
+.form_container {
+    margin: 50px auto;
+    width: 500px;
     max-width: 100%;
 }
+
 form {
     background: rgb(234, 243, 255);
     width: 100%;
@@ -11,6 +16,7 @@ form {
     border-radius: 5px;
     border: 1px solid #f37d42;
 }
+
 form header {
     text-align: center;
     background: #f37d42;
@@ -19,6 +25,7 @@ form header {
     font-size: 1.4em;
     border-radius: 5px 5px 0px 0px;
 }
+
 form label {
     font-weight: 400;
     margin-left: 20px;
@@ -26,6 +33,7 @@ form label {
     margin-top: 20px;
     margin-bottom: 5px;
 }
+
 form input {
     display: block;
     width: 90%;
@@ -36,6 +44,7 @@ form input {
     outline: none;
     border: 1px solid #ccc;
 }
+
 form button {
     position: relative;
     margin-top: 30px;
@@ -52,33 +61,38 @@ form button {
     cursor: pointer;
     transition: all 0.15s ease-in-out;
 }
+
 form button:hover {
     background: #ef4d4d;
 }
-form .invalid-alert{
+
+form .invalid-alert {
     margin-top: 6px;
     margin-left: 20px;
     color: red;
     font-size: 0.8em;
 }
+
 .bottom-text {
     box-sizing: border-box;
     color: #666666;
     font-size: 12px;
     text-align: center;
 }
-.bottom-text p  {
+
+.bottom-text p {
     margin-top: 15px;
-    font-size:14px;
+    font-size: 14px;
 }
+
 .bottom-text a {
     color: #f37d42;
     text-decoration: none;
-    font-size:14px;
+    font-size: 14px;
 }
 
-.bottom-text p a{
-    color:#f37d42;
+.bottom-text p a {
+    color: #f37d42;
     margin-left: 5px;
     transition: .5s ease-in;
     -webkit-transition: .5s ease-in;
@@ -86,6 +100,7 @@ form .invalid-alert{
     -o-transition: .5s ease-in;
     -moz-transition: .5s ease-in;
 }
+
 .bottom-text p a:hover {
-    color:#007bff; 
+    color: #007bff;
 }

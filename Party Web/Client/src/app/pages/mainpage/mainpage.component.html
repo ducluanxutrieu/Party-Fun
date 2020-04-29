@@ -2,6 +2,7 @@
 <html>
 
 <body>
+    <app-header></app-header>
     <!-- Page Content -->
     <div class="content-container container">
         <div class="row">
@@ -36,19 +37,19 @@
                         <div class="carousel-item active">
                             <a href="product/{{new_products[0]?._id}}"><img class="d-block img-fluid big-thumb-img"
                                     src={{new_products[0]?.image[0]}}
-                                    onError="this.src='../../assets/images/carousel-thumbnail-default.png';"
+                                    onError="this.src='/assets/images/carousel-thumbnail-default.png';"
                                     alt="First slide"></a>
                         </div>
                         <div class="carousel-item">
                             <a href="product/{{new_products[1]?._id}}"><img class="d-block img-fluid big-thumb-img"
                                     src={{new_products[1]?.image[0]}}
-                                    onError="this.src='../../assets/images/carousel-thumbnail-default.png';"
+                                    onError="this.src='/assets/images/carousel-thumbnail-default.png';"
                                     alt="Second slide"></a>
                         </div>
                         <div class="carousel-item">
                             <a href="product/{{new_products[2]?._id}}"><img class="d-block img-fluid big-thumb-img"
                                     src={{new_products[2]?.image[0]}}
-                                    onError="this.src='../../assets/images/carousel-thumbnail-default.png';"
+                                    onError="this.src='/assets/images/carousel-thumbnail-default.png';"
                                     alt="Third slide"></a>
                         </div>
                     </div>
@@ -103,6 +104,7 @@
         </div>
     </div>
     <scroll-to-top></scroll-to-top>
+    <app-footer></app-footer>
 </body>
 
 </html>

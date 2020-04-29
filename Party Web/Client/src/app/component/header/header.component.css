@@ -1,13 +1,8 @@
-html,body{
-	color: white;
+.navbar-custom {
+	background-color: #f37d42;
 }
-.header h1{
-color:#14a6fa;
-text-align: center;
-margin: 0px;
-padding: 0.5em;
-}
-.header a{
-	text-decoration:none;
-	font-family: 'Lucida Sans';
+
+.brand-name {
+	font-family: ReadMyHandLL, Roboto, Helvetica;
+	font-weight: bold;
 }

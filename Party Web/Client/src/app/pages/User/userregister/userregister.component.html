@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<body>
+<div class="content_wrapper">
+    <app-header></app-header>
     <div class="form_container">
         <form #userreg = "ngForm" (ngSubmit) = "onClickSubmit(userreg.value)" id="regform">
             <header>Register</header>
@@ -26,5 +24,5 @@
             </div>
         </form>
     </div>
-</body>
-</html>
+    <app-footer></app-footer>
+</div>
