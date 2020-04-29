@@ -109,4 +109,16 @@ class _$AppApiService extends AppApiService {
     return client
         .send<PartyBookResponseModel, PartyBookResponseModel>($request);
   }
+
+  @override
+  Future<Response<GetPaymentResponseModel>> getPayment(
+      {String token, String id}) {
+    final $url = 'payment/get_payment';
+    final $params = <String, dynamic>{'_id': id};
+    final $headers = {'authorization': token};
+    final $request = Request('GET', $url, client.baseUrl,
+        parameters: $params, headers: $headers);
+    return client
+        .send<GetPaymentResponseModel, GetPaymentResponseModel>($request);
+  }
 }

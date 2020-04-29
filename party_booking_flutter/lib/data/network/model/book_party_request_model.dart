@@ -43,21 +43,23 @@ class ListDishes {
   int numberDish;
   String id;
   String name;
+  String image;
 
-  ListDishes({this.numberDish, this.id, this.name});
+  ListDishes({this.numberDish, this.id, this.name, this.image});
 
   static ListDishes fromJsonFactory(Map<String, dynamic> json) =>
       ListDishes.fromJson(json);
 
   factory ListDishes.fromJson(Map<String, dynamic> json) => ListDishes(
-        numberDish: json["numberDish"],
-        id: json["_id"],
-        name: json["name"],
-      );
+      numberDish: json["numberDish"],
+      id: json["_id"],
+      name: json["name"],
+      image: json['image']);
 
   Map<String, dynamic> toJson() => {
         "numberDish": numberDish,
         "_id": id,
         "name": name,
+        'image': image,
       };
 }

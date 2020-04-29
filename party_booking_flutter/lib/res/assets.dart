@@ -8,4 +8,5 @@ class Assets {
   static String get animBagError => 'assets/jsons/bag_error.json';
   static String get animReviewDish => 'assets/jsons/give-us-a-review.json';
   static String get animBookSuccess => 'assets/jsons/food-around-the-city.json';
+  static String get animPayment => 'assets/jsons/orange-payment.json';
 }
