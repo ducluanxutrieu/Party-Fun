@@ -112,12 +112,12 @@ class _$AppApiService extends AppApiService {
 
   @override
   Future<Response<GetPaymentResponseModel>> getPayment(
-      {String token, GetPaymentRequestModel mode}) {
+      {String token, String id}) {
     final $url = 'payment/get_payment';
+    final $params = <String, dynamic>{'_id': id};
     final $headers = {'authorization': token};
-    final $body = mode;
-    final $request =
-        Request('GET', $url, client.baseUrl, body: $body, headers: $headers);
+    final $request = Request('GET', $url, client.baseUrl,
+        parameters: $params, headers: $headers);
     return client
         .send<GetPaymentResponseModel, GetPaymentResponseModel>($request);
   }

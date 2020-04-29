@@ -1,17 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
-import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/data/network/model/get_payment_request_mode.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stripe_payment/stripe_payment.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookPartySuccessScreen extends StatefulWidget {
   final Bill mBill;
@@ -23,27 +21,13 @@ class BookPartySuccessScreen extends StatefulWidget {
 }
 
 class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
-  Token _paymentToken;
-  PaymentMethod _paymentMethod;
-
-//  PaymentIntentResult _paymentIntent;
-//  CreditCard testCard;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  var cardInfo = CardFormPaymentRequest(
-      prefilledInformation: PrefilledInformation(
-          billingAddress: BillingAddress(
-              name: 'PartyBooking',
-              city: 'HCM',
-              country: 'VietNam',
-              line1: 'KTX Khu A',
-              postalCode: '70000')),
-      requiredBillingAddressFields: 'KTX Khu A');
 
   @override
   initState() {
     super.initState();
     StripePayment.setOptions(StripeOptions(
-        publishableKey: "pk_test_JAMtZa7BVlk7wXRM3aUtsg3H00rFK1TwPR",
+        publishableKey: "pk_test_28owFDjd02mGhWN5XUDoq1S700UciXGH9F",
         merchantId: "Test",
         androidPayMode: 'test'));
   }
@@ -64,10 +48,6 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
           label: Text(' Pay Now'),
           icon: Icon(FontAwesomeIcons.creditCard),
           onPressed: () {
-/*            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyApp()) */
             requestSource(widget.mBill);
           }),
       body: SingleChildScrollView(
@@ -197,74 +177,22 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
     );
   }
 
-  void getPayment(String id, String token, int totalMoney, AccountModel accountModel) async{
-    var model = GetPaymentRequestModel(id: id);
-    await AppApiService.create().getPayment(mode: model, token: token).then((onValue){
-      StripePayment.createSourceWithParams(SourceParams(
-        type: 'ideal',
-        amount: totalMoney,
-        country: 'vn',
-        email: accountModel.email,
-        name: accountModel.fullName,
-        currency: 'VND',
-        returnURL: onValue.body.data.successUrl,
-      )).then((source) {
-        _scaffoldKey.currentState
-            .showSnackBar(SnackBar(content: Text('Received ${source.sourceId}')));
-      }).catchError(setError);
-    }, onError: setError);
+  void getPayment(String id, String token, int totalMoney) async {
+    await AppApiService.create().getPayment(token: token, id: id).then(
+            (onValue) async {
+              String urlSession = onValue.body.data.id;
+              String url = "http://139.180.131.30/client/payment/mobile/$urlSession";
+              if (await canLaunch(url)) {
+              await launch(url);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (Route<dynamic> route) => false);
+              } else {
+              throw 'Could not launch $url';
+              }
+        }, onError: setError);
   }
 
   void requestSource(Bill mBill) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String accountJson = preferences.getString(Constants.ACCOUNT_MODEL_KEY);
-    AccountModel accountModel = AccountModel.fromJson(json.decode(accountJson));
-    getPayment(mBill.id, preferences.getString(Constants.USER_TOKEN), mBill.totalMoney, accountModel);
+    getPayment(mBill.id, preferences.getString(Constants.USER_TOKEN), mBill.totalMoney);
   }
 }
-
-//  void requestPaymentNative() async{
-//    bool isSupportNativePay = await StripePayment.deviceSupportsNativePay();
-//    if(isSupportNativePay){
-//      StripePayment.paymentRequestWithNativePay(
-//        androidPayOptions: AndroidPayPaymentRequest(
-//          total_price: widget.mBill.totalMoney.toString(),
-//          currency_code: "VND",
-//        ),
-//        applePayOptions: ApplePayPaymentOptions(
-//          countryCode: 'VN',
-//          currencyCode: 'VND',
-//          items: [
-//            ApplePayItem(
-//              label: 'Test',
-//              amount: widget.mBill.totalMoney.toString(),
-//            )
-//          ],
-//        ),
-//      ).then((token) {
-//        setState(() {
-//          _paymentToken = token;
-//        });
-//      }).catchError((setError) => {);
-//    }else{
-//
-//    }
-//  }
-
-//  void createPaymentWithCard() {
-//    StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest())
-//        .then((paymentMethod) {
-//      StripePayment.createTokenWithCard(
-//        paymentMethod.card,
-//      ).then((token) {
-//        setState(() {
-//          _paymentToken = token;
-//        });
-//      }).catchError(setError);
-//      _scaffoldKey.currentState.showSnackBar(
-//          SnackBar(content: Text('Received ${paymentMethod.id}')));
-//      setState(() {
-//        _paymentMethod = paymentMethod;
-//      });
-//    }).catchError(setError);
-//  }

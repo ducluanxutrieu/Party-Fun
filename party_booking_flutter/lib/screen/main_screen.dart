@@ -167,13 +167,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: _appBarTitle,
         actions: <Widget>[
-
-             InkWell(onTap: _searchPressed, child: _searchIcon),
-
-          //   IconButton(
-          //   icon: Icon(Icons.shopping_cart),
-          //    onPressed: () => Navigator.pushNamed(context, '/cart'),
-          // )
+          InkWell(onTap: _searchPressed, child: _searchIcon),
           _shoppingCartBadge(),
         ],
       ),
@@ -230,7 +224,6 @@ class _MainScreenState extends State<MainScreen> {
                       builder: (context) => ProfileScreen(
                             mAccountModel: _accountModel,
                           )));
-              //   Navigator.pop(profile);
             }),
         _createDrawerItem(
             icon: Icons.location_on, text: 'Address', onTap: null),
@@ -382,13 +375,14 @@ class _MainScreenState extends State<MainScreen> {
                     IconButton(
                       icon: Icon(FontAwesomeIcons.cartPlus),
                       //   onPressed: () => model.addProduct(dishModel)
-                      onPressed: () async{
-                        final action =
-                        await Dialogs.yesAbortDialog(context, 'Added to your cart', 'Do you want to check your cart?');
+                      onPressed: () async {
+                        final action = await Dialogs.yesAbortDialog(
+                            context,
+                            'Added to your cart',
+                            'Do you want to check your cart?');
                         if (action == DialogAction.yes) {
                           Navigator.pushNamed(context, '/cart');
-                        } else {
-                        }
+                        } else {}
                         model.addProduct(dishModel);
                       },
                     ),
