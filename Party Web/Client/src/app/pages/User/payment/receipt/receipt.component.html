@@ -28,7 +28,7 @@
                                 <em>Date: {{receipt.dateParty | date: 'dd-MM-yyyy'}}</em>
                             </p>
                             <p>
-                                <em>Receipt #: 34522677W</em>
+                                <em>Receipt #: {{bill_id}}</em>
                             </p>
                         </div>
                     </div>
@@ -79,8 +79,8 @@
                             </tbody>
                         </table>
                         <div class="col-md-12">
-                            <a routerLink="/payment" type="button" class="btn btn-success btn-lg btn-block nav-btn">
-                                    Pay Now <i class="fa fa-angle-right fa-bold"></i>
+                            <a type="button" class="btn btn-success btn-lg btn-block nav-btn" (click)="pay()">
+                                Pay Now <i class="fa fa-angle-right fa-bold"></i>
                             </a>
                             <a routerLink="/mainpage" type="button" class="btn btn-danger btn-lg btn-block nav-btn">
                                 <i class="fa fa-angle-left"></i> Back to main page 

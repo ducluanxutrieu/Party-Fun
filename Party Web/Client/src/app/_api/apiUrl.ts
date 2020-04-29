@@ -19,4 +19,6 @@ export const api = {
     rateDish: `${apiUrl}/product/ratedish`,              //rate dish
 
     orderConfirm: `${apiUrl}/product/book`,              //confirm order
+
+    get_payment: `${apiUrl}/payment/get_payment`
 };

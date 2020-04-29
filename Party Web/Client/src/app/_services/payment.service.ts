@@ -1,18 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
 
 import { api } from '../_api/apiUrl';
+//Models
+import { Payment } from '../_models/payment.model';
+//Services
+import { StripeService } from './stripe.service';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
-
+    headers = new HttpHeaders({
+        'Content-type': 'application/x-www-form-urlencoded',
+        'Authorization': localStorage.getItem('token')
+    });
 
     constructor(
         private http: HttpClient,
-        private router: Router
+        private stripeService: StripeService,
     ) { }
 
-    pay(){
+    pay(checkout_session_id: string) {
+        this.stripeService.stripe.redirectToCheckout({
+            sessionId: checkout_session_id
+        }).then(function (result) {
+            console.log(result.error.message);
+        })
+    }
+
+    get_paymentInfo(bill_id: string) {
+        const option = {
+            headers: this.headers,
+        }
+        let body = `_id=${bill_id}`;
+        return this.http.get<Payment>(api.get_payment + '?_id=' + bill_id, option);
     }
 }
