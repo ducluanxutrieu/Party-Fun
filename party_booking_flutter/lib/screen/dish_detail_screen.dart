@@ -6,19 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
+import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/res/custom_icons_icons.dart';
+import 'package:party_booking/screen/add_new_dish_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DishDetailScreen extends StatefulWidget {
   final DishModel dishModel;
+  final AccountModel accountModel;
 
-  DishDetailScreen({Key key, @required this.dishModel});
+  DishDetailScreen({Key key, @required this.dishModel, this.accountModel});
 
   @override
   _DishDetailScreenState createState() => _DishDetailScreenState();
@@ -30,6 +35,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   Animation<Offset> offset;
   final myController = TextEditingController();
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  DishModel _dishModel;
 
   _DishDetailScreenState();
 
@@ -42,6 +48,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
 
   @override
   void initState() {
+    _dishModel = widget.dishModel;
     super.initState();
 
     controller =
@@ -81,7 +88,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       children: <Widget>[
         RatingBar(
           itemCount: 5,
-          initialRating: widget.dishModel.rate.average,
+          initialRating: _dishModel.rate.average,
           minRating: 1,
           allowHalfRating: true,
           direction: Axis.horizontal,
@@ -96,7 +103,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           height: 10,
         ),
         Text(
-          widget.dishModel.description,
+          _dishModel.description,
           overflow: TextOverflow.clip,
           style: TextStyle(fontFamily: 'Montserrat', fontSize: 16),
         ),
@@ -174,7 +181,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     return Stack(
       children: <Widget>[
         Hero(
-          tag: widget.dishModel.id,
+          tag: _dishModel.id,
           child: Image.asset(
             Assets.imgDishDetail,
             fit: BoxFit.cover,
@@ -196,7 +203,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
           items: UTiu.mapIndexed(
-            widget.dishModel.image,
+            _dishModel.image,
             (index, value) => Container(
               padding: EdgeInsets.all(10),
               child: ClipRRect(
@@ -348,7 +355,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     var result = await AppApiService.create().requestRating(
       token: token,
       model: RateDishRequestModel(
-          id: widget.dishModel.id,
+          id: _dishModel.id,
           content: myController.text,
           rateScore: rateScore),
     );
@@ -368,7 +375,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.dishModel.name),
+        title: Text(_dishModel.name),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -379,12 +386,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _dialogRating(context),
-        label: Text('Rating'),
-        icon: Icon(FontAwesomeIcons.edit),
-        tooltip: 'Write your review!',
-      ),
+      floatingActionButton: _buildFABEditDish(context),
       body: Column(
         children: <Widget>[
           _headerDish(),
@@ -401,7 +403,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                       height: 20,
                     ),
                     Text(
-                      widget.dishModel.name,
+                      _dishModel.name,
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 30,
@@ -412,11 +414,11 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                       height: 10,
                     ),
                     Text(
-                      widget.dishModel.type,
+                      _dishModel.type,
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 22),
                     ),
                     Expanded(
-                        child: _contentDish(widget.dishModel.rate.lishRate))
+                        child: _contentDish(_dishModel.rate.lishRate))
                   ],
                 ),
               ),
@@ -425,5 +427,32 @@ class _DishDetailScreenState extends State<DishDetailScreen>
         ],
       ),
     );
+  }
+
+  FloatingActionButton _buildFABEditDish(BuildContext context) {
+    bool isStaff = widget.accountModel.role == "nhanvien";
+
+    return isStaff ?
+    FloatingActionButton.extended(
+      onPressed: () => _goToUpdateDish(context),
+      label: Text('Edit'),
+      icon: Icon(FontAwesomeIcons.edit),
+      tooltip: 'Edit this dish',
+    ) : FloatingActionButton.extended(
+      onPressed: () => _dialogRating(context),
+      label: Text('Rating'),
+      icon: Icon(CustomIcons.ic_rating),
+      tooltip: 'Write your review!',
+    );
+  }
+
+  _goToUpdateDish(BuildContext context) async {
+    DishModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDishScreen(_dishModel)));
+    if(result != null){
+      setState(() {
+        _dishModel = result;
+        Navigator.maybePop(context, result);
+      });
+    }
   }
 }

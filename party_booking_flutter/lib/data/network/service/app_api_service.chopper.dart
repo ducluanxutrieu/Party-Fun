@@ -121,4 +121,26 @@ class _$AppApiService extends AppApiService {
     return client
         .send<GetPaymentResponseModel, GetPaymentResponseModel>($request);
   }
+
+  @override
+  Future<Response<UpdateDishResponseModel>> updateDish(
+      {String token, Map<String, dynamic> data}) {
+    final $url = 'product/updatedish';
+    final $headers = {'authorization': token};
+    final $body = data;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client
+        .send<UpdateDishResponseModel, UpdateDishResponseModel>($request);
+  }
+
+  @override
+  Future<Response<BaseResponseModel>> deleteDish({String token, String id}) {
+    final $url = 'product/deletedish';
+    final $headers = {'authorization': token};
+    final $body = <String, dynamic>{'_id': id};
+    final $request =
+        Request('DELETE', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BaseResponseModel, BaseResponseModel>($request);
+  }
 }

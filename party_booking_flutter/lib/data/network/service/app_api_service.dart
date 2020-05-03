@@ -10,9 +10,9 @@ import 'package:party_booking/data/network/model/login_response_model.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
+import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 
-import '../interceptor/network_interceptor.dart';
 import 'json_serializable_converter.dart';
 
 part 'app_api_service.chopper.dart';
@@ -77,6 +77,16 @@ abstract class AppApiService extends ChopperService {
     @Query('_id') String id,
   });
 
+  @Post(path: 'product/updatedish')
+  Future<Response<UpdateDishResponseModel>> updateDish({
+    @Header('authorization') String token,
+    @body Map<String, dynamic> data,
+  });
+
+  @Delete(path: 'product/deletedish')
+  Future<Response<BaseResponseModel>> deleteDish(
+      {@Header('authorization') String token, @Field('_id') String id});
+
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',
@@ -87,7 +97,6 @@ abstract class AppApiService extends ChopperService {
         errorConverter: JsonConverter(),
         interceptors: [
           HttpLoggingInterceptor(),
-          NetworkInterceptor(),
         ]);
     return _$AppApiService(client);
   }
@@ -108,6 +117,7 @@ abstract class AppApiService extends ChopperService {
       ListDishes: ListDishes.fromJsonFactory,
       PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
       GetPaymentResponseModel: GetPaymentResponseModel.fromJsonFactory,
+      UpdateDishResponseModel: UpdateDishResponseModel.jsonFactory,
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
       Data: Data.fromJsonFactory,

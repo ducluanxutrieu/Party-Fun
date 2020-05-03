@@ -50,6 +50,7 @@ dependencies:
   cached_network_image: ^2.0.0
   scoped_model: ^1.0.1
   stripe_payment: ^1.0.6
+  material_design_icons_flutter: ^4.0.5145
 
 
 dev_dependencies:
@@ -87,6 +88,9 @@ flutter:
     - family: Source Sans Pro
       fonts:
         - asset: assets/fonts/SourceSansPro-Regular.ttf
+    - family: CustomIcons
+      fonts:
+        - asset: assets/icons/CustomIcons.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

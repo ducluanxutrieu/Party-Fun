@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -23,18 +24,23 @@ class AppImageAPIService {
   Future<BaseResponseModel> updateAvatar(File imageToUpdate) async {
     FormData formData = new FormData.fromMap({
 //      "image": new UploadFileInfo(imageToUpdate, imageToUpdate.name, contentType: ContentType('image', 'jpeg')),
-    "image": await MultipartFile.fromFile(imageToUpdate.path, filename: imageToUpdate.path?.split("/")?.last, contentType: MediaType('image', 'jpeg'))
+      "image": await MultipartFile.fromFile(imageToUpdate.path,
+          filename: imageToUpdate.path?.split("/")?.last,
+          contentType: MediaType('image', 'jpeg'))
     });
 
     BaseResponseModel response;
-    var result = await dio.post('user/uploadavatar', data: formData,
-        /*onSendProgress: (int sent, int total) {
+    var result = await dio.post(
+      'user/uploadavatar',
+      data: formData,
+      /*onSendProgress: (int sent, int total) {
       print("Luan sent");
       print("$sent $total");
     }, onReceiveProgress: (int receive, int total) {
       print("Luan receive");
       print("$receive $total");
-    }*/);
+    }*/
+    );
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);
@@ -42,13 +48,16 @@ class AppImageAPIService {
     return response;
   }
 
-  Future<BaseResponseModel> addNewDish(List<Asset> listImage, String name, String description, String type, String price) async {
+  Future<BaseResponseModel> addNewDish(List<Asset> listImage, String name,
+      String description, String type, String price) async {
     var listMultiPath = List();
 
-    for(int i = 0; i < listImage.length; i++){
-      var path = await FlutterAbsolutePath.getAbsolutePath(listImage[i].identifier);
+    for (int i = 0; i < listImage.length; i++) {
+      var path =
+          await FlutterAbsolutePath.getAbsolutePath(listImage[i].identifier);
       listMultiPath.add(await MultipartFile.fromFile(path,
-          filename: listImage[i].name, contentType: MediaType('image', 'jpeg')));
+          filename: listImage[i].name,
+          contentType: MediaType('image', 'jpeg')));
     }
 
     FormData formData = new FormData.fromMap({
@@ -62,7 +71,7 @@ class AppImageAPIService {
 
     BaseResponseModel response;
     var result = await dio.post('product/adddish', data: formData,
-    onSendProgress: (int sent, int total){
+        onSendProgress: (int sent, int total) {
       _updateProgress(sent, total);
     });
 
@@ -70,7 +79,37 @@ class AppImageAPIService {
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);
-    }else{
+    } else {
+      UTiu.showToast(BaseResponseModel.fromJson(result.data).message);
+    }
+    progressDialog.dismiss();
+    return response;
+  }
+
+  Future<BaseResponseModel> updateDish(String name,
+      String description, String type, String price, String id) async {
+
+    Map<String, dynamic> formData = {
+      '_id' : id,
+      'name': name,
+      'description': description,
+      'type': type,
+      'discount': '0',
+      'price': price,
+    };
+
+    var jsonValue = jsonEncode(formData);
+
+    BaseResponseModel response;
+    var result = await dio.post('product/updatedish', data: jsonValue,
+        onSendProgress: (int sent, int total) {
+      _updateProgress(sent, total);
+    }).catchError(
+        (onError) => {print('product/updatedish'), print(onError.toString()), progressDialog.dismiss()});
+
+    if (result.statusCode == 200) {
+      response = BaseResponseModel.fromJson(result.data);
+    } else {
       UTiu.showToast(BaseResponseModel.fromJson(result.data).message);
     }
     progressDialog.dismiss();
@@ -79,7 +118,7 @@ class AppImageAPIService {
 
   void _updateProgress(int sent, int total) {
     progressDialog.update(
-      progress: (sent/total)*100,
+      progress: (sent / total) * 100,
       message: "Please wait...",
       progressWidget: Container(
           padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
@@ -128,7 +167,10 @@ class AppImageAPIService {
         responseHeader: true));
 
     //Progress
-    ProgressDialog progressDialog = new ProgressDialog(context,type: ProgressDialogType.Download, isDismissible: false, showLogs: true);
+    ProgressDialog progressDialog = new ProgressDialog(context,
+        type: ProgressDialogType.Download,
+        isDismissible: false,
+        showLogs: true);
     progressDialog.style(
         message: 'Uploading images...',
         borderRadius: 10.0,
@@ -141,8 +183,7 @@ class AppImageAPIService {
         progressTextStyle: TextStyle(
             color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
         messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600)
-    );
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
     progressDialog.show();
     return AppImageAPIService(dio: dio, progressDialog: progressDialog);
   }

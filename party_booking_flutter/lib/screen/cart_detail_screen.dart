@@ -49,7 +49,7 @@ class _CartPageState extends State<CartPage> {
                             return ListTile(
                               title: Text(model.cart[index].name),
                               subtitle: Text(
-                                  "${model.cart[index].qty.toString()} x ${model.cart[index].price.toString()} = ${(model.cart[index].qty * model.cart[index].price)}"),
+                                  "${model.cart[index].quantity.toString()} x ${model.cart[index].price.toString()} = ${(model.cart[index].quantity * model.cart[index].price)}"),
                               trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -57,7 +57,7 @@ class _CartPageState extends State<CartPage> {
                                       icon: Icon(Icons.add),
                                       onPressed: () {
                                         model.updateProduct(model.cart[index],
-                                            model.cart[index].qty + 1);
+                                            model.cart[index].quantity + 1);
                                         // model.removeProduct(model.cart[index]);
                                       },
                                     ),
@@ -65,7 +65,7 @@ class _CartPageState extends State<CartPage> {
                                       icon: Icon(Icons.remove),
                                       onPressed: () {
                                         model.updateProduct(model.cart[index],
-                                            model.cart[index].qty - 1);
+                                            model.cart[index].quantity - 1);
                                         // model.removeProduct(model.cart[index]);
                                       },
                                     ),

@@ -133,7 +133,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
 
     ScopedModel.of<CartModel>(context, rebuildOnChange: true).cart.forEach(
         (item) =>
-            {listDish.add(ListDishes(numberDish: item.qty, id: item.id))});
+            {listDish.add(ListDishes(numberDish: item.quantity, id: item.id))});
 
     var model = BookPartyRequestModel(
         dateParty: DateFormat(Constants.DATE_TIME_FORMAT_SERVER).format(day),

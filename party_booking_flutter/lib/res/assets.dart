@@ -4,6 +4,7 @@ class Assets {
   static String get icLogoApp => 'assets/images/ic_logo.png';
   static String get imgDishDetail => 'assets/images/background_dish_detail.jpg';
   static String get icCheck => 'assets/images/check.png';
+  static String get icRating => 'assets/images/ic_rating.png';
 
   static String get animBagError => 'assets/jsons/bag_error.json';
   static String get animReviewDish => 'assets/jsons/give-us-a-review.json';
