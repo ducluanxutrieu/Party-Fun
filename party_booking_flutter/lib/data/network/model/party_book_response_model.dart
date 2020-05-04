@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:party_booking/data/network/model/book_party_request_model.dart';
+import 'get_user_profile_response_model.dart';
 
 PartyBookResponseModel partyBookResponseModelFromJson(String str) =>
     PartyBookResponseModel.fromJson(json.decode(str));

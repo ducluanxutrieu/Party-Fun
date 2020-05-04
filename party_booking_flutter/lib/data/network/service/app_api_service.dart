@@ -13,6 +13,7 @@ import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 
+import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
 import 'json_serializable_converter.dart';
 
 part 'app_api_service.chopper.dart';
@@ -62,6 +63,11 @@ abstract class AppApiService extends ChopperService {
 
   @Get(path: 'user/profile')
   Future<Response<AccountResponseModel>> getUserProfile({
+    @Header('authorization') String token,
+  });
+
+  @Get(path: 'user/profile')
+  Future<Response<GetUserProfileResponseModel>> getUserProfile1({
     @Header('authorization') String token,
   });
 
@@ -118,6 +124,7 @@ abstract class AppApiService extends ChopperService {
       PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
       GetPaymentResponseModel: GetPaymentResponseModel.fromJsonFactory,
       UpdateDishResponseModel: UpdateDishResponseModel.jsonFactory,
+      GetUserProfileResponseModel: GetUserProfileResponseModel.fromJsonFactory,
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
       Data: Data.fromJsonFactory,

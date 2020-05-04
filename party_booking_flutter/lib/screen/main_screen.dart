@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/history_order_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
@@ -262,7 +262,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Visibility buildFABAddNewDish() {
-    bool isVisible = _accountModel.role == 'nhanvien';
+    bool isVisible = (_accountModel.role ?? "") == 'nhanvien';
     return Visibility(
       visible: isVisible,
       child: FloatingActionButton(
@@ -315,11 +315,27 @@ class _MainScreenState extends State<MainScreen> {
               );
             }),
         _createDrawerItem(
-            icon: Icons.location_on, text: 'Address', onTap: null,),
-        _createDrawerItem(icon: Icons.history, text: 'My Ordered', onTap: null),
+          icon: Icons.location_on,
+          text: 'Address',
+          onTap: null,
+        ),
+        _createDrawerItem(
+            icon: Icons.history,
+            text: 'My Ordered',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HistoryOrderScreen(),
+                ),
+              );
+            }),
         Divider(),
         _createDrawerItem(
-            icon: FontAwesomeIcons.info, text: 'About Us', onTap: null),
+          icon: FontAwesomeIcons.info,
+          text: 'About Us',
+          onTap: null,
+        ),
         _createDrawerItem(
             icon: FontAwesomeIcons.signOutAlt, text: 'Logout', onTap: _signOut),
         Center(
@@ -485,7 +501,7 @@ class _MainScreenState extends State<MainScreen> {
     showDialog(
         context: context,
         builder: (bCtx) {
-          Timer(Duration(seconds: 3), () {
+          Timer(Duration(milliseconds: 700), () {
             Navigator.pop(context);
             dialog(context);
           });

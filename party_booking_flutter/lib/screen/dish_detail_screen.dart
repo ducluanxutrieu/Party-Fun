@@ -10,7 +10,6 @@ import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
-import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';

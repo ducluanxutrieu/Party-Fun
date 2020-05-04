@@ -115,7 +115,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       print(result.toString());
     }
-
   }
 
   Future<void> retrieveLostData() async {

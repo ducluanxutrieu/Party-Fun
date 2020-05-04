@@ -99,6 +99,14 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
+  Future<Response<GetUserProfileResponseModel>> getUserProfile1({String token}) {
+    final $url = 'user/profile';
+    final $headers = {'authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<GetUserProfileResponseModel, GetUserProfileResponseModel>($request);
+  }
+
+  @override
   Future<Response<PartyBookResponseModel>> bookParty(
       {String token, BookPartyRequestModel model}) {
     final $url = 'product/book';

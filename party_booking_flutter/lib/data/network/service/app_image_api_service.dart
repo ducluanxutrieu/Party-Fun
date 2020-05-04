@@ -23,7 +23,6 @@ class AppImageAPIService {
 
   Future<BaseResponseModel> updateAvatar(File imageToUpdate) async {
     FormData formData = new FormData.fromMap({
-//      "image": new UploadFileInfo(imageToUpdate, imageToUpdate.name, contentType: ContentType('image', 'jpeg')),
       "image": await MultipartFile.fromFile(imageToUpdate.path,
           filename: imageToUpdate.path?.split("/")?.last,
           contentType: MediaType('image', 'jpeg'))
@@ -33,18 +32,14 @@ class AppImageAPIService {
     var result = await dio.post(
       'user/uploadavatar',
       data: formData,
-      /*onSendProgress: (int sent, int total) {
-      print("Luan sent");
-      print("$sent $total");
-    }, onReceiveProgress: (int receive, int total) {
-      print("Luan receive");
-      print("$receive $total");
-    }*/
-    );
+    ).catchError((onError) {
+      progressDialog.dismiss();
+    });
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);
     }
+    progressDialog.dismiss();
     return response;
   }
 
@@ -118,7 +113,7 @@ class AppImageAPIService {
 
   void _updateProgress(int sent, int total) {
     progressDialog.update(
-      progress: (sent / total) * 100,
+      progress: (sent ~/ total * 100).toDouble(),
       message: "Please wait...",
       progressWidget: Container(
           padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),

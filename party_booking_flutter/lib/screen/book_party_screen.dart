@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
+import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
@@ -29,6 +30,8 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
+  static var now = new DateTime.now();
+  var twoDaysFromNow = now.add(new Duration(days: 2));
 
   final List<ListDishes> listDish = new List();
 
@@ -93,10 +96,15 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       appBar: AppBar(
         title: Text('Book Party'),
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: FormBuilder(
           key: _fbKey,
-          autovalidate: true,
+          autovalidate: false,
+          initialValue: {
+            'day': twoDaysFromNow,
+            'num': 1,
+          },
           child: Container(
             color: Colors.white,
             child: Padding(
