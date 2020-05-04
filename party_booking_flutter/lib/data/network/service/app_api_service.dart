@@ -11,7 +11,7 @@ import 'package:party_booking/data/network/model/party_book_response_model.dart'
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
-
+import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
 import '../interceptor/network_interceptor.dart';
 import 'json_serializable_converter.dart';
 
@@ -65,6 +65,11 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
   });
 
+  @Get(path: 'user/profile')
+  Future<Response<GetUserProfileResponseModel>> getUserProfile1({
+    @Header('authorization') String token,
+  });
+
   @Post(path: 'product/book')
   Future<Response<PartyBookResponseModel>> bookParty({
     @Header('authorization') String token,
@@ -108,6 +113,7 @@ abstract class AppApiService extends ChopperService {
       ListDishes: ListDishes.fromJsonFactory,
       PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
       GetPaymentResponseModel: GetPaymentResponseModel.fromJsonFactory,
+      GetUserProfileResponseModel: GetUserProfileResponseModel.fromJsonFactory,
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
       Data: Data.fromJsonFactory,

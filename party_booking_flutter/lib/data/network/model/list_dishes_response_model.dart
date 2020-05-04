@@ -3,10 +3,14 @@
 //     final listDishesResponseModel = listDishesResponseModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-ListDishesResponseModel listDishesResponseModelFromJson(String str) => ListDishesResponseModel.fromJson(json.decode(str));
 
-String listDishesResponseModelToJson(ListDishesResponseModel data) => json.encode(data.toJson());
+ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
+    ListDishesResponseModel.fromJson(json.decode(str));
+
+String listDishesResponseModelToJson(ListDishesResponseModel data) =>
+    json.encode(data.toJson());
 
 class ListDishesResponseModel {
   bool success;
@@ -22,17 +26,19 @@ class ListDishesResponseModel {
   static ListDishesResponseModel fromJsonFactory(Map<String, dynamic> json) =>
       ListDishesResponseModel.fromJson(json);
 
-  factory ListDishesResponseModel.fromJson(Map<String, dynamic> json) => ListDishesResponseModel(
-    success: json["success"],
-    message: json["message"],
-    listDishes: List<DishModel>.from(json["lishDishs"].map((x) => DishModel.fromJson(x))),
-  );
+  factory ListDishesResponseModel.fromJson(Map<String, dynamic> json) =>
+      ListDishesResponseModel(
+        success: json["success"],
+        message: json["message"],
+        listDishes: List<DishModel>.from(
+            json["lishDishs"].map((x) => DishModel.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "lishDishs": List<dynamic>.from(listDishes.map((x) => x.toJson())),
-  };
+        "success": success,
+        "message": message,
+        "lishDishs": List<dynamic>.from(listDishes.map((x) => x.toJson())),
+      };
 }
 
 class DishModel {
@@ -66,36 +72,38 @@ class DishModel {
       DishModel.fromJson(json);
 
   factory DishModel.fromJson(Map<String, dynamic> json) => DishModel(
-    id: json["_id"],
-    name: json["name"],
-    description: json["description"],
-    price: json["price"],
-    type: json["type"],
-    discount: json["discount"],
-    qty: 1,
-    image: List<String>.from(json["image"].map((x) => x)),
-    updateAt: json["updateAt"],
-    createAt: json["createAt"],
-    rate: RateModel.fromJson(json["rate"]),
-  );
+        id: json["_id"],
+        name: json["name"],
+        description: json["description"],
+        price: json["price"],
+        type: json["type"],
+        discount: json["discount"],
+        qty: 1,
+        image: List<String>.from(json["image"].map((x) => x)),
+        updateAt: json["updateAt"],
+        createAt: json["createAt"],
+        rate: RateModel.fromJson(json["rate"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "description": description,
-    "price": price,
-    "type": type,
-    "discount": discount,
-    "image": List<dynamic>.from(image.map((x) => x)),
-    "updateAt": updateAt,
-    "createAt": createAt,
-    "rate": rate.toJson(),
-  };
+        "_id": id,
+        "name": name,
+        "description": description,
+        "price": price,
+        "type": type,
+        "discount": discount,
+        "image": List<dynamic>.from(image.map((x) => x)),
+        "updateAt": updateAt,
+        "createAt": createAt,
+        "rate": rate.toJson(),
+      };
 }
+
 class CartModel extends Model {
   List<DishModel> cart = [];
   double totalCartValue = 0;
-
+  int i;
+  String totalmoney;
   int get total => cart.length;
 
   void addProduct(product) {
@@ -121,8 +129,7 @@ class CartModel extends Model {
   void updateProduct(product, qty) {
     int index = cart.indexWhere((i) => i.id == product.id);
     cart[index].qty = qty;
-    if (cart[index].qty == 0)
-      removeProduct(product);
+    if (cart[index].qty == 0) removeProduct(product);
 
     calculateTotal();
     notifyListeners();
@@ -139,16 +146,21 @@ class CartModel extends Model {
     cart.forEach((f) {
       totalCartValue += f.price * f.qty;
     });
-  }
-  int calculateTotal1() {
-   int totalCartValue = 0;
-    cart.forEach((f) {
-      totalCartValue += f.qty;
-    }
-    );
-   return totalCartValue;
+
+    i = int.parse(totalCartValue.toStringAsFixed(
+        totalCartValue.truncateToDouble() == totalCartValue ? 0 : 2));
+    final f = new NumberFormat("#,###");
+    totalmoney = f.format(i);
   }
 
+  int calculateTotal1() {
+    int totalCartValue = 0;
+    cart.forEach((f) {
+      totalCartValue += f.qty;
+    });
+
+    return totalCartValue;
+  }
 }
 
 class RateModel {
@@ -166,16 +178,17 @@ class RateModel {
       RateModel.fromJson(json);
 
   factory RateModel.fromJson(Map<String, dynamic> json) => RateModel(
-    average: json["average"].toDouble(),
-    lishRate: List<RateItemModel>.from(json["lishRate"].map((x) => RateItemModel.fromJson(x))),
-    totalpeople: json["totalpeople"],
-  );
+        average: json["average"].toDouble(),
+        lishRate: List<RateItemModel>.from(
+            json["lishRate"].map((x) => RateItemModel.fromJson(x))),
+        totalpeople: json["totalpeople"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "average": average,
-    "lishRate": List<dynamic>.from(lishRate.map((x) => x.toJson())),
-    "totalpeople": totalpeople,
-  };
+        "average": average,
+        "lishRate": List<dynamic>.from(lishRate.map((x) => x.toJson())),
+        "totalpeople": totalpeople,
+      };
 }
 
 class RateItemModel {
@@ -201,24 +214,24 @@ class RateItemModel {
       RateItemModel.fromJson(json);
 
   factory RateItemModel.fromJson(Map<String, dynamic> json) => RateItemModel(
-    username: json["username"],
-    imageUrl: json["imageurl"] == null ? null : json["imageurl"],
-    dishId: json["_iddish"],
-    scoreRate: json["scorerate"],
-    content: json["content"],
-    updateAt: json["updateAt"],
-    createAt: json["createAt"],
-  );
+        username: json["username"],
+        imageUrl: json["imageurl"] == null ? null : json["imageurl"],
+        dishId: json["_iddish"],
+        scoreRate: json["scorerate"],
+        content: json["content"],
+        updateAt: json["updateAt"],
+        createAt: json["createAt"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "username": username,
-    "imageurl": imageUrl == null ? null : imageUrl,
-    "_iddish": dishId,
-    "scorerate": scoreRate,
-    "content": content,
-    "updateAt": updateAt,
-    "createAt": createAt,
-  };
+        "username": username,
+        "imageurl": imageUrl == null ? null : imageUrl,
+        "_iddish": dishId,
+        "scorerate": scoreRate,
+        "content": content,
+        "updateAt": updateAt,
+        "createAt": createAt,
+      };
 }
 
 class EnumValues<T> {

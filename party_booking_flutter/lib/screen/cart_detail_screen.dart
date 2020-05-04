@@ -79,12 +79,12 @@ class _CartPageState extends State<CartPage> {
                   Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        "Total: \$ " +
+                        "Total: " +
                             ScopedModel.of<CartModel>(context,
                                     rebuildOnChange: true)
-                                .totalCartValue
+                                .totalmoney
                                 .toString() +
-                            "",
+                            "  " + "VND",
                         style: TextStyle(
                             fontSize: 24.0, fontWeight: FontWeight.bold),
                       )),

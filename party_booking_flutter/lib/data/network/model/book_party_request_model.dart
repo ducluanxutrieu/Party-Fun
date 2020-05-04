@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
+
 BookPartyRequestModel bookPartyRequestModelFromJson(String str) =>
     BookPartyRequestModel.fromJson(json.decode(str));
 
@@ -36,30 +38,5 @@ class BookPartyRequestModel {
         "dateParty": dateParty,
         "numbertable": numberTable,
         "lishDishs": List<dynamic>.from(lishDishs.map((x) => x.toJson())),
-      };
-}
-
-class ListDishes {
-  int numberDish;
-  String id;
-  String name;
-  String image;
-
-  ListDishes({this.numberDish, this.id, this.name, this.image});
-
-  static ListDishes fromJsonFactory(Map<String, dynamic> json) =>
-      ListDishes.fromJson(json);
-
-  factory ListDishes.fromJson(Map<String, dynamic> json) => ListDishes(
-      numberDish: json["numberDish"],
-      id: json["_id"],
-      name: json["name"],
-      image: json['image']);
-
-  Map<String, dynamic> toJson() => {
-        "numberDish": numberDish,
-        "_id": id,
-        "name": name,
-        'image': image,
       };
 }
