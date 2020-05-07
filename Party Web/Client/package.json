@@ -24,6 +24,7 @@
     "angular-cli-ghpages": "^0.6.0",
     "jw-angular-pagination": "^1.1.0",
     "ngx-bar-rating": "^1.1.0",
+    "ngx-stripe": "^7.4.4",
     "rxjs": "~6.4.0",
     "toastr": "^2.1.4",
     "tslib": "^1.10.0",

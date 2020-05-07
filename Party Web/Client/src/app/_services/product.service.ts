@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { api } from '../_api/apiUrl';
-import { Product } from '../_models/product.model'
 import { HttpClient } from '@angular/common/http';
 import { Item } from '../_models/item.model'
 import { BehaviorSubject } from 'rxjs';
@@ -22,7 +21,7 @@ export class ProductService {
         this.productList.subscribe(data => this.products = data);
         toastr.options = {
             "timeOut": "1500",
-            "positionClass": "toast-top-center"
+            "positionClass": "toast-top-left",
         }
     }
     //Lấy danh sách sản phẩm

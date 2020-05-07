@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 
-import { api } from '../../../_api/apiUrl';
 import { ProductService } from '../../../_services/product.service';
 
 

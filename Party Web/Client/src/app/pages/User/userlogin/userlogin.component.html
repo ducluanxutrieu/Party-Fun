@@ -1,5 +1,4 @@
 <html>
-
 <body>
     <app-header></app-header>
     <div class="login">
@@ -11,7 +10,6 @@
                 <input id="username" type="text" name="username" required placeholder="Enter username" ngModel #username="ngModel">
                 <div class="invalid-alert" role="alert" *ngIf="username.invalid && username?.dirty">Please enter username!</div>
                 <label for="password">Password</label>
-                <!-- <span class="showpass"><input class="checkbox" type="checkbox">Hiện mật khẩu</span> -->
                 <br>
                 <input id="password" type="password" name="pwd" placeholder="Enter password" ngModel required #pw="ngModel">
                 <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Please enter password!</div>
@@ -34,7 +32,7 @@
             </div> -->
             <div class="bottom-text">
                 <p>Doesn't have a account?<a style="font-weight: 500" href="user_register">Register</a></p>
-                <h4><a style="font-weight: 500" href="forgotpassword">Forgot your password?</a></h4>
+                <h4><a href="forgotpassword">Forgot your password?</a></h4>
             </div>
         </div>
     </div>

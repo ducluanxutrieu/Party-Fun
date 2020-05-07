@@ -9,6 +9,7 @@ import { api } from '../../../../_api/apiUrl';
 
 import { Bill } from '../../../../_models/bill.model';
 
+declare var $: any;
 declare var toastr;
 
 @Component({
@@ -82,6 +83,12 @@ export class UserCheckoutComponent implements OnInit {
   changeOfDate(event: any) {
     this.deliveryDate = event.target.value;
     this.deliveryDate = this.datepipe.transform(this.deliveryDate, 'MM/dd/yyyy HH:mm');
+
+    // let today = new Date();
+    // if (this.deliveryDate < this.datepipe.transform(today), 'MM/dd/yyyy HH:mm') {
+    //   toastr.error("Cannot choose day smaller than current date!");
+    //   $('#deliveryDate').val('');
+    // }
   }
   // changeOfTime(event: any) {
   //   this.deliveryTime = event.target.value;

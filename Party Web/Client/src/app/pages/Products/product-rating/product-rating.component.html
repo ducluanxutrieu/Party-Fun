@@ -86,7 +86,7 @@
             </div>
             <div class="col-sm-4 text-center">
                 <h6>Write your review</h6>
-                <button type="button" data-toggle="collapse" data-target="#ratingField" class="btn btn-default btn-block">Review</button>
+                <button id="reviewbtn" type="button" data-toggle="collapse" data-target="#ratingField" class="btn btn-default btn-block" disabled="{{authenticationService.loggedIn()}}">Review</button>
             </div>
             <div class="col-sm-12">
                 <div class="collapse" id="ratingField">

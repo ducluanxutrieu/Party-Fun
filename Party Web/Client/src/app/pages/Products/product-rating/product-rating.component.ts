@@ -1,11 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { api } from '../../../_api/apiUrl';
-import { ProductService } from '../../../_services/product.service';
-import { AuthenticationService } from '../../../_services/authentication.service';
+//Models
 import { Product } from '../../../_models/product.model';
+//Services
+import { AuthenticationService } from '../../../_services/authentication.service';
+import { ProductService } from '../../../_services/product.service';
 
 declare var toastr;
+declare var $: any;
 
 interface rateOverall {
   one: number;
@@ -63,6 +66,9 @@ export class ProductRatingComponent implements OnInit {
           index++;
           break;
       }
+    }
+    if (!this.authenticationService.loggedIn()) {
+      $('#reviewbtn').text('Login to write review');
     }
   }
   ratingSubmit(data: {

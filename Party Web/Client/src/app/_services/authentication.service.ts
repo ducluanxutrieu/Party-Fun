@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { api } from '../_api/apiUrl';
 
@@ -12,8 +13,13 @@ export class AuthenticationService {
     private apiLogout = api.signout;
     constructor(
         private http: HttpClient,
-        private router: Router
-    ) { }
+        private router: Router,
+        private location: Location
+    ) {
+        toastr.options = {
+            "timeOut": "1500"
+        }
+    }
 
     login(username: string, password: string) {
         let body = `username=${username}&password=${password}`;
@@ -24,13 +30,12 @@ export class AuthenticationService {
         var results;
         return this.http.post(this.apiLogin, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
             results = res_data.body;
-            // alert("Login success!");
-            //    sessionStorage.setItem('info',JSON.stringify(res_data));
             sessionStorage.setItem('response_body', JSON.stringify(results));
             localStorage.setItem('token', results.account.token);
             localStorage.setItem('userinfo', JSON.stringify(results.account));
             localStorage.setItem('avatar', results.account.imageurl);
-            this.router.navigate(['/mainpage']);
+            // this.router.navigate(['/mainpage']);
+            this.location.back();
         },
             err => {
                 toastr.error("Error: " + err.status + " " + err.error.message);
