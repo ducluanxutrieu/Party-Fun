@@ -39,7 +39,7 @@ export class ProductRatingComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private productService: ProductService,
-    private authenticationService: AuthenticationService
+    public authenticationService: AuthenticationService,
   ) { }
   ngOnInit() {
     this.currentProduct = this.productService.find(this.productId);
