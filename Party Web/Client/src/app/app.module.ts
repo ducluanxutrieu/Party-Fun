@@ -95,7 +95,7 @@ import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/paym
     MatExpansionModule,
     MatTableModule,
     BarRatingModule,
-    NgxStripeModule.forRoot('pk_test_28owFDjd02mGhWN5XUDoq1S700UciXGH9F'), 
+    NgxStripeModule.forRoot('pk_test_28owFDjd02mGhWN5XUDoq1S700UciXGH9F'),
     ReactiveFormsModule
   ],
   providers: [

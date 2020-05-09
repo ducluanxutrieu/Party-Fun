@@ -1,8 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100,300,400,600,700|Work+Sans:100,200,300,400,500,600');
 .navbar-custom {
 	background-color: #f37d42;
 }
 
 .brand-name {
-	font-family: ReadMyHandLL, Roboto, Helvetica;
+	font-family: 'Josefin Sans', Roboto, Helvetica;
 	font-weight: bold;
+}
+
+.nav-item .nav-link {
+	color: white;
+	transition: transform .3s;
+}
+
+.nav-link:hover {
+	transform: scale(1.1);
 }
