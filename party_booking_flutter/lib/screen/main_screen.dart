@@ -34,7 +34,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String _fullNameUser = "PartyBooking";
   String _token = "";
-  String _imgurl = "";
+  String _avatar = "";
   String _email = "";
   var _listMenuFiltered = List<MenuModel>();
   final _listDishOrigin = List<DishModel>();
@@ -142,7 +142,7 @@ class _MainScreenState extends State<MainScreen> {
       _accountModel = AccountModel.fromJson(json.decode(accountJson));
       _appBarTitle = Text(_accountModel.fullName);
       _fullNameUser = _accountModel.fullName;
-      _imgurl = _accountModel.imageUrl;
+      _avatar = _accountModel.avatar;
       _email = _accountModel.email;
     } else {
       Navigator.pushReplacement(
@@ -262,7 +262,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Visibility buildFABAddNewDish() {
-    bool isVisible = (_accountModel.role ?? "") == 'nhanvien';
+    bool isVisible = (_accountModel != null &&(_accountModel.role ?? "") == 'nhanvien');
     return Visibility(
       visible: isVisible,
       child: FloatingActionButton(
@@ -287,7 +287,7 @@ class _MainScreenState extends State<MainScreen> {
             style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
           ),
           currentAccountPicture: CircleAvatar(
-            backgroundImage: NetworkImage(_imgurl),
+            backgroundImage: NetworkImage(_avatar),
             backgroundColor: Colors.transparent,
           ),
           accountEmail: Text(
@@ -570,7 +570,7 @@ class _MainScreenState extends State<MainScreen> {
     var listDessert = List<DishModel>();
 
     for (var i = 0; i < dishes.length; i++) {
-      switch (dishes[i].type) {
+      switch (dishes[i].categories) {
         case "Holiday Offers":
           listHolidayOffers.add(dishes[i]);
           break;

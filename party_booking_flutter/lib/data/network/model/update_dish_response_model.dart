@@ -11,12 +11,10 @@ UpdateDishResponseModel updateDishResponseModelFromJson(String str) => UpdateDis
 String updateDishResponseModelToJson(UpdateDishResponseModel data) => json.encode(data.toJson());
 
 class UpdateDishResponseModel {
-  bool success;
   String message;
   DishModel dish;
 
   UpdateDishResponseModel({
-    this.success,
     this.message,
     this.dish,
   });
@@ -24,14 +22,12 @@ class UpdateDishResponseModel {
   static UpdateDishResponseModel jsonFactory(Map<String, dynamic> json) => UpdateDishResponseModel.fromJson(json);
 
   factory UpdateDishResponseModel.fromJson(Map<String, dynamic> json) => UpdateDishResponseModel(
-    success: json["success"],
     message: json["message"],
-    dish: DishModel.fromJson(json["dish"]),
+    dish: DishModel.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
     "message": message,
-    "dish": dish.toJson(),
+    "data": dish.toJson(),
   };
 }

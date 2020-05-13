@@ -35,6 +35,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   final myController = TextEditingController();
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   DishModel _dishModel;
+  RateModel _rateModel = RateModel(average: 0, lishRate: List(), totalpeople: 0);
 
   _DishDetailScreenState();
 
@@ -87,7 +88,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       children: <Widget>[
         RatingBar(
           itemCount: 5,
-          initialRating: _dishModel.rate.average,
+          initialRating: _rateModel?.average,
           minRating: 1,
           allowHalfRating: true,
           direction: Axis.horizontal,
@@ -413,11 +414,11 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                       height: 10,
                     ),
                     Text(
-                      _dishModel.type,
+                      _dishModel.categories,
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 22),
                     ),
                     Expanded(
-                        child: _contentDish(_dishModel.rate.lishRate))
+                        child: _contentDish((_rateModel?.lishRate ??= List<RateItemModel>())))
                   ],
                 ),
               ),
@@ -429,7 +430,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   FloatingActionButton _buildFABEditDish(BuildContext context) {
-    bool isStaff = widget.accountModel.role == "nhanvien";
+    bool isStaff = (widget.accountModel.role == UserRole.Staff.index || widget.accountModel.role == UserRole.Admin.index);
 
     return isStaff ?
     FloatingActionButton.extended(

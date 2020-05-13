@@ -14,6 +14,10 @@ import 'package:party_booking/widgets/common/utiu.dart';
 import 'login_screen.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
+  final String username;
+
+  ChangePasswordScreen({@required this.username});
+
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
 }
@@ -40,7 +44,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
       var result = await AppApiService.create().confirmResetPassword(
           model: ConfirmResetPasswordRequestModel(
-              code: code, passwordNew: newPassword));
+              code: code, password: newPassword, username: widget.username));
       if (result.isSuccessful) {
         UTiu.showToast(result.body.message);
         Navigator.pushAndRemoveUntil(

@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("DISH DETAIL"),
+        title: Text("Receipt Detail"),
       ),
       body: _children[_currentIndex],
     );

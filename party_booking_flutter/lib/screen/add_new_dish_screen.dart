@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/list_dish_category_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/data/network/service/app_image_api_service.dart';
@@ -100,12 +101,12 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     if (_fbKey.currentState.saveAndValidate()) {
       String name = _fbKey.currentState.fields['name'].currentState.value;
       String price = _fbKey.currentState.fields['price'].currentState.value;
-      String type = _fbKey.currentState.fields['type'].currentState.value;
+      String categories = _fbKey.currentState.fields['type'].currentState.value;
       String description =
           _fbKey.currentState.fields['description'].currentState.value;
       if (widget.dishModel == null) {
         BaseResponseModel result = await AppImageAPIService.create(context)
-            .addNewDish(images, name, description, type, price);
+            .addNewDish(images, name, description, categories, int.parse(price));
         if (result != null) {
           UTiu.showToast(result.message);
           Navigator.pop(context, result);
@@ -116,9 +117,10 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
           '_id': widget.dishModel.id,
           'name': name,
           'description': description,
-          'type': type,
+          'categories': ListDishCategoryResponseModel().getListIdCategory(categories),
           'discount': '0',
           'price': price,
+          'currency': 'vnd',
         };
         var result = await AppApiService.create()
             .updateDish(token: token, data: formData);
@@ -283,7 +285,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
         'name': widget.dishModel.name ?? "",
         'description': widget.dishModel.description ?? "",
         'price': widget.dishModel.price.toString() ?? "",
-        'type': widget.dishModel.type
+        'type': widget.dishModel.categories
       };
     }
   }

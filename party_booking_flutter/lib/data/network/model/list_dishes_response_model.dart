@@ -3,7 +3,9 @@
 //     final listDishesResponseModel = listDishesResponseModelFromJson(jsonString);
 
 import 'dart:convert';
+
 import 'package:intl/intl.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
@@ -13,14 +15,12 @@ String listDishesResponseModelToJson(ListDishesResponseModel data) =>
     json.encode(data.toJson());
 
 class ListDishesResponseModel {
-  bool success;
-  String message;
   List<DishModel> listDishes;
+  String message;
 
   ListDishesResponseModel({
-    this.success,
-    this.message,
     this.listDishes,
+    this.message,
   });
 
   static ListDishesResponseModel fromJsonFactory(Map<String, dynamic> json) =>
@@ -28,16 +28,13 @@ class ListDishesResponseModel {
 
   factory ListDishesResponseModel.fromJson(Map<String, dynamic> json) =>
       ListDishesResponseModel(
-        success: json["success"],
-        message: json["message"],
-        listDishes: List<DishModel>.from(
-            json["lishDishs"].map((x) => DishModel.fromJson(x))),
-      );
+          listDishes: List<DishModel>.from(
+              json["data"].map((x) => DishModel.fromJson(x))),
+          message: json['message']);
 
   Map<String, dynamic> toJson() => {
-        "success": success,
-        "message": message,
-        "lishDishs": List<dynamic>.from(listDishes.map((x) => x.toJson())),
+        "data": List<dynamic>.from(listDishes.map((x) => x.toJson())),
+        'message': message
       };
 }
 
@@ -46,13 +43,12 @@ class DishModel {
   String name;
   String description;
   int price;
-  String type;
+  String categories;
   int discount;
   int quantity;
   List<String> image;
   String updateAt;
   String createAt;
-  RateModel rate;
 
   DishModel({
     this.id,
@@ -60,12 +56,11 @@ class DishModel {
     this.description,
     this.price,
     this.quantity,
-    this.type,
+    this.categories,
     this.discount,
     this.image,
     this.updateAt,
     this.createAt,
-    this.rate,
   });
 
   static DishModel fromJsonFactory(Map<String, dynamic> json) =>
@@ -76,13 +71,12 @@ class DishModel {
         name: json["name"],
         description: json["description"],
         price: json["price"],
-        type: json["type"],
+        categories: json["categories"],
         discount: json["discount"],
         quantity: 1,
         image: List<String>.from(json["image"].map((x) => x)),
         updateAt: json["updateAt"],
         createAt: json["createAt"],
-        rate: RateModel.fromJson(json["rate"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -90,12 +84,11 @@ class DishModel {
         "name": name,
         "description": description,
         "price": price,
-        "type": type,
+        "categories": categories,
         "discount": discount,
         "image": List<dynamic>.from(image.map((x) => x)),
         "updateAt": updateAt,
         "createAt": createAt,
-        "rate": rate.toJson(),
       };
 }
 
@@ -104,6 +97,7 @@ class CartModel extends Model {
   double totalCartValue = 0;
   int i;
   String totalmoney;
+
   int get total => cart.length;
 
   void addProduct(product) {
@@ -178,7 +172,7 @@ class RateModel {
       RateModel.fromJson(json);
 
   factory RateModel.fromJson(Map<String, dynamic> json) => RateModel(
-        average: json["average"].toDouble(),
+        average: (json["average"] ??= "0"),
         lishRate: List<RateItemModel>.from(
             json["lishRate"].map((x) => RateItemModel.fromJson(x))),
         totalpeople: json["totalpeople"],

@@ -13,31 +13,31 @@ class UpdateProfileRequestModel {
   String fullName;
   String phoneNumber;
   String birthday;
-  String sex;
+  int gender;
 
   UpdateProfileRequestModel({
     this.email,
     this.fullName,
     this.phoneNumber,
     this.birthday,
-    this.sex,
+    this.gender,
   });
 
   static UpdateProfileRequestModel fromJsonFactory(Map<String, dynamic> json) => UpdateProfileRequestModel.fromJson(json);
 
   factory UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) => UpdateProfileRequestModel(
     email: json["email"],
-    fullName: json["fullName"],
-    phoneNumber: json["phoneNumber"],
+    fullName: json["full_name"],
+    phoneNumber: json["phone"],
     birthday: json["birthday"],
-    sex: json["sex"],
+    gender: json["gender"],
   );
 
   Map<String, dynamic> toJson() => {
     "email": email,
-    "fullName": fullName,
-    "phoneNumber": phoneNumber,
+    "full_name": fullName,
+    "phone": phoneNumber,
     "birthday": birthday,
-    "sex": sex,
+    "gender": gender,
   };
 }

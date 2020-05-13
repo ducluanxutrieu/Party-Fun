@@ -19,10 +19,10 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
   void _getUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.USER_TOKEN);
-    var result = await AppApiService.create().getUserProfile1(token: token);
+    var result = await AppApiService.create().getUserProfile(token: token);
     if (result.isSuccessful) {
       setState(() {
-        _listUserCart = result.body.account.userCart;
+//        _listUserCart = result.body.account.userCart;
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
@@ -42,7 +42,7 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('ORDER HISTORY'),
+        title: Text('Order History'),
       ),
       body: Center(
           child: ListView.builder(

@@ -9,6 +9,7 @@ import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/list_dish_category_response_model.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -29,10 +30,12 @@ class AppImageAPIService {
     });
 
     BaseResponseModel response;
-    var result = await dio.post(
-      'user/uploadavatar',
+    var result = await dio
+        .put(
+      'user/avatar',
       data: formData,
-    ).catchError((onError) {
+    )
+        .catchError((onError) {
       progressDialog.dismiss();
     });
 
@@ -44,7 +47,7 @@ class AppImageAPIService {
   }
 
   Future<BaseResponseModel> addNewDish(List<Asset> listImage, String name,
-      String description, String type, String price) async {
+      String description, String categories, int price) async {
     var listMultiPath = List();
 
     for (int i = 0; i < listImage.length; i++) {
@@ -55,17 +58,20 @@ class AppImageAPIService {
           contentType: MediaType('image', 'jpeg')));
     }
 
+    var listCategory = ListDishCategoryResponseModel().getListIdCategory(categories);
+
     FormData formData = new FormData.fromMap({
       'name': name,
       'description': description,
-      'type': type,
+      'categories': listCategory,
       'discount': '0',
       'price': price,
       'image': listMultiPath,
+      'currency': 'vnd',
     });
 
     BaseResponseModel response;
-    var result = await dio.post('product/adddish', data: formData,
+    var result = await dio.post('product/dish', data: formData,
         onSendProgress: (int sent, int total) {
       _updateProgress(sent, total);
     });
@@ -81,14 +87,16 @@ class AppImageAPIService {
     return response;
   }
 
-  Future<BaseResponseModel> updateDish(String name,
-      String description, String type, String price, String id) async {
+  Future<BaseResponseModel> updateDish(String name, String description,
+      String categories, String price, String id) async {
+
+    var listCategory = ListDishCategoryResponseModel().getListIdCategory(categories);
 
     Map<String, dynamic> formData = {
-      '_id' : id,
+      '_id': id,
       'name': name,
       'description': description,
-      'type': type,
+      'categories': listCategory,
       'discount': '0',
       'price': price,
     };
@@ -96,11 +104,14 @@ class AppImageAPIService {
     var jsonValue = jsonEncode(formData);
 
     BaseResponseModel response;
-    var result = await dio.post('product/updatedish', data: jsonValue,
+    var result = await dio.put('product/dish', data: jsonValue,
         onSendProgress: (int sent, int total) {
       _updateProgress(sent, total);
-    }).catchError(
-        (onError) => {print('product/updatedish'), print(onError.toString()), progressDialog.dismiss()});
+    }).catchError((onError) => {
+          print('product/updatedish'),
+          print(onError.toString()),
+          progressDialog.dismiss()
+        });
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);

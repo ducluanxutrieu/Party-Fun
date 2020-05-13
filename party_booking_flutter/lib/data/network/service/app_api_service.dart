@@ -3,9 +3,9 @@ import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
+import 'package:party_booking/data/network/model/get_dish_detail_response_model.dart';
 import 'package:party_booking/data/network/model/get_payment_response_mode.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
@@ -13,7 +13,6 @@ import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 
-import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
 import 'json_serializable_converter.dart';
 
 part 'app_api_service.chopper.dart';
@@ -22,7 +21,8 @@ part 'app_api_service.chopper.dart';
 abstract class AppApiService extends ChopperService {
   @Post(path: 'user/signin')
   Future<Response<AccountResponseModel>> requestSignIn({
-    @body LoginRequestModel model,
+    @Field('username') String username,
+    @Field('password') String password,
   });
 
   @Post(path: 'user/signup')
@@ -30,27 +30,39 @@ abstract class AppApiService extends ChopperService {
     @body RegisterRequestModel model,
   });
 
-  @Get(path: 'product/finddish')
+  @Get(path: 'product/dishs')
   Future<Response<ListDishesResponseModel>> getListDishes({
     @Header('authorization') String token,
   });
 
-  @Post(path: 'user/resetpassword')
-  Future<Response<BaseResponseModel>> requestResetPassword({
-    @body ChangePasswordRequestModel model,
+  @Get(path: 'product/dish/{dishId}')
+  Future<Response<DishDetailResponseModel>> getDishDetail({
+    @Header('authorization') String token,
+    @Path() String dishId
   });
 
-  @Post(path: 'user/resetconfirm')
+  @Get(path: 'user/reset_password')
+  Future<Response<BaseResponseModel>> resetPassword({
+    @Query('username') String username,
+  });
+
+  @Put(path: 'user/confirm_otp')
   Future<Response<BaseResponseModel>> confirmResetPassword({
     @body ConfirmResetPasswordRequestModel model,
   });
 
-  @Post(path: 'user/signout')
+  @Put(path: 'user/change_pwd')
+  Future<Response<BaseResponseModel>> changePassword({
+    @Field('password') String password,
+    @Field('new_password') String newPassword,
+  });
+
+  @Get(path: 'user/signout')
   Future<Response<BaseResponseModel>> requestSignOut({
     @Header('authorization') String token,
   });
 
-  @Post(path: 'user/updateuser')
+  @Put(path: 'user/update')
   Future<Response<AccountResponseModel>> requestUpdateUser(
       {@Header('authorization') String token,
       @body UpdateProfileRequestModel model});
@@ -61,13 +73,8 @@ abstract class AppApiService extends ChopperService {
     @body RateDishRequestModel model,
   });
 
-  @Get(path: 'user/profile')
+  @Get(path: 'user/get_me')
   Future<Response<AccountResponseModel>> getUserProfile({
-    @Header('authorization') String token,
-  });
-
-  @Get(path: 'user/profile')
-  Future<Response<GetUserProfileResponseModel>> getUserProfile1({
     @Header('authorization') String token,
   });
 
@@ -83,7 +90,7 @@ abstract class AppApiService extends ChopperService {
     @Query('_id') String id,
   });
 
-  @Post(path: 'product/updatedish')
+  @Put(path: 'product/dish')
   Future<Response<UpdateDishResponseModel>> updateDish({
     @Header('authorization') String token,
     @body Map<String, dynamic> data,
@@ -120,11 +127,9 @@ abstract class AppApiService extends ChopperService {
       UpdateProfileRequestModel: UpdateProfileRequestModel.fromJsonFactory,
       RateDishRequestModel: RateDishRequestModel.fromJsonFactory,
       BookPartyRequestModel: BookPartyRequestModel.fromJsonFactory,
-      ListDishes: ListDishes.fromJsonFactory,
       PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
       GetPaymentResponseModel: GetPaymentResponseModel.fromJsonFactory,
       UpdateDishResponseModel: UpdateDishResponseModel.jsonFactory,
-      GetUserProfileResponseModel: GetUserProfileResponseModel.fromJsonFactory,
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
       Data: Data.fromJsonFactory,

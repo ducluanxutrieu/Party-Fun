@@ -1,31 +1,10 @@
-class ChangePasswordRequestModel {
-  String username;
-
-  ChangePasswordRequestModel({this.username});
-
-  static ChangePasswordRequestModel fromJsonFactory(
-          Map<String, dynamic> json) =>
-      ChangePasswordRequestModel.fromJson(json);
-
-  ChangePasswordRequestModel.fromJson(Map<String, dynamic> json) {
-    username = json['username'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['username'] = this.username;
-    return data;
-  }
-}
-
 class ConfirmResetPasswordRequestModel {
   String code;
-  String passwordNew;
+  String password;
+  String username;
 
-  ConfirmResetPasswordRequestModel({
-    this.code,
-    this.passwordNew,
-  });
+  ConfirmResetPasswordRequestModel(
+      {this.code, this.password, this.username});
 
   static ConfirmResetPasswordRequestModel formJsonFactory(
           Map<String, dynamic> json) =>
@@ -34,12 +13,10 @@ class ConfirmResetPasswordRequestModel {
   factory ConfirmResetPasswordRequestModel.fromJson(
           Map<String, dynamic> json) =>
       ConfirmResetPasswordRequestModel(
-        code: json["resetpassword"],
-        passwordNew: json["passwordnew"],
-      );
+          code: json["otp_code"],
+          password: json["password"],
+          username: json['username']);
 
-  Map<String, dynamic> toJson() => {
-        "resetpassword": code,
-        "passwordnew": passwordNew,
-      };
+  Map<String, dynamic> toJson() =>
+      {"otp_code": code, "password": password, 'username': username};
 }
