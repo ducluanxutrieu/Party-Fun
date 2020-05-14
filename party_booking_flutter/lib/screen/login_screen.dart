@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/login_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/forgot_password_screen.dart';
@@ -36,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _stateLoginButton = 2;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(model.toJson()));
+    prefs.setString(Constants.ACCOUNT_MODEL_KEY, accountModelToJson(model));
     prefs.setString(Constants.USER_TOKEN, model.token);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MainScreen()));
@@ -46,8 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _stateLoginButton = 1;
     });
-    var model = LoginRequestModel(username: username, password: password);
-    var result = await AppApiService.create().requestSignIn(model: model);
+    var result = await AppApiService.create().requestSignIn(username: username, password: password);
     if (result.isSuccessful) {
       UTiu.showToast(result.body.message);
       saveDataToPrefs(result.body.account);

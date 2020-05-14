@@ -28,12 +28,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       final String username =
           _fbKey.currentState.fields['username'].currentState.value;
 
-      var result = await AppApiService.create().requestResetPassword(
-          model: ChangePasswordRequestModel(username: username));
+      var result = await AppApiService.create().resetPassword(username: username);
       if (result.isSuccessful) {
-        UTiu.showToast(result.body.message);
+        UTiu.showToast("${result.body.message}: ${result.body.data}");
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
+            MaterialPageRoute(builder: (context) => ChangePasswordScreen(username: username,)));
       }else {
         setState(() {
           _stateButton = 3;

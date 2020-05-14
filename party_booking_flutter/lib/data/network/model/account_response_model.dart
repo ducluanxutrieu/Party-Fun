@@ -1,36 +1,33 @@
+// To parse this JSON data, do
+//
+//     final accountResponseModel = accountResponseModelFromJson(jsonString);
 
 import 'dart:convert';
 
 AccountResponseModel accountResponseModelFromJson(String str) => AccountResponseModel.fromJson(json.decode(str));
 
 String accountResponseModelToJson(AccountResponseModel data) => json.encode(data.toJson());
-class AccountResponseModel {
-  bool success;
-  String message;
-  AccountModel account;
 
-  AccountResponseModel({this.success, this.message, this.account});
+class AccountResponseModel{
+  AccountModel account;
+  String message;
+
+  AccountResponseModel({
+    this.message, this.account,
+  });
 
   static AccountResponseModel fromJsonFactory(Map<String, dynamic> json) =>
       AccountResponseModel.fromJson(json);
 
-  AccountResponseModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    account = json['account'] != null
-        ? new AccountModel.fromJson(json['account'])
-        : null;
-  }
+  factory AccountResponseModel.fromJson(Map<String, dynamic> json) => AccountResponseModel(
+    message: json['message'],
+    account: AccountModel.fromJson(json["data"]),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.account != null) {
-      data['account'] = this.account.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    'message': message,
+    "data": account.toJson(),
+  };
 }
 
 AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
@@ -42,11 +39,11 @@ class AccountModel {
   String username;
   String fullName;
   String email;
-  String phoneNumber;
+  int phoneNumber;
   String birthday;
-  String sex;
-  String role;
-  String imageUrl;
+  int gender;
+  int role;
+  String avatar;
   String createAt;
   String updateAt;
   String token;
@@ -58,44 +55,61 @@ class AccountModel {
     this.email,
     this.phoneNumber,
     this.birthday,
-    this.sex,
+    this.gender,
     this.role,
-    this.imageUrl,
+    this.avatar,
     this.createAt,
     this.updateAt,
     this.token,
   });
 
-  factory AccountModel.fromJson(Map<String, dynamic> json) => AccountModel(
-        id: json["id"]?? "jdfnj2e23r32",
-        username: json["username"],
-        fullName: json["fullName"],
-        email: json["email"],
-        phoneNumber: json["phoneNumber"],
-        birthday: json["birthday"],
-        sex: json["sex"],
-        role: json["role"],
-        imageUrl: json["imageurl"],
-        createAt: json["createAt"],
-        updateAt: json["updateAt"],
-        token: json["token"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "username": username,
-        "fullName": fullName,
-        "email": email,
-        "phoneNumber": phoneNumber,
-        "birthday": birthday,
-        "sex": sex,
-        "role": role,
-        "imageurl": imageUrl,
-        "createAt": createAt,
-        "updateAt": updateAt,
-        "token": token,
-      };
-
   static AccountModel fromJsonFactory(Map<String, dynamic> json) =>
       AccountModel.fromJson(json);
+
+  factory AccountModel.fromJson(Map<String, dynamic> json) => AccountModel(
+    id: json["_id"],
+    username: json["username"],
+    fullName: json["full_name"],
+    email: json["email"],
+    phoneNumber: json["phone"],
+    birthday: json["birthday"],
+    gender: json["gender"],
+    role: json["role"],
+    avatar: json["avatar"],
+    createAt: json["createAt"],
+    updateAt: json["updateAt"],
+    token: json["token"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "username": username,
+    "full_name": fullName,
+    "email": email,
+    "phone": phoneNumber,
+    "birthday": birthday,
+    "gender": gender,
+    "role": role,
+    "avatar": avatar,
+    "createAt": createAt,
+    "updateAt": updateAt,
+    "token": token,
+  };
+}
+
+enum UserRole {
+  UserDeleted,
+  Customer,
+  Staff,
+  Admin,
+}
+
+enum UserGender{
+  Other,
+  Male,
+  Female,
+}
+
+String getGenderStringFromIndex(int index){
+  return UserGender.values[index].toString().replaceAll("UserGender.", "");
 }

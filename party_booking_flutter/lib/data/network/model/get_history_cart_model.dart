@@ -1,37 +1,66 @@
 // To parse this JSON data, do
 //
-//     final partyBookResponseModel = partyBookResponseModelFromJson(jsonString);
+//     final getHistoryCartModel = getHistoryCartModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PartyBookResponseModel partyBookResponseModelFromJson(String str) => PartyBookResponseModel.fromJson(json.decode(str));
+GetHistoryCartModel getHistoryCartModelFromJson(String str) => GetHistoryCartModel.fromJson(json.decode(str));
 
-String partyBookResponseModelToJson(PartyBookResponseModel data) => json.encode(data.toJson());
+String getHistoryCartModelToJson(GetHistoryCartModel data) => json.encode(data.toJson());
 
-class PartyBookResponseModel {
+class GetHistoryCartModel {
   String message;
-  Bill bill;
+  Data data;
 
-  PartyBookResponseModel({
+  GetHistoryCartModel({
     this.message,
-    this.bill,
+    this.data,
   });
 
-  static PartyBookResponseModel fromJsonFactory(Map<String, dynamic> json) =>
-      PartyBookResponseModel.fromJson(json);
+  static GetHistoryCartModel fromJsonFactory(Map<String, dynamic> json) =>
+      GetHistoryCartModel.fromJson(json);
 
-  factory PartyBookResponseModel.fromJson(Map<String, dynamic> json) => PartyBookResponseModel(
+  factory GetHistoryCartModel.fromJson(Map<String, dynamic> json) => GetHistoryCartModel(
     message: json["message"],
-    bill: Bill.fromJson(json["data"]),
+    data: Data.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
     "message": message,
-    "data": bill.toJson(),
+    "data": data.toJson(),
   };
 }
 
-class Bill {
+class Data {
+  int totalPage;
+  int start;
+  int end;
+  List<UserCart> userCarts;
+
+  Data({
+    this.totalPage,
+    this.start,
+    this.end,
+    this.userCarts,
+  });
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    totalPage: json["total_page"],
+    start: json["start"],
+    end: json["end"],
+    userCarts: List<UserCart>.from(json["value"].map((x) => UserCart.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "total_page": totalPage,
+    "start": start,
+    "end": end,
+    "value": List<dynamic>.from(userCarts.map((x) => x.toJson())),
+  };
+}
+
+class UserCart {
+  String id;
   DateTime dateParty;
   int table;
   int countCustomer;
@@ -48,9 +77,9 @@ class Bill {
   int paymentType;
   DateTime paymentAt;
   String paymentBy;
-  String id;
 
-  Bill({
+  UserCart({
+    this.id,
     this.dateParty,
     this.table,
     this.countCustomer,
@@ -67,10 +96,10 @@ class Bill {
     this.paymentType,
     this.paymentAt,
     this.paymentBy,
-    this.id,
   });
 
-  factory Bill.fromJson(Map<String, dynamic> json) => Bill(
+  factory UserCart.fromJson(Map<String, dynamic> json) => UserCart(
+    id: json["_id"],
     dateParty: DateTime.parse(json["date_party"]),
     table: json["table"],
     countCustomer: json["count_customer"],
@@ -87,10 +116,10 @@ class Bill {
     paymentType: json["payment_type"],
     paymentAt: DateTime.parse(json["payment_at"]),
     paymentBy: json["payment_by"],
-    id: json["_id"],
   );
 
   Map<String, dynamic> toJson() => {
+    "_id": id,
     "date_party": dateParty.toIso8601String(),
     "table": table,
     "count_customer": countCustomer,
@@ -107,7 +136,6 @@ class Bill {
     "payment_type": paymentType,
     "payment_at": paymentAt.toIso8601String(),
     "payment_by": paymentBy,
-    "_id": id,
   };
 }
 

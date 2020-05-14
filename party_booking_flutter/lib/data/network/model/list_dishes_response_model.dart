@@ -3,36 +3,39 @@
 //     final listDishesResponseModel = listDishesResponseModelFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:scoped_model/scoped_model.dart';
-ListDishesResponseModel listDishesResponseModelFromJson(String str) => ListDishesResponseModel.fromJson(json.decode(str));
 
-String listDishesResponseModelToJson(ListDishesResponseModel data) => json.encode(data.toJson());
+import 'package:intl/intl.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
+    ListDishesResponseModel.fromJson(json.decode(str));
+
+String listDishesResponseModelToJson(ListDishesResponseModel data) =>
+    json.encode(data.toJson());
 
 class ListDishesResponseModel {
-  bool success;
-  String message;
   List<DishModel> listDishes;
+  String message;
 
   ListDishesResponseModel({
-    this.success,
-    this.message,
     this.listDishes,
+    this.message,
   });
 
   static ListDishesResponseModel fromJsonFactory(Map<String, dynamic> json) =>
       ListDishesResponseModel.fromJson(json);
 
-  factory ListDishesResponseModel.fromJson(Map<String, dynamic> json) => ListDishesResponseModel(
-    success: json["success"],
-    message: json["message"],
-    listDishes: List<DishModel>.from(json["lishDishs"].map((x) => DishModel.fromJson(x))),
-  );
+  factory ListDishesResponseModel.fromJson(Map<String, dynamic> json) =>
+      ListDishesResponseModel(
+          listDishes: List<DishModel>.from(
+              json["data"].map((x) => DishModel.fromJson(x))),
+          message: json['message']);
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "lishDishs": List<dynamic>.from(listDishes.map((x) => x.toJson())),
-  };
+        "data": List<dynamic>.from(listDishes.map((x) => x.toJson())),
+        'message': message
+      };
 }
 
 class DishModel {
@@ -40,61 +43,60 @@ class DishModel {
   String name;
   String description;
   int price;
-  String type;
+  String categories;
   int discount;
-  int qty;
+  int quantity;
   List<String> image;
   String updateAt;
   String createAt;
-  RateModel rate;
 
   DishModel({
     this.id,
     this.name,
     this.description,
     this.price,
-    this.qty,
-    this.type,
+    this.quantity,
+    this.categories,
     this.discount,
     this.image,
     this.updateAt,
     this.createAt,
-    this.rate,
   });
 
   static DishModel fromJsonFactory(Map<String, dynamic> json) =>
       DishModel.fromJson(json);
 
   factory DishModel.fromJson(Map<String, dynamic> json) => DishModel(
-    id: json["_id"],
-    name: json["name"],
-    description: json["description"],
-    price: json["price"],
-    type: json["type"],
-    discount: json["discount"],
-    qty: 1,
-    image: List<String>.from(json["image"].map((x) => x)),
-    updateAt: json["updateAt"],
-    createAt: json["createAt"],
-    rate: RateModel.fromJson(json["rate"]),
-  );
+        id: json["_id"],
+        name: json["name"],
+        description: json["description"],
+        price: json["price"],
+        categories: json["categories"],
+        discount: json["discount"],
+        quantity: 1,
+        image: List<String>.from(json["image"].map((x) => x)),
+        updateAt: json["updateAt"],
+        createAt: json["createAt"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "description": description,
-    "price": price,
-    "type": type,
-    "discount": discount,
-    "image": List<dynamic>.from(image.map((x) => x)),
-    "updateAt": updateAt,
-    "createAt": createAt,
-    "rate": rate.toJson(),
-  };
+        "_id": id,
+        "name": name,
+        "description": description,
+        "price": price,
+        "categories": categories,
+        "discount": discount,
+        "image": List<dynamic>.from(image.map((x) => x)),
+        "updateAt": updateAt,
+        "createAt": createAt,
+      };
 }
+
 class CartModel extends Model {
   List<DishModel> cart = [];
   double totalCartValue = 0;
+  int i;
+  String totalmoney;
 
   int get total => cart.length;
 
@@ -102,7 +104,7 @@ class CartModel extends Model {
     int index = cart.indexWhere((i) => i.id == product.id);
     print(index);
     if (index != -1)
-      updateProduct(product, product.qty + 1);
+      updateProduct(product, product.quantity + 1);
     else {
       cart.add(product);
       calculateTotal();
@@ -112,7 +114,7 @@ class CartModel extends Model {
 
   void removeProduct(product) {
     int index = cart.indexWhere((i) => i.id == product.id);
-    cart[index].qty = 1;
+    cart[index].quantity = 1;
     cart.removeWhere((item) => item.id == product.id);
     calculateTotal();
     notifyListeners();
@@ -120,16 +122,15 @@ class CartModel extends Model {
 
   void updateProduct(product, qty) {
     int index = cart.indexWhere((i) => i.id == product.id);
-    cart[index].qty = qty;
-    if (cart[index].qty == 0)
-      removeProduct(product);
+    cart[index].quantity = qty;
+    if (cart[index].quantity == 0) removeProduct(product);
 
     calculateTotal();
     notifyListeners();
   }
 
   void clearCart() {
-    cart.forEach((f) => f.qty = 1);
+    cart.forEach((f) => f.quantity = 1);
     cart = [];
     notifyListeners();
   }
@@ -137,18 +138,23 @@ class CartModel extends Model {
   void calculateTotal() {
     totalCartValue = 0;
     cart.forEach((f) {
-      totalCartValue += f.price * f.qty;
+      totalCartValue += f.price * f.quantity;
     });
-  }
-  int calculateTotal1() {
-   int totalCartValue = 0;
-    cart.forEach((f) {
-      totalCartValue += f.qty;
-    }
-    );
-   return totalCartValue;
+
+    i = int.parse(totalCartValue.toStringAsFixed(
+        totalCartValue.truncateToDouble() == totalCartValue ? 0 : 2));
+    final f = new NumberFormat("#,###");
+    totalmoney = f.format(i);
   }
 
+  int calculateTotal1() {
+    int totalCartValue = 0;
+    cart.forEach((f) {
+      totalCartValue += f.quantity;
+    });
+
+    return totalCartValue;
+  }
 }
 
 class RateModel {
@@ -166,16 +172,17 @@ class RateModel {
       RateModel.fromJson(json);
 
   factory RateModel.fromJson(Map<String, dynamic> json) => RateModel(
-    average: json["average"].toDouble(),
-    lishRate: List<RateItemModel>.from(json["lishRate"].map((x) => RateItemModel.fromJson(x))),
-    totalpeople: json["totalpeople"],
-  );
+        average: (json["average"] ??= "0"),
+        lishRate: List<RateItemModel>.from(
+            json["lishRate"].map((x) => RateItemModel.fromJson(x))),
+        totalpeople: json["totalpeople"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "average": average,
-    "lishRate": List<dynamic>.from(lishRate.map((x) => x.toJson())),
-    "totalpeople": totalpeople,
-  };
+        "average": average,
+        "lishRate": List<dynamic>.from(lishRate.map((x) => x.toJson())),
+        "totalpeople": totalpeople,
+      };
 }
 
 class RateItemModel {
@@ -201,24 +208,24 @@ class RateItemModel {
       RateItemModel.fromJson(json);
 
   factory RateItemModel.fromJson(Map<String, dynamic> json) => RateItemModel(
-    username: json["username"],
-    imageUrl: json["imageurl"] == null ? null : json["imageurl"],
-    dishId: json["_iddish"],
-    scoreRate: json["scorerate"],
-    content: json["content"],
-    updateAt: json["updateAt"],
-    createAt: json["createAt"],
-  );
+        username: json["username"],
+        imageUrl: json["imageurl"] == null ? null : json["imageurl"],
+        dishId: json["_iddish"],
+        scoreRate: json["scorerate"],
+        content: json["content"],
+        updateAt: json["updateAt"],
+        createAt: json["createAt"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "username": username,
-    "imageurl": imageUrl == null ? null : imageUrl,
-    "_iddish": dishId,
-    "scorerate": scoreRate,
-    "content": content,
-    "updateAt": updateAt,
-    "createAt": createAt,
-  };
+        "username": username,
+        "imageurl": imageUrl == null ? null : imageUrl,
+        "_iddish": dishId,
+        "scorerate": scoreRate,
+        "content": content,
+        "updateAt": updateAt,
+        "createAt": createAt,
+      };
 }
 
 class EnumValues<T> {

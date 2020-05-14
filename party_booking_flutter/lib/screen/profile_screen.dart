@@ -105,17 +105,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (image != null && image.path != null && image.path.isNotEmpty) {
       var result = await AppImageAPIService.create(context).updateAvatar(image);
-      if (result.success) {
+      if (result != null) {
         setState(() {
           UTiu.showToast('Change avatar successful');
-          avatarUrl = result.message;
+          avatarUrl = result.data;
         });
       } else {
         UTiu.showToast(result.message);
       }
       print(result.toString());
     }
-
   }
 
   Future<void> retrieveLostData() async {
@@ -170,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: CircleAvatar(
                     radius: 50,
                     backgroundImage: (avatarUrl == null)
-                        ? NetworkImage(_accountModel.imageUrl)
+                        ? NetworkImage(_accountModel.avatar)
                         : NetworkImage(avatarUrl),
                   )),
               Text(
@@ -180,16 +179,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Pacifico',
-                ),
-              ),
-              Text(
-                _accountModel.role,
-                style: TextStyle(
-                  fontFamily: 'Source Sans Pro',
-                  fontSize: 30.0,
-                  color: Colors.teal[50],
-                  letterSpacing: 2.5,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
@@ -245,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: null,
               ),
               InfoCard(
-                text: _accountModel.sex,
+                text: UserGender.values[_accountModel.gender].toString().replaceAll("UserGender.", ""),
                 icon: FontAwesomeIcons.venusMars,
                 onPressed: null,
               ),

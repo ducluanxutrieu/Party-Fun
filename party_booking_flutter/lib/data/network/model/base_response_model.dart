@@ -3,24 +3,24 @@ import 'dart:convert';
 BaseResponseModel baseResponseModelFromJson(String str) => BaseResponseModel.fromJson(json.decode(str));
 
 class BaseResponseModel {
-  bool success;
   String message;
+  String data;
 
   BaseResponseModel({
-    this.success,
     this.message,
+    this.data
   });
 
   static BaseResponseModel fromJsonFactory(Map<String, dynamic> json) =>
       BaseResponseModel.fromJson(json);
 
   factory BaseResponseModel.fromJson(Map<String, dynamic> json) => BaseResponseModel(
-    success: json["success"],
     message: json["message"],
+    data: json['data'],
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
     "message": message,
+    "data": data,
   };
 }

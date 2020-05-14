@@ -43,12 +43,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final birthday = _fbKey.currentState.fields['birthday'].currentState.value;
       final gender = _fbKey.currentState.fields['gender'].currentState.value;
       final phoneNumber = _fbKey.currentState.fields['phonenumber'].currentState.value;
+
+      int genderId = UserGender.values.indexWhere((e) => e.toString() == "UserGender.$gender");
       final model = UpdateProfileRequestModel(
           email: email,
           birthday: DateFormat('MM/dd/yyyy').format(birthday),
           fullName: fullName,
           phoneNumber: phoneNumber,
-          sex: gender);
+          gender:  genderId);
       _requestUpdateUserProfile(model);
     }
   }
@@ -90,7 +92,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       validators: [FormBuilderValidators.required()],
       items: ['Male', 'Female', 'Other']
           .map((gender) =>
-              DropdownMenuItem(value: gender, child: Text("$gender")))
+              DropdownMenuItem(value: gender, child: Text(gender)))
           .toList(),
     );
   }
@@ -123,7 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             'email': widget.mAccountModel.email,
             'phonenumber': (widget.mAccountModel.phoneNumber.toString() ?? 'Empty'),
             'birthday': DateFormat("MM/dd/yyyy").parse(widget.mAccountModel.birthday),
-            'gender': widget.mAccountModel.sex,
+            'gender': getGenderStringFromIndex(widget.mAccountModel.gender),
           },
           child: Container(
             color: Colors.white,
