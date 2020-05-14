@@ -1,24 +1,25 @@
 export const apiUrl = "http://139.180.131.30:3000";
 export const api = {
-    signin: `${apiUrl}/user/signin`,                     //login
-    signout: `${apiUrl}/user/signout`,                   //logout
-    signup: `${apiUrl}/user/signup`,                     //signup
+    signin: `${apiUrl}/user/signin`,                            // Đăng nhập
+    signout: `${apiUrl}/user/signout`,                          // Đăng xuất
+    signup: `${apiUrl}/user/signup`,                            // Đăng ký
 
-    changepassword: `${apiUrl}/user/changepassword`,     //changepass
-    resetpassword: `${apiUrl}/user/resetpassword`,       //forgotpass-1:   
-    resetconfirm: `${apiUrl}/user/resetconfirm`,         //forgotpass-2: resetpassword with confirm code
+    change_password: `${apiUrl}/user/change_pwd`,               // Đổi mật khẩu (Trong profile)
+    reset_password: `${apiUrl}/user/reset_password`,            // Yêu cầu quên mật khẩu   
+    confirm_otp: `${apiUrl}/user/confirm_otp`,                  // Xác nhận đổi mật khẩu với mã OTP 
 
-    uploadavatar: `${apiUrl}/user/uploadavatar`,         //upload avatar
-    profile: `${apiUrl}/user/profile`,                   //get user profile
-    updateuser: `${apiUrl}/user/updateuser`,             //update user's info
-    upgraderole: `${apiUrl}/user/upgraderole`,           //upgrade from customer to admin
+    profile: `${apiUrl}/user/get_me`,                           // Lấy thông tin user
+    cart_history: `${apiUrl}/user/get_history_cart`,            // Lấy lịch sử đơn hàng
+    update_user: `${apiUrl}/user/update`,                       // Cập nhật thông tin user
+    update_avt: `${apiUrl}/user/avatar`,                        // Cập nhật avatar
+    upgraderole: `${apiUrl}/user/upgraderole`,                  // Nâng cấp quyền của user (Từ khách hàng thành nhân viên)
 
-    adddish: `${apiUrl}/product/adddish`,                //add new dish to database
-    getdishlist: `${apiUrl}/product/finddish`,           //get list of all dishes
-    updateDish: `${apiUrl}/product/update`,              //update existed dish
-    rateDish: `${apiUrl}/product/ratedish`,              //rate dish
+    get_dishlist: `${apiUrl}/product/dishs`,                    // Lấy danh sách món ăn
+    get_category: `${apiUrl}/product/get_dish_by_categories`,   // Lấy danh sách món ăn trong 1 category
+    get_dish: `${apiUrl}/product/dish`,                         // Lấy thông tin của 1 món
+    product_rate: `${apiUrl}/product/rate`,                     // Các thao tác liên quan đến comment và rating món ăn
 
-    orderConfirm: `${apiUrl}/product/book`,              //confirm order
+    book: `${apiUrl}/product/book`,                             // Đặt đơn hàng
 
     get_payment: `${apiUrl}/payment/get_payment`
 };

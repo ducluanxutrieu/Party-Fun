@@ -51,15 +51,15 @@
                         </ul>
                     </div>
                     <div class="details col-md-6" >
-                        <h3 class="product-title">{{product_data.name}}</h3>
+                        <h3 class="product-title">{{product_data?.name}}</h3>
                         <div class="rating">
-                            <bar-rating [rate]="product_data.rate.average" [max]="5" [theme]="'fontawesome'" [readOnly]="true"></bar-rating>
-                            <span (click)="scroll(review)" class="review-no review-link">{{product_data.rate.totalpeople}} reviews</span>
+                            <bar-rating [rate]="product_ratings?.avg_rate" [max]="5" [theme]="'fontawesome'" [readOnly]="true"></bar-rating>
+                            <span (click)="scroll(review)" class="review-no review-link">{{product_ratings?.count_rate}} reviews</span>
                         </div>
                         <p style="font-weight: bold">Description:</p>
-                        <p class="product-description">{{product_data.description}}</p>
-                        <p class="category">Type: <a href="category/{{product_data.type}}"><span>{{product_data.type}}</span></a></p>
-                        <h4 class="price">Price: <span>{{product_data.price | number}} VND</span></h4>
+                        <p class="product-description">{{product_data?.description}}</p>
+                        <p class="category">Type: <a href="category/{{product_data?.categories}}"><span>{{product_data?.categories}}</span></a></p>
+                        <h4 class="price">Price: <span>{{product_data?.price | number}} VND</span></h4>
                         <div class="action">
                             <div class="form-group">
                                 <label>Quantity</label>
@@ -93,7 +93,7 @@
             </div>
         </div>
         <h6 #review class="sub-header">Dish reviews</h6>
-        <app-product-rating [productId]="product_data._id"></app-product-rating>
+        <app-product-rating [productId]="product_data?._id" [productRating]="product_ratings"></app-product-rating>
     </div>
     <app-footer></app-footer>
 </body>

@@ -12,42 +12,48 @@ declare var toastr;
   styleUrls: ['./forgotpassword.component.css']
 })
 export class ForgotpasswordComponent implements OnInit {
-  authorized = false;
-  username: string;
+  is_authorized = false; //Kiểm tra username có hợp lệ không
+  username: string
   constructor(
     private http: HttpClient,
     private router: Router
   ) { }
-  onClickSubmit(data: { username: string; email: string; recoverycode: string; newpass: string }) {
+
+  onClickSubmit(data: {
+    username: string;
+    otp_code: string;
+    newpass: string;
+  }) {
     let headers = new HttpHeaders({
-      'Content-type': 'application/x-www-form-urlencoded'
+      'Content-type': 'application/x-www-form-urlencoded',
     })
-    if (this.authorized == false) {
-      let body = `username=${data.username}`;
-      this.username = data.username;
-      this.http.post(api.resetpassword, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-        this.authorized = true;
-      },
+    //Ban đầu hoặc khi tên username không hợp lệ
+    if (this.is_authorized == false) {
+      this.http.get(api.reset_password + "?username=" + data.username, { headers: headers, observe: 'response' }).subscribe(
+        res => {
+          this.is_authorized = true;
+          this.username = data.username;
+        },
         err => {
           toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }
-    if (this.authorized) {
-      let body = `username=${this.username}&passnew=${data.newpass}&checkforgotpassword=${data.recoverycode}`;
-      this.http.post(api.resetpassword, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-        toastr.success("Change password success!");
-        this.router.navigate(['/user_login']);
-        this.authorized = false;
-      },
+    //Nếu username hợp lệ chuyển sang form đổi mật khẩu
+    if (this.is_authorized) {
+      let body = `username=${this.username}&password=${data.newpass}&otp_code=${data.otp_code}`;
+      console.log(body);
+      this.http.put(api.confirm_otp, body, { headers: headers, observe: 'response' }).subscribe(
+        res => {
+          toastr.success("Change password success!");
+          this.router.navigate(['/user_login']);
+          this.is_authorized = false;
+        },
         err => {
           toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }
-
   }
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 }

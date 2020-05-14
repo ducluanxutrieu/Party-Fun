@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 //Service
 import { AuthenticationService } from '../../_services/authentication.service';
+
+declare var toastr;
 
 @Component({
   selector: 'app-header',
@@ -11,18 +14,35 @@ export class HeaderComponent implements OnInit {
   userInfo;
 
   constructor(
-    public authenticationService: AuthenticationService
-  ) { }
+    public authenticationService: AuthenticationService,
+    private router: Router,
+  ) {
+    toastr.options = {
+      "timeOut": "1500"
+    }
+  }
 
   ngOnInit() {
-    this.getuserInfo();
+    this.get_userInfo();
     // this.fbLibrary();
   }
-  getuserInfo() {
+  //Get user info
+  get_userInfo() {
     this.userInfo = JSON.parse(localStorage.getItem('userinfo'));
   }
+  //Logout
   logout() {
-    this.authenticationService.logout();
+    this.authenticationService.logout().subscribe(
+      res_data => {
+        localStorage.clear();
+        sessionStorage.clear();
+        sessionStorage.setItem('response', JSON.stringify(res_data.body));
+        this.router.navigate(['/user_login']);
+      },
+      err => {
+        sessionStorage.setItem('error', JSON.stringify(err));
+        toastr.error("Cannot logout!");
+      })
   }
   // fbLibrary() {
   //   (window as any).fbAsyncInit = function () {

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { api } from '../../_api/apiUrl';
+// Services
 import { ProductService } from '../../_services/product.service';
+// Models
+import { Product } from '../../_models/product.model';
 
 @Component({
   selector: 'app-mainpage',
@@ -10,8 +11,8 @@ import { ProductService } from '../../_services/product.service';
   styleUrls: ['./mainpage.component.css']
 })
 export class MainpageComponent implements OnInit {
-  dishes_Data = [];
-  pageOfItems: Array<any>;
+  dishes_Data: Product[] = [];
+  // pageOfItems: Array<any>;
   category_list = [
     "First Dishes",
     "Main Dishes",
@@ -27,23 +28,21 @@ export class MainpageComponent implements OnInit {
     private productService: ProductService
   ) { }
 
-  getDishList() {
-    this.http.get(api.getdishlist, { observe: 'response' }).subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        var response_body = JSON.parse(sessionStorage.getItem('response_body'));
-        this.dishes_Data = response_body.lishDishs;
-        this.getNewProducts();
-        // console.log(res_data.body);
+  get_DishList() {
+    this.productService.get_DishList().subscribe(
+      res => {
+        this.dishes_Data = res.data as Product[];
+        this.get_newProducts();
+        localStorage.setItem('dish_list', JSON.stringify(res.data)); // Sẽ bỏ trong tương lai
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.message);
+        console.log("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
-    );
+    )
   }
 
-  getNewProducts() {
+  get_newProducts() {
     let temp_product_list = this.dishes_Data;
     for (var i = temp_product_list.length - 1; i > temp_product_list.length - 4; i--) {
       this.new_products.push(temp_product_list[i]);
@@ -55,15 +54,15 @@ export class MainpageComponent implements OnInit {
     this.productService.addCartItem(id, 1);
   }
 
-  onChangePage(pageOfItems: Array<any>) {
-    // update current page of items
-    this.pageOfItems = pageOfItems;
-  }
+  // onChangePage(pageOfItems: Array<any>) {
+  //   // update current page of items
+  //   this.pageOfItems = pageOfItems;
+  // }
 
   product_filter(filter: string): any[] {
     this.filterred_list = [];
     for (var i = 0; i < this.dishes_Data.length; i++) {
-      if (this.dishes_Data[i].type == filter) {
+      if (this.dishes_Data[i].categories == filter) {
         this.filterred_list.push(this.dishes_Data[i]);
       }
     }
@@ -71,6 +70,6 @@ export class MainpageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDishList();
+    this.get_DishList();
   }
 }

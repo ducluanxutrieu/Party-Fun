@@ -14,13 +14,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="cart-table-item" *ngFor="let item of userData?.userCart; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(item)">
+      <tr class="cart-table-item" *ngFor="let item of cart_history; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(item)">
         <th scope="row" class="text-center">{{i+1}}</th>
-        <td class="text-center">{{item.createAt | date:'dd-MM-yyyy'}}</td>
-        <td class="text-center">{{item.dateParty | date:'dd-MM-yyyy, HH:mm'}}</td>
-        <td class="text-center">{{item.numbertable}}</td>
-        <td class="text-center">{{item.totalMoney | number}}</td>
-        <td class="text-center"><span *ngIf="!item.paymentstatus">Unpaid</span><span *ngIf="item.paymentstatus">Paid</span></td>
+        <td class="text-center">{{item?.create_at | date:'dd-MM-yyyy'}}</td>
+        <td class="text-center">{{item?.date_party | date:'dd-MM-yyyy, HH:mm'}}</td>
+        <td class="text-center">{{item?.table}}</td>
+        <td class="text-center">{{item?.total | number}}</td>
+        <td class="text-center"><span *ngIf="item?.payment_status==0">Unpaid</span><span *ngIf="item?.payment_status==1">Paid</span></td>
         <!-- Cart Detail Modal-->
         <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -44,9 +44,9 @@
                         <tbody>
                           <tr *ngFor="let itemDetail of cartDetail; let i = index">
                             <th scope="row" class="text-center">{{i+1}}</th>
-                            <td class="text-center">{{productService.find(itemDetail._id).name}}</td>
-                            <td class="text-center">{{productService.find(itemDetail._id).price | number}}</td>
-                            <td class="text-center">{{itemDetail.numberDish | number}}</td>
+                            <td class="text-center">{{itemDetail?.name}}</td>
+                            <td class="text-center">{{itemDetail?.price | number}}</td>
+                            <td class="text-center">{{itemDetail?.count | number}}</td>
                           </tr>
                         </tbody>
                       </table>

@@ -1,14 +1,14 @@
-import { Rate } from './rate.model'
 export class Product {
-    createAt: string;
+    _id: string;
+    name: string;
     description: string;
+    price: number;
     discount: number;
     image: string[];
-    name: string;
-    price: number;
-    rate: Rate;
-    type: string;
-    updateAt: string;
-    usercreate: string;
-    _id: string;
+    create_at: string;
+    update_at: string;
+    user_create: string;
+    categories: string;
+    feature_image: string;
+    currency: string;
 }

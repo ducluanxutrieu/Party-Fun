@@ -1,7 +1,8 @@
-html, body{
+html, body {
     font-family: Roboto, Helvetica, sans-serif;
 }
-header{
+
+header {
     text-align: left;
     padding: 0px 10px 10px;
     color: black;
@@ -9,7 +10,8 @@ header{
     font-size: 1.4em;
     font-weight: 500;
 }
-.editavatar-container{
+
+.editavatar-container {
     width: 500px;
     background-color: white;
     float: left;
@@ -18,28 +20,34 @@ header{
     background-color: white;
     border-radius: 5px;
 }
-.avatar{
+
+.avatar {
     float: left;
     display: inline-block;
     margin: 10px 10px;
 }
-.avatar img{
+
+.avatar img {
     width: 200px;
     height: 200px;
 }
-.updatePicture{
+
+.updatePicture {
     display: inline-block;
     margin: 0px 10px 10px;
 }
-.updatePicture input{
+
+.updatePicture input {
     margin: 5px 0px;
 }
+
 form {
     background: white;
     width: 100%;
     font-family: Roboto, Helvetica, sans-serif;
     color: #333;
 }
+
 form header {
     margin: 0px 0px;
     padding: 0px 0px;
@@ -47,16 +55,22 @@ form header {
     font-size: 0.9em;
     font-weight: bold;
 }
-form .formHeader{
+
+form .formHeader {
     margin: 10px 0px;
 }
-form p{
+
+form p {
     font-size: 0.8em;
 }
-form button{
+
+form button {
     color: white;
     background: #ffae70;
+    border: none;
+    outline: none;
 }
-form button:hover{
+
+form button:hover {
     cursor: pointer;
 }

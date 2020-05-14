@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-
-import { Item } from '../../../../_models/item.model';
-import { ProductService } from '../../../../_services/product.service';
+// Services
 import { api } from '../../../../_api/apiUrl';
-
+// Models
+import { Item } from '../../../../_models/item.model';
 import { Bill } from '../../../../_models/bill.model';
+import { Response } from '../../../../_models/response.model';
 
-declare var $: any;
 declare var toastr;
 
 @Component({
@@ -25,7 +24,6 @@ export class UserCheckoutComponent implements OnInit {
   // private deliveryTime;
 
   constructor(
-    private productService: ProductService,
     private http: HttpClient,
     public datepipe: DatePipe,
     private router: Router
@@ -36,10 +34,9 @@ export class UserCheckoutComponent implements OnInit {
   }
 
   order_comfirm() {
-    var token = localStorage.getItem('token');
     let headers = new HttpHeaders({
-      'Authorization': token,
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': localStorage.getItem('token'),
     })
     var item_ordered: any[] = [];
     for (var i = 0; i < this.items.length; i++) {
@@ -47,15 +44,15 @@ export class UserCheckoutComponent implements OnInit {
       item_ordered.push(
         {
           _id: item.product._id,
-          numberDish: item.quantity
+          count: item.quantity
         }
       )
     }
-    let body = `lishDishs=${JSON.stringify(item_ordered)}&numbertable=${this.numOfTable}&dateParty=${this.deliveryDate}&discount="0"`;
-    this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(
-      res_data => {
-        let temp = res_data.body as Bill;
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
+    let body = `dishes=${JSON.stringify(item_ordered)}&table=${this.numOfTable}&date_party=${this.deliveryDate}&count_customer=1`;
+    this.http.post<Response>(api.book, body, { headers: headers }).subscribe(
+      res => {
+        let receipt = res.data as Bill;
+        sessionStorage.setItem('response', JSON.stringify(res));
         toastr.success("Order success!");
         localStorage.removeItem('cart');
         sessionStorage.setItem('current_receipt', JSON.stringify({
@@ -64,15 +61,16 @@ export class UserCheckoutComponent implements OnInit {
           dateParty: this.deliveryDate,
           total_price: this.total
         }))
-        this.router.navigate(['/receipt/' + temp.bill._id]);
+        this.router.navigate(['/receipt/' + receipt._id]);
       },
       err => {
-        console.log(err);
-        if (err.status == 400) {
-          toastr.warning('Please fill all the field with valid value!');
-        } else {
-          toastr.error("Error: " + err.status + " " + err.error.message);
-        }
+        // console.log(err);
+        // if (err.status == 400) {
+        //   toastr.warning('Please fill all the field with valid value!');
+        // } else {
+        //   toastr.error("Error: " + err.status + " " + err.error.message);
+        // }
+        toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }

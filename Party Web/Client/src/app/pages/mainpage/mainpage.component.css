@@ -131,6 +131,10 @@ a:hover {
   cursor: pointer;
 }
 
+.fa-shopping-cart {
+  vertical-align: -1px;
+}
+
 .add-cart-btn {
   transition: transform .3s;
 }

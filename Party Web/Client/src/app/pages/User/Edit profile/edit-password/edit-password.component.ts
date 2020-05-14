@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, JsonpInterceptor } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { api } from '../../../../_api/apiUrl';
 
@@ -12,37 +11,30 @@ declare var toastr;
   styleUrls: ['./edit-password.component.css']
 })
 export class EditPasswordComponent implements OnInit {
-  apiUrl = api.changepassword;
-
   constructor(
     private http: HttpClient,
-    private router: Router
   ) { }
 
   onClickSubmit(data: {
     pwd: string;
     newpass: string;
   }) {
-    var token = localStorage.getItem('token');
-    let body = `password=${data.pwd}&newpassword=${data.newpass}`;
+    let body = `password=${data.pwd}&new_password=${data.newpass}`;
     let headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': token
+      'Authorization': localStorage.getItem('token')
     })
-    // alert("password: " + data.pwd + "newpass: " + data.newpass);
-    return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(
-      res_data => {
+    return this.http.put(api.change_password, body, { headers: headers }).subscribe(
+      res => {
         toastr.success("Change success!");
-        sessionStorage.setItem('response', JSON.stringify(res_data));
-        this.router.navigate(['profile']);
+        sessionStorage.setItem('response', JSON.stringify(res));
+        toastr.success("Change password success!");
       },
       err => {
-        toastr.error("Error: " + err.status + " " + err.error.message);
+        toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 }

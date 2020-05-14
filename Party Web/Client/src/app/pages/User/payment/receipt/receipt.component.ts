@@ -38,10 +38,10 @@ export class ReceiptComponent implements OnInit {
 
   get_paymentInfo(bill_id: string) {
     this.paymentService.get_paymentInfo(bill_id).subscribe(
-      res_data => {
-        // let temp = res_data as PaymentInfo;
-        this.checkout_session_id = res_data.data.id;
-        // console.log(this.checkout_session_id);
+      res => {
+        // let temp = res as PaymentInfo;
+        this.checkout_session_id = res.data.id;
+        console.log(this.checkout_session_id);
       },
       err => {
         sessionStorage.setItem('error', JSON.stringify(err));
