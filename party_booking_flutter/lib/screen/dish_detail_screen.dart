@@ -16,7 +16,10 @@ import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/res/custom_icons_icons.dart';
 import 'package:party_booking/screen/add_new_dish_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../badges.dart';
 
 class DishDetailScreen extends StatefulWidget {
   final DishModel dishModel;
@@ -377,13 +380,15 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       appBar: AppBar(
         title: Text(_dishModel.name),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: InkWell(
-              child: Icon(FontAwesomeIcons.cartPlus),
-              onTap: null,
-            ),
-          )
+        //  Padding(
+          //  padding: const EdgeInsets.only(right: 10),
+            //child: InkWell(
+              //child: Icon(FontAwesomeIcons.cartPlus),
+              //onTap: null,
+            //),
+         // )
+
+          _shoppingCartBadge(widget.dishModel),
         ],
       ),
       floatingActionButton: _buildFABEditDish(context),
@@ -455,4 +460,25 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       });
     }
   }
+  Widget _shoppingCartBadge(DishModel dishModel) {
+    return Badge(
+      position: BadgePosition.topRight(top: 0, right: 3),
+      animationDuration: Duration(milliseconds: 300),
+      animationType: BadgeAnimationType.slide,
+      badgeContent: Text(
+        ScopedModel.of<CartModel>(context, rebuildOnChange: true)
+            .calculateTotal1()
+            .toString(),
+        style: TextStyle(color: Colors.white),
+      ),
+      child: IconButton(
+          icon: Icon(FontAwesomeIcons.cartPlus),
+          onPressed: () {
+          //  Navigator.pushNamed(context, '/cart');
+            ScopedModel.of<CartModel>(context, rebuildOnChange: true)
+                .addProduct(dishModel);
+          }),
+    );
+  }
+
 }

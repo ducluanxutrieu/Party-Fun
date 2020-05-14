@@ -1,10 +1,12 @@
+
+
 // To parse this JSON data, do
 //
 //     final bookPartyRequestModel = bookPartyRequestModelFromJson(jsonString);
 
 import 'dart:convert';
 
-import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
+
 
 BookPartyRequestModel bookPartyRequestModelFromJson(String str) =>
     BookPartyRequestModel.fromJson(json.decode(str));
@@ -15,12 +17,14 @@ String bookPartyRequestModelToJson(BookPartyRequestModel data) =>
 class BookPartyRequestModel {
   String dateParty;
   int numberTable;
-  List<ListDishes> lishDishs;
+  int numberCustomer;
+  List<ListDishes> listDishes;
 
   BookPartyRequestModel({
     this.dateParty,
     this.numberTable,
-    this.lishDishs,
+    this.numberCustomer,
+    this.listDishes,
   });
 
   static BookPartyRequestModel fromJsonFactory(Map<String, dynamic> json) =>
@@ -28,15 +32,42 @@ class BookPartyRequestModel {
 
   factory BookPartyRequestModel.fromJson(Map<String, dynamic> json) =>
       BookPartyRequestModel(
-        dateParty: json["dateParty"],
-        numberTable: json["numbertable"],
-        lishDishs: List<ListDishes>.from(
-            json["lishDishs"].map((x) => ListDishes.fromJson(x))),
+        dateParty: json["date_party"],
+        numberTable: json["table"],
+        numberCustomer: json['count_customer'],
+        listDishes: List<ListDishes>.from(
+            json["dishes"].map((x) => ListDishes.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "dateParty": dateParty,
-        "numbertable": numberTable,
-        "lishDishs": List<dynamic>.from(lishDishs.map((x) => x.toJson())),
-      };
+    "date_party": dateParty,
+    "table": numberTable,
+    "count_customer": numberCustomer,
+    "dishes": List<dynamic>.from(listDishes.map((x) => x.toJson())),
+  };
 }
+
+class ListDishes {
+  int numberDish;
+  String id;
+
+  ListDishes({ this.id,this.numberDish });
+
+  static ListDishes fromJsonFactory(Map<String, dynamic> json) =>
+      ListDishes.fromJson(json);
+
+  factory ListDishes.fromJson(Map<String, dynamic> json) => ListDishes(
+    id: json["_id"],
+    numberDish: json["count"],
+
+    //name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "count": numberDish,
+
+    //  "name": name,
+  };
+}
+

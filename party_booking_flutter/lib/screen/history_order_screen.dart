@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/get_history_cart_model.dart';
 import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
@@ -16,10 +17,12 @@ class HistoryOrderScreen extends StatefulWidget {
 class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
   List<UserCart> _listUserCart = List();
 
+  List<Value> _listUserCart1 = List();
+
   void _getUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.USER_TOKEN);
-    var result = await AppApiService.create().getUserProfile(token: token);
+    var result = await AppApiService.create().getUserHistory(token: token);
     if (result.isSuccessful) {
       setState(() {
 //        _listUserCart = result.body.account.userCart;
@@ -46,7 +49,8 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
       ),
       body: Center(
           child: ListView.builder(
-        itemCount: _listUserCart.length,
+      //  itemCount: _listUserCart.length,
+            itemCount: _listUserCart1.length,
         itemBuilder: (context, index) {
           return ListItem(_listUserCart[index]);
         },

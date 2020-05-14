@@ -58,7 +58,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 10),
               child: Text(
-                'Customer: ${widget.mBill.username}',
+                'Customer: ${widget.mBill.customer}',
                 style: TextStyle(
                     fontFamily: 'Pacifico', color: Colors.orange, fontSize: 20),
               ),
@@ -88,7 +88,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                                 height: 10,
                               ),
                               Text(
-                                '\$${widget.mBill.totalMoney}',
+                                '\$${widget.mBill.total}',
                                 style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                               ),
                               Text('Number of Tables'),
                               Text(
-                                '${widget.mBill.numberTable}',
+                                '${widget.mBill.table}',
                                 style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.bold,
@@ -145,9 +145,9 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
               height: 300,
               padding: EdgeInsets.only(left: 15, right: 15),
               child: ListView.builder(
-                  itemCount: widget.mBill.listDishes.length,
+                  itemCount: widget.mBill.dishes.length,
                   itemBuilder: (bCtx, index) {
-                    var dish = widget.mBill.listDishes[index];
+                    var dish = widget.mBill.dishes[index];
                     return Card(
                       color: Colors.white70,
                       shape: RoundedRectangleBorder(
@@ -160,11 +160,11 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                           style: TextStyle(fontSize: 17, color: Colors.blue),
                         ),
                         selected: false,
-                        trailing: Text(dish.numberDish.toString()),
+                        trailing: Text(dish.count.toString()),
                         dense: true,
                         leading: CircleAvatar(
                           radius: 25,
-                          backgroundImage: NetworkImage(dish.image),
+                          backgroundImage: NetworkImage(dish.featureImage),
                           backgroundColor: Colors.transparent,
                         ),
                       ),
@@ -193,6 +193,6 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
 
   void requestSource(Bill mBill) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    getPayment(mBill.id, preferences.getString(Constants.USER_TOKEN), mBill.totalMoney);
+    getPayment(mBill.id, preferences.getString(Constants.USER_TOKEN), mBill.total);
   }
 }

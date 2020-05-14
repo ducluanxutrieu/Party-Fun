@@ -22,6 +22,7 @@ import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'about_us_screen.dart';
 import 'add_new_dish_screen.dart';
 import 'dish_detail_screen.dart';
 
@@ -233,8 +234,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _goToAddDish() async {
-    BaseResponseModel result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddNewDishScreen(null)));
+    BaseResponseModel result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddNewDishScreen(null)));
     if (result != null) {
       _getListDishes();
     }
@@ -262,7 +263,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Visibility buildFABAddNewDish() {
-    bool isVisible = (_accountModel != null &&(_accountModel.role ?? "") == 'nhanvien');
+    bool isVisible =
+        (_accountModel != null && (_accountModel.role ?? "") == 'nhanvien');
     return Visibility(
       visible: isVisible,
       child: FloatingActionButton(
@@ -332,10 +334,13 @@ class _MainScreenState extends State<MainScreen> {
             }),
         Divider(),
         _createDrawerItem(
-          icon: FontAwesomeIcons.info,
-          text: 'About Us',
-          onTap: null,
-        ),
+            icon: FontAwesomeIcons.info,
+            text: 'About Us',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AboutUsScreen()));
+              //   Navigator.pop(profile);
+            }),
         _createDrawerItem(
             icon: FontAwesomeIcons.signOutAlt, text: 'Logout', onTap: _signOut),
         Center(
@@ -489,12 +494,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _cartDishPriceWidget(DishModel dishModel) {
-    final currencyFormat = new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
+    final currencyFormat =
+        new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
     String price = currencyFormat.format(dishModel.price);
     return Text(
-                    price,
-                    style: new TextStyle(fontSize: 20.0, color: Colors.black),
-                  );
+      price,
+      style: new TextStyle(fontSize: 20.0, color: Colors.black),
+    );
   }
 
   void _addDishToCartDialog(BuildContext context) {
@@ -516,8 +522,7 @@ class _MainScreenState extends State<MainScreen> {
             content: Container(
               width: MediaQuery.of(bCtx).size.width * 2 / 3,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                    10.0, 10, 10, 0),
+                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -638,8 +643,12 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _goToDishDetail(BuildContext context, DishModel dishModel) async {
-    DishModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>DishDetailScreen(dishModel: dishModel, accountModel: _accountModel)));
-    if(result != null){
+    DishModel result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DishDetailScreen(
+                dishModel: dishModel, accountModel: _accountModel)));
+    if (result != null) {
       _getListDishes();
     }
   }

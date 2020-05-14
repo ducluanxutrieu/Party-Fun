@@ -4,6 +4,7 @@ import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
 import 'package:party_booking/data/network/model/get_dish_detail_response_model.dart';
+import 'package:party_booking/data/network/model/get_history_cart_model.dart';
 import 'package:party_booking/data/network/model/get_payment_response_mode.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
@@ -78,6 +79,11 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
   });
 
+  @Get(path: 'user/get_history_cart')
+  Future<Response<GetHistoryCartModel>> getUserHistory({
+   @Header('authorization') String token,
+  });
+
   @Post(path: 'product/book')
   Future<Response<PartyBookResponseModel>> bookParty({
     @Header('authorization') String token,
@@ -132,7 +138,8 @@ abstract class AppApiService extends ChopperService {
       UpdateDishResponseModel: UpdateDishResponseModel.jsonFactory,
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
-      Data: Data.fromJsonFactory,
+    //  Data: Data.fromJsonFactory,
+      GetHistoryCartModel: GetHistoryCartModel.fromJsonFactory,
     });
   }
 }

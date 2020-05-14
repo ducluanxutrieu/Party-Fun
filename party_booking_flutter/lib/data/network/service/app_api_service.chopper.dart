@@ -165,4 +165,13 @@ class _$AppApiService extends AppApiService {
         Request('DELETE', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
+
+  @override
+  Future<Response<GetHistoryCartModel>> getUserHistory({String token}) {
+    final $url = 'user/get_history_cart';
+    final $headers = {'authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<GetHistoryCartModel, GetHistoryCartModel>($request);
+  }
+
 }
