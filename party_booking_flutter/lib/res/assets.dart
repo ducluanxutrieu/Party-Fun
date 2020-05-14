@@ -10,5 +10,6 @@ class Assets {
   static String get animReviewDish => 'assets/jsons/give-us-a-review.json';
   static String get animBookSuccess => 'assets/jsons/food-around-the-city.json';
   static String get animPayment => 'assets/jsons/orange-payment.json';
-  static String get animaddtocart => 'assets/jsons/addtocart.json';
+  static String get animAddToCart => 'assets/jsons/addtocart.json';
+  static String get animBillManagement => 'assets/jsons/pagseguros-billing-management.json';
 }

@@ -528,7 +528,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Lottie.asset(
-                        Assets.animaddtocart,
+                        Assets.animAddToCart,
                         repeat: true,
                       ),
                       SizedBox(

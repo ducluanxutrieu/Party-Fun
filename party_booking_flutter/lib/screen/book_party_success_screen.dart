@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
@@ -39,9 +40,10 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var timeFormatter = DateFormat('dd-MM-yyyy HH:mm');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Purchase order'),
+        title: Text('Purchase Order'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -118,7 +120,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                       ),
                       Text('Party time'),
                       Text(
-                        '${widget.mBill.dateParty}',
+                        '${timeFormatter.format(widget.mBill.dateParty) }',
                         style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,

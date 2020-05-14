@@ -35,31 +35,31 @@ class Data {
   int totalPage;
   int start;
   int end;
-  List<Value> value;
+  List<UserCart> userCarts;
 
   Data({
     this.totalPage,
     this.start,
     this.end,
-    this.value,
+    this.userCarts,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     totalPage: json["total_page"],
     start: json["start"],
     end: json["end"],
-    value: List<Value>.from(json["value"].map((x) => Value.fromJson(x))),
+    userCarts: List<UserCart>.from(json["value"].map((x) => UserCart.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "total_page": totalPage,
     "start": start,
     "end": end,
-    "value": List<dynamic>.from(value.map((x) => x.toJson())),
+    "value": List<dynamic>.from(userCarts.map((x) => x.toJson())),
   };
 }
 
-class Value {
+class UserCart {
   String id;
   DateTime dateParty;
   int table;
@@ -78,7 +78,7 @@ class Value {
   DateTime paymentAt;
   String paymentBy;
 
-  Value({
+  UserCart({
     this.id,
     this.dateParty,
     this.table,
@@ -98,7 +98,7 @@ class Value {
     this.paymentBy,
   });
 
-  factory Value.fromJson(Map<String, dynamic> json) => Value(
+  factory UserCart.fromJson(Map<String, dynamic> json) => UserCart(
     id: json["_id"],
     dateParty: DateTime.parse(json["date_party"]),
     table: json["table"],
