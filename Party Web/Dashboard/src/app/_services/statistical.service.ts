@@ -1,6 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { api } from '../_api/apiUrl';
 import { Injectable } from '@angular/core';
+// Services
+import { api } from '../_api/apiUrl';
+// Models
+import { ApiResponse } from '../_models/response.model';
 
 @Injectable()
 export class StatisticalService {
@@ -12,18 +15,18 @@ export class StatisticalService {
         private http: HttpClient,
     ) { }
 
-    //Lấy số liệu thống kê doanh thu gần đây
+    // Thống kê tổng hóa đơn theo 7 ngày gần nhất
     get_moneyStatistics() {
-        return this.http.get(api.moneyStatistics, { headers: this.headers, observe: 'response' })
+        return this.http.get<ApiResponse>(api.moneyStatistics, { headers: this.headers })
     }
 
-    //Lấy số liệu thống kê sản phẩm trong ngày
+    // Thống kê món ăn được gọi trong 1 ngày
     get_productStatistics() {
-        return this.http.get(api.productStatistics, { headers: this.headers, observe: 'response' })
+        return this.http.get<ApiResponse>(api.productStatistics, { headers: this.headers })
     }
 
-    //Lấy số liệu thống kê đơn hàng
+    // Lấy số liệu thống kê đơn hàng
     get_recentBills() {
-        return this.http.get(api.billStatistics, { headers: this.headers, observe: 'response' })
+        return this.http.get<ApiResponse>(api.billStatistics, { headers: this.headers })
     }
 }

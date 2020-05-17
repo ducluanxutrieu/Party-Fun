@@ -3,74 +3,72 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { api } from '../_api/apiUrl';
+// Models
+import { ApiResponse } from '..//_models/response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private apiLogin = api.signin;
-    private apiLogout = api.signout;
     constructor(
         private http: HttpClient,
         private router: Router
     ) { }
-
+    // Đăng nhập
     login(username: string, password: string) {
         let body = `username=${username}&password=${password}`;
         // alert(body);
         let headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded'
         })
-        var results;
-        this.http.post(this.apiLogin, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-            results = res_data.body;
-            if (results.account.role == "Admin" || results.account.role == "nhanvien") {
-                sessionStorage.setItem('response_body', JSON.stringify(results));
-                localStorage.setItem('token', results.account.token);
-                localStorage.setItem('userinfo', JSON.stringify(results.account));
-                localStorage.setItem('avatar', results.account.imageurl);
-                this.router.navigate(['/dashboard']);
-            }
-            else alert("Must be staff or admin account!");
-        },
+        this.http.post<ApiResponse>(api.signin, body, { headers: headers }).subscribe(
+            res => {
+                if (res.data.role == "2" || res.data.role == "3") {
+                    sessionStorage.setItem('response', JSON.stringify(res));
+                    localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('userinfo', JSON.stringify(res.data));
+                    localStorage.setItem('avatar', res.data.avatar);
+                    this.router.navigate(['/dashboard']);
+                }
+                else alert("Must be staff or admin account!");
+            },
             err => {
-                alert("Error: " + err.status + " " + err.error.message);
+                alert("Error: " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             });
     }
-
+    // Đăng xuất
     logout() {
         let headers = new HttpHeaders({
-            'Content-type': 'application/x-www-form-urlencoded',
             'Authorization': localStorage.getItem('token')
         })
-        let body;
-        this.http.post(this.apiLogout, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-            sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-            localStorage.clear();
-            sessionStorage.clear();
-            this.router.navigate(['/login']);
-        },
+        this.http.get(api.signout, { headers: headers }).subscribe(
+            res => {
+                sessionStorage.setItem('response', JSON.stringify(res));
+                localStorage.clear();
+                sessionStorage.clear();
+                this.router.navigate(['/login']);
+            },
             err => {
                 sessionStorage.setItem('error', JSON.stringify(err));
                 alert("Cannot logout!");
             })
     }
-
-    loggedIn() {
+    // Kiểm tra có đăng nhập không
+    is_loggedIn() {
         return !!localStorage.getItem('token');
     }
-
-    isAdmin() {
-        if (this.loggedIn() == true) {
+    // Kiểm tra tài khoản có phải admin không
+    is_admin() {
+        if (this.is_loggedIn() == true) {
             var currentUser = JSON.parse(localStorage.getItem('userinfo'));
-            if (currentUser.role == "Admin") return true;
+            if (currentUser.role == "3") return true;
         }
         return false;
     }
-
-    isStaff() {
-        if (this.loggedIn() == true) {
+    // Kiểm tra tài khoản có phải nhân viên không
+    is_staff() {
+        if (this.is_loggedIn() == true) {
             var currentUser = JSON.parse(localStorage.getItem('userinfo'));
-            if (currentUser.role == "nhanvien") return true;
+            if (currentUser.role == "2") return true;
         }
         return false;
     }

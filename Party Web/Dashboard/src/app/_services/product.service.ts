@@ -1,20 +1,41 @@
 import { Injectable } from '@angular/core';
-import { api } from '../_api/apiUrl';
-import { Product } from '../_models/product.model'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Item } from '../_models/item.model'
+// Services
+import { api } from '../_api/apiUrl';
+// Models
+import { Product } from '../_models/product.model'
+import { Item } from '../_models/item.model';
+import { ApiResponse } from '../_models/response.model';
 
 @Injectable()
 export class ProductService {
     products = [];
-    cartItems: Item[] = [];
 
     constructor(
         private http: HttpClient
     ) { }
+    
     //Lấy danh sách sản phẩm
-    getDishList() {
-        return this.http.get(api.getdishlist, { observe: 'response' })
+    get_dishList() {
+        return this.http.get<ApiResponse>(api.get_dishList);
+    }
+
+    // Thêm món ăn mới
+    add_dish(body: any) {
+        let headers = new HttpHeaders({
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': localStorage.getItem('token')
+        })
+        return this.http.post<ApiResponse>(api.add_dish, body, { headers: headers });
+    }
+
+    // Cập nhật món ăn có sẵn
+    update_dish(body: string) {
+        let headers = new HttpHeaders({
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': localStorage.getItem('token')
+        })
+        return this.http.put<ApiResponse>(api.update_dish, body, { headers: headers });
     }
 
     //Tìm sản phẩm

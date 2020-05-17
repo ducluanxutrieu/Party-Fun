@@ -39,12 +39,12 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngFor="let staff of staffsList?.user; let i = index">
+                              <tr *ngFor="let staff of staffs_List; let i = index">
                                 <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                                <td class="align-middle text-center">{{staff.fullName}}</td>
+                                <td class="align-middle text-center">{{staff.full_name}}</td>
                                 <td class="align-middle text-center">{{staff.username}}</td>
                                 <td class="text-center">
-                                  <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Downgrade this user" (click)="downgrade(staff.username)">
+                                  <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Downgrade this user" (click)="downgrade(staff._id)">
                                     <i class="fa fa-angle-double-down" aria-hidden="true"></i>
                                   </button>
                                 </td>

@@ -18,6 +18,7 @@ export class UserloginComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService
   ) { }
+
   onClickSubmit(data: { username: string; pwd: string; }) {
     this.authenticationService.login(data.username, data.pwd);
     // this.thisForm.reset();
@@ -41,7 +42,7 @@ export class UserloginComponent implements OnInit {
   // }
 
   ngOnInit() {
-    if (this.authenticationService.loggedIn()) {
+    if (this.authenticationService.is_loggedIn()) {
       this.router.navigate(['/dashboard']);
     }
   }

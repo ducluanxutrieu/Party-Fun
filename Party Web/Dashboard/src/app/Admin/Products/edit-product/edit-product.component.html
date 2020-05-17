@@ -31,7 +31,7 @@
                             </div>
                             <div class="card-body">
                             <p>Please fill all the fields</p>
-                            <form #editdishForm = "ngForm" (ngSubmit) = "onClickSubmit(editdishForm.value)" id="editDish">
+                            <form #editdishForm = "ngForm" (ngSubmit) = "update_confirm(editdishForm.value)" id="editDish">
                                 <div class="form-group">
                                     <label class="form-control-label">Product Name</label>
                                     <input type="text" placeholder="Product Name" class="form-control" name="name" ngModel [(ngModel)]="product_data.name" required #productname="ngModel">
@@ -49,7 +49,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-1 form-control-label">Type</label>
                                     <div class="col-sm-3">
-                                        <select name="account" class="form-control mb-3" name="type" ngModel [(ngModel)]="product_data.type" required #producttype="ngModel">
+                                        <select name="account" class="form-control mb-3" name="type" ngModel [(ngModel)]="product_data.categories" required #producttype="ngModel">
                                             <option value="Holiday Offers">Holiday Offers</option>
                                             <option value="First Dishes">First Dishes</option>
                                             <option value="Main Dishes">Main Dishes</option>
@@ -69,19 +69,19 @@
                                         Please enter price.
                                     </div>
                                 </div>
-                                <!-- <div class="form-group">
+                                <div class="form-group">
                                     <label class="form-control-label">Discount</label>
-                                    <input type="number" placeholder="Discount" class="form-control" [(ngModel)]="product_data.discount" min="0" max="100" name="promotion" ngModel>
-                                </div> -->
-                                <!-- <div class="form-group row">
+                                    <input type="number" placeholder="Discount" class="form-control" [(ngModel)]="product_data.discount" min="0" max="100" name="discount" ngModel>
+                                </div>
+                                <div class="form-group row">
                                     <label for="fileInput" class="col-sm-1 form-control-label">Image</label>
                                     <div class="col-sm-3">
-                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="image1" required (change)="fileChanged($event)" ngModel #image="ngModel">
+                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" multiple="multiple" class="form-control-file" name="image" required (change)="fileChanged($event)" ngModel #image="ngModel">
                                     </div>
                                     <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
                                         Please choose a image.
                                     </div>
-                                </div> -->
+                                </div>
                                 <div class="form-group">       
                                     <input type="submit" value="Comfirm" class="btn btn-primary" form="editDish" [disabled]="editdishForm.invalid">
                                 </div>

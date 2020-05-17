@@ -1,11 +1,14 @@
 export class Product {
-    createAt;
-    description: string;
-    image: string[];
-    name: string;
-    price: number;
-    promotion: number;
-    type: string;
-    updateAt;
     _id: string;
+    name: string;
+    description: string;
+    price: number;
+    discount: number;
+    image: string[];
+    create_at: string;
+    update_at: string;
+    user_create: string;
+    categories: string;
+    feature_image: string;
+    currency: string;
 }

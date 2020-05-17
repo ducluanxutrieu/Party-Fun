@@ -40,10 +40,10 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngFor="let product of product_data; let i = index">
+                              <tr *ngFor="let product of product_list; let i = index">
                                 <th scope="row" class="align-middle text-center">{{i+1}}</th>
                                 <td class="align-middle text-center">{{product.name}}</td>
-                                <td class="align-middle text-center">{{product.type}}</td>
+                                <td class="align-middle text-center">{{product.categories}}</td>
                                 <td class="align-middle text-center">{{product.price | number}}</td>
                                 <td class="text-center">
                                   <a href="products/edit/{{product._id}}">

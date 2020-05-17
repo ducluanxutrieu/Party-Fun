@@ -1,34 +1,31 @@
 export const apiUrl = "http://139.180.131.30:3000";
 export const api = {
-    signin: `${apiUrl}/user/signin`,                        //login
-    signout: `${apiUrl}/user/signout`,                      //logout
-    signup: `${apiUrl}/user/signup`,                        //signup
+    signin: `${apiUrl}/user/signin`,                            // Đăng nhập
+    signout: `${apiUrl}/user/signout`,                          // Đăng xuất
+    signup: `${apiUrl}/user/signup`,                            // Đăng ký
 
-    changepassword: `${apiUrl}/user/changepassword`,        //changepass
-    resetpassword: `${apiUrl}/user/resetpassword`,          //forgotpass-1:   
-    resetconfirm: `${apiUrl}/user/resetconfirm`,            //forgotpass-2: resetpassword with confirm code
+    get_profile: `${apiUrl}/user/get_me`,                       // Lấy thông tin user
+    uploadavatar: `${apiUrl}/user/uploadavatar`,                // Cập nhật avatar
+    update_user: `${apiUrl}/user/update`,                       // Cập nhật thông tin user
+    upgrade_role: `${apiUrl}/user/add_staff`,                   // Nâng cấp tài khoản thành nhân viên
+    downgrade_role: `${apiUrl}/user/del_staff`,                 // Hạ cấp thành tài khoản khách hàng
+    get_customerList: `${apiUrl}/user/customers`,               // Lấy danh sách khách hàng
+    get_staffList: `${apiUrl}/user/staffs`,                     // Lấy danh sách nhân viên
 
-    uploadavatar: `${apiUrl}/user/uploadavatar`,            //upload avatar
-    profile: `${apiUrl}/user/profile`,                      //get user profile
-    updateuser: `${apiUrl}/user/updateuser`,                //update user's info
-    upgraderole: `${apiUrl}/user/upgraderole`,              //upgrade from customer to staff
-    downgraderole: `${apiUrl}/user/demotionrole`,           //downgrade from staff to customer
-    getCustomerlist: `${apiUrl}/user/finduserkh`,           //get customers list
-    getStafflist: `${apiUrl}/user/findusernv`,              //get staffs list
-
-    productStatistics: `${apiUrl}/product/statisticaldish`,        //get products statistics (current day)
-    moneyStatistics: `${apiUrl}/product/statisticalmoney`,         //get money statistics by day (last 7 day)
-    billStatistics: `${apiUrl}/product/findallbill`,               //get bill statistics in last 20 days 
+    productStatistics: `${apiUrl}/product/statistic_dish`,      // Thống kê món ăn được gọi trong 1 ngày
+    moneyStatistics: `${apiUrl}/product/statistic_money`,       // Thống kê tổng hóa đơn theo 7 ngày gần nhất
+    billStatistics: `${apiUrl}/product/findallbill`,            //  
 
     findbill: `${apiUrl}/product/findbill`,                 //find user bill info
     pay: `${apiUrl}/product/pay`,                           //pay bill
     delete_bill: `${apiUrl}/product/deletebill`,            //delete bill
 
-    adddish: `${apiUrl}/product/adddish`,                   //add new dish to database
-    getdishlist: `${apiUrl}/product/finddish`,              //get list of all dishes
-    updateDish: `${apiUrl}/product/updatedish`,             //update existed dish
-    uploadDishImage: `${apiUrl}/product/uploadimage`,       //
-    deleteDish: `${apiUrl}/product/deletedish`,             //delete existed dish
+    add_dish: `${apiUrl}/product/dish`,                     // Thêm món ăn mới
+    get_dishList: `${apiUrl}/product/dishs`,                // Lấy danh sách món ăn
+    update_dish: `${apiUrl}/product/dish`,                  // Cập nhật món ăn có sẵn
+    deleteDish: `${apiUrl}/product/deletedish`,             // delete existed dish
 
     orderConfirm: `${apiUrl}/product/book`,                 //confirm order
+
+    upload_image: `${apiUrl}/product/upload_image`,         // Upload ảnh
 };

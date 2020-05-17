@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../_services/user.service';
-import { api } from '../../_api/apiUrl';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
+// Services
+import { api } from '../../_api/apiUrl';
+import { UserService } from '../../_services/user.service';
+// Models
+import { User } from '../../_models/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +14,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  profile_info;
+  user_info: User;
   private birthday;
 
   constructor(
@@ -21,34 +24,34 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.profile_info = this.userService.get_userInfo();
-    // console.log(this.profile_info);
+    this.get_userInfo();
   }
-  
+  // Lấy thông tin user
+  get_userInfo() {
+    this.user_info = JSON.parse(localStorage.getItem('userinfo')) as User;
+  }
+
+  // Cập nhật thông tin profile
   updateSubmit(data: {
     name: string;
     email: string;
-    phone: string;
+    phone: number;
     gender: string;
     birthday: string;
   }) {
     this.birthday = this.datepipe.transform(data.birthday, 'MM/dd/yyyy');
-    let body = `fullName=${data.name}&sex=${data.gender}&birthday=${this.birthday}&phoneNumber=${data.phone}&email=${data.email}`;
-    console.log(body);
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': localStorage.getItem('token')
-    })
-    this.http.post(api.updateuser, body, { headers: headers, observe: 'response' }).subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
+    let body = `full_name=${data.name}&sex=${data.gender}&birthday=${this.birthday}&phone=${data.phone}&email=${data.email}`;
+    this.userService.update_userInfo(body).subscribe(
+      res => {
+        sessionStorage.setItem('response_body', JSON.stringify(res));
         alert("Update info success!");
         window.location.reload();
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
+        alert("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
-      })
+      }
+    )
   }
 
   avatarChanged(event: any) {

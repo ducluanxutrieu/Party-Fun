@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { api } from '../../../_api/apiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+// Services
 import { ProductService } from '../../../_services/product.service';
-
-// declare jquery;
+// Models
+import { Product } from '../../../_models/product.model';
+// jquery;
 declare var $: any;
 
 @Component({
@@ -12,7 +14,7 @@ declare var $: any;
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
-  product_data = [];
+  product_list: Product[] = [];
 
   // dtTrigger: Subject<any> = new Subject();
 
@@ -21,6 +23,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
     private productService: ProductService
   ) { }
 
+  // Xóa món ăn
   product_delete(id: string) {
     let headers = new HttpHeaders({
       'Authorization': localStorage.getItem('token')
@@ -32,8 +35,8 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
       },
     }
     this.http.delete(api.deleteDish, option).subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data));
+      res => {
+        sessionStorage.setItem('response', JSON.stringify(res));
         alert("Delete product success!");
         window.location.reload();
       },
@@ -43,7 +46,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     )
   }
-
+  // Xác nhận xóa
   delete_clicked(id: string, name: string) {
     if (confirm("Are you sure to delete this?\n" + name)) {
       this.product_delete(id);
@@ -51,7 +54,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
-  //Generate datatable 
+  // Generate datatable 
   datatable_generate() {
     var productTable = $('#productTable').DataTable();
     var productTable_info = productTable.page.info();
@@ -78,15 +81,17 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
     //       this.datatable_generate();
     //     }, 1000)
     //   });
-    this.productService.getDishList().subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        var response_body = JSON.parse(sessionStorage.getItem('response_body'));
-        localStorage.setItem('dish-list', JSON.stringify(response_body.lishDishs));
-        this.product_data = response_body.lishDishs;
+    this.get_dishList();
+  }
+  get_dishList() {
+    this.productService.get_dishList().subscribe(
+      res => {
+        sessionStorage.setItem('response', JSON.stringify(res));
+        localStorage.setItem('dish-list', JSON.stringify(res.data));
+        this.product_list = res.data as Product[];
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.message);
+        console.log("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
       () => {
@@ -96,7 +101,6 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
       }
     )
   }
-
   ngAfterViewInit(): void {
     // this.dtTrigger.next();
   }

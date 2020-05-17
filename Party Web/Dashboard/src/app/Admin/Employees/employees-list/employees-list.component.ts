@@ -5,7 +5,10 @@ import { StaffService } from '../../../_services/staff.service';
 declare var $: any;
 
 interface Staff {
-  user: any[]
+  _id: string;
+  username: string;
+  full_name: string;
+  avatar: string;
 }
 
 @Component({
@@ -14,17 +17,16 @@ interface Staff {
   styleUrls: ['./employees-list.component.css']
 })
 export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit {
-  // staffsList = [];
-  staffsList: Staff;
+  staffs_List: Staff[] = [];
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
     private staffService: StaffService
   ) { }
 
-  downgrade(username: string) {
-    if (confirm("Are you sure to downgrade this user? " + username)) {
-      this.staffService.downgradeStaff(username);
+  downgrade(user_id: string) {
+    if (confirm("Are you sure to downgrade this user?")) {
+      this.staffService.downgradeStaff(user_id);
     };
   }
 
@@ -42,12 +44,17 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.staffService.get_staffsList().subscribe(
-      res_data => {
-        this.staffsList = res_data.body as Staff;
+    this.get_staffList();
+  }
+
+  // Lấy danh sách nhân viên
+  get_staffList() {
+    this.staffService.get_staffsList(1).subscribe(
+      res => {
+        this.staffs_List = res.data.value as Staff[];
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.message);
+        console.log("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
       () => {
@@ -57,7 +64,6 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
         })
       });
   }
-
   ngAfterViewInit(): void {
     // this.dtTrigger.next();
   }

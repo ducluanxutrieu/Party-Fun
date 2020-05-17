@@ -4,6 +4,8 @@ import { formatDate } from "@angular/common";
 
 //services
 import { StatisticalService } from '../../_services/statistical.service';
+// Models
+import { MoneyStatistic, DishStatistic } from '../../_models/statistic.model';
 
 @Component({
   selector: 'app-admin-page',
@@ -76,48 +78,48 @@ export class AdminPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    //Get money statistic and generate chart
-    this.statisticalService.get_moneyStatistics().subscribe(
-      res_data => {
-        this.money_statistics = res_data.body as any[];
-        this.isMoneyDataAvailable = true;
-        setTimeout(() => {
-          this.create_moneyChart(res_data.body as any[]);
-        })
-      },
-      err => {
-        console.log("Error: " + err.status + " " + err.error.text);
-        sessionStorage.setItem('error', JSON.stringify(err));
-      })
-
-    //Get products statistic and generate chart
-    this.statisticalService.get_productStatistics().subscribe(
-      res_data => {
-        this.product_statistics = res_data.body as any[];
-        this.isProductDataAvailable = true;
-        setTimeout(() => {
-          this.create_productChart(res_data.body as any[]);
-        })
-      },
-      err => {
-        console.log("Error: " + err.status + " " + err.error.text);
-        sessionStorage.setItem('error', JSON.stringify(err));
-      });
-
-    // this.bill_statistics = this.statisticalService.get_billData();
-    // this.money_statistics.sort(function (a, b) {
-    //   return new Date(b.dateDay.split('-').reverse().join('-')) - new Date(a.dateDay.split('-').reverse().join('-'));
-    // });
-
-    // this.create_billChart(this.bill_statistics);
+    this.get_statistic_money();
+    this.get_statistic_dish();
   }
 
-  //Create chart from money statistic data
-  create_moneyChart(moneyData: any[]) {
+  // Lấy Thống kê tổng hóa đơn theo 7 ngày gần nhất và tạo biểu đồ tương ứng
+  get_statistic_money() {
+    this.statisticalService.get_moneyStatistics().subscribe(
+      res => {
+        this.money_statistics = res.data as any[];
+        this.isMoneyDataAvailable = true;
+        setTimeout(() => {
+          this.create_moneyChart(res.data as MoneyStatistic[]);
+        })
+      },
+      err => {
+        console.log("Error: " + err.error.message);
+        sessionStorage.setItem('error', JSON.stringify(err));
+      })
+  }
+
+  // Lấy Thống kê món ăn được gọi trong 1 ngày và tạo biểu đồ tương ứng
+  get_statistic_dish() {
+    this.statisticalService.get_productStatistics().subscribe(
+      res => {
+        this.product_statistics = res.data as any[];
+        this.isProductDataAvailable = true;
+        setTimeout(() => {
+          this.create_productChart(res.data as any[]);
+        })
+      },
+      err => {
+        console.log("Error: " + err.error.message);
+        sessionStorage.setItem('error', JSON.stringify(err));
+      });
+  }
+
+  // Tạo biểu đồ từ Thống kê tổng hóa đơn theo 7 ngày gần nhất
+  create_moneyChart(moneyData: MoneyStatistic[]) {
     var money_data = [];
     for (let i = 0; i < moneyData.length; i++) {
-      money_data.push(moneyData[i].totalMoney);
-      this.moneyChartLabels.push(formatDate(moneyData[i].dateDay, 'dd-MM-yyyy', 'en-US'));
+      money_data.push(moneyData[i].total);
+      this.moneyChartLabels.push(formatDate(moneyData[i]._id, 'dd-MM-yyyy', 'en-US'));
     }
     this.moneyChartData = [
       {
@@ -127,7 +129,7 @@ export class AdminPageComponent implements OnInit {
     ]
   }
 
-  //Create chart from product statistic data
+  // Tạo biểu đồ từ Thống kê món ăn được gọi trong 1 ngày
   create_productChart(productData: any[]) {
     if (productData) {
       var product_data1 = [];

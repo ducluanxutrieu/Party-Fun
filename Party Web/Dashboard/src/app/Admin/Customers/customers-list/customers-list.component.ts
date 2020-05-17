@@ -5,7 +5,10 @@ import { StaffService } from '../../../_services/staff.service';
 declare var $: any;
 
 interface Customer {
-  user: any[]
+  _id: string;
+  full_name: string;
+  username: string;
+  avatar: string;
 }
 @Component({
   selector: 'app-customers-list',
@@ -13,8 +16,7 @@ interface Customer {
   styleUrls: ['./customers-list.component.css']
 })
 export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit {
-  // customersList = [];
-  customersList: Customer;
+  customers_list: Customer[] = [];
 
   // dtTrigger: Subject<any> = new Subject();
 
@@ -22,9 +24,9 @@ export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit 
     private staffService: StaffService
   ) { }
 
-  upgrade(username: string) {
-    if (confirm("Are you sure to upgrade this user? " + username)) {
-      this.staffService.upgradeCustomer(username);
+  upgrade(user_id: string) {
+    if (confirm("Are you sure to upgrade this user?")) {
+      this.staffService.upgradeCustomer(user_id);
     };
   }
 
@@ -42,12 +44,15 @@ export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.staffService.get_customersList().subscribe(
-      res_data => {
-        this.customersList = res_data.body as Customer;
+    this.get_customerList();
+  }
+  get_customerList() {
+    this.staffService.get_customersList(1).subscribe(
+      res => {
+        this.customers_list = res.data.value as Customer[];
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.message);
+        console.log("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
       () => {

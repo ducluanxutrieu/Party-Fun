@@ -41,12 +41,12 @@
                             </tr>
                           </thead>
                           <tbody id="tableData">
-                            <tr *ngFor="let customer of customersList?.user; let i = index">
+                            <tr *ngFor="let customer of customers_list; let i = index">
                               <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                              <td class="align-middle text-center">{{customer.fullName}}</td>
+                              <td class="align-middle text-center">{{customer.full_name}}</td>
                               <td class="align-middle text-center">{{customer.username}}</td>
                               <td class="text-center">
-                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Upgrade this user" (click)="upgrade(customer.username)">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Upgrade this user" (click)="upgrade(customer._id)">
                                   <i class="fa fa-angle-double-up"></i>
                                 </button>
                               </td>

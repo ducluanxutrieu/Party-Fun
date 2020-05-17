@@ -1,6 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { api } from '../_api/apiUrl';
 import { Injectable } from '@angular/core';
+// Services
+import { api } from '../_api/apiUrl';
+// Models
+import { ApiResponse } from '../_models/response.model';
 
 @Injectable()
 export class StaffService {
@@ -14,51 +17,51 @@ export class StaffService {
     ) { }
 
     //Lấy danh sách nhân viên
-    get_staffsList() {
-        return this.http.get(api.getStafflist, { headers: this.headers, observe: 'response' })
+    get_staffsList(page: number) {
+        return this.http.get<ApiResponse>(api.get_staffList + "?page=" + page, { headers: this.headers })
     }
 
     //Lấy danh sách khách hàng
-    get_customersList() {
-        return this.http.get(api.getCustomerlist, { headers: this.headers, observe: 'response' })
+    get_customersList(page: number) {
+        return this.http.get<ApiResponse>(api.get_customerList + "?page=" + page, { headers: this.headers })
     }
 
     //Hạ cấp tài khoản nhân viên
-    downgradeStaff(username: string) {
+    downgradeStaff(user_id: string) {
         const option = {
             headers: this.headers,
             body: {
-                userupgrade: username
+                userupgrade: user_id
             },
         }
-        this.http.delete(api.downgraderole, option).subscribe(
-            res_data => {
-                sessionStorage.setItem('response_body', JSON.stringify(res_data));
+        this.http.put(api.downgrade_role, option).subscribe(
+            res => {
+                sessionStorage.setItem('response', JSON.stringify(res));
                 alert("Downgrade user success!");
                 window.location.reload();
             },
             err => {
-                alert("Error: " + err.status + " - " + err.error.message);
+                alert("Error: " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
         )
     }
 
     //Hạ cấp tài khoản khách hàng
-    upgradeCustomer(username: string) {
+    upgradeCustomer(user_id: string) {
         let headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded',
             'Authorization': localStorage.getItem('token')
         })
-        let body = `userupgrade=${username}`;
-        this.http.post(api.upgraderole, body, { headers: headers }).subscribe(
-            res_data => {
-                sessionStorage.setItem('response_body', JSON.stringify(res_data));
+        let body = `user_id=${user_id}`;
+        this.http.put(api.upgrade_role, body, { headers: headers }).subscribe(
+            res => {
+                sessionStorage.setItem('response', JSON.stringify(res));
                 alert("Upgrade user success!");
                 window.location.reload();
             },
             err => {
-                alert("Error: " + err.status + " - " + err.error.message);
+                alert("Error: " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             })
     }
