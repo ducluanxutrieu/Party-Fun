@@ -20,6 +20,7 @@ import { UserService } from './_services/user.service';
 //Guard
 import { AuthGuard } from './_guard/auth.guard';
 import { PaymentGuard } from './_guard/payment.guard';
+import { CheckoutGuard } from './_guard/checkout.guard';
 
 //Components
 import { AppComponent } from './app.component';
@@ -104,7 +105,8 @@ import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/paym
     ProductService,
     DatePipe,
     UserService,
-    PaymentGuard
+    PaymentGuard,
+    CheckoutGuard
   ],
   bootstrap: [AppComponent]
 })

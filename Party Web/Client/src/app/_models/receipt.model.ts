@@ -2,7 +2,7 @@ import { Item } from "./item.model";
 
 export class Receipt {
     items: Item[];
-    numofTable: number;
+    numOfTable: number;
     dateParty: Date;
     total_price: number;
 }

@@ -8,7 +8,8 @@
             <div class="col-sm-4 text-center">
                 <div class="rating-block">
                     <h5>Average rating</h5>
-                    <h2 class="bold padding-bottom-5">{{productRating?.avg_rate | number}} <span>/ 5</span></h2>
+                    <h2 class="bold padding-bottom-5" *ngIf="productRating?.avg_rate">{{productRating?.avg_rate | number}} <span>/ 5</span></h2>
+                    <p class="bold" *ngIf="!productRating?.avg_rate">No one has rated this dish!</p>
                     <bar-rating [rate]="productRating?.avg_rate" [max]="5" [theme]="'fontawesome'" [readOnly]="true" class="d-flex justify-content-center"></bar-rating>
                     <p>{{productRating?.count_rate}} reviews</p>
                 </div>
@@ -115,7 +116,7 @@
                     <div *ngFor="let review of productRating?.list_rate; let i = index">
                         <div class="row review-item" *ngIf="i<11">
                             <div class="col-sm-3 text-center">
-                            <img src={{review.imageurl}} onError="this.src='http://dummyimage.com/60x60/666/ffffff&text=No+Image';" class="img-rounded avt-thumb">
+                            <img src={{review.avatar}} onError="this.src='http://dummyimage.com/60x60/666/ffffff&text=No+Image';" class="img-rounded avt-thumb">
                                 <div class="review-block-name"><a>{{review.user_rate}}</a></div>
                                 <div class="review-block-date">{{review.create_at | date: 'dd-MM-yyyy hh:mm a'}}</div>
                             </div>

@@ -41,7 +41,6 @@ export class ReceiptComponent implements OnInit {
       res => {
         // let temp = res as PaymentInfo;
         this.checkout_session_id = res.data.id;
-        console.log(this.checkout_session_id);
       },
       err => {
         sessionStorage.setItem('error', JSON.stringify(err));

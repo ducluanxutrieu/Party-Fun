@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 //Guard
 import { AuthGuard } from './_guard/auth.guard';
 import { PaymentGuard } from './_guard/payment.guard';
+import { CheckoutGuard } from './_guard/checkout.guard';
 
 //Components
 import { AppComponent } from './app.component';
@@ -58,7 +59,7 @@ const routes: Routes = [
   { path: 'forgotpassword', component: ForgotpasswordComponent },
   { path: 'homepage', component: AppComponent },
   { path: 'cart', component: UserCartComponent },
-  { path: 'checkout', component: UserCheckoutComponent, canActivate: [AuthGuard] },
+  { path: 'checkout', component: UserCheckoutComponent, canActivate: [AuthGuard, CheckoutGuard] },
   { path: 'receipt/:bill_id', component: ReceiptComponent, canActivate: [AuthGuard, PaymentGuard] },
   {
     path: 'payment', component: PaymentComponent,
