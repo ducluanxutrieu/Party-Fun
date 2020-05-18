@@ -1,8 +1,7 @@
 .payment-form {
 	padding-top: 50px;
 	padding-bottom: 50px;
-	font-family: 'Montserrat', sans-serif;
-	/* font-family: Roboto, Helvetica, sans-serif; */
+	font-family: 'Montserrat', Roboto, sans-serif;
 }
 
 .payment-form.dark {

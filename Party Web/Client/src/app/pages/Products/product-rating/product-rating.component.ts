@@ -30,7 +30,7 @@ interface rateOverall {
 export class ProductRatingComponent implements OnInit {
   @Input() productId: string;
   @Input() productRating: Dish_rating;
-
+  current_user_id: string;  // Để so xác nhận comment nào là của mình
   // product_rating: any;
   reviewOverall: rateOverall = {
     one: 0,
@@ -45,8 +45,44 @@ export class ProductRatingComponent implements OnInit {
     public authenticationService: AuthenticationService,
   ) { }
   ngOnInit() {
-    // this.product_rating = this.currentProduct.rate;
-    console.log(this.productRating);
+    this.current_user_id = JSON.parse(localStorage.getItem('userinfo')).username;
+    this.load_review();
+    if (!this.authenticationService.loggedIn()) {
+      $('#reviewbtn').text('Login to write review');
+    }
+  }
+
+  // Xác nhận comment
+  ratingSubmit(data: {
+    comment: string,
+    rating: number
+  }) {
+    if (this.authenticationService.loggedIn()) {
+      let headers = new HttpHeaders({
+        'Content-type': 'application/x-www-form-urlencoded',
+        'Authorization': localStorage.getItem('token')
+      })
+      let body = `id=${this.productId}&score=${data.rating}&comment=${data.comment}`;
+      this.http.post(api.product_rate, body, { headers: headers, observe: 'response' }).subscribe(
+        res_data => {
+          // this.productService.getDishList();
+          sessionStorage.setItem('response', JSON.stringify(res_data.body));
+          toastr.success("Posted comment successfully!");
+          window.location.reload();
+        },
+        err => {
+          toastr.error("Error: " + err.status + " " + err.error.message);
+          sessionStorage.setItem('error', JSON.stringify(err));
+        }
+      )
+    }
+    else {
+      toastr.warning("You must be logged in to post a comment!");
+    }
+  }
+
+  // Load reviewOverall
+  load_review() {
     for (var index = 0; index < this.productRating.list_rate.length; index++) {
       switch (this.productRating.list_rate[index].score) {
         case 1:
@@ -69,36 +105,17 @@ export class ProductRatingComponent implements OnInit {
           break;
       }
     }
-    if (!this.authenticationService.loggedIn()) {
-      $('#reviewbtn').text('Login to write review');
-    }
   }
-  ratingSubmit(data: {
-    comment: string,
-    rating: number
-  }) {
-    if (this.authenticationService.loggedIn()) {
-      let headers = new HttpHeaders({
-        'Content-type': 'application/x-www-form-urlencoded',
-        'Authorization': localStorage.getItem('token')
-      })
-      let body = `id=${this.productId}&score=${data.rating}&comment=${data.comment}`;
-      console.log(body)
-      this.http.post(api.product_rate, body, { headers: headers, observe: 'response' }).subscribe(
-        res_data => {
-          // this.productService.getDishList();
-          sessionStorage.setItem('response', JSON.stringify(res_data.body));
-          toastr.success("Posted comment successfully!");
-          window.location.reload();
-        },
-        err => {
-          toastr.error("Error: " + err.status + " " + err.error.message);
-          sessionStorage.setItem('error', JSON.stringify(err));
-        }
-      )
+  // Thay comment thành editor
+  edit_clicked(review: Rating) {
+    if ($('.review-block-description').text() == review.comment) {
+      var $el = $('.review-block-description')
     }
-    else {
-      toastr.warning("You must be logged in to post a comment!");
-    }
+    let $textarea = $('<textarea/>').val(review.comment);
+    $el.replaceWith($textarea);
+  }
+  // Sửa comment
+  edit_comment(comment_id: string) {
+
   }
 }

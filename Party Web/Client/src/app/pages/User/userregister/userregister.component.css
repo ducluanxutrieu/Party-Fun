@@ -14,12 +14,12 @@ form {
     font-family: Roboto, Helvetica, sans-serif;
     color: #333;
     border-radius: 5px;
-    border: 1px solid #f37d42;
+    border: 1px solid #4DAD16;
 }
 
 form header {
     text-align: center;
-    background: #f37d42;
+    background: #4DAD16;
     padding: 15px 10px;
     color: white;
     font-size: 1.4em;
@@ -86,13 +86,13 @@ form .invalid-alert {
 }
 
 .bottom-text a {
-    color: #f37d42;
+    color: #4DAD16;
     text-decoration: none;
     font-size: 14px;
 }
 
 .bottom-text p a {
-    color: #f37d42;
+    color: #4DAD16;
     margin-left: 5px;
     transition: .5s ease-in;
     -webkit-transition: .5s ease-in;

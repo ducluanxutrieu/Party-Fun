@@ -105,7 +105,7 @@
                             <button class="btn btn-success" type="submit" [disabled]="rating.invalid">Send</button>
                         </div>
                     </form>
-                  </div>
+                </div>
             </div>
         </div>
         <!-- User review and rating section -->
@@ -120,12 +120,14 @@
                                 <div class="review-block-name"><a>{{review.user_rate}}</a></div>
                                 <div class="review-block-date">{{review.create_at | date: 'dd-MM-yyyy hh:mm a'}}</div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-8 pr-0">
                                 <div class="review-block-rate">
                                     <bar-rating [rate]="review.score" [max]="5" [theme]="'fontawesome'" [readOnly]="true"></bar-rating>
                                 </div>
-                                <!-- <div class="review-block-title">this was nice in buy</div> -->
                                 <div class="review-block-description">{{review.comment}}</div>
+                            </div>
+                            <div class="col-sm-1 text-center pl-0 pr-0">
+                                <span id="editBtn" (click)=edit_clicked(review)><i class="fa fa-edit" *ngIf="review.user_rate==current_user_id"></i></span>
                             </div>
                         </div>
                         <hr *ngIf="i!=productRating?.list_rate.length-1 && i<11">                       

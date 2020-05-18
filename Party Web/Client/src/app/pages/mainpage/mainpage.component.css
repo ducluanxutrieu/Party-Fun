@@ -79,11 +79,7 @@ a:hover {
 }
 
 .custom-panel {
-  background-color: #f37d42;
-}
-
-.custom-btn {
-  background-color: #ffae70;
+  background-color: #4DAD16;
 }
 
 .category {
@@ -111,7 +107,7 @@ a:hover {
 }
 
 .category-title:hover {
-  background-color: #f37d42;
+  background-color: #4DAD16;
   color: white;
 }
 
@@ -124,7 +120,7 @@ a:hover {
 }
 
 .section-title {
-  color: #f37d42;
+  color: #2ecc71;
 }
 
 .category-title:hover {

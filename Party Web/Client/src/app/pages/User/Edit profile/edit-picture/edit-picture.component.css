@@ -73,4 +73,5 @@ form button {
 
 form button:hover {
     cursor: pointer;
+    background: #ef4d4d;
 }

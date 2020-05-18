@@ -31,8 +31,8 @@ export class ProductService {
         return this.http.get<Response>(api.get_dish + "/" + id);
     }
 
-    // Lấy danh sách sản phẩm trong 1 category
-    get_category(category: string, page: number) {
+    // Lấy danh sách sản phẩm của 1 category
+    get_dish_by_category(category: string, page: number) {
         return this.http.get<Response>(api.get_category + "?categories=" + category + "&page=" + page);
     }
 
@@ -40,6 +40,7 @@ export class ProductService {
     get_dishRating(dish_id: string, page: number) {
         return this.http.get<Response>(api.product_rate + "?id=" + dish_id + "&page=" + page);
     }
+
     // Chỉnh sửa comment và rating của món ăn
     edit_rating(rating_id: string, rating: number, content: string) {
         let headers = new HttpHeaders({

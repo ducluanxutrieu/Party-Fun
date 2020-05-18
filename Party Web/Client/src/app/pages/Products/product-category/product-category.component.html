@@ -22,30 +22,45 @@
                 <!--div class="sorting-panel"></div-->
                 <h3 class="section-title">{{cat_filter}}</h3>
                 <div class="grid-container row">
-                    <div class="grid-item col-lg-4 col-md-6 mb-4" *ngFor="let item of pageOfItems">
+                    <div class="grid-item col-lg-4 col-md-6 mb-4" *ngFor="let product of filtered_products">
                         <div class="card h-100 product-card">
-                            <a [routerLink]="['/product', item._id]">
+                            <a [routerLink]="['/product', product._id]">
                                 <figure class="item-thumb-wrapper">
-                                    <img class="card-img-top item-thumb" src={{item.image[0]}}
-                                    onError="this.src='../../assets/images/dish-thumbnail-default.png';" alt="">
+                                    <img class="card-img-top item-thumb" src={{product?.image[0]}}
+                                    onError="this.src='assets/images/dish-thumbnail-default.png';" alt="">
                                 </figure>
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <a href="product/{{item._id}}">{{item.name}}</a>
+                                    <a href="product/{{product?._id}}">{{product.name}}</a>
                                 </h5>
-                                <h6>{{item.price | number}} VND</h6>
-                                <p class="card-text">{{item.description}}</p>
+                                <h6 class="text-uppercase">{{product?.price | number}} {{product?.currency}}</h6>
+                                <p class="card-text">{{product?.description}}</p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn btn-outline-secondary add-cart-btn" (click)="addCart_clicked(item._id)">Add to cart</a>
+                                <a class="btn btn-outline-secondary add-cart-btn" (click)="addCart(product._id)">Add to cart</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <p class="text-center" *ngIf="!filtered_products.length">There is no product in this category.</p>
-                <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center">
-                    <jw-pagination [items]="filtered_products" (changePage)="onChangePage($event)"></jw-pagination>
+                <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center" *ngIf="total_pages > 1">
+                    <!-- <jw-pagination [items]="filtered_products" (changePage)="onChangePage($event)"></jw-pagination> -->
+                    <div class="pagination">
+                        <ul>
+                          <a (click)="change_page(current_index - 1)"><li><</li></a>
+                          <!-- <a class="active" href="#"><li>1</li></a>
+                          <a href="#"><li>2</li></a>
+                          <a href="#"><li>3</li></a>
+                          <a href="#"><li>4</li></a>
+                          <a href="#"><li>5</li></a>
+                          <a href="#"><li>6</li></a> -->
+                          <a *ngFor="let item of [].constructor(total_pages); let currentIndex=index" 
+                            (click)="change_page(currentIndex+1)" 
+                            [ngClass]="{active: currentIndex+1 == current_index}">{{currentIndex + 1}}</a>
+                          <a (click)="change_page(current_index + 1)"><li>></li></a>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

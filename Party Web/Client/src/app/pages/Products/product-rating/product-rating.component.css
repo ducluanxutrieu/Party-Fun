@@ -79,3 +79,7 @@ body {
 .rating-overall {
     padding: 0 3em 3em;
 }
+
+#editBtn:hover {
+    cursor: pointer;
+}

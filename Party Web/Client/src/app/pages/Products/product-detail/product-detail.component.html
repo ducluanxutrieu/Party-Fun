@@ -79,7 +79,7 @@
                     <div class="card h-100 product-card" *ngIf="i<6">
                         <a href="product/{{item._id}}">
                             <figure class="suggest-item-thumb-wrapper">
-                                <img class="card-img-top suggest-item-thumb" src={{item.image[0]}} onError="this.src='../../../../assets/images/dish-thumbnail-default.png';" alt="">
+                                <img class="card-img-top suggest-item-thumb" src={{item.image[0]}} onError="this.src='assets/images/dish-thumbnail-default.png';" alt="">
                             </figure>
                         </a>
                         <div class="card-body text-center">
@@ -93,7 +93,7 @@
             </div>
         </div>
         <h6 #review class="sub-header">Dish reviews</h6>
-        <app-product-rating [productId]="product_data?._id" [productRating]="product_ratings"></app-product-rating>
+        <app-product-rating [productId]="product_data?._id" [productRating]="product_ratings" *ngIf="product_ratings"></app-product-rating>
     </div>
     <app-footer></app-footer>
 </body>

@@ -16,6 +16,7 @@ export class Rating {
     _id: string;
     id_dish: string;
     user_rate: string;
+    avatar: string;
     score: number;
     comment: string;
     create_at: string;

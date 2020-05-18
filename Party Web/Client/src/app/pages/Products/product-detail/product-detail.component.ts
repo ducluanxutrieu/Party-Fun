@@ -53,7 +53,6 @@ export class ProductDetailComponent implements OnInit {
     this.productService.get_dishRating(dish_id, 1).subscribe(
       res => {
         this.product_ratings = res.data as Dish_rating;
-        console.log(this.product_ratings);
       },
       err => {
         console.log("Error: " + err.error.message);
@@ -63,7 +62,7 @@ export class ProductDetailComponent implements OnInit {
   }
   // Lấy danh sách sản phẩm tương tự
   get_suggestList(category: string) {
-    this.productService.get_category(category, 1).subscribe(
+    this.productService.get_dish_by_category(category, 1).subscribe(
       res => {
         this.suggest_list = res.data.value as Product[];
       },
@@ -81,7 +80,6 @@ export class ProductDetailComponent implements OnInit {
         this.suggest_list.push(this.products_list[i]);
       }
     }
-    console.log(this.suggest_list);
   }
 
   // Thay đổi số lượng sản phẩm
