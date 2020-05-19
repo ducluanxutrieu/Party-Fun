@@ -121,6 +121,14 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
+  Future<Response<GetHistoryCartModel>> getUserHistory({String token}) {
+    final $url = 'user/get_history_cart';
+    final $headers = {'authorization': token};
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<GetHistoryCartModel, GetHistoryCartModel>($request);
+  }
+
+  @override
   Future<Response<PartyBookResponseModel>> bookParty(
       {String token, BookPartyRequestModel model}) {
     final $url = 'product/book';
@@ -167,11 +175,11 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<GetHistoryCartModel>> getUserHistory({String token}) {
-    final $url = 'user/get_history_cart';
+  Future<Response<ListPostsResponseModel>> getListPosts({String token}) {
+    final $url = 'product/posts';
     final $headers = {'authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
-    return client.send<GetHistoryCartModel, GetHistoryCartModel>($request);
+    return client
+        .send<ListPostsResponseModel, ListPostsResponseModel>($request);
   }
-
 }

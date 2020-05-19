@@ -19,7 +19,7 @@ class UpdateDishResponseModel {
     this.dish,
   });
 
-  static UpdateDishResponseModel jsonFactory(Map<String, dynamic> json) => UpdateDishResponseModel.fromJson(json);
+  static UpdateDishResponseModel fromJsonFactory(Map<String, dynamic> json) => UpdateDishResponseModel.fromJson(json);
 
   factory UpdateDishResponseModel.fromJson(Map<String, dynamic> json) => UpdateDishResponseModel(
     message: json["message"],
