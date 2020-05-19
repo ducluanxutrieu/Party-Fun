@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "821951850480",
+    "firebase_url": "https://partybooking-54cc2.firebaseio.com",
+    "project_id": "partybooking-54cc2",
+    "storage_bucket": "partybooking-54cc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821951850480:android:23c9b031b56f90ec305f35",
+        "android_client_info": {
+          "package_name": "com.ducluanxutrieu.party_booking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "821951850480-rcd7ffrhlh5hpd5eijucku0couo48oi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs7OooN8_5qY2lTQbq-mfFoXPkNOyoSME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "821951850480-rcd7ffrhlh5hpd5eijucku0couo48oi6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

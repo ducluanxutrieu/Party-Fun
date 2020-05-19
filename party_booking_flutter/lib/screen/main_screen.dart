@@ -16,6 +16,7 @@ import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/history_order_screen.dart';
+import 'package:party_booking/screen/list_posts_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
@@ -26,7 +27,6 @@ import 'about_us_screen.dart';
 import 'add_new_dish_screen.dart';
 import 'dish_detail_screen.dart';
 
-// ignore: must_be_immutable
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -329,6 +329,17 @@ class _MainScreenState extends State<MainScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => HistoryOrderScreen(),
+                ),
+              );
+            }),
+        _createDrawerItem(
+            icon: FontAwesomeIcons.solidNewspaper,
+            text: 'News',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListPostsScreen(),
                 ),
               );
             }),

@@ -9,7 +9,6 @@ import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stripe_payment/stripe_payment.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookPartySuccessScreen extends StatefulWidget {
@@ -23,15 +22,6 @@ class BookPartySuccessScreen extends StatefulWidget {
 
 class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
-  @override
-  initState() {
-    super.initState();
-    StripePayment.setOptions(StripeOptions(
-        publishableKey: "pk_test_28owFDjd02mGhWN5XUDoq1S700UciXGH9F",
-        merchantId: "Test",
-        androidPayMode: 'test'));
-  }
 
   void setError(dynamic error) {
     _scaffoldKey.currentState
