@@ -7,6 +7,7 @@ import 'package:party_booking/data/network/model/get_dish_detail_response_model.
 import 'package:party_booking/data/network/model/get_history_cart_model.dart';
 import 'package:party_booking/data/network/model/get_payment_response_mode.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/data/network/model/list_posts_response_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
@@ -37,10 +38,8 @@ abstract class AppApiService extends ChopperService {
   });
 
   @Get(path: 'product/dish/{dishId}')
-  Future<Response<DishDetailResponseModel>> getDishDetail({
-    @Header('authorization') String token,
-    @Path() String dishId
-  });
+  Future<Response<DishDetailResponseModel>> getDishDetail(
+      {@Header('authorization') String token, @Path() String dishId});
 
   @Get(path: 'user/reset_password')
   Future<Response<BaseResponseModel>> resetPassword({
@@ -81,7 +80,7 @@ abstract class AppApiService extends ChopperService {
 
   @Get(path: 'user/get_history_cart')
   Future<Response<GetHistoryCartModel>> getUserHistory({
-   @Header('authorization') String token,
+    @Header('authorization') String token,
   });
 
   @Post(path: 'product/book')
@@ -105,6 +104,11 @@ abstract class AppApiService extends ChopperService {
   @Delete(path: 'product/deletedish')
   Future<Response<BaseResponseModel>> deleteDish(
       {@Header('authorization') String token, @Field('_id') String id});
+
+  //Post
+  @Get(path: 'product/posts')
+  Future<Response<ListPostsResponseModel>> getListPosts(
+      {@Header('authorization') String token});
 
   static AppApiService create() {
     final client = ChopperClient(
@@ -135,10 +139,10 @@ abstract class AppApiService extends ChopperService {
       BookPartyRequestModel: BookPartyRequestModel.fromJsonFactory,
       PartyBookResponseModel: PartyBookResponseModel.fromJsonFactory,
       GetPaymentResponseModel: GetPaymentResponseModel.fromJsonFactory,
-      UpdateDishResponseModel: UpdateDishResponseModel.jsonFactory,
+      UpdateDishResponseModel: UpdateDishResponseModel.fromJsonFactory,
+      ListPostsResponseModel: ListPostsResponseModel.fromJsonFactory,
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
-    //  Data: Data.fromJsonFactory,
       GetHistoryCartModel: GetHistoryCartModel.fromJsonFactory,
     });
   }
