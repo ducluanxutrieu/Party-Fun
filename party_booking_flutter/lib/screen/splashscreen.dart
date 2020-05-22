@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loading/indicator/ball_pulse_indicator.dart';
-import 'package:loading/loading.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/main_screen.dart';
@@ -50,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Container(
                 color: Colors.lightBlue,
                 child: Center(
-                  child: Loading(indicator: BallPulseIndicator(), size: 100.0,color: Colors.pink),
                 ),
               ),
             ),
