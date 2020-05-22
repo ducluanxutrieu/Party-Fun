@@ -1,3 +1,13 @@
-span.tab-space{
+span.tab-space {
     padding-left: 1em;
+}
+
+.product-img {
+    max-width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+.product-name {
+    transform: translateX(30%);
 }

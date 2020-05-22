@@ -29,7 +29,7 @@
                               <h3 class="h4">Create Post</h3>
                           </div>
                           <div class="card-body">
-                            <form #postEditorForm = "ngForm" id="postEditor" (ngSubmit)="createClicked(postEditorForm.value)">
+                            <form #postEditorForm = "ngForm" id="postEditor" (ngSubmit)="add_post(postEditorForm.value)">
                               <!-- Post title -->
                               <div class="form-group">
                                 <label class="form-control-label">Post title</label>
@@ -39,17 +39,26 @@
                                 </div>
                               </div>
                               <!-- Post summary -->
-                              <div class="form-group">
+                              <!-- <div class="form-group">
                                 <label class="form-control-label">Post summary</label>
                                 <input type="text" placeholder="Post summary" class="form-control" name="summary" ngModel required #postSummary="ngModel">
                                 <div class="invalid-feedback d-block" role="alert" *ngIf="postSummary.invalid && postSummary.dirty">
                                   Please write a summary.
                                 </div>
+                              </div> -->
+                              <div class="form-group row">
+                                <label for="postimage" class="col-sm-2 form-control-label pr-0 d-flex align-items-center">Featured Image</label>
+                                <div class="col-sm-3 pl-0">
+                                    <input id="postimage" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="image" required (change)="fileChanged($event)" ngModel #image="ngModel">
+                                </div>
+                                <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
+                                    Please choose a image.
+                                </div>
                               </div>
                               <!-- Post content -->
                               <div class="form-group">
                                 <label class="form-control-label">Post content</label>
-                                <div id="postEditor" [froalaEditor]="options" [(froalaModel)]="postContent"></div>
+                                <div id="postEditor" [froalaEditor]="options" [(froalaModel)]="post_content"></div>
                               </div>
                               <div class="form-group">       
                                 <input type="submit" value="Create" class="btn btn-primary" form="postEditor" 

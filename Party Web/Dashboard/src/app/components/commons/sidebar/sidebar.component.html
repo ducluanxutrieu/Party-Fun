@@ -2,7 +2,7 @@
     <nav class="side-navbar">
         <!-- Sidebar Header-->
         <div class="sidebar-header d-flex align-items-center">
-        <div class="avatar"><img src={{user_info?.avatar}} onError="this.src='../assets/images/avatar/default-avatar.jpg'" alt="avatar" class="img-fluid rounded-circle"></div>
+        <div class="avatar"><img src={{user_info?.avatar}} alt="avatar" class="img-fluid rounded-circle"></div>
         <div class="title">
             <a href="profile"><h1 class="h4">{{user_info?.username}}</h1></a>
             <p><span *ngIf="user_info?.role=='2'">Staff</span><span *ngIf="user_info?.role=='3'">Admin</span></p>
@@ -31,18 +31,23 @@
         <li><a href="#CustomerDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-user" aria-hidden="true"></i>Customers </a>
             <ul id="CustomerDropdown" class="collapse list-unstyled ">
             <li><a href="customers/list"><i class="fa fa-list"></i>Customers List</a></li>
-            <li><a href="customers/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
-            <li><a href="customers/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
+            </ul>
+        </li>
+        <li><a href="#billDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-usd" aria-hidden="true"></i>Bills </a>
+            <ul id="billDropdown" class="collapse list-unstyled ">
+            <li><a href="bills/recent-bill"><i class="fa fa-clock-o" aria-hidden="true"></i>Recent Bills</a></li>
+            <li><a href="bills/pay"><i class="fa fa-money"></i>Quick Payment</a></li>
             </ul>
         </li>
         </ul>
-        <!-- <span class="heading">Others</span>
+        <span class="heading">Others</span>
         <ul class="list-unstyled">
         <li><a href="#PostDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-sticky-note"></i>Posts </a>
             <ul id="PostDropdown" class="collapse list-unstyled ">
             <li><a href="post/create"><i class="fa fa-plus"></i>Create post</a></li>
+            <li><a href="post/list"><i class="fa fa-list"></i>Posts List</a></li>
             </ul>
         </li>
-        </ul> -->
+        </ul>
     </nav>
 </div>

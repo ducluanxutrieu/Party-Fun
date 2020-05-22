@@ -14,10 +14,15 @@ export class ProductService {
     constructor(
         private http: HttpClient
     ) { }
-    
-    //Lấy danh sách sản phẩm
+
+    //Lấy danh sách món ăn
     get_dishList() {
         return this.http.get<ApiResponse>(api.get_dishList);
+    }
+
+    // Lấy thông tin 1 sản phẩm
+    get_dish(id: string) {
+        return this.http.get<ApiResponse>(api.get_dish + "/" + id);
     }
 
     // Thêm món ăn mới
@@ -38,6 +43,19 @@ export class ProductService {
         return this.http.put<ApiResponse>(api.update_dish, body, { headers: headers });
     }
 
+    // Xóa món ăn
+    delete_dish(id: string) {
+        let headers = new HttpHeaders({
+            'Authorization': localStorage.getItem('token')
+        })
+        let option = {
+            headers: headers,
+            body: {
+                _id: id
+            },
+        }
+        return this.http.delete<ApiResponse>(api.delete_dish, option);
+    }
     //Tìm sản phẩm
     findAll(): any[] {
         this.products = JSON.parse(localStorage.getItem('dish-list'));

@@ -1,22 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 // Services
 import { PostService } from '../../../_services/post.service';
 import { CommonService } from '../../../_services/common.service';
-
+/// Models
+import { Post } from '../../../_models/post.model';
+import { api } from '../../../_api/apiUrl';
 @Component({
-  selector: 'app-post',
-  templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css']
+  selector: 'app-posts-edit',
+  templateUrl: './posts-edit.component.html',
+  styleUrls: ['./posts-edit.component.css']
 })
-export class PostComponent implements OnInit {
-  public post_content;
+export class PostsEditComponent implements OnInit {
+  post_id: string;
+  post: Post = new Post;
   post_feature_image;
-  constructor(
-    private postService: PostService,
-    private commonService: CommonService
-  ) { }
-
-  ngOnInit() { }
 
   options: Object = {
     placeholderText: 'Edit your post here!',
@@ -45,7 +43,7 @@ export class PostComponent implements OnInit {
     },
     imageUploadParam: 'image',
     // Set the image upload URL.
-    imageUploadURL: '	https://api.imgur.com/3/image',
+    imageUploadURL: api.upload_image,
     // Set request type.
     imageUploadMethod: 'POST',
     // Set max image size to 5MB.
@@ -53,36 +51,69 @@ export class PostComponent implements OnInit {
     // Allow to upload PNG and JPG.
     imageAllowedTypes: ['jpeg', 'jpg', 'png'],
   }
+  constructor(
+    private postService: PostService,
+    private commonService: CommonService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
-  // Thêm bài viết
-  add_post(content: {
+  ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      this.post_id = params['id'];
+      this.get_post(this.post_id);
+    })
+  }
+
+  // Xác nhận chỉnh sửa bài viết
+  edit_confirm(content: {
     title: string
   }) {
-    let post_feature_image_url: string;
-    this.commonService.upload_image(this.post_feature_image).subscribe(
+    if (this.post_feature_image) {
+      this.commonService.upload_image(this.post_feature_image).subscribe(
+        res => {
+          this.post.feature_image = res.data;
+        },
+        err => {
+          alert("Error: Upload image error!");
+          return;
+        },
+        () => {
+          this.edit_post(content);
+        }
+      )
+    }
+    else {
+      this.edit_post(content);
+    }
+  }
+
+  // Chỉnh sửa bài viết
+  edit_post(content: {
+    title: string
+  }
+  ) {
+    let body = `_id=${this.post_id}&title=${content.title}&feature_image=${this.post.feature_image}&content=${this.post.content}`;
+    this.postService.edit_post(body).subscribe(
       res => {
-        post_feature_image_url = res.data;
+        alert("Edit post success!");
+        window.location.reload();
       },
       err => {
-        alert("Error: Upload image error!");
-        return;
-      },
-      () => {
-        let body = `title=${content.title}&feature_image=${post_feature_image_url}&content=${this.post_content}`;
-        this.postService.add_post(body).subscribe(
-          res => {
-            alert("Add post success!");
-            window.location.reload();
-          },
-          err => {
-            alert("Error: " + err.error.message);
-          }
-        )
+        alert("Error: " + err.error.message);
       }
     )
   }
-
-  // Khi thêm ảnh vào input
+  // Lấy nội dung bài viết
+  get_post(post_id: string) {
+    this.postService.get_post(post_id).subscribe(
+      res => {
+        this.post = res.data as Post;
+      },
+      err => {
+        console.log("Error: " + err.error.message);
+      }
+    )
+  }
   fileChanged(event: any) {
     this.post_feature_image = event.target.files;
   }

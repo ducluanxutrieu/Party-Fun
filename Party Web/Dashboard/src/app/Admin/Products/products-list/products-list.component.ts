@@ -25,23 +25,13 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
 
   // Xóa món ăn
   product_delete(id: string) {
-    let headers = new HttpHeaders({
-      'Authorization': localStorage.getItem('token')
-    })
-    const option = {
-      headers: headers,
-      body: {
-        _id: id
-      },
-    }
-    this.http.delete(api.deleteDish, option).subscribe(
+    this.productService.delete_dish(id).subscribe(
       res => {
-        sessionStorage.setItem('response', JSON.stringify(res));
         alert("Delete product success!");
         window.location.reload();
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
+        alert("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )
@@ -50,7 +40,6 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   delete_clicked(id: string, name: string) {
     if (confirm("Are you sure to delete this?\n" + name)) {
       this.product_delete(id);
-      console.log(id);
     }
   }
 

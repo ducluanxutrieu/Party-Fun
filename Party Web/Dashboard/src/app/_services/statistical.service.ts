@@ -21,12 +21,12 @@ export class StatisticalService {
     }
 
     // Thống kê món ăn được gọi trong 1 ngày
-    get_productStatistics() {
-        return this.http.get<ApiResponse>(api.productStatistics, { headers: this.headers })
+    get_productStatistics(type: string) {
+        return this.http.get<ApiResponse>(api.productStatistics + `?type=${type}`, { headers: this.headers })
     }
 
-    // Lấy số liệu thống kê đơn hàng
-    get_recentBills() {
-        return this.http.get<ApiResponse>(api.billStatistics, { headers: this.headers })
+    // Thống kê tiền khách hàng thanh toán
+    get_customerStatistics(type: string, payment_status: number) {
+        return this.http.get<ApiResponse>(api.customerStatistics + `?type=${type}&payment_status=${payment_status}`, { headers: this.headers });
     }
 }

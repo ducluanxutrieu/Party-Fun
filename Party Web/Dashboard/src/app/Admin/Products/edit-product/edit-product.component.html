@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="form-group">       
                                     <label class="form-control-label">Description</label>
-                                    <textarea style="height: 5em" type="text" placeholder="Description" class="form-control" name="description" ngModel [(ngModel)]="product_data.description" minlength="6" required #productdescription="ngModel"></textarea>
+                                    <textarea type="text" placeholder="Description" class="form-control dish-description" name="description" ngModel [(ngModel)]="product_data.description" minlength="6" required #productdescription="ngModel"></textarea>
                                     <div class="invalid-feedback d-block" role="alert" *ngIf="productdescription.invalid && productdescription.dirty">
                                         Please write a description with at least 6 characters.
                                     </div>
@@ -76,10 +76,15 @@
                                 <div class="form-group row">
                                     <label for="fileInput" class="col-sm-1 form-control-label">Image</label>
                                     <div class="col-sm-3">
-                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" multiple="multiple" class="form-control-file" name="image" required (change)="fileChanged($event)" ngModel #image="ngModel">
+                                        <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" multiple="multiple" class="form-control-file" name="image" (change)="fileChanged($event)" ngModel #image="ngModel">
                                     </div>
                                     <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
                                         Please choose a image.
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-3" *ngFor="let image of product_data.image">
+                                        <img class="product-img" src={{image}} alt="...">
                                     </div>
                                 </div>
                                 <div class="form-group">       

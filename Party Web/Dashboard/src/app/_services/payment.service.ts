@@ -1,11 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { api } from '../_api/apiUrl';
 import { Injectable } from '@angular/core';
+// Services
+import { api } from '../_api/apiUrl';
+// Models
+import { ApiResponse } from '../_models/response.model';
 
 @Injectable()
 export class PaymentService {
 
     headers = new HttpHeaders({
+        'Content-type': 'application/x-www-form-urlencoded',
         'Authorization': localStorage.getItem('token')
     })
     constructor(
@@ -13,20 +17,16 @@ export class PaymentService {
     ) { }
 
     //Thanh toán đơn hàng
-    pay_bill(bill_id) {
-        let headers = new HttpHeaders({
-            'Content-type': 'application/x-www-form-urlencoded',
-            'Authorization': localStorage.getItem('token')
-        })
-        let body = `_id=${bill_id}`;
-        this.http.post(api.pay, body, { headers: headers }).subscribe(
-            res_data => {
-                sessionStorage.setItem('response_body', JSON.stringify(res_data));
+    pay_bill(bill_id: string) {
+        let body;
+        this.http.post<ApiResponse>(api.pay_bill + "/" + bill_id, body, { headers: this.headers }).subscribe(
+            res => {
+                sessionStorage.setItem('response', JSON.stringify(res));
                 alert("Paid success!");
                 window.location.reload();
             },
             err => {
-                alert("Error: " + err.status + " - " + err.error.message);
+                alert("Error: " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
         )
@@ -34,7 +34,7 @@ export class PaymentService {
     }
 
     //Xóa đơn hàng
-    delete_bill(bill_id) {
+    delete_bill(bill_id: string) {
         const option = {
             headers: this.headers,
             body: {
@@ -42,8 +42,8 @@ export class PaymentService {
             },
         }
         this.http.delete(api.delete_bill, option).subscribe(
-            res_data => {
-                sessionStorage.setItem('response_body', JSON.stringify(res_data));
+            res => {
+                sessionStorage.setItem('response', JSON.stringify(res));
                 alert("Delete bill success!");
                 window.location.reload();
             },
@@ -52,5 +52,15 @@ export class PaymentService {
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
         )
+    }
+
+    // Lấy danh sách tất cả hóa đơn
+    get_bills_list(page: number) {
+        return this.http.get<ApiResponse>(api.get_bills_list + "?page=" + page, { headers: this.headers });
+    }
+
+    // Lấy danh sách hóa đơn theo tên khách hàng
+    get_bills_by_username(username: string) {
+        return this.http.get<ApiResponse>(api.get_bills_list + "/" + username, { headers: this.headers });
     }
 }

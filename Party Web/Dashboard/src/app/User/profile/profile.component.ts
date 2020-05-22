@@ -14,7 +14,7 @@ import { User } from '../../_models/user.model';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user_info: User;
+  user_info: User = new User;
   private birthday;
 
   constructor(
@@ -28,7 +28,14 @@ export class ProfileComponent implements OnInit {
   }
   // Lấy thông tin user
   get_userInfo() {
-    this.user_info = JSON.parse(localStorage.getItem('userinfo')) as User;
+    this.userService.get_userInfo().subscribe(
+      res => {
+        this.user_info = res.data as User;
+      },
+      err => {
+        console.log("Get user info error!");
+      }
+    )
   }
 
   // Cập nhật thông tin profile
@@ -62,7 +69,7 @@ export class ProfileComponent implements OnInit {
     let headers = new HttpHeaders({
       'Authorization': localStorage.getItem('token')
     })
-    this.http.post(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(
+    this.http.put(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
         window.location.reload();

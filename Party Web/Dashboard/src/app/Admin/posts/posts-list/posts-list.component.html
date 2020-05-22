@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <div class="page">
+    <div class="page-content d-flex align-items-stretch">
+      <!-- Sidebar -->
+      <app-sidebar></app-sidebar>
+      <!-- Page content-->
+      <div class="content-inner">
+        <header class="page-header">
+          <div class="container-fluid">
+            <h2 class="no-margin-bottom">Post</h2>
+          </div>
+        </header>
+        <!-- Breadcrumb-->
+        <div class="breadcrumb-holder container-fluid">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+            <li class="breadcrumb-item active">Posts list</li>
+          </ul>
+        </div>
+        <section class="tables">
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Posts list</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="employeTable" class="table table-bordered table-striped employee-table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Title</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Created at</th>
+                        <th class="text-center">Updated at</th>
+                        <th class="text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let post of posts_list; let i = index">
+                        <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                        <td class="align-middle text-center">{{post?.title}}</td>
+                        <td class="align-middle text-center">{{post?.author}}</td>
+                        <td class="align-middle text-center">{{post?.create_at | date:'dd-MM-yyyy'}}</td>
+                        <td class="align-middle text-center">{{post?.update_at | date:'dd-MM-yyyy'}}</td>
+                        <td class="text-center">
+                            <a href="post/edit/{{post?._id}}" class="pr-1">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                            </a>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip"
+                                data-placement="top" title="Delete this post" (click)="post_delete(post?._id)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

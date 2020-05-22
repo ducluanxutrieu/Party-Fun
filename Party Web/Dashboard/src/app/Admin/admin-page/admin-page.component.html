@@ -5,7 +5,7 @@
       <div class="page-content d-flex align-items-stretch">
         <!-- Sidebar -->
         <app-sidebar></app-sidebar>
-            
+        <!-- Content -->
         <div class="content-inner">
           <!-- Page Header-->
           <header class="page-header">
@@ -16,50 +16,103 @@
           <!-- Charts-->
           <section class="charts">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                          <div class="card-header d-flex align-items-center">
-                            <div class="row">
-                                <h3 class="h4 col-lg-12">Statistics of products ordered today</h3>
+              <div class="row">
+                <!-- Products Statistics -->
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                      <form id="productRange" #productRangeForm = "ngForm" (ngSubmit)="product_rangeChanged(productRangeForm.value)">
+                        <div class="row">
+                            <h3 class="h4 col-lg-12">Statistics of products ordered</h3>
+                            <div class="col-lg-3 d-flex align-items-center pr-0">Select range</div>
+                            <!-- <div class="col-lg-2 pl-0 mt-1">
+                              <input type="text" class="form-control" name="value" ngModel #rangedValue="ngModel">
+                            </div> -->
+                            <div class="col-lg-2 pl-0 mt-1">
+                              <select class="form-control" name="range" ngModel #ranged="ngModel" required>
+                                <option value="day">Day</option>
+                                <option value="week">Week</option>
+                                <option value="month">Month</option>
+                              </select>
                             </div>
-                          </div>
-                          <div class="card-body" *ngIf="isProductDataAvailable">
-                              <div style="overflow:scroll;overflow-y:auto;overflow-x:auto;">
-                                  <div class="chart-wrapper" style="width: 100wh">
-                                    <canvas baseChart id="productChart"
-                                      [datasets]="productChartData"
-                                      [labels]="productChartLabels"
-                                      [options]="productChartOptions"
-                                      [legend]="barChartLegend"
-                                      [chartType]="barChartType">
-                                    </canvas>
-                                  </div>                                         
-                              </div>
-                          </div>
+                            <div class="col lg-2 pl-0 mt-1">
+                              <input type="submit" value="Submit" form="productRange" class="btn btn-primary" [disabled]="productRangeForm.invalid">
+                            </div>
                         </div>
+                      </form>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="card">
-                          <div class="card-header d-flex align-items-center">
-                            <div class="row">
-                                <h3 class="h4 col-lg-12">
-                                  Statistics of money collected in the last 7 days (Not counting days without revenue)
-                                </h3>
-                            </div>
-                          </div>
-                          <div class="card-body" *ngIf="isMoneyDataAvailable">
-                              <canvas baseChart
-                                [datasets]="moneyChartData"
-                                [labels]="moneyChartLabels"
-                                [options]="moneyChartOptions"
+                    <span *ngIf="!isProductDataAvailable"  class="text-center pt-2 pb-2">No data available</span>
+                    <div class="card-body" *ngIf="isProductDataAvailable">
+                        <div style="overflow:scroll;overflow-y:auto;overflow-x:auto;">
+                            <div class="chart-wrapper" style="width: 100wh">
+                              <canvas baseChart id="productChart"
+                                [datasets]="productChartData"
+                                [labels]="productChartLabels"
+                                [options]="productChartOptions"
                                 [legend]="barChartLegend"
                                 [chartType]="barChartType">
-                              </canvas>                                  
-                          </div>
+                              </canvas>
+                            </div>                                         
                         </div>
                     </div>
+                  </div>
                 </div>
+                <!-- Money Statistic -->
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                      <div class="row">
+                          <h3 class="h4 col-lg-12">
+                            Statistics of money collected in the last recent 7 days with revenue
+                          </h3>
+                      </div>
+                    </div>
+                    <span *ngIf="!isMoneyDataAvailable"  class="text-center pt-2 pb-2">No data available</span>
+                    <div class="card-body" *ngIf="isMoneyDataAvailable">
+                        <canvas baseChart
+                          [datasets]="moneyChartData"
+                          [labels]="moneyChartLabels"
+                          [options]="moneyChartOptions"
+                          [legend]="barChartLegend"
+                          [chartType]="barChartType">
+                        </canvas>                                  
+                    </div>
+                  </div>
+                </div>
+                <!-- Customers Statistic -->
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                      <form id="customerRange" #customerRangeForm = "ngForm" (ngSubmit)="customer_rangeChanged(customerRangeForm.value)">
+                        <div class="row">
+                            <h3 class="h4 col-lg-12">Payment statistics of customers</h3>
+                            <div class="col-lg-3 d-flex align-items-center pr-0">Select range</div>
+                            <div class="col-lg-2 pl-0 mt-1">
+                              <select class="form-control" name="range" ngModel #ranged="ngModel" required>
+                                <option value="day">Day</option>
+                                <option value="week">Week</option>
+                                <option value="month">Month</option>
+                              </select>
+                            </div>
+                            <div class="col lg-2 pl-0 mt-1">
+                              <input type="submit" value="Submit" form="customerRange" class="btn btn-primary" [disabled]="customerRangeForm.invalid">
+                            </div>
+                        </div>
+                      </form>
+                    </div>
+                    <span *ngIf="!isCustomerDataAvailable"  class="text-center pt-2 pb-2">No data available</span>
+                    <div class="card-body" *ngIf="isCustomerDataAvailable">
+                        <canvas baseChart
+                          [datasets]="customerChartData"
+                          [labels]="customerChartLabels"
+                          [options]="customerChartOptions"
+                          [legend]="barChartLegend"
+                          [chartType]="barChartType">
+                        </canvas>     
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </div>

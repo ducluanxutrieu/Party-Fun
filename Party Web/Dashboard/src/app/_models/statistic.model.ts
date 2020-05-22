@@ -10,3 +10,9 @@ export class DishStatistic {
     name: string;
     date: string;
 }
+
+export class CustomerStatistic {
+    _id: string;
+    count_bill: number;
+    total_money: number;
+}

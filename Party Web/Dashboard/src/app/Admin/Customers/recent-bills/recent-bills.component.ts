@@ -1,29 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+// Services
 import { api } from '../../../_api/apiUrl';
-
 import { StatisticalService } from '../../../_services/statistical.service';
 import { PaymentService } from '../../../_services/payment.service';
 import { ProductService } from '../../../_services/product.service';
+// Models
+import { Bill, Bill_item } from '../../../_models/bill.model';
 
 // declare jquery;
 declare var $: any;
 
-interface RecentBill {
-  _id: string;
-  lishDishs: [];
-  dateParty: string;
-  numbertable: number;
-  username: string;
-  createAt: string;
-  paymentstatus: boolean;
-  totalMoney: number;
-  userpayment;
-  paymentAt: string;
-  phoneNumber: number;
-  email: string;
-}
 @Component({
   selector: 'app-recent-bills',
   templateUrl: './recent-bills.component.html',
@@ -31,9 +19,9 @@ interface RecentBill {
 })
 
 export class RecentBillsComponent implements OnInit {
-  recent_billList = [];
-  bill_detail = [];
-  current_bill: RecentBill;
+  recent_bills: Bill[] = [];
+  bill_detail: Bill_item[] = [];
+  current_bill: Bill;
 
   // dtTrigger: Subject<any> = new Subject();
 
@@ -66,13 +54,14 @@ export class RecentBillsComponent implements OnInit {
     }
   }
 
-  itemClicked(item: any) {
+  // Khi click vào bill trong list
+  itemClicked(item: Bill) {
     if ($('#CartDetailModal').hasClass('show')) {
       $('#CartDetailModal').modal('hide');
     }
     else {
       this.current_bill = item;
-      this.bill_detail = item.lishDishs;
+      this.bill_detail = item.dishes;
     }
   }
 
@@ -88,18 +77,33 @@ export class RecentBillsComponent implements OnInit {
     };
   }
 
+  // Lấy danh sách bill và tạo datatable
   get_recentBills() {
-    this.http.get(api.billStatistics, { headers: this.headers, observe: 'response' }).subscribe(
-      res_data => {
-        sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
-        this.recent_billList = JSON.parse(sessionStorage.getItem('recent_bills'));
-        // this.dtTrigger.next();
-        // setTimeout(() => {
-        //   this.datatable_generate();
-        // }, 1000)
+    // this.http.get(api.get_bills_list, { headers: this.headers, observe: 'response' }).subscribe(
+    //   res_data => {
+    //     sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
+    //     this.recent_bills = JSON.parse(sessionStorage.getItem('recent_bills'));
+    //     // this.dtTrigger.next();
+    //     // setTimeout(() => {
+    //     //   this.datatable_generate();
+    //     // }, 1000)
+    //   },
+    //   err => {
+    //     console.log("Error: " + err.status + " " + err.error.text);
+    //     sessionStorage.setItem('error', JSON.stringify(err));
+    //   },
+    //   () => {
+    //     setTimeout(() => {
+    //       this.datatable_generate();
+    //     })
+    //   }
+    // )
+    this.paymentService.get_bills_list(1).subscribe(
+      res => {
+        this.recent_bills = res.data.value as Bill[];
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.text);
+        console.log("Error: " + err.error.text);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
       () => {
