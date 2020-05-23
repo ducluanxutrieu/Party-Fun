@@ -1,4 +1,10 @@
 <app-header></app-header>
+<div class="container" *ngIf="post_list.length < 1">
+  <list-loading></list-loading>
+  <list-loading></list-loading>
+  <list-loading></list-loading>
+  <list-loading></list-loading>
+</div>
 <div class="container mt-1" *ngFor="let post of post_list">
   <div class="col-md-12 row">
     <div class="col-md-2">

@@ -56,6 +56,8 @@ import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/paym
 import { PostListComponent } from './pages/post/post-list/post-list.component';
 import { PostDetailComponent } from './pages/post/post-detail/post-detail.component';
 import { PaginationComponent } from './component/pagination/pagination.component';
+import { LoadingComponent } from './component/loading/loading.component';
+import { SafeHtml } from './_pipes/safeHtml.pipe';
 
 @NgModule({
   declarations: [
@@ -91,7 +93,9 @@ import { PaginationComponent } from './component/pagination/pagination.component
     PaymentMobileComponent,
     PostListComponent,
     PostDetailComponent,
-    PaginationComponent
+    PaginationComponent,
+    LoadingComponent,
+    SafeHtml
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Service
@@ -11,11 +11,12 @@ declare var toastr;
 @Component({
   selector: 'app-post-detail',
   templateUrl: './post-detail.component.html',
-  styleUrls: ['./post-detail.component.css']
+  styleUrls: ['./post-detail.component.css'],
+  // encapsulation: ViewEncapsulation.None,
 })
 export class PostDetailComponent implements OnInit {
   post: Post = new Post;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private postService: PostService,

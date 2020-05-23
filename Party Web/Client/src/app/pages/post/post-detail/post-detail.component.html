@@ -1,4 +1,8 @@
 <app-header></app-header>
-<div class="container pt-1" [innerHTML]="post.content"></div>
+<div class="text-center" *ngIf="!post.content">
+  <img src="assets/images/hakase-walking.gif" alt="loading">
+  <h4>Loading...</h4>
+</div>
+<div *ngIf="post.content" class="container pt-1" [innerHTML]="post?.content | safeHtml"></div>
 <scroll-to-top></scroll-to-top>
 <app-footer></app-footer>
