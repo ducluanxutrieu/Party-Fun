@@ -3,8 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { api } from '../_api/apiUrl';
 
-declare var toastr;
-
 interface signup_data {
     name: string;
     email: string;
@@ -16,11 +14,7 @@ interface signup_data {
 export class AuthenticationService {
     constructor(
         private http: HttpClient,
-    ) {
-        toastr.options = {
-            "timeOut": "1500"
-        }
-    }
+    ) { }
     // Đăng nhập
     signin(username: string, password: string) {
         let body = `username=${username}&password=${password}`;

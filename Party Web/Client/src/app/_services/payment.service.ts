@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { api } from '../_api/apiUrl';
 //Models
 import { Payment } from '../_models/payment.model';
-import {Response} from '../_models/response.model';
+import { ApiResponse } from '../_models/response.model';
 //Services
 import { StripeService } from './stripe.service';
 
@@ -32,6 +32,6 @@ export class PaymentService {
         const option = {
             headers: this.headers,
         }
-        return this.http.get<Response>(api.get_payment + '?_id=' + bill_id, option);
+        return this.http.get<ApiResponse>(api.get_payment + '?_id=' + bill_id, option);
     }
 }

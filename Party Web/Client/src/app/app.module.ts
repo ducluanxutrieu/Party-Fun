@@ -53,6 +53,9 @@ import { PaymentSuccessComponent } from './pages/User/payment/payment-success/pa
 import { PaymentFailComponent } from './pages/User/payment/payment-fail/payment-fail.component';
 import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-info.component';
 import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/payment-mobile.component';
+import { PostListComponent } from './pages/post/post-list/post-list.component';
+import { PostDetailComponent } from './pages/post/post-detail/post-detail.component';
+import { PaginationComponent } from './component/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +88,10 @@ import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/paym
     PaymentSuccessComponent,
     PaymentFailComponent,
     PaymentInfoComponent,
-    PaymentMobileComponent
+    PaymentMobileComponent,
+    PostListComponent,
+    PostDetailComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

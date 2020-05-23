@@ -3,7 +3,7 @@ import { api } from '../_api/apiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 //Models
 import { Item } from '../_models/item.model';
-import { Response } from '../_models/response.model';
+import { ApiResponse } from '../_models/response.model';
 
 declare var toastr;
 
@@ -23,22 +23,22 @@ export class ProductService {
     }
     // Lấy danh sách sản phẩm
     get_DishList() {
-        return this.http.get<Response>(api.get_dishlist);
+        return this.http.get<ApiResponse>(api.get_dishlist);
     }
 
     // Lấy thông tin 1 sản phẩm
     get_dish(id: string) {
-        return this.http.get<Response>(api.get_dish + "/" + id);
+        return this.http.get<ApiResponse>(api.get_dish + "/" + id);
     }
 
     // Lấy danh sách sản phẩm của 1 category
     get_dish_by_category(category: string, page: number) {
-        return this.http.get<Response>(api.get_category + "?categories=" + category + "&page=" + page);
+        return this.http.get<ApiResponse>(api.get_category + "?categories=" + category + "&page=" + page);
     }
 
     // Lấy toàn bộ comment và rating của món ăn
     get_dishRating(dish_id: string, page: number) {
-        return this.http.get<Response>(api.product_rate + "?id=" + dish_id + "&page=" + page);
+        return this.http.get<ApiResponse>(api.product_rate + "?id=" + dish_id + "&page=" + page);
     }
 
     // Chỉnh sửa comment và rating của món ăn
@@ -48,7 +48,7 @@ export class ProductService {
             'Authorization': localStorage.getItem('token'),
         })
         let body = `id=${rating_id}&score=${rating}&comment=${content}`;
-        return this.http.put<Response>(api.product_rate, body, { headers: headers });
+        return this.http.put<ApiResponse>(api.product_rate, body, { headers: headers });
     }
 
     // Thêm comment và rating của món ăn
@@ -58,9 +58,9 @@ export class ProductService {
             'Authorization': localStorage.getItem('token'),
         })
         let body = `id=${dish_id}&score=${rating}&comment=${content}`;
-        return this.http.post<Response>(api.product_rate, body, { headers: headers });
+        return this.http.post<ApiResponse>(api.product_rate, body, { headers: headers });
     }
-    
+
     //API CŨ
     // Tìm tất cả sản phẩm
     findAll(): any[] {

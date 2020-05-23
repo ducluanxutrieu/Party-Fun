@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 
 import { api } from '../../../../_api/apiUrl';
 //Models
-import { Response } from '../../../../_models/response.model';
+import { ApiResponse } from '../../../../_models/response.model';
 
 declare var toastr;
 
@@ -35,7 +35,7 @@ export class EditPictureComponent implements OnInit {
     let headers = new HttpHeaders({
       'Authorization': localStorage.getItem('token'),
     })
-    return this.http.put<Response>(api.update_avt, body, { headers: headers }).subscribe(
+    return this.http.put<ApiResponse>(api.update_avt, body, { headers: headers }).subscribe(
       res => {
         sessionStorage.setItem('response', JSON.stringify(res));
         localStorage.setItem('avatar', res.data);

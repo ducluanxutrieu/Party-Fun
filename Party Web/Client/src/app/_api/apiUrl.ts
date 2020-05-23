@@ -12,7 +12,6 @@ export const api = {
     cart_history: `${apiUrl}/user/get_history_cart`,            // Lấy lịch sử đơn hàng
     update_user: `${apiUrl}/user/update`,                       // Cập nhật thông tin user
     update_avt: `${apiUrl}/user/avatar`,                        // Cập nhật avatar
-    upgraderole: `${apiUrl}/user/upgraderole`,                  // Nâng cấp quyền của user (Từ khách hàng thành nhân viên)
 
     get_dishlist: `${apiUrl}/product/dishs`,                    // Lấy danh sách món ăn
     get_category: `${apiUrl}/product/get_dish_by_categories`,   // Lấy danh sách món ăn trong 1 category
@@ -20,6 +19,7 @@ export const api = {
     product_rate: `${apiUrl}/product/rate`,                     // Các thao tác liên quan đến comment và rating món ăn
 
     book: `${apiUrl}/product/book`,                             // Đặt đơn hàng
+    get_payment: `${apiUrl}/payment/get_payment`,               // Lấy Stripe session
 
-    get_payment: `${apiUrl}/payment/get_payment`
-};
+    post: `${apiUrl}/product/posts`,                            // Liên quan đến post
+}

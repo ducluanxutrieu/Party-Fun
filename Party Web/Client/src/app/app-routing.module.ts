@@ -32,6 +32,8 @@ import { PaymentSuccessComponent } from './pages/User/payment/payment-success/pa
 import { PaymentFailComponent } from './pages/User/payment/payment-fail/payment-fail.component';
 import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-info.component';
 import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/payment-mobile.component';
+import { PostListComponent } from './pages/post/post-list/post-list.component';
+import { PostDetailComponent } from './pages/post/post-detail/post-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
@@ -69,6 +71,14 @@ const routes: Routes = [
       { path: 'success', component: PaymentSuccessComponent },
       { path: 'cancel', component: PaymentFailComponent },
       { path: 'mobile/:session_id', component: PaymentMobileComponent }
+    ]
+  },
+  {
+    path: 'post',
+    children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      { path: 'list', component: PostListComponent },
+      { path: 'detail/:id', component: PostDetailComponent }
     ]
   },
   { path: 'mainpage', component: MainpageComponent },

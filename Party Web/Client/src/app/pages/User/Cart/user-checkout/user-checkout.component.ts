@@ -7,7 +7,7 @@ import { api } from '../../../../_api/apiUrl';
 // Models
 import { Item } from '../../../../_models/item.model';
 import { Bill } from '../../../../_models/bill.model';
-import { Response } from '../../../../_models/response.model';
+import { ApiResponse } from '../../../../_models/response.model';
 
 declare var toastr;
 
@@ -49,7 +49,7 @@ export class UserCheckoutComponent implements OnInit {
       )
     }
     let body = `dishes=${JSON.stringify(item_ordered)}&table=${this.numOfTable}&date_party=${this.deliveryDate}&count_customer=1`;
-    this.http.post<Response>(api.book, body, { headers: headers }).subscribe(
+    this.http.post<ApiResponse>(api.book, body, { headers: headers }).subscribe(
       res => {
         let receipt = res.data as Bill;
         sessionStorage.setItem('response', JSON.stringify(res));

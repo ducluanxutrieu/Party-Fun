@@ -1,0 +1,8 @@
+a:hover {
+    text-decoration: none;
+}
+
+.post-image {
+    max-width: 100%;
+    max-height: 100%;
+}

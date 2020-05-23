@@ -16,3 +16,7 @@
 .nav-link:hover {
 	transform: scale(1.1);
 }
+
+.logo {
+	border-radius: 5px;
+}

@@ -5,7 +5,7 @@ import { DatePipe } from '@angular/common';
 import { api } from '../../../../_api/apiUrl';
 //Models
 import { User } from '../../../../_models/user.model';
-import { Response } from '../../../../_models/response.model';
+import { ApiResponse } from '../../../../_models/response.model';
 
 declare var toastr;
 
@@ -38,7 +38,7 @@ export class EditProfileComponent implements OnInit {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': localStorage.getItem('token'),
     })
-    return this.http.put<Response>(api.update_user, body, { headers: headers }).subscribe(
+    return this.http.put<ApiResponse>(api.update_user, body, { headers: headers }).subscribe(
       res => {
         sessionStorage.setItem('response', JSON.stringify(res));
         localStorage.setItem('userinfo', JSON.stringify(res.data));
