@@ -72,13 +72,12 @@ class _$AppApiService extends AppApiService {
 
   @override
   Future<Response<BaseResponseModel>> changePassword(
-      {String password, String newPassword}) {
+      {String token, ConfirmChangePasswordRequestModel model}) {
     final $url = 'user/change_pwd';
-    final $body = <String, dynamic>{
-      'password': password,
-      'new_password': newPassword
-    };
-    final $request = Request('PUT', $url, client.baseUrl, body: $body);
+    final $headers = {'authorization': token};
+    final $body = model;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
 
