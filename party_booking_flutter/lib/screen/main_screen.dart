@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +27,10 @@ import 'add_new_dish_screen.dart';
 import 'dish_detail_screen.dart';
 
 class MainScreen extends StatefulWidget {
+  final AccountModel accountModel;
+
+  MainScreen({@required this.accountModel});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -49,9 +52,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    //  _appBarTitle = Text(accountModel.fullName);
+    _accountModel = widget.accountModel;
     print(DateTime.now().millisecondsSinceEpoch);
-    checkAlreadyLogin();
+    _initLayout();
     _getListDishesFromDB();
     // _appBarTitle = Text(_accountModel.fullName);
     _getListDishes();
@@ -135,20 +138,11 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
-  void checkAlreadyLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    print(DateTime.now().millisecondsSinceEpoch);
-    if (accountJson != null && accountJson.isNotEmpty) {
-      _accountModel = AccountModel.fromJson(json.decode(accountJson));
-      _appBarTitle = Text(_accountModel.fullName);
-      _fullNameUser = _accountModel.fullName;
-      _avatar = _accountModel.avatar;
-      _email = _accountModel.email;
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    }
+  void _initLayout() {
+    _appBarTitle = Text(_accountModel.fullName);
+    _fullNameUser = _accountModel.fullName;
+    _avatar = _accountModel.avatar;
+    _email = _accountModel.email;
   }
 
   void _initSearch() {
@@ -264,7 +258,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Visibility buildFABAddNewDish() {
     bool isVisible =
-        (_accountModel != null && (_accountModel.role ?? "") == 'nhanvien');
+        (_accountModel != null && _accountModel.role == Role.Staff.index);
     return Visibility(
       visible: isVisible,
       child: FloatingActionButton(
@@ -585,28 +579,30 @@ class _MainScreenState extends State<MainScreen> {
     var listDrink = List<DishModel>();
     var listDessert = List<DishModel>();
 
-    for (var i = 0; i < dishes.length; i++) {
-      switch (dishes[i].categories) {
-        case "Holiday Offers":
-          listHolidayOffers.add(dishes[i]);
-          break;
-        case "First Dishes":
-          listFirstDishes.add(dishes[i]);
-          break;
-        case "Main Dishes":
-          listMainDishes.add(dishes[i]);
-          break;
-        case "Seafood":
-          listSeafood.add(dishes[i]);
-          break;
-        case "Drinks":
-          listDrink.add(dishes[i]);
-          break;
-        case "Dessert":
-          listDessert.add(dishes[i]);
-          break;
-      }
-    }
+    dishes.forEach((dish) {
+      dish.categories.forEach((element) {
+        switch (element) {
+          case "Holiday Offers":
+            listHolidayOffers.add(dishes[i]);
+            break;
+          case "First Dishes":
+            listFirstDishes.add(dishes[i]);
+            break;
+          case "Main Dishes":
+            listMainDishes.add(dishes[i]);
+            break;
+          case "Seafood":
+            listSeafood.add(dishes[i]);
+            break;
+          case "Drinks":
+            listDrink.add(dishes[i]);
+            break;
+          case "Dessert":
+            listDessert.add(dishes[i]);
+            break;
+        }
+      });
+    });
 
     if (listHolidayOffers.length > 0) {
       listMenu.add(

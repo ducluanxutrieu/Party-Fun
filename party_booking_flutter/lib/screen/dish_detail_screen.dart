@@ -419,7 +419,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                       height: 10,
                     ),
                     Text(
-                      _dishModel.categories,
+                      _getListCategory(),
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 22),
                     ),
                     Expanded(
@@ -432,6 +432,14 @@ class _DishDetailScreenState extends State<DishDetailScreen>
         ],
       ),
     );
+  }
+
+  String _getListCategory(){
+    String category = "";
+    _dishModel.categories.forEach((element) {
+      category += "$element\n";
+    });
+    return category;
   }
 
   FloatingActionButton _buildFABEditDish(BuildContext context) {

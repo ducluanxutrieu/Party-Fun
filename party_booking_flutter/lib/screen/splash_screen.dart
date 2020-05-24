@@ -1,13 +1,16 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/main_screen.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_screen.dart';
+import 'main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,13 +26,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkAlreadyLogin() async {
+    new Future.delayed(const Duration(seconds: 5), () => "5");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
     print(DateTime.now().millisecondsSinceEpoch);
     if (accountJson != null && accountJson.isNotEmpty) {
       AccountModel _accountModel =
           AccountModel.fromJson(json.decode(accountJson));
-      getListDishes(_accountModel);
+      goToMainScreen(_accountModel);
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -39,17 +43,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.greenAccent,
-      body: Center(
+      backgroundColor: Colors.blueAccent,
+      body: SafeArea(
         child: Column(
           children: <Widget>[
-            LogoAppWidget(mLogoSize: 200,),
-            Expanded(
-              child: Container(
-                color: Colors.lightBlue,
-                child: Center(
-                ),
+            SizedBox(
+              height: 30,
+            ),
+            LogoAppWidget(
+              mLogoSize: 200,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: Lottie.asset(
+                Assets.animLoading,
+                repeat: true,
               ),
+            ),
+            Text(
+              'Easy to book a party and\nenjoy with your relatives',
+              style: TextStyle(
+                  fontFamily: 'Pacifico', color: Colors.orange, fontSize: 28),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -57,12 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void getListDishes(accountModel) async {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
-//    var result = await AppApiService.create().getListDishes(token: token);
-//    if(result.isSuccessful){
-//
-//    }
-//    result.body.listDishes;
+  void goToMainScreen(accountModel) async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel,)));
   }
 }

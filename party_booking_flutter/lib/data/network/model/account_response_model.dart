@@ -110,6 +110,13 @@ enum UserGender{
   Female,
 }
 
+enum Role{
+  BlockedUser,
+  Customer,
+  Staff,
+  Admin
+}
+
 String getGenderStringFromIndex(int index){
   return UserGender.values[index].toString().replaceAll("UserGender.", "");
 }

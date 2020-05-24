@@ -12,4 +12,5 @@ class Assets {
   static String get animPayment => 'assets/jsons/orange-payment.json';
   static String get animAddToCart => 'assets/jsons/addtocart.json';
   static String get animBillManagement => 'assets/jsons/pagseguros-billing-management.json';
+  static String get animLoading => 'assets/jsons/loading-paperplane.json';
 }

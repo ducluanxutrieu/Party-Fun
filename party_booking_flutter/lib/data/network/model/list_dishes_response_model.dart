@@ -5,7 +5,6 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
@@ -43,7 +42,7 @@ class DishModel {
   String name;
   String description;
   int price;
-  String categories;
+  List<String> categories;
   int discount;
   int quantity;
   List<String> image;
@@ -71,7 +70,7 @@ class DishModel {
         name: json["name"],
         description: json["description"],
         price: json["price"],
-        categories: json["categories"],
+        categories: List<String>.from(json["categories"].map((x) => x)),
         discount: json["discount"],
         quantity: 1,
         image: List<String>.from(json["image"].map((x) => x)),

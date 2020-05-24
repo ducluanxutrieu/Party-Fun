@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/change_password_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/screen/change_password_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';

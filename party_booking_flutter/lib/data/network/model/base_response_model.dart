@@ -4,7 +4,7 @@ BaseResponseModel baseResponseModelFromJson(String str) => BaseResponseModel.fro
 
 class BaseResponseModel {
   String message;
-  String data;
+  dynamic data;
 
   BaseResponseModel({
     this.message,
