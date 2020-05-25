@@ -9,6 +9,7 @@ import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/data/network/service/app_image_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/change_password_screen_2.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:party_booking/widgets/info_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,16 +30,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AccountModel _accountModel;
   String avatarUrl;
 
-  void _updateUserProfile()async{
+  void _updateUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.USER_TOKEN);
     var result = await AppApiService.create().getUserProfile(token: token);
-    if(result.isSuccessful){
+    if (result.isSuccessful) {
       setState(() {
         _accountModel = result.body.account;
       });
-      prefs.setString(Constants.ACCOUNT_MODEL_KEY, jsonEncode(_accountModel.toJson()));
-    }else{
+      prefs.setString(
+          Constants.ACCOUNT_MODEL_KEY, jsonEncode(_accountModel.toJson()));
+    } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UTiu.showToast(model.message);
     }
@@ -73,31 +75,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(context: context, builder: (x) => dialog);
   }
 
-  void _showBottomSheet(context) async{
-    showModalBottomSheet(context: context, builder: (BuildContext bc){
-      return Container(
-        child: new Wrap(
-          children: <Widget>[
-            new ListTile(
-                leading: new Icon(Icons.camera),
-                title: new Text('Camera'),
-                onTap: () {
-                  _getImage(ImageSource.camera);
-                  Navigator.pop(context);
-                }
+  void _showBottomSheet(context) async {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _getImage(ImageSource.camera);
+                      Navigator.pop(context);
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.videocam),
+                  title: new Text('Gallery'),
+                  onTap: () {
+                    _getImage(ImageSource.gallery);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            new ListTile(
-              leading: new Icon(Icons.videocam),
-              title: new Text('Gallery'),
-              onTap: () {
-                _getImage(ImageSource.gallery);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 
   _getImage(source) async {
@@ -136,7 +139,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _goToEditProfileScreen() async {
-    AccountModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileScreen(mAccountModel: _accountModel,)));
+    AccountModel result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditProfileScreen(
+                  mAccountModel: _accountModel,
+                )));
+    if (result != null) {
+      setState(() {
+        _accountModel = result;
+      });
+    }
+  }
+
+  void _goToChangePassScreen() async {
+    AccountModel result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChangePasswordScreen(
+                  mAccountModel: _accountModel,
+                )));
     if (result != null) {
       setState(() {
         _accountModel = result;
@@ -147,10 +169,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Profile'),),
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-           _goToEditProfileScreen();
+        onPressed: () {
+          _goToEditProfileScreen();
         },
         child: Icon(Icons.edit),
       ),
@@ -196,7 +220,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 text: _accountModel.phoneNumber.toString(),
                 icon: Icons.phone,
                 onPressed: () async {
-                  String removeSpaceFromPhoneNumber = _accountModel.phoneNumber.toString()
+                  String removeSpaceFromPhoneNumber = _accountModel.phoneNumber
+                      .toString()
                       .replaceAll(new RegExp(r"\s+\b|\b\s"), "");
                   final phoneCall = 'tel:$removeSpaceFromPhoneNumber';
 
@@ -234,14 +259,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: null,
               ),
               InfoCard(
-                text: UserGender.values[_accountModel.gender].toString().replaceAll("UserGender.", ""),
+                text: UserGender.values[_accountModel.gender]
+                    .toString()
+                    .replaceAll("UserGender.", ""),
                 icon: FontAwesomeIcons.venusMars,
                 onPressed: null,
               ),
               InfoCard(
-                text: '******',
+                text: '****',
                 icon: Icons.lock,
-                onPressed: null,
+                onPressed: () {
+                  _goToChangePassScreen();
+                },
               ),
               SizedBox(
                 height: 20,

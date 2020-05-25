@@ -14,7 +14,7 @@ import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
-
+import 'package:party_booking/data/network/model/change_password_request_model_2.dart';
 import 'json_serializable_converter.dart';
 
 part 'app_api_service.chopper.dart';
@@ -52,10 +52,9 @@ abstract class AppApiService extends ChopperService {
   });
 
   @Put(path: 'user/change_pwd')
-  Future<Response<BaseResponseModel>> changePassword({
-    @Field('password') String password,
-    @Field('new_password') String newPassword,
-  });
+  Future<Response<BaseResponseModel>> changePassword(
+      {@Header('authorization') String token,
+      @body ConfirmChangePasswordRequestModel model});
 
   @Get(path: 'user/signout')
   Future<Response<BaseResponseModel>> requestSignOut({
