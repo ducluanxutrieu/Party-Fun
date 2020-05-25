@@ -53,10 +53,8 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _accountModel = widget.accountModel;
-    print(DateTime.now().millisecondsSinceEpoch);
     _initLayout();
     _getListDishesFromDB();
-    // _appBarTitle = Text(_accountModel.fullName);
     _getListDishes();
     _initSearch();
   }
@@ -215,9 +213,7 @@ class _MainScreenState extends State<MainScreen> {
   void _signOut() async {
     var result = await AppApiService.create().requestSignOut(token: _token);
     if (result.isSuccessful) {
-      print(DateTime.now().millisecondsSinceEpoch);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(DateTime.now().millisecondsSinceEpoch);
       prefs.remove(Constants.ACCOUNT_MODEL_KEY);
       prefs.remove(Constants.USER_TOKEN);
       Navigator.pushAndRemoveUntil(
@@ -439,8 +435,7 @@ class _MainScreenState extends State<MainScreen> {
       scrollDirection: Axis.vertical,
       crossAxisCount: 2,
       itemCount: dishes.length,
-      itemBuilder: (BuildContext context, int index) =>
-          _itemCard(dishes[index]),
+      itemBuilder: (BuildContext context, int index) => _itemCard(dishes[index]),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
@@ -583,22 +578,22 @@ class _MainScreenState extends State<MainScreen> {
       dish.categories.forEach((element) {
         switch (element) {
           case "Holiday Offers":
-            listHolidayOffers.add(dishes[i]);
+            listHolidayOffers.add(dish);
             break;
           case "First Dishes":
-            listFirstDishes.add(dishes[i]);
+            listFirstDishes.add(dish);
             break;
           case "Main Dishes":
-            listMainDishes.add(dishes[i]);
+            listMainDishes.add(dish);
             break;
           case "Seafood":
-            listSeafood.add(dishes[i]);
+            listSeafood.add(dish);
             break;
           case "Drinks":
-            listDrink.add(dishes[i]);
+            listDrink.add(dish);
             break;
           case "Dessert":
-            listDessert.add(dishes[i]);
+            listDessert.add(dish);
             break;
         }
       });
