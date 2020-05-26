@@ -28,13 +28,13 @@ export class StaffService {
 
     //Hạ cấp tài khoản nhân viên
     downgradeStaff(user_id: string) {
-        const option = {
-            headers: this.headers,
-            body: {
-                userupgrade: user_id
-            },
-        }
-        this.http.put(api.downgrade_role, option).subscribe(
+        let headers = new HttpHeaders({
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Authorization': localStorage.getItem('token')
+        })
+        let body = `user_id=${user_id}`;
+        console.log(body);
+        this.http.put(api.downgrade_role, body, { headers: headers }).subscribe(
             res => {
                 sessionStorage.setItem('response', JSON.stringify(res));
                 alert("Downgrade user success!");
@@ -47,7 +47,7 @@ export class StaffService {
         )
     }
 
-    //Hạ cấp tài khoản khách hàng
+    //Nâng cấp tài khoản khách hàng
     upgradeCustomer(user_id: string) {
         let headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded',

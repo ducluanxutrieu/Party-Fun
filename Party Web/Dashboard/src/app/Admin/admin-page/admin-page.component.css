@@ -1,7 +1,20 @@
-/* ::-webkit-scrollbar {
-    width: 0px; 
-    background: transparent;
-} */
-#productChart{
+#productChart {
     width: 100wh!important;
 }
+
+.chart-btn {
+    background-color: white;
+    color: #796AEE;
+}
+
+.chart-btn:hover {
+    background-color: #796AEE;
+    border-color: #796AEE;
+    color: white;
+}
+
+/* .chart-btn.active {
+    background-color: #5a48ea;
+    border-color: blue;
+    color: white;
+} */

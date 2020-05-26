@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // Services
+import { api } from '../../../_api/apiUrl';
 import { PostService } from '../../../_services/post.service';
 import { CommonService } from '../../../_services/common.service';
 
@@ -41,17 +42,24 @@ export class PostComponent implements OnInit {
     // imageUpload: false,
     // Set the image upload parameter.
     requestHeaders: {
-      Authorization: '18ae6ee9422882c8a5beeae6e30c35a46b42607e'
+      Authorization: localStorage.getItem('token'),
     },
     imageUploadParam: 'image',
     // Set the image upload URL.
-    imageUploadURL: '	https://api.imgur.com/3/image',
+    imageUploadURL: api.upload_image,
+    // Additional upload params.
+    imageUploadParams: { type: 'post_image' },
     // Set request type.
     imageUploadMethod: 'POST',
     // Set max image size to 5MB.
     imageMaxSize: 5 * 1024 * 1024,
     // Allow to upload PNG and JPG.
     imageAllowedTypes: ['jpeg', 'jpg', 'png'],
+    // events: {
+    //   'image.uploaded': function (e, editor, response) {
+    //     editor.image.insert(response.body.data, false, null, editor.image.get(), response);
+    //   }
+    // }
   }
 
   // Thêm bài viết

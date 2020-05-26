@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 // Services
 import { ProductService } from '../../../_services/product.service';
 import { CommonService } from '../../../_services/common.service';
@@ -21,7 +21,6 @@ export class EditProductComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
     private commonService: CommonService,
-    private router: Router
   ) { }
 
   ngOnInit() {
@@ -52,7 +51,6 @@ export class EditProductComponent implements OnInit {
     price: number;
     discount: number;
   }) {
-    this.product_categories.push(data.type); // Push category vào mảng
     // Upload image lên server trước
     if (this.product_imgs_files) {
       this.commonService.upload_image(this.product_imgs_files).subscribe(
@@ -83,10 +81,10 @@ export class EditProductComponent implements OnInit {
     price: number;
     discount: number;
   }) {
-    let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.type)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
+    this.product_categories.push(data.type); // Push category vào mảng
+    let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${JSON.stringify(this.product_categories)}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.type)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
     this.productService.update_dish(body).subscribe(
       res => {
-        sessionStorage.setItem('response', JSON.stringify(res));
         alert("Edit product success");
         window.location.reload();
       },

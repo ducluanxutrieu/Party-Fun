@@ -19,7 +19,6 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
-    private http: HttpClient,
     private productService: ProductService
   ) { }
 
@@ -57,21 +56,10 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    //this.product_data = JSON.parse(localStorage.getItem('dish-list'));
-    // this.product_data = this.productService.findAll();
-    // this.productService.productList.subscribe(
-    //   data => {
-    //     this.product_data = data;
-    //   },
-    //   err => console.log(err),
-    //   () => {
-    //     setTimeout(() => {
-    //       // this.dtTrigger.next();
-    //       this.datatable_generate();
-    //     }, 1000)
-    //   });
     this.get_dishList();
   }
+
+  // Lấy danh sách món ăn
   get_dishList() {
     this.productService.get_dishList().subscribe(
       res => {

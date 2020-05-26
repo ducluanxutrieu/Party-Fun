@@ -6,6 +6,8 @@ import { StatisticalService } from '../../_services/statistical.service';
 // Models
 import { MoneyStatistic, DishStatistic, CustomerStatistic } from '../../_models/statistic.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
@@ -32,26 +34,26 @@ export class AdminPageComponent implements OnInit {
         }
       ]
     },
-    maintainAspectRatio: false
+    // maintainAspectRatio: false
   };
 
   // Option cho biểu đồ thống kê doanh thu
   public moneyChartOptions = {
-    scaleShowVerticalLines: false,
+    // scaleShowVerticalLines: false,
     responsive: true,
-    scales: {
-      xAxes: [{
-        barPercentage: 0.4,
-        maxBarThickness: 50,
-      }],
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-          }
-        }
-      ]
-    }
+    // scales: {
+    //   xAxes: [{
+    //     barPercentage: 0.4,
+    //     maxBarThickness: 50,
+    //   }],
+    //   yAxes: [
+    //     {
+    //       ticks: {
+    //         beginAtZero: true
+    //       }
+    //     }
+    //   ]
+    // }
   };
 
   // Option cho biểu đồ thống kê tiền khách hàng thanh toán
@@ -67,25 +69,34 @@ export class AdminPageComponent implements OnInit {
         {
           id: 'y-axis-0',
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            callback: function (value) { if (value % 1 === 0) { return value; } },
           },
-          position: 'left'
+          position: 'left',
+          gridLines: {
+            display: false
+          }
         },
         {
           id: 'y-axis-1',
           ticks: {
             beginAtZero: true
           },
-          position: 'right'
+          position: 'right',
+          gridLines: {
+            display: false
+          }
         }
       ]
-    }
+    },
   };
 
   public moneyChartLabels = [];
   public productChartLabels = [];
   public customerChartLabels = [];
   public barChartType = 'bar';
+  public pieChartType = 'pie';
+  public lineChartType = 'line';
   public barChartLegend = true;
 
   // Data cho biểu đồ món ăn
@@ -195,17 +206,19 @@ export class AdminPageComponent implements OnInit {
         {
           data: customer_totalmoney,
           label: 'Total money',
-          yAxisID: 'y-axis-1'
+          yAxisID: 'y-axis-1',
         }
       ]
     }
   }
 
   // Khi thay đổi phạm vi thống kê món ăn
-  product_rangeChanged(data: {
-    range: string;
-  }) {
-    this.statisticalService.get_productStatistics(data.range).subscribe(
+  product_range_changed(event: any) {
+    $('.chart-btn').on('click', function () {
+      $('#productBtns > .chart-btn').removeClass('active');
+      $(this).addClass('active');
+    });
+    this.statisticalService.get_productStatistics(event.target.value).subscribe(
       res => {
         if (res.data.length > 0) {
           this.isProductDataAvailable = true;
@@ -225,11 +238,12 @@ export class AdminPageComponent implements OnInit {
   }
 
   // Khi thay đổi phạm vi thống kê khách hàng
-  customer_rangeChanged(data: {
-    range: string;
-    payment_status: number;
-  }) {
-    this.statisticalService.get_customerStatistics(data.range, data.payment_status).subscribe(
+  customer_range_changed(event: any) {
+    $('.chart-btn').on('click', function () {
+      $('#customerBtns > .chart-btn').removeClass('active');
+      $(this).addClass('active');
+    });
+    this.statisticalService.get_customerStatistics(event.target.value, null).subscribe(
       res => {
         if (res.data.length > 0) {
           this.isCustomerDataAvailable = true;
