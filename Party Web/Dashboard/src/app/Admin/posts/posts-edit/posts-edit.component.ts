@@ -39,11 +39,13 @@ export class PostsEditComponent implements OnInit {
     // imageUpload: false,
     // Set the image upload parameter.
     requestHeaders: {
-      Authorization: '18ae6ee9422882c8a5beeae6e30c35a46b42607e'
+      Authorization: localStorage.getItem('token'),
     },
     imageUploadParam: 'image',
     // Set the image upload URL.
     imageUploadURL: api.upload_image,
+    // Additional upload params.
+    imageUploadParams: { type: 'post_image' },
     // Set request type.
     imageUploadMethod: 'POST',
     // Set max image size to 5MB.
