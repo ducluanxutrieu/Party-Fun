@@ -58,6 +58,7 @@ import { PostDetailComponent } from './pages/post/post-detail/post-detail.compon
 import { PaginationComponent } from './component/pagination/pagination.component';
 import { LoadingComponent } from './component/loading/loading.component';
 import { SafeHtml } from './_pipes/safeHtml.pipe';
+import { CardLoadingComponent } from './component/card-loading/card-loading.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { SafeHtml } from './_pipes/safeHtml.pipe';
     PostDetailComponent,
     PaginationComponent,
     LoadingComponent,
-    SafeHtml
+    SafeHtml,
+    CardLoadingComponent
   ],
   imports: [
     BrowserModule,

@@ -24,7 +24,7 @@
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" id="navbarDropdownMenu" data-toggle="dropdown"
 				aria-haspopup="true" aria-expanded="false" *ngIf="authenticationService.loggedIn()" style="cursor:pointer">
-				<i class="fa fa-user"></i> {{userInfo.username}} </a>
+				<i class="fa fa-user"></i> {{userInfo?.username}} </a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenu">
 					<a class="dropdown-item" *ngIf="authenticationService.loggedIn()" [routerLink]="['/profile']">Account</a>
 					<a class="dropdown-item" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Logout</a>

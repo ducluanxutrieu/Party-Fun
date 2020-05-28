@@ -45,7 +45,9 @@ export class ProductRatingComponent implements OnInit {
     public authenticationService: AuthenticationService,
   ) { }
   ngOnInit() {
-    this.current_user_id = JSON.parse(localStorage.getItem('userinfo')).username;
+    if (localStorage.getItem('userinfo')) {
+      this.current_user_id = JSON.parse(localStorage.getItem('userinfo')).username;
+    }
     this.load_review();
     if (!this.authenticationService.loggedIn()) {
       $('#reviewbtn').text('Login to write review');

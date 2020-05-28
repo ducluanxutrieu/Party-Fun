@@ -36,17 +36,17 @@
           </ol>
           <div class="carousel-inner" role="listbox">
             <div class="carousel-item active">
-              <a href="product/{{new_products[0]?._id}}"><img class="d-block img-fluid big-thumb-img"
+              <a [routerLink]="['/product', new_products[0]?._id]"><img class="d-block img-fluid big-thumb-img"
                   src={{new_products[0]?.image[0]}} onError="this.src='assets/images/carousel-thumbnail-default.jpg';"
                   alt="First slide"></a>
             </div>
             <div class="carousel-item">
-              <a href="product/{{new_products[1]?._id}}"><img class="d-block img-fluid big-thumb-img"
+              <a [routerLink]="['/product', new_products[1]?._id]"><img class="d-block img-fluid big-thumb-img"
                   src={{new_products[1]?.image[0]}} onError="this.src='assets/images/carousel-thumbnail-default.jpg';"
                   alt="Second slide"></a>
             </div>
             <div class="carousel-item">
-              <a href="product/{{new_products[2]?._id}}"><img class="d-block img-fluid big-thumb-img"
+              <a [routerLink]="['/product', new_products[2]?._id]"><img class="d-block img-fluid big-thumb-img"
                   src={{new_products[2]?.image[0]}} onError="this.src='assets/images/carousel-thumbnail-default.jpg';"
                   alt="Third slide"></a>
             </div>

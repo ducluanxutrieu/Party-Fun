@@ -1,40 +1,46 @@
-<app-header></app-header>
-<div class="container" *ngIf="post_list.length < 1">
-  <list-loading></list-loading>
-  <list-loading></list-loading>
-  <list-loading></list-loading>
-  <list-loading></list-loading>
-</div>
-<div class="container mt-1" *ngFor="let post of post_list">
-  <div class="col-md-12 row">
-    <div class="col-md-2">
-       <img src={{post?.feature_image}} alt="..." class="post-image">
-    </div>
-    <div class="col-md-10">
-      <a [routerLink]="['/post/detail', post?._id]"><h4>{{post?.title}}</h4></a>
-      <p>
-        {{post?.summary}}
-      </p>
-      <div>
-        <span class="badge badge-secondary">Posted {{post?.create_at | date: 'dd/MM/yyyy'}}</span>
-        <div class="pull-right">
-          <span class="badge badge-success">{{post?.type}}</span>
+<div class="main-wrapper">
+  <!-- Header -->
+  <app-header></app-header>
+  <!-- Loading -->
+  <div class="container" *ngIf="post_list.length < 1">
+    <div class="row">
+      <div class="col-md-6" *ngFor="let item of [].constructor(4)">
+        <div class="card mb-4 mt-4">
+          <card-loading></card-loading>
         </div>
       </div>
-      <hr>
     </div>
   </div>
-  <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center" *ngIf="total_pages > 1">
-    <div class="pagination">
-      <ul>
-        <a (click)="change_page(current_index - 1)"><li><</li></a>
-        <a *ngFor="let item of [].constructor(total_pages); let currentIndex=index" 
-          (click)="change_page(currentIndex+1)" 
-          [ngClass]="{active: currentIndex+1 == current_index}">{{currentIndex + 1}}</a>
-        <a (click)="change_page(current_index + 1)"><li>></li></a>
-      </ul>
+  <!-- Main -->
+  <div class="container mt-1 pl-5 pr-5">
+    <h4 class="font-weight-bold mb-4 mt-2">Posts list</h4>
+    <!-- Posts list -->
+    <div class="row">
+      <div class="col-md-6" *ngFor="let post of post_list">
+        <div class="card mb-4 card-shadow">
+          <!-- Feature image -->
+          <a [routerLink]="['/post/detail', post?._id]">
+            <div class="img-wrapper">
+              <img src={{post?.feature_image}} alt="..." class="img-fluid feature-image">
+            </div>
+          </a>
+          <div class="text-right mr-2 mt-1">
+            <span class="badge badge-success category">{{post?.type}}</span>
+          </div>
+          <!-- Card body -->
+          <div class="card-body">
+            <a [routerLink]="['/post/detail', post?._id]"><h4 class="font-weight-bold dark-grey-text mb-1"><strong class="post-title">{{post?.title}}</strong></h4></a>
+            <div class="meta mb-1"><span><i class="fa fa-user"></i> {{post?.author}}</span><span><i class="fa fa-calendar-o"></i> {{post?.create_at | date: 'dd/MM/yyyy'}}</span><span><i class="fa fa-tags"></i> {{post?.type}}</span></div>
+            <p class="post-summary">
+              {{post?.summary}}
+            </p>
+            <a class="btn more-link" [routerLink]="['/post/detail', post?._id]">Read more &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <scroll-to-top></scroll-to-top>
+  <!-- Footer -->
+  <app-footer></app-footer>
 </div>
-</div>
-<scroll-to-top></scroll-to-top>
-<app-footer></app-footer>

@@ -1,7 +1,9 @@
-/*****************globals*************/
-
 body {
   overflow-x: hidden;
+  min-height: 100vh;
+  margin: 0;
+  background: #eee;
+  font-family: Roboto, Helvetica, sans-serif;
 }
 
 img {

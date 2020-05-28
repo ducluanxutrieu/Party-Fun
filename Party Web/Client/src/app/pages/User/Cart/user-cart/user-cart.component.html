@@ -46,7 +46,7 @@
                         <td class="text-center"><strong>Total 1.99</strong></td>
                     </tr> -->
                     <tr>
-                        <td><a href="#" class="btn btn-warning text-white"><i class="fa fa-angle-left"></i> Continue shopping</a></td>
+                        <td><a [routerLink]="['/mainpage']" class="btn btn-warning text-white"><i class="fa fa-angle-left"></i> Continue shopping</a></td>
                         <td colspan="2" class="hidden-xs"></td>
                         <td class="hidden-xs text-center"><strong>Total: {{total | number}}</strong></td>
                         <td><button class="btn btn-success btn-block" [disabled]= "productService.getTotalCount(null) < 1" (click)="checkout()">Checkout <i class="fa fa-angle-right"></i></button></td>
