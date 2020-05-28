@@ -16,6 +16,8 @@ declare var toastr;
   styleUrls: ['./user-cart-info.component.css']
 })
 export class UserCartInfoComponent implements OnInit {
+  total_pages: number;
+
   checkout_session_id: string;
   userData: User;
   cart_history: Bill[] = [];
@@ -39,6 +41,7 @@ export class UserCartInfoComponent implements OnInit {
     this.userService.get_cartHistory(page).subscribe(
       res => {
         this.cart_history = res.data.value as Bill[];
+        this.total_pages = res.data.total_page;
       },
       err => {
         toastr.error("Error: " + err.error.message);

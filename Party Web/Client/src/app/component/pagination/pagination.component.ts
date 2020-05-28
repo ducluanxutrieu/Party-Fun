@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-pagination',
+  selector: 'pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.css']
 })
+
 export class PaginationComponent implements OnInit {
-  total_pages: number;
+  @Input() public total_pages: number;  // Tổng số trang
+  @Output() onChange: EventEmitter<any> = new EventEmitter();
+  // Trang hiện tại
   current_index: number = 1;
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
+
   // Đổi trang
-  change_page(page: number) {
+  changePage(page: number) {
     if (page > 0 && page <= this.total_pages) {
       this.current_index = page;
+      this.onChange.emit(this.current_index);
     }
   }
 }

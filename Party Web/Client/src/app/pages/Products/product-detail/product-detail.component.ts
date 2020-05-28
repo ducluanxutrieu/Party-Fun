@@ -38,7 +38,7 @@ export class ProductDetailComponent implements OnInit {
         res => {
           this.product_data = res.data as Product;
           this.get_suggestList(this.product_data.categories);
-          this.product_filter(this.product_data.categories); // tạm thời
+          // this.product_filter(this.product_data.categories); // tạm thời
         },
         err => {
           console.log("Error: " + err.error.message);

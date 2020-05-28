@@ -10,12 +10,12 @@
             <div class="category col-12 col-lg-3">
                 <div class="card-header custom-panel text-white text-uppercase"><i class="fa fa-list"></i> Category</div>
                 <div class="list-group">
-                    <a href="category/Holiday Offers" class="list-group-item category-title"><span><img src="assets/icon/gift.svg" class="pbicon"> Holiday Offers</span></a>
-                    <a href="category/First Dishes" class="list-group-item category-title"><span><img src="assets/icon/salad.svg" class="pbicon"> First Dishes</span></a>
-                    <a href="category/Main Dishes" class="list-group-item category-title"><span><img src="assets/icon/pizza-slice-solid.svg" class="pbicon"> Main Dishes</span></a>
-                    <a href="category/Seafood" class="list-group-item category-title"><span><img src="assets/icon/seafood.svg" class="pbicon"> Seafood</span></a>
-                    <a href="category/Drinks" class="list-group-item category-title"><span><img src="assets/icon/cocktail-solid.svg" class="pbicon"> Drinks</span></a>
-                    <a href="category/Dessert" class="list-group-item category-title"><span><img src="assets/icon/cake-svgrepo-com.svg" class="pbicon"> Dessert</span></a>
+                    <a [routerLink]="['/category', 'Holiday Offers']" class="list-group-item category-title"><span><img src="assets/icon/gift.svg" class="pbicon"> Holiday Offers</span></a>
+                    <a [routerLink]="['/category', 'First Dishes']" class="list-group-item category-title"><span><img src="assets/icon/salad.svg" class="pbicon"> First Dishes</span></a>
+                    <a [routerLink]="['/category', 'Main Dishes']" class="list-group-item category-title"><span><img src="assets/icon/pizza-slice-solid.svg" class="pbicon"> Main Dishes</span></a>
+                    <a [routerLink]="['/category', 'Seafood']" class="list-group-item category-title"><span><img src="assets/icon/seafood.svg" class="pbicon"> Seafood</span></a>
+                    <a [routerLink]="['/category', 'Drinks']" class="list-group-item category-title"><span><img src="assets/icon/cocktail-solid.svg" class="pbicon"> Drinks</span></a>
+                    <a [routerLink]="['/category', 'Dessert']" class="list-group-item category-title"><span><img src="assets/icon/cake-svgrepo-com.svg" class="pbicon"> Dessert</span></a>
                 </div>
             </div>
             <div class="main-content col-lg-9">
@@ -32,7 +32,7 @@
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <a href="product/{{product?._id}}">{{product.name}}</a>
+                                    <a [routerLink]="['/product', product._id]">{{product.name}}</a>
                                 </h5>
                                 <h6 class="text-uppercase">{{product?.price | number}} {{product?.currency}}</h6>
                                 <p class="card-text">{{product?.description}}</p>
@@ -44,24 +44,7 @@
                     </div>
                 </div>
                 <p class="text-center" *ngIf="!filtered_products.length">There is no product in this category.</p>
-                <div class="pagination-bar pb-0 pt-3 d-flex justify-content-center" *ngIf="total_pages > 1">
-                    <!-- <jw-pagination [items]="filtered_products" (changePage)="onChangePage($event)"></jw-pagination> -->
-                    <div class="pagination">
-                        <ul>
-                          <a (click)="change_page(current_index - 1)"><li><</li></a>
-                          <!-- <a class="active" href="#"><li>1</li></a>
-                          <a href="#"><li>2</li></a>
-                          <a href="#"><li>3</li></a>
-                          <a href="#"><li>4</li></a>
-                          <a href="#"><li>5</li></a>
-                          <a href="#"><li>6</li></a> -->
-                          <a *ngFor="let item of [].constructor(total_pages); let currentIndex=index" 
-                            (click)="change_page(currentIndex+1)" 
-                            [ngClass]="{active: currentIndex+1 == current_index}">{{currentIndex + 1}}</a>
-                          <a (click)="change_page(current_index + 1)"><li>></li></a>
-                        </ul>
-                    </div>
-                </div>
+                <pagination [total_pages]="total_pages" (onChange)="get_dishes_byCate(this.cat_filter, $event)"></pagination>
             </div>
         </div>
     </div>

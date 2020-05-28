@@ -61,5 +61,17 @@
       </tr>
     </tbody>
   </table>
+  <!-- <div class="pagination-bar pb-0 d-flex justify-content-center" *ngIf="total_pages > 1">
+    <div class="pagination">
+        <ul>
+          <a (click)="change_page(current_index - 1)"><li><</li></a>
+          <a *ngFor="let item of [].constructor(total_pages); let currentIndex=index" 
+            (click)="change_page(currentIndex+1)" 
+            [ngClass]="{active: currentIndex+1 == current_index}">{{currentIndex + 1}}</a>
+          <a (click)="change_page(current_index + 1)"><li>></li></a>
+        </ul>
+    </div>
+  </div> -->
+  <pagination [total_pages]="total_pages" (onChange)="get_cartHistory($event)"></pagination>
 </body>
 </html>

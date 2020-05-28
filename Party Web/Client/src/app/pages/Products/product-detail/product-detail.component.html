@@ -52,7 +52,7 @@
                         </div>
                         <p style="font-weight: bold">Description:</p>
                         <p class="product-description">{{product_data?.description}}</p>
-                        <p class="category">Type: <a href="category/{{product_data?.categories}}"><span>{{product_data?.categories}}</span></a></p>
+                        <p class="category">Type: <a href="category/{{product_data?.categories[0]}}"><span>{{product_data?.categories}}</span></a></p>
                         <h4 class="price">Price: <span>{{product_data?.price | number}} VND</span></h4>
                         <div class="action">
                             <div class="form-group">
@@ -78,7 +78,7 @@
                         </a>
                         <div class="card-body text-center">
                             <h6 class="card-title">
-                                <a href="product/{{item._id}}">{{item.name}}</a>
+                                <a [routerLink]="['/product', item._id]">{{item.name}}</a>
                             </h6>
                             <h6 class="price">{{item.price}} VND</h6>
                         </div>

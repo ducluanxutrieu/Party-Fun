@@ -16,7 +16,6 @@ export class ProductCategoryComponent implements OnInit {
   filtered_products: Product[] = [];
   cat_filter: string;
   total_pages: number;
-  current_index: number = 1;
   // pageOfItems: Array<any>;
 
   constructor(
@@ -43,13 +42,6 @@ export class ProductCategoryComponent implements OnInit {
     )
   }
 
-  // Đổi trang
-  change_page(page: number) {
-    if (page > 0 && page <= this.total_pages) {
-      this.get_dishes_byCate(this.cat_filter, page);
-      this.current_index = page;
-    }
-  }
   // onChangePage(pageOfItems: Array<any>) {
   //   this.pageOfItems = pageOfItems;
   // }
