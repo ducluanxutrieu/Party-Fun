@@ -82,7 +82,7 @@ class _CartPageState extends State<CartPage> {
                         "Total: " +
                             ScopedModel.of<CartModel>(context,
                                     rebuildOnChange: true)
-                                .totalmoney
+                                .totalMoney
                                 .toString() +
                             "  " + "VND",
                         style: TextStyle(

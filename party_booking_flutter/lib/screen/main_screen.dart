@@ -14,6 +14,7 @@ import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/cart_detail_screen.dart';
 import 'package:party_booking/screen/history_order_screen.dart';
 import 'package:party_booking/screen/list_posts_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
@@ -115,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
               }),
               _actionButton('Yes', () {
                 Navigator.of(bCtx).pop();
-                Navigator.pushNamed(context, '/cart');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage()));
               }),
             ],
           );
@@ -225,7 +226,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void _goToAddDish() async {
     BaseResponseModel result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => AddNewDishScreen(null)));
+        MaterialPageRoute(builder: (context) => AddNewDishScreen()));
     if (result != null) {
       _getListDishes();
     }

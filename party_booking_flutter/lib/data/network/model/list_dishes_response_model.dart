@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
@@ -37,7 +38,33 @@ class ListDishesResponseModel {
       };
 }
 
-class DishModel {
+SingleDishResponseModel singleDishResponseModelFromJson(String str) => SingleDishResponseModel.fromJson(json.decode(str));
+
+String singleDishResponseModelToJson(SingleDishResponseModel data) => json.encode(data.toJson());
+
+class SingleDishResponseModel {
+  String message;
+  DishModel dishModel;
+
+  SingleDishResponseModel({
+    this.message,
+    this.dishModel,
+  });
+
+  static SingleDishResponseModel fromJsonFactory(Map<String, dynamic> json) => SingleDishResponseModel.fromJson(json);
+
+  factory SingleDishResponseModel.fromJson(Map<String, dynamic> json) => SingleDishResponseModel(
+    message: json["message"],
+    dishModel: DishModel.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "message": message,
+    "data": dishModel.toJson(),
+  };
+}
+
+class DishModel extends BaseResponseModel {
   String id;
   String name;
   String description;
@@ -46,6 +73,8 @@ class DishModel {
   int discount;
   int quantity;
   List<String> image;
+  String featureImage;
+  String currency;
   String updateAt;
   String createAt;
 
@@ -58,6 +87,8 @@ class DishModel {
     this.categories,
     this.discount,
     this.image,
+    this.featureImage,
+    this.currency,
     this.updateAt,
     this.createAt,
   });
@@ -74,6 +105,8 @@ class DishModel {
         discount: json["discount"],
         quantity: 1,
         image: List<String>.from(json["image"].map((x) => x)),
+        featureImage: json["feature_image"],
+        currency: json["currency"],
         updateAt: json["updateAt"],
         createAt: json["createAt"],
       );
@@ -86,16 +119,15 @@ class DishModel {
         "categories": categories,
         "discount": discount,
         "image": List<dynamic>.from(image.map((x) => x)),
-        "updateAt": updateAt,
-        "createAt": createAt,
+        "feature_image": featureImage,
+        "currency": currency,
       };
 }
 
 class CartModel extends Model {
   List<DishModel> cart = [];
   double totalCartValue = 0;
-  int i;
-  String totalmoney;
+  String totalMoney;
 
   int get total => cart.length;
 
@@ -140,10 +172,10 @@ class CartModel extends Model {
       totalCartValue += f.price * f.quantity;
     });
 
-    i = int.parse(totalCartValue.toStringAsFixed(
+    int i = int.parse(totalCartValue.toStringAsFixed(
         totalCartValue.truncateToDouble() == totalCartValue ? 0 : 2));
     final f = new NumberFormat("#,###");
-    totalmoney = f.format(i);
+    totalMoney = f.format(i);
   }
 
   int calculateTotal1() {

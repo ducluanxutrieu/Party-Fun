@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -8,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:party_booking/data/network/model/base_list_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/list_dish_category_response_model.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -46,75 +45,39 @@ class AppImageAPIService {
     return response;
   }
 
-  Future<BaseResponseModel> addNewDish(List<Asset> listImage, String name,
-      String description, String categories, int price) async {
+  Future<BaseListResponseModel> uploadImages(List<Asset> listImage) async {
     var listMultiPath = List();
 
-    for (int i = 0; i < listImage.length; i++) {
+    for(int i = 0; i < listImage.length; i++) {
+      var image = listImage[i];
       var path =
-          await FlutterAbsolutePath.getAbsolutePath(listImage[i].identifier);
-      listMultiPath.add(await MultipartFile.fromFile(path,
-          filename: listImage[i].name,
-          contentType: MediaType('image', 'jpeg')));
+      await FlutterAbsolutePath.getAbsolutePath(image.identifier);
+      listMultiPath.add(
+          MapEntry(
+            'image', MultipartFile.fromFileSync(path,
+              filename: image.name,
+              contentType: MediaType('image', 'jpeg'))),
+          );
     }
 
-    var listCategory = ListDishCategoryResponseModel().getListIdCategory(categories);
+    FormData formData = FormData();
+    formData.files.addAll([
+      ...listMultiPath
+    ]);
 
-    FormData formData = new FormData.fromMap({
-      'name': name,
-      'description': description,
-      'categories': listCategory,
-      'discount': '0',
-      'price': price,
-      'image': listMultiPath,
-      'currency': 'vnd',
-    });
-
-    BaseResponseModel response;
-    var result = await dio.post('product/dish', data: formData,
+    BaseListResponseModel response;
+    var result = await dio.post('product/upload_image', data: formData,
         onSendProgress: (int sent, int total) {
       _updateProgress(sent, total);
+    }).catchError((onError) {
+      print(onError);
+      progressDialog.dismiss();
     });
 
     progressDialog.dismiss();
 
     if (result.statusCode == 200) {
-      response = BaseResponseModel.fromJson(result.data);
-    } else {
-      UTiu.showToast(BaseResponseModel.fromJson(result.data).message);
-    }
-    progressDialog.dismiss();
-    return response;
-  }
-
-  Future<BaseResponseModel> updateDish(String name, String description,
-      String categories, String price, String id) async {
-
-    var listCategory = ListDishCategoryResponseModel().getListIdCategory(categories);
-
-    Map<String, dynamic> formData = {
-      '_id': id,
-      'name': name,
-      'description': description,
-      'categories': listCategory,
-      'discount': '0',
-      'price': price,
-    };
-
-    var jsonValue = jsonEncode(formData);
-
-    BaseResponseModel response;
-    var result = await dio.put('product/dish', data: jsonValue,
-        onSendProgress: (int sent, int total) {
-      _updateProgress(sent, total);
-    }).catchError((onError) => {
-          print('product/updatedish'),
-          print(onError.toString()),
-          progressDialog.dismiss()
-        });
-
-    if (result.statusCode == 200) {
-      response = BaseResponseModel.fromJson(result.data);
+      response = BaseListResponseModel.fromJson(result.data);
     } else {
       UTiu.showToast(BaseResponseModel.fromJson(result.data).message);
     }
@@ -142,9 +105,10 @@ class AppImageAPIService {
         random.nextInt(4294967296).toString().padLeft(10, '0');
     BaseOptions options = new BaseOptions(
         baseUrl: "http://139.180.131.30:3000/",
-        connectTimeout: 5000,
+        connectTimeout: 100000,
         receiveTimeout: 3000,
-        method: 'POST');
+        method: 'POST'
+    );
     Dio dio = new Dio(options);
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (Options options) async {

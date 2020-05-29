@@ -181,4 +181,16 @@ class _$AppApiService extends AppApiService {
     return client
         .send<ListPostsResponseModel, ListPostsResponseModel>($request);
   }
+
+  @override
+  Future<Response<SingleDishResponseModel>> addNewDish(
+      {String token, DishModel model}) {
+    final $url = 'product/dish';
+    final $headers = {'authorization': token};
+    final $body = model;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client
+        .send<SingleDishResponseModel, SingleDishResponseModel>($request);
+  }
 }

@@ -1,7 +1,8 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/base_list_response_model.dart';
 import 'package:party_booking/data/network/model/list_dish_category_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
@@ -15,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AddNewDishScreen extends StatefulWidget {
   final DishModel dishModel;
 
-  AddNewDishScreen(this.dishModel);
+  AddNewDishScreen({this.dishModel});
 
   @override
   _AddNewDishScreenState createState() => _AddNewDishScreenState();
@@ -26,15 +27,22 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
   TextStyle mStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   List<Asset> images = List<Asset>();
   String _token;
+  bool isAddNewDish = false;
+
+  @override
+  void initState() {
+    isAddNewDish = widget.dishModel == null || widget.dishModel.id == null;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title:
-            widget.dishModel == null ? Text('Add New Dish') : Text('Edit Dish'),
+        isAddNewDish ? Text('Add New Dish') : Text('Edit Dish'),
         actions: <Widget>[
-          widget.dishModel != null ? IconButton(
+          !isAddNewDish ? IconButton(
             onPressed: _deleteDish,
             icon: Icon(Icons.delete_forever),
             tooltip: 'Delete this dish',
@@ -58,14 +66,9 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    widget.dishModel == null
-                        ? ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: 500,
-                              minHeight: 0,
-                              maxWidth: MediaQuery.of(context).size.width,
-                            ),
-                            child: _buildGridView())
+                    _buildNewImageGridView(),
+                    !isAddNewDish
+                        ? _buildOldImageGridView()
                         : SizedBox(),
                     SizedBox(
                       height: 80,
@@ -80,7 +83,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: AppButtonWidget(
                       buttonText:
-                          widget.dishModel == null ? 'Add New' : 'Update',
+                          isAddNewDish ? 'Add New' : 'Update',
                       buttonHandler: () => _addNewDishClicked(context),
                       stateButton: 0,
                     ),
@@ -104,13 +107,8 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
       String categories = _fbKey.currentState.fields['type'].currentState.value;
       String description =
           _fbKey.currentState.fields['description'].currentState.value;
-      if (widget.dishModel == null) {
-        BaseResponseModel result = await AppImageAPIService.create(context)
-            .addNewDish(images, name, description, categories, int.parse(price));
-        if (result != null) {
-          UTiu.showToast(result.message);
-          Navigator.pop(context, result);
-        }
+      if (isAddNewDish) {
+        _addNewDish(name, price, description, categories);
       } else {
         String token = await _getToken();
         Map<String, dynamic> formData = {
@@ -128,6 +126,25 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
           UTiu.showToast(result.body.message);
           Navigator.pop(context, result.body.dish);
         }
+      }
+    }
+  }
+
+  void _addNewDish(String name, String price, String description, String category) async {
+    BaseListResponseModel uploadImageRes = await AppImageAPIService.create(context)
+        .uploadImages(images);
+
+    if (uploadImageRes != null) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String token = preferences.getString(Constants.USER_TOKEN);
+      List<String> categories = List();
+      categories.add(category);
+      List imageList = uploadImageRes.data;
+      DishModel dishModel = DishModel(name: name, price: int.parse(price), description: description, categories: categories, discount: 10, image: imageList, featureImage: imageList[0], currency: 'VND');
+      Response<SingleDishResponseModel> addNewDishRes = await AppApiService.create().addNewDish(token: token, model: dishModel);
+      if(addNewDishRes.isSuccessful){
+        UTiu.showToast(addNewDishRes.body.message);
+        Navigator.pop(context, uploadImageRes);
       }
     }
   }
@@ -159,7 +176,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
   }
 
   Widget _pickImageButton() {
-    return widget.dishModel == null
+    return isAddNewDish
         ? Material(
             elevation: 5.0,
             borderRadius: BorderRadius.circular(30.0),
@@ -257,9 +274,14 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     );
   }
 
-  Widget _buildGridView() {
-    if (images.isNotEmpty)
-      return GridView.count(
+  Widget _buildNewImageGridView() {
+    return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: 500,
+          minHeight: 0,
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        child: images.isNotEmpty ? GridView.count(
         shrinkWrap: true,
         crossAxisCount: 3,
         crossAxisSpacing: 5,
@@ -272,13 +294,34 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
             height: 300,
           );
         }),
-      );
-    else
-      return null;
+      )
+    : SizedBox()
+    );
+  }
+
+  Widget _buildOldImageGridView() {
+    List imageList = widget.dishModel.image;
+    return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: 500,
+          minHeight: 0,
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        child: imageList.isNotEmpty ? GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+          children: List.generate(imageList.length, (index) {
+            return Container(width: 300, height: 300, child: Image.network(imageList[index]));
+          }),
+        )
+            : SizedBox()
+    );
   }
 
   Map<String, dynamic> _initValue() {
-    if (widget.dishModel == null)
+    if (isAddNewDish)
       return {'name': ""};
     else {
       return {

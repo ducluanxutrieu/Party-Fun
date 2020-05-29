@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/screen/cart_detail_screen.dart';
-import 'package:party_booking/screen/main_screen.dart';
 import 'package:party_booking/screen/splash_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -34,7 +32,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         home: SplashScreen(),
-        routes: {'/cart': (context) => CartPage()},
       ),
     );
   }

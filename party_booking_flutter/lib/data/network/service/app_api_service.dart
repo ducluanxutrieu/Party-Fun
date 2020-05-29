@@ -109,6 +109,12 @@ abstract class AppApiService extends ChopperService {
   Future<Response<ListPostsResponseModel>> getListPosts(
       {@Header('authorization') String token});
 
+  @Post(path: 'product/dish')
+  Future<Response<SingleDishResponseModel>> addNewDish({
+    @Header('authorization') String token,
+    @body DishModel model,
+  });
+
   static AppApiService create() {
     final client = ChopperClient(
         baseUrl: 'http://139.180.131.30:3000/',
@@ -143,6 +149,7 @@ abstract class AppApiService extends ChopperService {
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
       GetHistoryCartModel: GetHistoryCartModel.fromJsonFactory,
+      SingleDishResponseModel: SingleDishResponseModel.fromJsonFactory
     });
   }
 }
