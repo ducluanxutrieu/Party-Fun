@@ -3,9 +3,12 @@ import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
 import 'package:party_booking/data/network/model/change_password_request_model.dart';
+import 'package:party_booking/data/network/model/change_password_request_model_2.dart';
+import 'package:party_booking/data/network/model/dish_create_request_model.dart';
 import 'package:party_booking/data/network/model/get_dish_detail_response_model.dart';
 import 'package:party_booking/data/network/model/get_history_cart_model.dart';
 import 'package:party_booking/data/network/model/get_payment_response_mode.dart';
+import 'package:party_booking/data/network/model/list_categories_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/list_posts_response_model.dart';
 import 'package:party_booking/data/network/model/login_response_model.dart';
@@ -14,7 +17,7 @@ import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
-import 'package:party_booking/data/network/model/change_password_request_model_2.dart';
+
 import 'json_serializable_converter.dart';
 
 part 'app_api_service.chopper.dart';
@@ -94,10 +97,16 @@ abstract class AppApiService extends ChopperService {
     @Query('_id') String id,
   });
 
+  @Post(path: 'product/dish')
+  Future<Response<SingleDishResponseModel>> addNewDish({
+    @Header('authorization') String token,
+    @body DishRequestCreateModel model,
+  });
+
   @Put(path: 'product/dish')
   Future<Response<UpdateDishResponseModel>> updateDish({
     @Header('authorization') String token,
-    @body Map<String, dynamic> data,
+    @body DishModel model,
   });
 
   @Delete(path: 'product/deletedish')
@@ -109,11 +118,9 @@ abstract class AppApiService extends ChopperService {
   Future<Response<ListPostsResponseModel>> getListPosts(
       {@Header('authorization') String token});
 
-  @Post(path: 'product/dish')
-  Future<Response<SingleDishResponseModel>> addNewDish({
-    @Header('authorization') String token,
-    @body DishModel model,
-  });
+
+  @Get(path: 'product/categories')
+  Future<Response<ListCategoriesResponseModel>> getCategories();
 
   static AppApiService create() {
     final client = ChopperClient(
@@ -149,7 +156,8 @@ abstract class AppApiService extends ChopperService {
       DisplayItem: DisplayItem.fromJsonFactory,
       Custom: Custom.fromJsonFactory,
       GetHistoryCartModel: GetHistoryCartModel.fromJsonFactory,
-      SingleDishResponseModel: SingleDishResponseModel.fromJsonFactory
+      SingleDishResponseModel: SingleDishResponseModel.fromJsonFactory,
+      ListCategoriesResponseModel: ListCategoriesResponseModel.fromJsonFactory,
     });
   }
 }

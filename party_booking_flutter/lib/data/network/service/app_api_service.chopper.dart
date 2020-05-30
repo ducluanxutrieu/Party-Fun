@@ -152,11 +152,23 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<UpdateDishResponseModel>> updateDish(
-      {String token, Map<String, dynamic> data}) {
+  Future<Response<SingleDishResponseModel>> addNewDish(
+      {String token, DishRequestCreateModel model}) {
     final $url = 'product/dish';
     final $headers = {'authorization': token};
-    final $body = data;
+    final $body = model;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client
+        .send<SingleDishResponseModel, SingleDishResponseModel>($request);
+  }
+
+  @override
+  Future<Response<UpdateDishResponseModel>> updateDish(
+      {String token, DishModel model}) {
+    final $url = 'product/dish';
+    final $headers = {'authorization': token};
+    final $body = model;
     final $request =
         Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
     return client
@@ -183,14 +195,10 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<SingleDishResponseModel>> addNewDish(
-      {String token, DishModel model}) {
-    final $url = 'product/dish';
-    final $headers = {'authorization': token};
-    final $body = model;
-    final $request =
-        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client
-        .send<SingleDishResponseModel, SingleDishResponseModel>($request);
+  Future<Response<ListCategoriesResponseModel>> getCategories() {
+    final $url = 'product/categories';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<ListCategoriesResponseModel,
+        ListCategoriesResponseModel>($request);
   }
 }

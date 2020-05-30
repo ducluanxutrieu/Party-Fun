@@ -5,7 +5,6 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
@@ -64,7 +63,7 @@ class SingleDishResponseModel {
   };
 }
 
-class DishModel extends BaseResponseModel {
+class DishModel {
   String id;
   String name;
   String description;
@@ -272,3 +271,4 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+

@@ -11,8 +11,8 @@ MenuModel menuModelFromJson(String str) => MenuModel.fromJson(json.decode(str));
 String menuModelToJson(MenuModel data) => json.encode(data.toJson());
 
 class MenuModel {
-  String menuName;
-  List<DishModel> listDish;
+  String menuName = "";
+  List<DishModel> listDish = List();
 
   MenuModel({
     this.menuName,

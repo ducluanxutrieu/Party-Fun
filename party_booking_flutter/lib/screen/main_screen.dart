@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 import 'package:party_booking/badges.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/list_categories_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
@@ -29,8 +30,10 @@ import 'dish_detail_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final AccountModel accountModel;
+  final List<DishModel> listDishModel;
+  final List<Category> listCategories;
 
-  MainScreen({@required this.accountModel});
+  MainScreen({@required this.accountModel, @required this.listCategories, this.listDishModel});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -55,8 +58,12 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _accountModel = widget.accountModel;
     _initLayout();
-    _getListDishesFromDB();
-    _getListDishes();
+//    _getListDishesFromDB();
+    if(widget.listDishModel == null) {
+      _getListDishes();
+    }else {
+      _initListDishData(widget.listDishModel);
+    }
     _initSearch();
   }
 
@@ -159,15 +166,15 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Future<void> _getListDishesFromDB() async {
+/*  Future<void> _getListDishesFromDB() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String listDishJson = prefs.getString(Constants.LIST_DISH_MODEL_KEY) ?? "";
     if (listDishJson.isNotEmpty) {
       ListDishesResponseModel model =
           listDishesResponseModelFromJson(listDishJson);
-      _initListDishData(model);
+      _initListDishData(model.listDishes);
     }
-  }
+  }*/
 
   Future<void> _getListDishes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -175,7 +182,7 @@ class _MainScreenState extends State<MainScreen> {
 
     var result = await AppApiService.create().getListDishes(token: _token);
     if (result.isSuccessful) {
-      _initListDishData(result.body);
+      _initListDishData(result.body.listDishes);
       prefs.setString(Constants.LIST_DISH_MODEL_KEY,
           listDishesResponseModelToJson(result.body).toString());
     } else {
@@ -184,12 +191,12 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  void _initListDishData(ListDishesResponseModel model) {
+  void _initListDishData(List<DishModel> model) {
     setState(() {
       _listMenuFiltered.clear();
       _listDishOrigin.clear();
-      _listMenuFiltered.addAll(_menuAllocation(model.listDishes));
-      _listDishOrigin.addAll(model.listDishes);
+      _listMenuFiltered.addAll(_menuAllocation(model));
+      _listDishOrigin.addAll(model);
     });
   }
 
@@ -567,62 +574,28 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   List<MenuModel> _menuAllocation(List<DishModel> dishes) {
+    List<Category> listCategories = widget.listCategories;
     var listMenu = List<MenuModel>();
-    var listHolidayOffers = List<DishModel>();
-    var listFirstDishes = List<DishModel>();
-    var listMainDishes = List<DishModel>();
-    var listSeafood = List<DishModel>();
-    var listDrink = List<DishModel>();
-    var listDessert = List<DishModel>();
 
     dishes.forEach((dish) {
-      dish.categories.forEach((element) {
-        switch (element) {
-          case "Holiday Offers":
-            listHolidayOffers.add(dish);
-            break;
-          case "First Dishes":
-            listFirstDishes.add(dish);
-            break;
-          case "Main Dishes":
-            listMainDishes.add(dish);
-            break;
-          case "Seafood":
-            listSeafood.add(dish);
-            break;
-          case "Drinks":
-            listDrink.add(dish);
-            break;
-          case "Dessert":
-            listDessert.add(dish);
-            break;
-        }
+      dish.categories.forEach((dishCategory) {
+        listCategories.forEach((category) {
+          if(dishCategory == category.name) {
+            bool haveThisCate = false;
+            listMenu.forEach((menu) {
+              if (menu.menuName == category.name) {
+                menu.listDish.add(dish);
+                haveThisCate = true;
+              }
+            });
+            if (!haveThisCate) {
+              listMenu.add(
+                  MenuModel(menuName: category.name, listDish: [dish]));
+            }
+          }
+        });
       });
     });
-
-    if (listHolidayOffers.length > 0) {
-      listMenu.add(
-          MenuModel(menuName: "Holiday Offers", listDish: listHolidayOffers));
-    }
-    if (listFirstDishes.length > 0) {
-      listMenu
-          .add(MenuModel(menuName: "First Dishes", listDish: listFirstDishes));
-    }
-    if (listMainDishes.length > 0) {
-      listMenu
-          .add(MenuModel(menuName: "Main Dishes", listDish: listMainDishes));
-    }
-    if (listSeafood.length > 0) {
-      listMenu.add(MenuModel(menuName: "Seafood", listDish: listSeafood));
-    }
-    if (listDrink.length > 0) {
-      listMenu.add(MenuModel(menuName: "Drinks", listDish: listDrink));
-    }
-
-    if (listDessert.length > 0) {
-      listMenu.add(MenuModel(menuName: "Dessert", listDish: listDessert));
-    }
-
     return listMenu;
   }
 

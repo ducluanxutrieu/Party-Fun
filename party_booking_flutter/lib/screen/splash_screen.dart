@@ -4,9 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/data/network/model/list_categories_response_model.dart';
+import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
+import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_screen.dart';
@@ -33,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (accountJson != null && accountJson.isNotEmpty) {
       AccountModel _accountModel =
           AccountModel.fromJson(json.decode(accountJson));
-      goToMainScreen(_accountModel);
+      _getListDishes(_accountModel);
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -73,8 +78,32 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void goToMainScreen(accountModel) async {
+  Future<void> _getListDishes(AccountModel accountModel) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString(Constants.USER_TOKEN);
+
+    var result = await AppApiService.create().getListDishes(token: _token);
+    if (result.isSuccessful) {
+      _getListCategories(prefs, result.body.listDishes, accountModel);
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
+  }
+
+  void _getListCategories(SharedPreferences prefs, List<DishModel> listDishes, AccountModel accountModel, ) async {
+    var result = await AppApiService.create().getCategories();
+    if (result.isSuccessful) {
+      prefs.setString(Constants.LIST_CATEGORIES_KEY, listCategoriesResponseModelToJson(result.body));
+      _goToMainScreen(accountModel, listDishes, result.body.categories);
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
+  }
+
+  void _goToMainScreen(accountModel, List<DishModel> listDishes, List<Category> categories) async {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel,)));
+        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel, listCategories: categories, listDishModel: listDishes,)));
   }
 }
