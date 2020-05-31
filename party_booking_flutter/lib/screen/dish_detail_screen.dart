@@ -460,11 +460,11 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   _goToUpdateDish(BuildContext context) async {
-    DishModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDishScreen(dishModel: _dishModel)));
+    var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDishScreen(dishModel: _dishModel)));
     if(result != null){
       setState(() {
-        _dishModel = result;
-        Navigator.maybePop(context, result);
+//        _dishModel = result;
+        Navigator.maybePop(context, true);
       });
     }
   }

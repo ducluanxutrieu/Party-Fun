@@ -177,7 +177,7 @@ class _$AppApiService extends AppApiService {
 
   @override
   Future<Response<BaseResponseModel>> deleteDish({String token, String id}) {
-    final $url = 'product/deletedish';
+    final $url = 'product/dish';
     final $headers = {'authorization': token};
     final $body = <String, dynamic>{'_id': id};
     final $request =

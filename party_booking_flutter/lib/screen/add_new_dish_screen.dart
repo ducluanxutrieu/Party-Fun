@@ -33,7 +33,9 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
   @override
   void initState() {
     isAddNewDish = widget.dishModel == null || widget.dishModel.id == null;
-    oldImages = widget.dishModel.image;
+    if(widget.dishModel != null) {
+      oldImages = widget.dishModel.image;
+    }
     super.initState();
   }
 
@@ -110,21 +112,19 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     if (_fbKey.currentState.saveAndValidate()) {
       String name = _fbKey.currentState.fields['name'].currentState.value;
       String price = _fbKey.currentState.fields['price'].currentState.value;
-      List<String> categories =
+      List<dynamic> categories =
           _fbKey.currentState.fields['type'].currentState.value;
       String description =
           _fbKey.currentState.fields['description'].currentState.value;
 
       List imageList = await _uploadImage();
       DishModel dishModel = DishModel(
-          id: widget.dishModel.id,
           name: name,
           price: int.parse(price),
           description: description,
-          categories: categories,
+          categories: categories.cast<String>().toList(),
           discount: 10,
           image: imageList,
-          featureImage: imageList[0],
           currency: 'VND');
 
       if (isAddNewDish) {
@@ -136,6 +136,8 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
   }
 
   void _updateDish(String token, DishModel dishModel) async {
+    dishModel.id = widget.dishModel.id;
+    dishModel.featureImage = widget.dishModel.featureImage;
     dishModel.image.addAll(oldImages);
     var result =
         await AppApiService.create().updateDish(token: token, model: dishModel);
@@ -149,12 +151,14 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
     DishRequestCreateModel dishModel = DishRequestCreateModel(
         name: model.name,
         currency: model.currency,
-        featureImage: model.featureImage,
         image: model.image,
         discount: model.discount,
         categories: model.categories,
         description: model.description,
         price: model.price);
+    if(model.image.isNotEmpty){
+      dishModel.featureImage = model.image[0];
+    }
 
     Response<SingleDishResponseModel> addNewDishRes =
         await AppApiService.create().addNewDish(token: token, model: dishModel);
@@ -165,13 +169,15 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
   }
 
   Future<List<String>> _uploadImage() async {
-    BaseListResponseModel uploadImageRes =
-        await AppImageAPIService.create(context).uploadImages(newImages);
-    if (uploadImageRes != null) {
-      List<String> imageList = uploadImageRes.data;
-      return imageList;
-    } else
-      return List();
+    if(newImages != null && newImages.isNotEmpty) {
+      BaseListResponseModel uploadImageRes =
+      await AppImageAPIService.create(context).uploadImages(newImages);
+      if (uploadImageRes != null) {
+        List<String> imageList = uploadImageRes.data;
+        return imageList;
+      } else
+        return List();
+    } else return List();
   }
 
   Future<void> loadAssets() async {
@@ -296,7 +302,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
           minHeight: 0,
           maxWidth: MediaQuery.of(context).size.width,
         ),
-        child: newImages.isNotEmpty
+        child: (newImages != null && newImages.isNotEmpty)
             ? GridView.count(
                 shrinkWrap: true,
                 crossAxisCount: 3,
@@ -351,7 +357,7 @@ class _AddNewDishScreenState extends State<AddNewDishScreen> {
               minHeight: 0,
               maxWidth: MediaQuery.of(context).size.width,
             ),
-            child: oldImages.isNotEmpty
+            child: (oldImages != null && oldImages.isNotEmpty)
                 ? GridView.count(
                     shrinkWrap: true,
                     crossAxisCount: 3,

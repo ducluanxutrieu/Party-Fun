@@ -232,7 +232,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _goToAddDish() async {
-    BaseResponseModel result = await Navigator.push(context,
+    bool result = await Navigator.push(context,
         MaterialPageRoute(builder: (context) => AddNewDishScreen()));
     if (result != null) {
       _getListDishes();
@@ -619,7 +619,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _goToDishDetail(BuildContext context, DishModel dishModel) async {
-    DishModel result = await Navigator.push(
+    var result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => DishDetailScreen(

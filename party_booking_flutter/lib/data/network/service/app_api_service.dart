@@ -109,7 +109,7 @@ abstract class AppApiService extends ChopperService {
     @body DishModel model,
   });
 
-  @Delete(path: 'product/deletedish')
+  @Delete(path: 'product/dish')
   Future<Response<BaseResponseModel>> deleteDish(
       {@Header('authorization') String token, @Field('_id') String id});
 
