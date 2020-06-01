@@ -16,11 +16,11 @@ export class UserService {
         // this.get_userData();
     }
 
-    //Lấy thông tin user
+    // Lấy thông tin user
     get_userInfo() {
         let headers = new HttpHeaders({
             'Authorization': localStorage.getItem('token')
-        })
+        });
         return this.http.get<ApiResponse>(api.get_profile, { headers: headers });
     }
     // Cập nhật thông tin user
@@ -28,7 +28,7 @@ export class UserService {
         let headers = new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': localStorage.getItem('token')
-        })
+        });
         return this.http.put<ApiResponse>(api.update_user, body, { headers: headers });
     }
 }

@@ -18,6 +18,7 @@ export const api = {
     productStatistics: `${apiUrl}/product/statistic_dish`,      // Thống kê món ăn được gọi trong 1 ngày/tháng/tuần
     moneyStatistics: `${apiUrl}/product/statistic_money`,       // Thống kê tổng hóa đơn theo 7 lần gần nhất
     customerStatistics: `${apiUrl}/product/statistic_customer`, // Thống kê tiền khách hàng thanh toán trong 1 ngày/tháng/tuần
+    staffStatistics: `${apiUrl}/product/statistic_staff`,       // Thống kê số tiền nhân viên đã thanh toán trong 1 ngày/tuần/tháng 
 
     // Payment
     get_bills_list: `${apiUrl}/product/bill`,                   // Lấy danh sách hóa đơn

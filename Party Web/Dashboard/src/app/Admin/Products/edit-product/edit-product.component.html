@@ -17,8 +17,8 @@
                 <!-- Breadcrumb-->
                 <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-                    <li class="breadcrumb-item"><a href="products/list">Products List</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/products/list']">Products List</a></li>
                     <li class="breadcrumb-item active">Edit Product</li>
                 </ul>
                 </div>
@@ -46,10 +46,10 @@
                                         Please write a description with at least 6 characters.
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-sm-1 form-control-label">Type</label>
                                     <div class="col-sm-3">
-                                        <select name="account" class="form-control mb-3" name="type" ngModel [(ngModel)]="product_data.categories" required #producttype="ngModel">
+                                        <select name="account" class="form-control mb-3" name="categories" ngModel  required #producttype="ngModel">
                                             <option value="Holiday Offers">Holiday Offers</option>
                                             <option value="First Dishes">First Dishes</option>
                                             <option value="Main Dishes">Main Dishes</option>
@@ -60,6 +60,18 @@
                                     </div>
                                     <div class="col-sm-12 invalid-feedback d-block" role="alert" *ngIf="producttype.invalid && producttype.touched">
                                         Please choose a type.
+                                    </div>
+                                </div> -->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 form-control-label pr-0">Categories</label>
+                                    <div class="col-sm-6 pl-0">
+                                        <ng-select2 name="categories" [data]="dish_categories"
+                                                    [placeholder]="'Select categories'"
+                                                    [width]="500"
+                                                    [options]="select2_options"
+                                                    ngModel
+                                                    [(ngModel)]="product_data.categories">
+                                        </ng-select2>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -78,7 +90,7 @@
                                     <div class="col-sm-3">
                                         <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" multiple="multiple" class="form-control-file" name="image" (change)="fileChanged($event)" ngModel #image="ngModel">
                                     </div>
-                                    <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
+                                    <div class="col-sm-12 invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
                                         Please choose a image.
                                     </div>
                                 </div>

@@ -17,7 +17,7 @@
                 <!-- Breadcrumb-->
                 <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
                     <li class="breadcrumb-item active">Add Product</li>
                 </ul>
                 </div>
@@ -34,18 +34,18 @@
                                 <div class="form-group">
                                     <label class="form-control-label">Product Name</label>
                                     <input type="text" placeholder="Product Name" class="form-control" name="name" ngModel required #productname="ngModel">
-                                    <div class="invalid-feedback d-block" role="alert" *ngIf="productname.invalid && productname.dirty">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="productname.invalid">
                                         Please choose a name.
                                     </div>
                                 </div>
                                 <div class="form-group">       
                                     <label class="form-control-label">Description</label>
                                     <textarea style="height: 5em" type="text" placeholder="Description" class="form-control" name="description" minlength="6" required ngModel #productdescription="ngModel"></textarea>
-                                    <div class="invalid-feedback d-block" role="alert" *ngIf="productdescription.invalid && productdescription.dirty">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="productdescription.invalid">
                                         Please write a description with at least 6 characters.
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-sm-1 form-control-label">Type</label>
                                     <div class="col-sm-3">
                                         <select class="form-control mb-3" name="type" ngModel required #producttype="ngModel">
@@ -60,11 +60,11 @@
                                     <div class="col-sm-12 invalid-feedback d-block" role="alert" *ngIf="producttype.invalid && producttype.touched">
                                         Please choose a type.
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <label class="form-control-label">Price</label>
                                     <input type="number" placeholder="Price" class="form-control" min="0" name="price" required ngModel #price="ngModel">
-                                    <div class="invalid-feedback d-block" role="alert" *ngIf="price.invalid && price.dirty">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="price.invalid">
                                         Please enter price.
                                     </div>
                                 </div>
@@ -77,8 +77,22 @@
                                     <div class="col-sm-3">
                                         <input id="fileInput" type="file" accept="image/x-png,image/gif,image/jpeg" multiple class="form-control-file" name="image" required (change)="fileChanged($event)" ngModel #image="ngModel">
                                     </div>
-                                    <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
+                                    <div class="col-sm-12 invalid-feedback d-block" role="alert" *ngIf="image.invalid">
                                         Please choose a image.
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 form-control-label">Categories</label>
+                                    <div class="col-sm-12">
+                                        <ng-select2 name="categories" #categories="ngModel" [data]="dish_categories" style="width:100%"
+                                                    [placeholder]="'Select categories'"
+                                                    [options]="select2_options"
+                                                    ngModel
+                                                    required>
+                                        </ng-select2>
+                                    </div>
+                                    <div class="col-sm-12 invalid-feedback d-block" role="alert" *ngIf="categories.invalid">
+                                        Please choose a type.
                                     </div>
                                 </div>
                                 <div class="form-group">       

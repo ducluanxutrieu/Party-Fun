@@ -9,6 +9,7 @@ import { Post } from '../../../_models/post.model';
   styleUrls: ['./posts-list.component.css']
 })
 export class PostsListComponent implements OnInit {
+  total_pages: number
   posts_list: Post[] = [];
 
   constructor(
@@ -16,14 +17,15 @@ export class PostsListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.get_posts_list();
+    this.get_posts_list(1);
   }
 
   // Lấy danh sách bài viết
-  get_posts_list() {
-    this.postService.get_posts_list(1).subscribe(
+  get_posts_list(page: number) {
+    this.postService.get_posts_list(page).subscribe(
       res => {
         this.posts_list = res.data.value as Post[];
+        this.total_pages = res.data.total_page;
       },
       err => {
         console.log("Error: " + err.error.message);

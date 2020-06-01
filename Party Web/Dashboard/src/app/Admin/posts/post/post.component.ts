@@ -20,6 +20,7 @@ export class PostComponent implements OnInit {
   ngOnInit() { }
 
   options: Object = {
+    pastePlain: true,
     placeholderText: 'Edit your post here!',
     toolbarButtons: [
       ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript'],
@@ -76,7 +77,7 @@ export class PostComponent implements OnInit {
         return;
       },
       () => {
-        let body = `title=${content.title}&feature_image=${post_feature_image_url}&content=${this.post_content}`;
+        let body = `title=${content.title}&feature_image=${post_feature_image_url}&content=${encodeURIComponent(this.post_content)}`;
         this.postService.add_post(body).subscribe(
           res => {
             alert("Add post success!");

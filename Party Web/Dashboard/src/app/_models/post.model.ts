@@ -1,7 +1,7 @@
 export class Post {
     _id: string;
     title: string;
-    content;
+    content: string;
     feature_image: string;
     link: string;
     type: string;

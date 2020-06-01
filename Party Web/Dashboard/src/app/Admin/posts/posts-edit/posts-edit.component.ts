@@ -17,6 +17,8 @@ export class PostsEditComponent implements OnInit {
   post_feature_image;
 
   options: Object = {
+    language: 'vi',
+    pastePlain: true,
     placeholderText: 'Edit your post here!',
     toolbarButtons: [
       ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript'],
@@ -94,14 +96,15 @@ export class PostsEditComponent implements OnInit {
     title: string
   }
   ) {
-    let body = `_id=${this.post_id}&title=${content.title}&feature_image=${this.post.feature_image}&content=${this.post.content}`;
+    let body = `_id=${this.post_id}&title=${content.title}&feature_image=${this.post.feature_image}&content=${encodeURIComponent(this.post.content)}`;
     this.postService.edit_post(body).subscribe(
       res => {
         alert("Edit post success!");
         window.location.reload();
       },
       err => {
-        alert("Error: " + err.error.message);
+        alert("Error while uploading post!");
+        console.log("Error" + err.error.message);
       }
     )
   }

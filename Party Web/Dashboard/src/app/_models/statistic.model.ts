@@ -16,3 +16,8 @@ export class CustomerStatistic {
     count_bill: number;
     total_money: number;
 }
+export class StaffStatistic {
+    _id: string;
+    count_bill: number;
+    total_money: number;
+}

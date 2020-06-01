@@ -15,19 +15,19 @@ export class PostService {
 
     // Thêm bài viết
     add_post(body: string) {
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded',
             'Authorization': localStorage.getItem('token')
-        })
+        });
         return this.http.post<ApiResponse>(api.post, body, { headers: headers });
     }
 
     // Sửa bài viết
     edit_post(body: string) {
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded',
             'Authorization': localStorage.getItem('token')
-        })
+        });
         return this.http.put<ApiResponse>(api.post, body, { headers: headers });
     }
 

@@ -11,12 +11,12 @@ export class PaymentService {
     headers = new HttpHeaders({
         'Content-type': 'application/x-www-form-urlencoded',
         'Authorization': localStorage.getItem('token')
-    })
+    });
     constructor(
         private http: HttpClient,
     ) { }
 
-    //Thanh toán đơn hàng
+    // Thanh toán đơn hàng
     pay_bill(bill_id: string) {
         let body;
         this.http.post<ApiResponse>(api.pay_bill + "/" + bill_id, body, { headers: this.headers }).subscribe(
@@ -29,18 +29,18 @@ export class PaymentService {
                 alert("Error: " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
-        )
+        );
         return false;
     }
 
-    //Xóa đơn hàng
+    // Xóa đơn hàng
     delete_bill(bill_id: string) {
         const option = {
             headers: this.headers,
             body: {
                 _id: bill_id
             },
-        }
+        };
         this.http.delete(api.delete_bill, option).subscribe(
             res => {
                 sessionStorage.setItem('response', JSON.stringify(res));
@@ -51,7 +51,7 @@ export class PaymentService {
                 alert("Error: " + err.status + " - " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             }
-        )
+        );
     }
 
     // Lấy danh sách tất cả hóa đơn

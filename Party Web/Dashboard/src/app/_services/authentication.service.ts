@@ -14,11 +14,11 @@ export class AuthenticationService {
     ) { }
     // Đăng nhập
     login(username: string, password: string) {
-        let body = `username=${username}&password=${password}`;
+        const body = `username=${username}&password=${password}`;
         // alert(body);
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded'
-        })
+        });
         this.http.post<ApiResponse>(api.signin, body, { headers: headers }).subscribe(
             res => {
                 if (res.data.role == "2" || res.data.role == "3") {
@@ -27,8 +27,9 @@ export class AuthenticationService {
                     localStorage.setItem('userinfo', JSON.stringify(res.data));
                     localStorage.setItem('avatar', res.data.avatar);
                     this.router.navigate(['/dashboard']);
+                } else {
+                    alert("Must be staff or admin account!");
                 }
-                else alert("Must be staff or admin account!");
             },
             err => {
                 alert("Error: " + err.error.message);
@@ -37,9 +38,9 @@ export class AuthenticationService {
     }
     // Đăng xuất
     logout() {
-        let headers = new HttpHeaders({
-            'Authorization': localStorage.getItem('token')
-        })
+        const headers = new HttpHeaders({
+            Authorization: localStorage.getItem('token')
+        });
         this.http.get(api.signout, { headers: headers }).subscribe(
             res => {
                 sessionStorage.setItem('response', JSON.stringify(res));
@@ -50,7 +51,7 @@ export class AuthenticationService {
             err => {
                 sessionStorage.setItem('error', JSON.stringify(err));
                 alert("Cannot logout!");
-            })
+            });
     }
     // Kiểm tra có đăng nhập không
     is_loggedIn() {

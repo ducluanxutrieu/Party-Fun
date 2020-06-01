@@ -5,6 +5,7 @@ import { ProductService } from '../../../_services/product.service';
 import { CommonService } from '../../../_services/common.service';
 // Models
 import { Product } from '../../../_models/product.model';
+import { Select2OptionData } from 'ng-select2';
 
 @Component({
   selector: 'app-edit-product',
@@ -17,6 +18,13 @@ export class EditProductComponent implements OnInit {
   product_imgs_files: any[];
   product_imgs_url: string[] = [];  // Mảng chứa url hình server trả về sau khi upload ảnh
   product_categories: string[] = []; // Mảng chứa dish category
+
+  dish_categories: Array<Select2OptionData>;
+  select2_options = {
+    multiple: true,
+    width: '300',
+    tags: true
+  };
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
@@ -27,7 +35,33 @@ export class EditProductComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.product_id = params['id'];
       this.get_dish(this.product_id);
-    })
+    });
+    this.dish_categories = [
+      {
+        id: 'Holiday Offers',
+        text: 'Holiday Offers'
+      },
+      {
+        id: 'First Dishes',
+        text: 'First Dishes'
+      },
+      {
+        id: 'Main Dishes',
+        text: 'Main Dishes'
+      },
+      {
+        id: 'Seafood',
+        text: 'Seafood'
+      },
+      {
+        id: 'Dessert',
+        text: 'Dessert'
+      },
+      {
+        id: 'Drinks',
+        text: 'Drinks'
+      }
+    ]
   }
 
   // Lấy thông tin món ăn
@@ -39,7 +73,7 @@ export class EditProductComponent implements OnInit {
       },
       err => {
         console.log("Error: " + err.error.message);
-        alert("Get dish info error!");
+        alert("Error while getting dish info!");
       }
     )
   }
@@ -47,10 +81,11 @@ export class EditProductComponent implements OnInit {
   update_confirm(data: {
     name: string;
     description: string;
-    type: string;
+    categories: string;
     price: number;
     discount: number;
   }) {
+    console.log(data.categories);
     // Upload image lên server trước
     if (this.product_imgs_files) {
       this.commonService.upload_image(this.product_imgs_files).subscribe(
@@ -77,20 +112,20 @@ export class EditProductComponent implements OnInit {
   update_dish(data: {
     name: string;
     description: string;
-    type: string;
+    categories: string;
     price: number;
     discount: number;
   }) {
-    this.product_categories.push(data.type); // Push category vào mảng
-    let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${JSON.stringify(this.product_categories)}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.type)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
+    // this.product_categories.push(data.categories); // Push category vào mảng
+    let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.categories)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
     this.productService.update_dish(body).subscribe(
       res => {
         alert("Edit product success");
-        window.location.reload();
+        // window.location.reload();
       },
       err => {
-        alert("Error: " + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
+        alert("Error while update dish!");
+        console.log(`Error + ${err.error.message}`);
       }
     )
   }

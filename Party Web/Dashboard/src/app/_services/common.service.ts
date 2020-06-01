@@ -18,7 +18,7 @@ export class CommonService {
     upload_image(images: any[]) {
         let headers = new HttpHeaders({
             'Authorization': localStorage.getItem('token')
-        })
+        });
         let body = new FormData();
         for (let i = 0; i < images.length; i++) {
             body.append('image', images[i]);

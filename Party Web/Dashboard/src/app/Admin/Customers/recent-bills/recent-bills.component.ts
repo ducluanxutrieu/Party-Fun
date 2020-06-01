@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // Services
-import { api } from '../../../_api/apiUrl';
 import { StatisticalService } from '../../../_services/statistical.service';
 import { PaymentService } from '../../../_services/payment.service';
 import { ProductService } from '../../../_services/product.service';
 // Models
 import { Bill, Bill_item } from '../../../_models/bill.model';
+import { Subject } from 'rxjs';
 
 // declare jquery;
 declare var $: any;
@@ -19,39 +18,39 @@ declare var $: any;
 })
 
 export class RecentBillsComponent implements OnInit {
+  dtOptions: DataTables.Settings = {};
+  total_pages: number;
   recent_bills: Bill[] = [];
   bill_detail: Bill_item[] = [];
   current_bill: Bill;
 
-  // dtTrigger: Subject<any> = new Subject();
-
-  headers = new HttpHeaders({
-    'Authorization': localStorage.getItem('token')
-  })
+  dtTrigger: Subject<any> = new Subject(); 
 
   constructor(
     public statisticalService: StatisticalService,
     public paymentService: PaymentService,
     public productService: ProductService,
-    private http: HttpClient,
   ) { }
 
   ngOnInit() {
     // this.recent_billList = this.statisticalService.get_billData();
-    this.get_recentBills();
+    this.get_recentBills(1);
+    this.dtOptions = {
+      "paging": false,
+    }
   }
 
   //Generate datatable 
   datatable_generate() {
-    var recentbillTable = $('#recentbillTable').DataTable();
-    var recentbillTable_info = recentbillTable.page.info();
-
-    if (recentbillTable_info.pages == 1) {
-      recentbillTable.destroy();
-      $('#recentbillTable').DataTable({
-        "paging": false
-      });
+    if ($.fn.DataTable.isDataTable('#recentbillTable')) {
+      console.log(1);
+      $('#recentbillTable').DataTable().fnDraw();
     }
+
+    $('#recentbillTable').DataTable({
+      "paging": false,
+      "bInfo": false,
+    });
   }
 
   // Khi click vào bill trong list
@@ -65,12 +64,14 @@ export class RecentBillsComponent implements OnInit {
     }
   }
 
+  // Thanh toán bill
   pay(bill_id: string) {
     if (confirm("Pay this bill?")) {
       this.paymentService.pay_bill(bill_id);
     };
   }
 
+  // Xóa bill
   delete_bill(bill_id) {
     if (confirm("Are you sure to delete this bill?")) {
       this.paymentService.delete_bill(bill_id);
@@ -78,39 +79,22 @@ export class RecentBillsComponent implements OnInit {
   }
 
   // Lấy danh sách bill và tạo datatable
-  get_recentBills() {
-    // this.http.get(api.get_bills_list, { headers: this.headers, observe: 'response' }).subscribe(
-    //   res_data => {
-    //     sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
-    //     this.recent_bills = JSON.parse(sessionStorage.getItem('recent_bills'));
-    //     // this.dtTrigger.next();
-    //     // setTimeout(() => {
-    //     //   this.datatable_generate();
-    //     // }, 1000)
-    //   },
-    //   err => {
-    //     console.log("Error: " + err.status + " " + err.error.text);
-    //     sessionStorage.setItem('error', JSON.stringify(err));
-    //   },
-    //   () => {
-    //     setTimeout(() => {
-    //       this.datatable_generate();
-    //     })
-    //   }
-    // )
-    this.paymentService.get_bills_list(1).subscribe(
+  get_recentBills(page: number) {
+    this.paymentService.get_bills_list(page).subscribe(
       res => {
         this.recent_bills = res.data.value as Bill[];
+        this.total_pages = res.data.total_page;
+        this.dtTrigger.next();
       },
       err => {
         console.log("Error: " + err.error.text);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
-      () => {
-        setTimeout(() => {
-          this.datatable_generate();
-        })
-      }
+      // () => {
+      //   setTimeout(() => {
+      //     this.datatable_generate();
+      //   }, 1000)
+      // }
     )
   }
 }

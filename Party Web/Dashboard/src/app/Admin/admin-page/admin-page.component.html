@@ -23,10 +23,10 @@
                     <div class="card-header">
                       <div class="row">
                           <h3 class="h4 col-lg-12">Statistics of products ordered</h3>
-                          <div id="productBtns" class="col lg-12 mt-1 text-right">
-                            <button type="button" value="day" class="btn btn-primary mr-1 chart-btn" (click)="product_range_changed($event)">Day</button>
-                            <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="product_range_changed($event)">Week</button>
-                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="product_range_changed($event)">Month</button>
+                          <div id="productBtn" class="col lg-12 mt-1 text-right">
+                            <button type="button" value="day" class="btn btn-primary mr-1 chart-btn active" (click)="product_range_changed('day')">Day</button>
+                            <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="product_range_changed('week')">Week</button>
+                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="product_range_changed('month')">Month</button>
                           </div>
                       </div>
                     </div>
@@ -69,15 +69,15 @@
                   </div>
                 </div>
                 <!-- Customers Statistic -->
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                   <div class="card">
                     <div class="card-header">
                       <div class="row">
                           <h3 class="h4 col-lg-12">Payment statistics of customers</h3>
-                          <div id="customerBtns" class="col lg-12 mt-1 text-right">
-                            <button type="button" value="day" class="btn btn-primary mr-1 chart-btn" (click)="customer_range_changed($event)">Day</button>
-                            <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="customer_range_changed($event)">Week</button>
-                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="customer_range_changed($event)">Month</button>
+                          <div id="customerBtn" class="col lg-12 mt-1 text-right">
+                            <button type="button" value="day" class="btn btn-primary mr-1 chart-btn active" (click)="customer_range_changed('day')">Day</button>
+                            <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="customer_range_changed('week')">Week</button>
+                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="customer_range_changed('month')">Month</button>
                           </div>
                       </div>
                     </div>
@@ -86,6 +86,31 @@
                         <canvas baseChart
                           [datasets]="customerChartData"
                           [labels]="customerChartLabels"
+                          [options]="customerChartOptions"
+                          [legend]="barChartLegend"
+                          [chartType]="barChartType">
+                        </canvas>     
+                    </div>
+                  </div>
+                </div>
+                <!-- Staffs Statistic -->
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="row">
+                          <h3 class="h4 col-lg-12">Statistics of the amount employees have paid</h3>
+                          <div id="staffBtn" class="col lg-12 mt-1 text-right">
+                            <button type="button" value="day" class="btn btn-primary mr-1 chart-btn active" (click)="staff_range_changed('day')">Day</button>
+                            <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="staff_range_changed('week')">Week</button>
+                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="staff_range_changed('month')">Month</button>
+                          </div>
+                      </div>
+                    </div>
+                    <span *ngIf="!isStaffDataAvailable"  class="text-center pt-2 pb-2">No data available</span>
+                    <div class="card-body" *ngIf="isStaffDataAvailable">
+                        <canvas baseChart
+                          [datasets]="staffChartData"
+                          [labels]="staffChartLabels"
                           [options]="customerChartOptions"
                           [legend]="barChartLegend"
                           [chartType]="barChartType">

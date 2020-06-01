@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
 import 'froala-editor/js/plugins.pkgd.min.js'; // Import toàn bộ Froala plugin (Có thể import riêng lẻ từng cái)
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-
+import { NgSelect2Module } from 'ng-select2'
 import { DatePipe } from '@angular/common';
 
 //Services
@@ -32,15 +32,16 @@ import { EditProductComponent } from './Admin/Products/edit-product/edit-product
 import { EmployeesListComponent } from './Admin/Employees/employees-list/employees-list.component';
 import { AddEmployeeComponent } from './Admin/Employees/add-employee/add-employee.component';
 import { EditEmployeeComponent } from './Admin/Employees/edit-employee/edit-employee.component';
-import { NotFoundComponent } from './components/pages/not-found/not-found.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { ProfileComponent } from './User/profile/profile.component';
 import { CustomersListComponent } from './Admin/Customers/customers-list/customers-list.component';
 import { PayComponent } from './Admin/Customers/pay/pay.component';
 import { RecentBillsComponent } from './Admin/Customers/recent-bills/recent-bills.component';
 import { PostComponent } from './Admin/posts/post/post.component';
-import { SidebarComponent } from './components/commons/sidebar/sidebar.component';
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { PostsListComponent } from './Admin/posts/posts-list/posts-list.component';
 import { PostsEditComponent } from './Admin/posts/posts-edit/posts-edit.component';
+import { PaginationComponent } from './shared/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { PostsEditComponent } from './Admin/posts/posts-edit/posts-edit.componen
     PostComponent,
     SidebarComponent,
     PostsListComponent,
-    PostsEditComponent
+    PostsEditComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,8 @@ import { PostsEditComponent } from './Admin/posts/posts-edit/posts-edit.componen
     ChartsModule,
     DataTablesModule,
     FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    FroalaViewModule.forRoot(),
+    NgSelect2Module
   ],
   providers: [
     AuthenticationService,

@@ -16,7 +16,7 @@
         <!-- Breadcrumb-->
         <div class="breadcrumb-holder container-fluid">
           <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
             <li class="breadcrumb-item active">Posts list</li>
           </ul>
         </div>
@@ -42,7 +42,7 @@
                     <tbody>
                       <tr *ngFor="let post of posts_list; let i = index">
                         <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                        <td class="align-middle text-center">{{post?.title}}</td>
+                        <td class="align-middle"><span class="table-text">{{post?.title}}</span></td>
                         <td class="align-middle text-center">{{post?.author}}</td>
                         <td class="align-middle text-center">{{post?.create_at | date:'dd-MM-yyyy'}}</td>
                         <td class="align-middle text-center">{{post?.update_at | date:'dd-MM-yyyy'}}</td>
@@ -58,6 +58,7 @@
                       </tr>
                     </tbody>
                   </table>
+                  <pagination [total_pages]="total_pages" (onChange)="get_posts_list($event)"></pagination>
                 </div>
               </div>
             </div>

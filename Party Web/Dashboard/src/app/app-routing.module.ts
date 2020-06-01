@@ -10,7 +10,7 @@ import { EditProductComponent } from './Admin/Products/edit-product/edit-product
 import { EmployeesListComponent } from './Admin/Employees/employees-list/employees-list.component';
 import { AddEmployeeComponent } from './Admin/Employees/add-employee/add-employee.component';
 import { EditEmployeeComponent } from './Admin/Employees/edit-employee/edit-employee.component';
-import { NotFoundComponent } from './components/pages/not-found/not-found.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { ProfileComponent } from './User/profile/profile.component';
 import { CustomersListComponent } from './Admin/Customers/customers-list/customers-list.component';
 import { PayComponent } from './Admin/Customers/pay/pay.component';

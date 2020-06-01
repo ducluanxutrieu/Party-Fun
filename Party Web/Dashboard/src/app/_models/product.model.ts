@@ -8,7 +8,7 @@ export class Product {
     create_at: string;
     update_at: string;
     user_create: string;
-    categories: string;
+    categories: string[];
     feature_image: string;
     currency: string;
 }
