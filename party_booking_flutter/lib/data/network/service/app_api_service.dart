@@ -14,6 +14,7 @@ import 'package:party_booking/data/network/model/list_posts_response_model.dart'
 import 'package:party_booking/data/network/model/login_response_model.dart';
 import 'package:party_booking/data/network/model/party_book_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
+import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
@@ -96,7 +97,11 @@ abstract class AppApiService extends ChopperService {
     @Header('authorization') String token,
     @Query('_id') String id,
   });
-
+  @Get(path: 'product/rate')
+  Future<Response<RateResponseModelData>> getRate(
+      @Field('id') String id,
+      @Field('page') int page,
+      );
   @Post(path: 'product/dish')
   Future<Response<SingleDishResponseModel>> addNewDish({
     @Header('authorization') String token,
@@ -142,10 +147,11 @@ abstract class AppApiService extends ChopperService {
       RegisterRequestModel: RegisterRequestModel.fromJsonFactory,
       ListDishesResponseModel: ListDishesResponseModel.fromJsonFactory,
       DishModel: DishModel.fromJsonFactory,
-      RateModel: RateModel.fromJsonFactory,
-      RateItemModel: RateItemModel.fromJsonFactory,
+    //  RateModel: RateModel.fromJsonFactory,
+     // RateItemModel: RateItemModel.fromJsonFactory,
       LoginResponseModel: LoginResponseModel.fromJsonFactory,
       BaseResponseModel: BaseResponseModel.fromJsonFactory,
+      RateResponseModelData: RateResponseModelData.fromJsonFactory,
       UpdateProfileRequestModel: UpdateProfileRequestModel.fromJsonFactory,
       RateDishRequestModel: RateDishRequestModel.fromJsonFactory,
       BookPartyRequestModel: BookPartyRequestModel.fromJsonFactory,

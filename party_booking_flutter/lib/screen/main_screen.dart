@@ -57,6 +57,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _accountModel = widget.accountModel;
+    _appBarTitle = Text( widget.accountModel.fullName);
+    _fullNameUser =  widget.accountModel.fullName;
+    _avatar =  widget.accountModel.avatar;
+    _email =  widget.accountModel.email;
     _initLayout();
 //    _getListDishesFromDB();
     if(widget.listDishModel == null) {
@@ -129,6 +133,9 @@ class _MainScreenState extends State<MainScreen> {
           );
         });
   }
+
+
+
 
   Widget _actionButton(String text, Function handle) {
     return FlatButton(
@@ -557,19 +564,17 @@ class _MainScreenState extends State<MainScreen> {
   Widget _itemCardImage(String image, String id) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Hero(
-          tag: id,
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-                width: 150,
-                height: 150,
-                padding: EdgeInsets.all(50),
-                child: CircularProgressIndicator()),
-            imageUrl: image,
-            fit: BoxFit.cover,
-            width: double.infinity,
+      child: CachedNetworkImage(
+        placeholder: (context, url) => Container(
+            width: 150,
             height: 150,
-          )),
+            padding: EdgeInsets.all(50),
+            child: CircularProgressIndicator()),
+        imageUrl: image,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: 150,
+      ),
     );
   }
 

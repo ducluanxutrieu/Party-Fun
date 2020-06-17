@@ -152,6 +152,15 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
+  Future<Response<RateResponseModelData>> getRate(String id, int page) {
+    final $url = 'product/rate';
+    //  final $params = model;
+    final $params = <String, dynamic>{'id': id, 'page': page};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<RateResponseModelData, RateResponseModelData>($request);
+  }
+
+  @override
   Future<Response<SingleDishResponseModel>> addNewDish(
       {String token, DishRequestCreateModel model}) {
     final $url = 'product/dish';

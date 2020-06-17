@@ -8,8 +8,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
+import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
@@ -38,8 +40,8 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   final myController = TextEditingController();
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   DishModel _dishModel;
-  RateModel _rateModel = RateModel(average: 0, lishRate: List(), totalpeople: 0);
-
+  //RateModel _rateModel = RateModel(average: 0, lishRate: List(), totalpeople: 0);
+  Data _rateModel1 = Data(countRate:0, avgRate: 0,totalPage: 0,start: 0,end: 0, listRate: List());
   _DishDetailScreenState();
 
   @override
@@ -52,6 +54,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   @override
   void initState() {
     _dishModel = widget.dishModel;
+    _getListRate (widget.dishModel.id, 1);
     super.initState();
 
     controller =
@@ -61,7 +64,29 @@ class _DishDetailScreenState extends State<DishDetailScreen>
         .animate(controller);
   }
 
-  Widget _contentDish(List<RateItemModel> listRate) {
+  Future<void> _getListRate(String id, int page) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
+    var result = await AppApiService.create().getRate(id,page);
+
+    if (result.isSuccessful) {
+      setState(() {
+        _rateModel1.listRate = result.body.data.listRate;
+      });
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      UTiu.showToast(model.message);
+    }
+
+    // _rateModel1 = Data(countRate: 0, avgRate: 0,totalPage: 0,start: 0,end: 0, listRate: List());
+
+
+  }
+
+
+
+  Widget _contentDish(List<ListRate> listRate) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: listRate.length + 1,
@@ -91,7 +116,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       children: <Widget>[
         RatingBar(
           itemCount: 5,
-          initialRating: _rateModel?.average,
+          initialRating: double.parse(_rateModel1?.avgRate.toString()),
           minRating: 1,
           allowHalfRating: true,
           direction: Axis.horizontal,
@@ -131,17 +156,17 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     );
   }
 
-  Widget _itemListRating(RateItemModel itemModel) {
+  Widget _itemListRating(ListRate itemModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           children: <Widget>[
-            (itemModel.imageUrl != null)
+            (itemModel.avatar != null)
                 ? CircleAvatar(
                     radius: 20,
                     backgroundImage: NetworkImage(
-                      itemModel.imageUrl,
+                      itemModel.avatar,
                     ),
                     backgroundColor: Colors.transparent,
                   )
@@ -156,18 +181,18 @@ class _DishDetailScreenState extends State<DishDetailScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  itemModel.username,
+                  itemModel.userRate,
                   style: TextStyle(
                     fontSize: 22,
                   ),
                 ),
-                _ratingBar(itemModel.scoreRate.toDouble(), 22, null),
+                _ratingBar(itemModel.score.toDouble(), 22, null),
               ],
             ),
           ],
         ),
         Text(
-          itemModel.content,
+          itemModel.comment,
           style: TextStyle(
             fontSize: 18,
           ),
@@ -183,14 +208,11 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   Widget _headerDish() {
     return Stack(
       children: <Widget>[
-        Hero(
-          tag: _dishModel.id,
-          child: Image.asset(
-            Assets.imgDishDetail,
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-            height: 250,
-          ),
+        Image.asset(
+          Assets.imgDishDetail,
+          fit: BoxFit.cover,
+          width: MediaQuery.of(context).size.width,
+          height: 250,
         ),
         CarouselSlider(
           height: 250,
@@ -423,7 +445,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                       style: TextStyle(fontFamily: 'Montserrat', fontSize: 22),
                     ),
                     Expanded(
-                        child: _contentDish((_rateModel?.lishRate ??= List<RateItemModel>())))
+                        child: _contentDish((_rateModel1?.listRate ??= List<ListRate>())))
                   ],
                 ),
               ),

@@ -187,76 +187,7 @@ class CartModel extends Model {
   }
 }
 
-class RateModel {
-  double average;
-  List<RateItemModel> lishRate;
-  int totalpeople;
 
-  RateModel({
-    this.average,
-    this.lishRate,
-    this.totalpeople,
-  });
-
-  static RateModel fromJsonFactory(Map<String, dynamic> json) =>
-      RateModel.fromJson(json);
-
-  factory RateModel.fromJson(Map<String, dynamic> json) => RateModel(
-        average: (json["average"] ??= "0"),
-        lishRate: List<RateItemModel>.from(
-            json["lishRate"].map((x) => RateItemModel.fromJson(x))),
-        totalpeople: json["totalpeople"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "average": average,
-        "lishRate": List<dynamic>.from(lishRate.map((x) => x.toJson())),
-        "totalpeople": totalpeople,
-      };
-}
-
-class RateItemModel {
-  String username;
-  String imageUrl;
-  String dishId;
-  int scoreRate;
-  String content;
-  String updateAt;
-  String createAt;
-
-  RateItemModel({
-    this.username,
-    this.imageUrl,
-    this.dishId,
-    this.scoreRate,
-    this.content,
-    this.updateAt,
-    this.createAt,
-  });
-
-  static RateItemModel fromJsonFactory(Map<String, dynamic> json) =>
-      RateItemModel.fromJson(json);
-
-  factory RateItemModel.fromJson(Map<String, dynamic> json) => RateItemModel(
-        username: json["username"],
-        imageUrl: json["imageurl"] == null ? null : json["imageurl"],
-        dishId: json["_iddish"],
-        scoreRate: json["scorerate"],
-        content: json["content"],
-        updateAt: json["updateAt"],
-        createAt: json["createAt"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "username": username,
-        "imageurl": imageUrl == null ? null : imageUrl,
-        "_iddish": dishId,
-        "scorerate": scoreRate,
-        "content": content,
-        "updateAt": updateAt,
-        "createAt": createAt,
-      };
-}
 
 class EnumValues<T> {
   Map<String, T> map;

@@ -7,7 +7,9 @@ import 'package:party_booking/data/network/model/party_book_response_model.dart'
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/login_screen.dart';
 import 'package:party_booking/screen/main_screen.dart';
+import 'package:party_booking/screen/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -176,7 +178,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
               String url = "http://139.180.131.30/client/payment/mobile/$urlSession";
               if (await canLaunch(url)) {
               await launch(url);
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (Route<dynamic> route) => false);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SplashScreen()), (Route<dynamic> route) => false);
               } else {
               throw 'Could not launch $url';
               }
