@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
@@ -82,19 +83,37 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString(Constants.USER_TOKEN);
 
-    var result = await AppApiService.create().getListDishes(token: _token);
-    if (result.isSuccessful) {
-      _getListCategories(prefs, result.body.listDishes, accountModel);
-    } else {
-      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
-    }
+    BaseResponseModel model;
+    await AppApiService.create()
+        .getListDishes(token: _token)
+        .catchError((onError) {
+      print(onError);
+      _getListDishesFromDB(accountModel, prefs);
+    }).then((result) => {
+              if (result == null || !result.isSuccessful)
+                {
+                  model = BaseResponseModel.fromJson(result.error),
+                  UTiu.showToast(model.message),
+                  _getListDishesFromDB(accountModel, prefs)
+                }
+              else
+                {
+                  _saveListDishesToDB(result.body.listDishes),
+                  _getListCategories(
+                      prefs, result.body.listDishes, accountModel),
+                }
+            });
   }
 
-  void _getListCategories(SharedPreferences prefs, List<DishModel> listDishes, AccountModel accountModel, ) async {
+  void _getListCategories(
+    SharedPreferences prefs,
+    List<DishModel> listDishes,
+    AccountModel accountModel,
+  ) async {
     var result = await AppApiService.create().getCategories();
     if (result.isSuccessful) {
-      prefs.setString(Constants.LIST_CATEGORIES_KEY, listCategoriesResponseModelToJson(result.body));
+      prefs.setString(Constants.LIST_CATEGORIES_KEY,
+          listCategoriesResponseModelToJson(result.body));
       _goToMainScreen(accountModel, listDishes, result.body.categories);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
@@ -102,8 +121,32 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void _goToMainScreen(accountModel, List<DishModel> listDishes, List<Category> categories) async {
+  void _goToMainScreen(accountModel, List<DishModel> listDishes,
+      List<Category> categories) async {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel, listCategories: categories, listDishModel: listDishes,)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => MainScreen(
+                  accountModel: accountModel,
+                  listCategories: categories,
+                  listDishModel: listDishes,
+                )));
+  }
+
+  Future<void> _getListDishesFromDB(
+      AccountModel accountModel, SharedPreferences prefs) async {
+    List<DishModel> listDishes = await DBProvider.db.getAllDishes();
+    ListCategoriesResponseModel categories =
+        listCategoriesResponseModelFromJson(
+            prefs.getString(Constants.LIST_CATEGORIES_KEY));
+    _goToMainScreen(accountModel, listDishes, categories.categories);
+  }
+
+  void _saveListDishesToDB(List<DishModel> listDishes) async {
+    await DBProvider.db.deleteAll();
+    listDishes.forEach((element) async {
+      await DBProvider.db.newDish(element);
+      print(element);
+    });
   }
 }

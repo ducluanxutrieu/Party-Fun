@@ -5,21 +5,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/data/network/model/rate_dish_request_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
-import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/res/custom_icons_icons.dart';
 import 'package:party_booking/screen/add_new_dish_screen.dart';
+import 'package:party_booking/widgets/common/dialog_util.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../badges.dart';
 
@@ -37,24 +33,15 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<Offset> offset;
-  final myController = TextEditingController();
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   DishModel _dishModel;
-  //RateModel _rateModel = RateModel(average: 0, lishRate: List(), totalpeople: 0);
-  Data _rateModel1 = Data(countRate:0, avgRate: 0,totalPage: 0,start: 0,end: 0, listRate: List());
-  _DishDetailScreenState();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    myController.dispose();
-    super.dispose();
-  }
+  RateDataModel _rateDataModel = RateDataModel();
+  int currentPage = 1;
 
   @override
   void initState() {
     _dishModel = widget.dishModel;
-    _getListRate (widget.dishModel.id, 1);
+    _getListRate(widget.dishModel.id, 1);
     super.initState();
 
     controller =
@@ -65,48 +52,27 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   Future<void> _getListRate(String id, int page) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-
-    var result = await AppApiService.create().getRate(id,page);
-
+    var result = await AppApiService.create().getRate(id, page);
     if (result.isSuccessful) {
       setState(() {
-        _rateModel1.listRate = result.body.data.listRate;
+        if (page == 1) {
+          _rateDataModel = result.body.rateData;
+        } else {
+          _rateDataModel.listRate.addAll(result.body.rateData.listRate);
+          _rateDataModel.end = result.body.rateData.end;
+        }
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UTiu.showToast(model.message);
     }
-
-    // _rateModel1 = Data(countRate: 0, avgRate: 0,totalPage: 0,start: 0,end: 0, listRate: List());
-
-
   }
-
-
 
   Widget _contentDish(List<ListRate> listRate) {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: listRate.length + 1,
-        itemBuilder: (context, index) => Container(
-            child: (index == 0)
-                ? _titleDish()
-                : _itemListRating(listRate[index - 1])));
-  }
-
-  Widget _ratingBar(double coreRating, double itemSize, void onRating(value)) {
-    return RatingBar(
-      initialRating: coreRating,
-      itemCount: 5,
-      minRating: 1,
-      allowHalfRating: true,
-      direction: Axis.horizontal,
-      itemSize: itemSize,
-      itemBuilder: (context, index) => _getIconRating(index),
-      onRatingUpdate: onRating,
-    );
+        itemCount: (listRate?.length ??= 0) + 2,
+        itemBuilder: (context, index) => _locationItem(index, listRate));
   }
 
   Widget _titleDish() {
@@ -114,9 +80,28 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          _dishModel.name,
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          _getListCategory(),
+          style: style.copyWith(fontSize: 22),
+        ),
         RatingBar(
           itemCount: 5,
-          initialRating: double.parse(_rateModel1?.avgRate.toString()),
+          initialRating:
+              double.parse((_rateDataModel?.avgRate ??= 0).toString()),
           minRating: 1,
           allowHalfRating: true,
           direction: Axis.horizontal,
@@ -157,52 +142,61 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   Widget _itemListRating(ListRate itemModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
+    return Card(
+      color: Colors.white70,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 20,
+          backgroundImage: NetworkImage(
+            itemModel.avatar,
+          ),
+          backgroundColor: Colors.transparent,
+        ),
+        title: Row(
           children: <Widget>[
-            (itemModel.avatar != null)
-                ? CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(
-                      itemModel.avatar,
-                    ),
-                    backgroundColor: Colors.transparent,
-                  )
-                : Icon(
-                    FontAwesomeIcons.userCircle,
-                    size: 40,
-                  ),
-            SizedBox(
-              width: 20,
+            Text(
+              itemModel.userRate,
+              style: TextStyle(
+                fontSize: 22,
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  itemModel.userRate,
-                  style: TextStyle(
-                    fontSize: 22,
-                  ),
-                ),
-                _ratingBar(itemModel.score.toDouble(), 22, null),
-              ],
-            ),
+            Spacer(),
+            DialogUTiu.ratingBar(itemModel.score.toDouble(), 22, null)
           ],
         ),
-        Text(
+        subtitle: Text(
           itemModel.comment,
           style: TextStyle(
             fontSize: 18,
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
-        Divider(),
-      ],
+      ),
     );
+  }
+
+  Widget _locationItem(
+    int index,
+    List<ListRate> listRate,
+  ) {
+    if (index == 0) {
+      return _titleDish();
+    } else if (index == listRate.length + 1) {
+      if ((_rateDataModel.end ??= 0) < (_rateDataModel.totalPage * 10 - 1)) {
+        return Container(
+          color: Colors.greenAccent,
+          child: FlatButton(
+            child: Text("Load More"),
+            onPressed: () {
+              currentPage++;
+              _getListRate(_dishModel.id, currentPage);
+            },
+          ),
+        );
+      }else return SizedBox();
+    } else {
+      return _itemListRating(listRate[index - 1]);
+    }
   }
 
   Widget _headerDish() {
@@ -235,7 +229,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                 borderRadius: BorderRadius.circular(8),
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Container(
-                      width: double.infinity,
+                      width: 150,
                       height: 150,
                       padding: EdgeInsets.all(50),
                       child: CircularProgressIndicator()),
@@ -252,147 +246,6 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     );
   }
 
-  Widget _getIconRating(int index) {
-    switch (index) {
-      case 0:
-        return Icon(
-          Icons.sentiment_very_dissatisfied,
-          color: Colors.red,
-        );
-      case 1:
-        return Icon(
-          Icons.sentiment_dissatisfied,
-          color: Colors.redAccent,
-        );
-      case 2:
-        return Icon(
-          Icons.sentiment_neutral,
-          color: Colors.amber,
-        );
-      case 3:
-        return Icon(
-          Icons.sentiment_satisfied,
-          color: Colors.lightGreen,
-        );
-      default:
-        return Icon(
-          Icons.sentiment_very_satisfied,
-          color: Colors.green,
-        );
-    }
-  }
-
-  Widget _actionButton(String text, Function handle) {
-    return FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.green,
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-        onPressed: handle,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: style.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ));
-  }
-
-  void _dialogRating(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (bCtx) {
-          double rateScore = 3;
-          return AlertDialog(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            content: Container(
-              width: MediaQuery.of(bCtx).size.width * 2 / 3,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Lottie.asset(
-                        Assets.animReviewDish,
-                        repeat: true,
-                      ),
-                      Text(
-                        'Review this dish',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: myController,
-                        decoration: InputDecoration(
-                            hintText: 'Write your review',
-                            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32))),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Rating this dish',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 18,
-                        ),
-                      ),
-                      _ratingBar(3, 40, (value) {
-                        rateScore = value;
-                      })
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            actions: <Widget>[
-              _actionButton('Cancel', () {
-                Navigator.of(bCtx).pop();
-              }),
-              _actionButton('Review', () {
-                _requestRating(rateScore, () {
-                  Navigator.of(bCtx).pop();
-                });
-              })
-            ],
-          );
-        });
-  }
-
-  void _requestRating(double rateScore, Function handle) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString(Constants.USER_TOKEN);
-    var result = await AppApiService.create().requestRating(
-      token: token,
-      model: RateDishRequestModel(
-          id: _dishModel.id,
-          content: myController.text,
-          rateScore: rateScore),
-    );
-    if (result.isSuccessful) {
-      UTiu.showToast(result.body.message);
-      handle();
-    } else {
-      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Timer(Duration(milliseconds: 300), () {
@@ -402,14 +255,6 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       appBar: AppBar(
         title: Text(_dishModel.name),
         actions: <Widget>[
-        //  Padding(
-          //  padding: const EdgeInsets.only(right: 10),
-            //child: InkWell(
-              //child: Icon(FontAwesomeIcons.cartPlus),
-              //onTap: null,
-            //),
-         // )
-
           _shoppingCartBadge(widget.dishModel),
         ],
       ),
@@ -419,35 +264,11 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           _headerDish(),
           Expanded(
             child: Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 50, 0),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: SlideTransition(
                 position: offset,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      _dishModel.name,
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      _getListCategory(),
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 22),
-                    ),
-                    Expanded(
-                        child: _contentDish((_rateModel1?.listRate ??= List<ListRate>())))
-                  ],
-                ),
+                child: _contentDish(
+                    (_rateDataModel?.listRate ??= List<ListRate>())),
               ),
             ),
           )
@@ -456,7 +277,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     );
   }
 
-  String _getListCategory(){
+  String _getListCategory() {
     String category = "";
     _dishModel.categories.forEach((element) {
       category += "$element\n";
@@ -465,31 +286,49 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   FloatingActionButton _buildFABEditDish(BuildContext context) {
-    bool isStaff = (widget.accountModel.role == UserRole.Staff.index || widget.accountModel.role == UserRole.Admin.index);
+    bool isStaff = (widget.accountModel.role == UserRole.Staff.index ||
+        widget.accountModel.role == UserRole.Admin.index);
 
-    return isStaff ?
-    FloatingActionButton.extended(
-      onPressed: () => _goToUpdateDish(context),
-      label: Text('Edit'),
-      icon: Icon(FontAwesomeIcons.edit),
-      tooltip: 'Edit this dish',
-    ) : FloatingActionButton.extended(
-      onPressed: () => _dialogRating(context),
-      label: Text('Rating'),
-      icon: Icon(CustomIcons.ic_rating),
-      tooltip: 'Write your review!',
-    );
+    return isStaff
+        ? FloatingActionButton.extended(
+            onPressed: () => _goToUpdateDish(context),
+            label: Text('Edit'),
+            icon: Icon(FontAwesomeIcons.edit),
+            tooltip: 'Edit this dish',
+          )
+        : FloatingActionButton.extended(
+            onPressed: () => _showRateDialog(),
+            label: Text('Rating'),
+            icon: Icon(CustomIcons.ic_rating),
+            tooltip: 'Write your review!',
+          );
   }
 
   _goToUpdateDish(BuildContext context) async {
-    var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDishScreen(dishModel: _dishModel)));
-    if(result != null){
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddNewDishScreen(dishModel: _dishModel)));
+    if (result != null) {
       setState(() {
-//        _dishModel = result;
         Navigator.maybePop(context, true);
       });
     }
   }
+
+  void _showRateDialog() async {
+    String currentUsername = widget.accountModel.username;
+    String rateId = "";
+    _rateDataModel.listRate.forEach((rateItem) {
+      if (rateItem.userRate == currentUsername) rateId = rateItem.id;
+    });
+    bool isUpdateListComment =
+        await DialogUTiu.showDialogRating(context, _dishModel.id, rateId);
+    if (isUpdateListComment) {
+      _getListRate(_dishModel.id, 1);
+    }
+  }
+
   Widget _shoppingCartBadge(DishModel dishModel) {
     return Badge(
       position: BadgePosition.topRight(top: 0, right: 3),
@@ -504,11 +343,10 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       child: IconButton(
           icon: Icon(FontAwesomeIcons.cartPlus),
           onPressed: () {
-          //  Navigator.pushNamed(context, '/cart');
+            //  Navigator.pushNamed(context, '/cart');
             ScopedModel.of<CartModel>(context, rebuildOnChange: true)
                 .addProduct(dishModel);
           }),
     );
   }
-
 }

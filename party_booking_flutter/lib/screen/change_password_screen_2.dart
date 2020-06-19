@@ -3,32 +3,13 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/change_password_request_model.dart';
-import 'package:party_booking/data/network/model/change_password_request_model_2.dart';
-import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/screen/profile_screen.dart';
-import 'package:party_booking/widgets/common/app_button.dart';
-import 'package:party_booking/widgets/common/logo_app.dart';
-import 'package:party_booking/widgets/common/text_field.dart';
-import 'package:party_booking/widgets/common/utiu.dart';
-
-import 'login_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:party_booking/res/constants.dart';
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/data/network/model/update_profile_request_model.dart';
+import 'package:party_booking/data/network/model/change_password_request_model_2.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
-import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';

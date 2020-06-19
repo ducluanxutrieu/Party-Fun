@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
+import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/forgot_password_screen.dart';
@@ -37,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constants.ACCOUNT_MODEL_KEY, accountModelToJson(model));
     prefs.setString(Constants.USER_TOKEN, model.token);
+    _getListDishes();
     _getListCategories(prefs, model);
   }
 
@@ -49,6 +52,28 @@ class _LoginScreenState extends State<LoginScreen> {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UTiu.showToast(model.message);
     }
+  }
+
+  Future<void> _getListDishes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _token = prefs.getString(Constants.USER_TOKEN);
+
+    BaseResponseModel model;
+    await AppApiService.create()
+        .getListDishes(token: _token)
+        .catchError((onError) {
+      print(onError);
+    }).then((result) => {
+      if (result == null || !result.isSuccessful)
+        {
+          model = BaseResponseModel.fromJson(result.error),
+          UTiu.showToast(model.message),
+        }
+      else
+        {
+          _saveListDishesToDB(result.body.listDishes),
+        }
+    });
   }
 
   void _goToMainScreen(accountModel, List<Category> categories) async {
@@ -172,5 +197,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void _saveListDishesToDB(List<DishModel> listDishes) async {
+    await DBProvider.db.deleteAll();
+    listDishes.forEach((element) async {
+      await DBProvider.db.newDish(element);
+      print(element);
+    });
   }
 }

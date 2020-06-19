@@ -110,6 +110,21 @@ class DishModel {
         createAt: json["createAt"],
       );
 
+  factory DishModel.fromJsonDB(Map<String, dynamic> json) => DishModel(
+    id: json["id"],
+    name: json["name"],
+    description: json["description"],
+    price: json["price"],
+    categories: List<String>(),
+    discount: json["discount"],
+    quantity: 1,
+    image: List<String>(),
+    featureImage: json["feature_image"],
+    currency: json["currency"],
+    updateAt: json["updateAt"],
+    createAt: json["createAt"],
+  );
+
   Map<String, dynamic> toJson() => {
         "_id": id,
         "name": name,
@@ -121,6 +136,58 @@ class DishModel {
         "feature_image": featureImage,
         "currency": currency,
       };
+}
+
+List<CategoryDb> categoryDbFromJson(String str) => List<CategoryDb>.from(json.decode(str).map((x) => CategoryDb.fromJson(x)));
+
+String categoryDbToJson(List<CategoryDb> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class CategoryDb {
+  CategoryDb({
+    this.id,
+    this.dishId,
+    this.category,
+  });
+
+  int id;
+  String dishId;
+  String category;
+
+  factory CategoryDb.fromJson(Map<String, dynamic> json) => CategoryDb(
+    id: json["id"],
+    dishId: json["dish_id"],
+    category: json["category"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "dish_id": dishId,
+    "category": category,
+  };
+}
+
+class ImageDb {
+  ImageDb({
+    this.id,
+    this.dishId,
+    this.image,
+  });
+
+  int id;
+  String dishId;
+  String image;
+
+  factory ImageDb.fromJson(Map<String, dynamic> json) => ImageDb(
+    id: json["id"],
+    dishId: json["dish_id"],
+    image: json["image"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "dish_id": dishId,
+    "image": image,
+  };
 }
 
 class CartModel extends Model {

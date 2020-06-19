@@ -70,8 +70,14 @@ abstract class AppApiService extends ChopperService {
       {@Header('authorization') String token,
       @body UpdateProfileRequestModel model});
 
-  @Post(path: 'product/ratedish')
+  @Post(path: 'product/rate')
   Future<Response<BaseResponseModel>> requestRating({
+    @Header('authorization') String token,
+    @body RateDishRequestModel model,
+  });
+
+  @Put(path: 'product/rate')
+  Future<Response<BaseResponseModel>> updateRating({
     @Header('authorization') String token,
     @body RateDishRequestModel model,
   });
@@ -99,8 +105,8 @@ abstract class AppApiService extends ChopperService {
   });
   @Get(path: 'product/rate')
   Future<Response<RateResponseModelData>> getRate(
-      @Field('id') String id,
-      @Field('page') int page,
+      @Query('id') String id,
+      @Query('page') int page,
       );
   @Post(path: 'product/dish')
   Future<Response<SingleDishResponseModel>> addNewDish({

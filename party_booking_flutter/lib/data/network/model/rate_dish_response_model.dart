@@ -11,31 +11,31 @@ String rateResponseModelDataToJson(RateResponseModelData data) => json.encode(da
 class RateResponseModelData {
   RateResponseModelData({
     this.message,
-    this.data,
+    this.rateData,
   });
 
   String message;
-  Data data;
+  RateDataModel rateData;
 
   static RateResponseModelData fromJsonFactory(Map<String, dynamic> json) =>
       RateResponseModelData.fromJson(json);
 
   factory RateResponseModelData.fromJson(Map<String, dynamic> json) => RateResponseModelData(
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    rateData: RateDataModel.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
     "message": message,
-    "data": data.toJson(),
+    "data": rateData.toJson(),
   };
 }
 
-class Data {
-  Data({
-    this.countRate,
-    this.avgRate,
-    this.totalPage,
+class RateDataModel {
+  RateDataModel({
+    this.countRate = 0,
+    this.avgRate = 0.0,
+    this.totalPage = 1,
     this.start,
     this.end,
     this.listRate,
@@ -48,9 +48,9 @@ class Data {
   int end;
   List<ListRate> listRate;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory RateDataModel.fromJson(Map<String, dynamic> json) => RateDataModel(
     countRate: json["count_rate"],
-    avgRate:  json["avg_rate"],
+    avgRate:  json["avg_rate"] ??= 0.0,
     totalPage: json["total_page"],
     start: json["start"],
     end: json["end"],

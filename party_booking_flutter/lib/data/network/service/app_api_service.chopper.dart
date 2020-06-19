@@ -103,11 +103,22 @@ class _$AppApiService extends AppApiService {
   @override
   Future<Response<BaseResponseModel>> requestRating(
       {String token, RateDishRequestModel model}) {
-    final $url = 'product/ratedish';
+    final $url = 'product/rate';
     final $headers = {'authorization': token};
     final $body = model;
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<BaseResponseModel, BaseResponseModel>($request);
+  }
+
+  @override
+  Future<Response<BaseResponseModel>> updateRating(
+      {String token, RateDishRequestModel model}) {
+    final $url = 'product/rate';
+    final $headers = {'authorization': token};
+    final $body = model;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<BaseResponseModel, BaseResponseModel>($request);
   }
 
@@ -154,7 +165,6 @@ class _$AppApiService extends AppApiService {
   @override
   Future<Response<RateResponseModelData>> getRate(String id, int page) {
     final $url = 'product/rate';
-    //  final $params = model;
     final $params = <String, dynamic>{'id': id, 'page': page};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<RateResponseModelData, RateResponseModelData>($request);

@@ -11,25 +11,25 @@ String requestRatingModelToJson(RateDishRequestModel data) => json.encode(data.t
 class RateDishRequestModel {
   String id;
   double rateScore;
-  String content;
+  String comment;
 
   RateDishRequestModel({
     this.id,
     this.rateScore,
-    this.content,
+    this.comment,
   });
 
   static RateDishRequestModel fromJsonFactory(Map<String, dynamic> json) => RateDishRequestModel.fromJson(json);
 
   factory RateDishRequestModel.fromJson(Map<String, dynamic> json) => RateDishRequestModel(
-    id: json["_id"],
-    rateScore: json["scorerate"].toDouble(),
-    content: json["content"],
+    id: json["id"],
+    rateScore: json["score"].toDouble(),
+    comment: json["comment"],
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "scorerate": rateScore,
-    "content": content,
+    "id": id,
+    "score": rateScore,
+    "comment": comment,
   };
 }

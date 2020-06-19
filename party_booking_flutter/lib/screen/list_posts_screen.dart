@@ -21,18 +21,20 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
     super.initState();
   }
 
-  void _getListPost() async{
+  void _getListPost() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var token = preferences.getString(Constants.USER_TOKEN);
-    var result = await AppApiService.create().getListPosts(token: token).catchError((onError) {
+    var result = await AppApiService.create()
+        .getListPosts(token: token)
+        .catchError((onError) {
       UTiu.showToast(onError.toString());
     });
 
-    if(result.isSuccessful){
+    if (result.isSuccessful) {
       setState(() {
         _listPosts = result.body.listPosts.posts;
       });
-    }else{
+    } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UTiu.showToast(model.message);
     }
@@ -47,34 +49,48 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
       body: ListView.builder(
         itemCount: _listPosts.length,
         itemBuilder: (BuildContext itemContext, int index) {
-        return ListTile(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    PostDetailScreen(postUrl: _listPosts[index].link, postTitle: _listPosts[index].title,),
+          return Card(
+            color: Colors.white70,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostDetailScreen(
+                      postUrl: _listPosts[index].link,
+                      postTitle: _listPosts[index].title,
+                    ),
+                  ),
+                );
+              },
+              title: Text(
+                _listPosts[index].title,
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-            );
-          },
-          title: Text(
-            _listPosts[index].title,
-            style: TextStyle(
-                fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
-          ),
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundImage: NetworkImage(_listPosts[index].featureImage),
-            backgroundColor: Colors.transparent,
-          ),
-          subtitle: Text(_listPosts[index].summary,
-              maxLines: 2,
-              style: TextStyle(fontSize: 18, color: Colors.lightBlueAccent)),
-          trailing: Text(_listPosts[index].author,
-              maxLines: 2,
-              style: TextStyle(fontSize: 18, color: Colors.lightBlueAccent)),
-        );
-      }, ),
+              leading: CircleAvatar(
+                radius: 25,
+                backgroundImage: NetworkImage(_listPosts[index].featureImage),
+                backgroundColor: Colors.transparent,
+              ),
+              subtitle: Text(_listPosts[index].summary,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Colors.lightBlueAccent),
+                  overflow: TextOverflow.ellipsis),
+              trailing: Text(_listPosts[index].author,
+                  maxLines: 2,
+                  style: TextStyle(fontSize: 18, color: Colors.lightBlueAccent),
+                  overflow: TextOverflow.ellipsis),
+            ),
+          );
+        },
+      ),
     );
   }
 }
