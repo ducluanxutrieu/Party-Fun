@@ -9,12 +9,12 @@ import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/data/network/service/app_image_api_service.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/change_password_screen_2.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:party_booking/widgets/info_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
+import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => ChangePasswordScreen(
-                  mAccountModel: _accountModel,
+                  avatarUrl: _accountModel.avatar,
                 )));
     if (result != null) {
       setState(() {
@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontSize: 40.0,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-               //   fontFamily: 'Pacifico',
+                  fontFamily: 'Source Sans Pro',
                 ),
               ),
               SizedBox(
