@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
-//import 'package:party_booking/data/network/model/get_user_profile_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
-//import 'package:party_booking/screen/book_party_success_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -16,17 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'book_party_success_screen.dart';
 
-
-
 class BookPartyScreen extends StatefulWidget {
-//  Note selectedNote;
-  BookPartyScreen();
-
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _BookPartyScreenState();
-  }
+  State<StatefulWidget> createState() => _BookPartyScreenState();
 }
 
 class _BookPartyScreenState extends State<BookPartyScreen> {
@@ -38,7 +27,6 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
   var twoDaysFromNow = now.add(new Duration(days: 2));
 
   final List<ListDishes> listDish = new List();
-
 
   Widget _showDatePicker() {
     return FormBuilderDateTimePicker(
@@ -103,7 +91,8 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     final num = _fbKey.currentState.fields['num'].currentState.value;
     final cus = _fbKey.currentState.fields['cus'].currentState.value;
     if (day != null && num != null) {
-      await requestBookParty(day, num,cus); //em check xong mà kh4ng truyền qua à
+      await requestBookParty(
+          day, num, cus); //em check xong mà kh4ng truyền qua à
     } else {
       UTiu.showToast('Please fill all fields');
     }
@@ -111,8 +100,6 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Book Party'),
@@ -159,12 +146,12 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
   }
 
-  Future requestBookParty(day, int num,int cus) async {
+  Future requestBookParty(day, int num, int cus) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     ScopedModel.of<CartModel>(context, rebuildOnChange: true).cart.forEach(
         (item) =>
-            {listDish.add(ListDishes( id: item.id, numberDish: item.quantity))});
+            {listDish.add(ListDishes(id: item.id, numberDish: item.quantity))});
 
     var model = BookPartyRequestModel(
         dateParty: DateFormat(Constants.DATE_TIME_FORMAT_SERVER).format(day),

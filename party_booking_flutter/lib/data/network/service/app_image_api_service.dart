@@ -35,13 +35,13 @@ class AppImageAPIService {
       data: formData,
     )
         .catchError((onError) {
-      progressDialog.dismiss();
+      progressDialog.hide();
     });
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);
     }
-    progressDialog.dismiss();
+    progressDialog.hide();
     return response;
   }
 
@@ -71,17 +71,17 @@ class AppImageAPIService {
       _updateProgress(sent, total);
     }).catchError((onError) {
       print(onError);
-      progressDialog.dismiss();
+      progressDialog.hide();
     });
 
-    progressDialog.dismiss();
+    progressDialog.hide();
 
     if (result.statusCode == 200) {
       response = BaseListResponseModel.fromJson(result.data);
     } else {
       UTiu.showToast(BaseResponseModel.fromJson(result.data).message);
     }
-    progressDialog.dismiss();
+    progressDialog.hide();
     return response;
   }
 

@@ -1,10 +1,10 @@
 class ConfirmChangePasswordRequestModel {
 
   String password;
-  String new_password;
+  String newPassword;
 
   ConfirmChangePasswordRequestModel(
-      {  this.password, this.new_password});
+      {  this.password, this.newPassword});
 
   static ConfirmChangePasswordRequestModel formJsonFactory(
           Map<String, dynamic> json) =>
@@ -15,8 +15,8 @@ class ConfirmChangePasswordRequestModel {
       ConfirmChangePasswordRequestModel(
 
           password: json["password"],
-          new_password: json['new_password']);
+          newPassword: json['new_password']);
 
   Map<String, dynamic> toJson() =>
-      { "password": password, 'new_password': new_password};
+      { "password": password, 'new_password': newPassword};
 }

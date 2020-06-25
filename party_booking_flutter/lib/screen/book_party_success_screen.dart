@@ -7,8 +7,6 @@ import 'package:party_booking/data/network/model/party_book_response_model.dart'
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/login_screen.dart';
-import 'package:party_booking/screen/main_screen.dart';
 import 'package:party_booking/screen/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';

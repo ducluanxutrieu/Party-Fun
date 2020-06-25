@@ -12,12 +12,12 @@ import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/custom_icons_icons.dart';
-import 'package:party_booking/screen/add_new_dish_screen.dart';
 import 'package:party_booking/widgets/common/dialog_util.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../badges.dart';
+import 'modify_disk/modify_dish_screen.dart';
 
 class DishDetailScreen extends StatefulWidget {
   final DishModel dishModel;
@@ -231,7 +231,6 @@ class _DishDetailScreenState extends State<DishDetailScreen>
                   placeholder: (context, url) => Container(
                       width: 150,
                       height: 150,
-                      padding: EdgeInsets.all(50),
                       child: CircularProgressIndicator()),
                   imageUrl: value,
                   fit: BoxFit.cover,
@@ -308,7 +307,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     var result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddNewDishScreen(dishModel: _dishModel)));
+            builder: (context) => ModifyDishScreen(dishModel: _dishModel)));
     if (result != null) {
       setState(() {
         Navigator.maybePop(context, true);

@@ -104,7 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _getImage(source) async {
-    File image = await ImagePicker.pickImage(source: source);
+    final picker = ImagePicker();
+    PickedFile pickedFile = await picker.getImage(source: source);
+    File image = File(pickedFile.path);
 
     if (image != null && image.path != null && image.path.isNotEmpty) {
       var result = await AppImageAPIService.create(context).updateAvatar(image);
@@ -117,24 +119,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         UTiu.showToast(result.message);
       }
       print(result.toString());
-    }
-  }
-
-  Future<void> retrieveLostData() async {
-    final LostDataResponse response = await ImagePicker.retrieveLostData();
-    if (response == null) {
-      return;
-    }
-    if (response.file != null) {
-      setState(() {
-        if (response.type == RetrieveType.video) {
-//          _handleVideo(response.file);
-        } else {
-//          _handleImage(response.file);
-        }
-      });
-    } else {
-//      _handleError(response.exception);
     }
   }
 

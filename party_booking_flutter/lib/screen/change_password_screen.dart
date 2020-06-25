@@ -61,7 +61,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         result = await AppApiService.create().changePassword(
             token: token,
             model: ConfirmChangePasswordRequestModel(
-                password: code, new_password: newPassword));
+                password: code, newPassword: newPassword));
       }else {
         result = await AppApiService.create().confirmResetPassword(
             model: ConfirmResetPasswordRequestModel(

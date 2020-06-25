@@ -19,13 +19,13 @@ import 'package:party_booking/screen/cart_detail_screen.dart';
 import 'package:party_booking/screen/history_order_screen.dart';
 import 'package:party_booking/screen/list_posts_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
+import 'package:party_booking/screen/modify_disk/modify_dish_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'about_us_screen.dart';
-import 'add_new_dish_screen.dart';
 import 'dish_detail_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -241,7 +241,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void _goToAddDish() async {
     bool result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddNewDishScreen()));
+        context, MaterialPageRoute(builder: (context) => ModifyDishScreen()));
     if (result != null) {
       _getListDishes();
     }
