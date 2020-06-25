@@ -301,6 +301,7 @@ class _MainScreenState extends State<MainScreen> {
             _email,
             style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0),
           ),
+          onDetailsPressed: _goToProfile,
         ),
         _createDrawerItem(
             icon: Icons.home,
@@ -311,16 +312,7 @@ class _MainScreenState extends State<MainScreen> {
         _createDrawerItem(
             icon: Icons.account_circle,
             text: 'Profile',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(
-                    mAccountModel: _accountModel,
-                  ),
-                ),
-              );
-            }),
+            onTap: _goToProfile),
         _createDrawerItem(
           icon: Icons.location_on,
           text: 'Address',
@@ -632,5 +624,16 @@ class _MainScreenState extends State<MainScreen> {
     if (result != null) {
       _getListDishes();
     }
+  }
+
+  _goToProfile(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(
+          mAccountModel: _accountModel,
+        ),
+      ),
+    );
   }
 }

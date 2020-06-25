@@ -54,7 +54,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
               child: Text(
                 'Customer: ${widget.mBill.customer}',
                 style: TextStyle(
-                    fontFamily: 'Pacifico', color: Colors.orange, fontSize: 20),
+                    fontFamily: 'Source Sans Pro', color: Colors.orange, fontSize: 20),
               ),
             ),
             Container(

@@ -23,9 +23,9 @@ class HistoryOrderDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 10),
               child: Text(
-                'Customer: ${userCart.customer}',
+                'Customer: ${userCart.customer.toUpperCase()}',
                 style: TextStyle(
-                    fontFamily: 'Pacifico', color: Colors.orange, fontSize: 20),
+                    fontFamily: 'Source Sans Pro', color: Colors.orange, fontSize: 25, fontStyle: FontStyle.italic, ),
               ),
             ),
             _buildHeader(),
@@ -98,65 +98,67 @@ class HistoryOrderDetailScreen extends StatelessWidget {
               topLeft: Radius.circular(10),
               bottomLeft: Radius.circular(10)),
         ),
-        child: Container(
-          margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
-          child: Row(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Total bill'),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    '\$${userCart.total}',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('Number of Tables'),
-                  Text(
-                    '${userCart.table}',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('Number of Customers'),
-                  Text(
-                    '${userCart.countCustomer}',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('Party time'),
-                  Text(
-                    '${DateFormat('dd-MM-yyyy HH:mm').format(userCart.dateParty)}',
-                    style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Container(
-                  width: 190,
-                  height: 190,
-                  child: Lottie.asset(Assets.animBillManagement)),
-            ],
+        child: Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+            child: Row(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Total bill'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '\$${userCart.total}',
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Number of Tables'),
+                    Text(
+                      '${userCart.table}',
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Number of Customers'),
+                    Text(
+                      '${userCart.countCustomer}',
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Party time'),
+                    Text(
+                      '${DateFormat('dd-MM-yyyy HH:mm').format(userCart.dateParty)}',
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Container(
+                    width: 190,
+                    height: 190,
+                    child: Lottie.asset(Assets.animBillManagement)),
+              ],
+            ),
           ),
         ),
       ),

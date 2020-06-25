@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               'Easy to book a party and\nenjoy with your relatives',
               style: TextStyle(
-                  fontFamily: 'Pacifico', color: Colors.orange, fontSize: 28),
+                  fontFamily: 'Source Sans Pro', color: Colors.orange, fontSize: 28),
               textAlign: TextAlign.center,
             ),
           ],
