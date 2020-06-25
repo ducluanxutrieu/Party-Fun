@@ -33,7 +33,10 @@ class MainScreen extends StatefulWidget {
   final List<DishModel> listDishModel;
   final List<Category> listCategories;
 
-  MainScreen({@required this.accountModel, @required this.listCategories, this.listDishModel});
+  MainScreen(
+      {@required this.accountModel,
+      @required this.listCategories,
+      this.listDishModel});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -57,15 +60,15 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _accountModel = widget.accountModel;
-    _appBarTitle = Text( widget.accountModel.fullName);
-    _fullNameUser =  widget.accountModel.fullName;
-    _avatar =  widget.accountModel.avatar;
-    _email =  widget.accountModel.email;
+    _appBarTitle = Text(widget.accountModel.fullName);
+    _fullNameUser = widget.accountModel.fullName;
+    _avatar = widget.accountModel.avatar;
+    _email = widget.accountModel.email;
     _initLayout();
 //    _getListDishesFromDB();
-    if(widget.listDishModel == null) {
+    if (widget.listDishModel == null) {
       _getListDishes();
-    }else {
+    } else {
       _initListDishData(widget.listDishModel);
     }
     _initSearch();
@@ -127,15 +130,13 @@ class _MainScreenState extends State<MainScreen> {
               }),
               _actionButton('Yes', () {
                 Navigator.of(bCtx).pop();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CartPage()));
               }),
             ],
           );
         });
   }
-
-
-
 
   Widget _actionButton(String text, Function handle) {
     return FlatButton(
@@ -239,8 +240,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _goToAddDish() async {
-    bool result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => AddNewDishScreen()));
+    bool result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddNewDishScreen()));
     if (result != null) {
       _getListDishes();
     }
@@ -450,7 +451,8 @@ class _MainScreenState extends State<MainScreen> {
       scrollDirection: Axis.vertical,
       crossAxisCount: 2,
       itemCount: dishes.length,
-      itemBuilder: (BuildContext context, int index) => _itemCard(dishes[index]),
+      itemBuilder: (BuildContext context, int index) =>
+          _itemCard(dishes[index]),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
@@ -482,7 +484,13 @@ class _MainScreenState extends State<MainScreen> {
                     IconButton(
                       icon: Icon(FontAwesomeIcons.cartPlus),
                       onPressed: () {
-                        _addDishToCartDialog(context);
+                        if (ScopedModel.of<CartModel>(context,
+                                        rebuildOnChange: true)
+                                    .calculateTotal1() %
+                                3 ==
+                            0) {
+                          _addDishToCartDialog(context);
+                        }
                         model.addProduct(dishModel);
                       },
                     ),
@@ -585,7 +593,7 @@ class _MainScreenState extends State<MainScreen> {
     dishes.forEach((dish) {
       dish.categories.forEach((dishCategory) {
         listCategories.forEach((category) {
-          if(dishCategory == category.name) {
+          if (dishCategory == category.name) {
             bool haveThisCate = false;
             listMenu.forEach((menu) {
               if (menu.menuName == category.name) {
@@ -594,8 +602,8 @@ class _MainScreenState extends State<MainScreen> {
               }
             });
             if (!haveThisCate) {
-              listMenu.add(
-                  MenuModel(menuName: category.name, listDish: [dish]));
+              listMenu
+                  .add(MenuModel(menuName: category.name, listDish: [dish]));
             }
           }
         });

@@ -92,7 +92,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
         style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
       ),
       validators: [FormBuilderValidators.required()],
-      items: List.generate(30, (generator) => generator + 1)
+      items: List.generate(1000, (generator) => generator + 1)
           .map((item) => DropdownMenuItem(value: item, child: Text("$item")))
           .toList(),
     );

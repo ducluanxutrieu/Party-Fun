@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontSize: 40.0,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Pacifico',
+               //   fontFamily: 'Pacifico',
                 ),
               ),
               SizedBox(

@@ -54,7 +54,7 @@ class _CartPageState extends State<CartPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.add),
+                                      icon: Icon(Icons.remove),
                                       onPressed: () {
                                         model.updateProduct(model.cart[index],
                                             model.cart[index].quantity + 1);
@@ -62,7 +62,7 @@ class _CartPageState extends State<CartPage> {
                                       },
                                     ),
                                     IconButton(
-                                      icon: Icon(Icons.remove),
+                                      icon: Icon(Icons.add),
                                       onPressed: () {
                                         model.updateProduct(model.cart[index],
                                             model.cart[index].quantity - 1);
