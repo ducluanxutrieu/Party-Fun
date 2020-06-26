@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:party_booking/badges.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
@@ -15,18 +13,17 @@ import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/cart_detail_screen.dart';
 import 'package:party_booking/screen/history_order_screen.dart';
 import 'package:party_booking/screen/list_posts_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
+import 'package:party_booking/screen/main_screen/components/dish_cart.dart';
 import 'package:party_booking/screen/modify_disk/modify_dish_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'about_us_screen.dart';
-import 'dish_detail_screen.dart';
+import '../about_us_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final AccountModel accountModel;
@@ -65,91 +62,12 @@ class _MainScreenState extends State<MainScreen> {
     _avatar = widget.accountModel.avatar;
     _email = widget.accountModel.email;
     _initLayout();
-//    _getListDishesFromDB();
     if (widget.listDishModel == null) {
-      _getListDishes();
+      _getListDishes(where: 'initState');
     } else {
       _initListDishData(widget.listDishModel);
     }
     _initSearch();
-  }
-
-  void dialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (bCtx) {
-          return AlertDialog(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            content: Container(
-              width: MediaQuery.of(bCtx).size.width * 2 / 3,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        'Added to your Cart',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Do you want to check your Cart ?',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            actions: <Widget>[
-              _actionButton('Cancel', () {
-                Navigator.of(bCtx).pop();
-              }),
-              _actionButton('Yes', () {
-                Navigator.of(bCtx).pop();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CartPage()));
-              }),
-            ],
-          );
-        });
-  }
-
-  Widget _actionButton(String text, Function handle) {
-    return FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.green,
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-        onPressed: handle,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-        ));
   }
 
   void _initLayout() {
@@ -174,17 +92,9 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-/*  Future<void> _getListDishesFromDB() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String listDishJson = prefs.getString(Constants.LIST_DISH_MODEL_KEY) ?? "";
-    if (listDishJson.isNotEmpty) {
-      ListDishesResponseModel model =
-          listDishesResponseModelFromJson(listDishJson);
-      _initListDishData(model.listDishes);
-    }
-  }*/
-
-  Future<void> _getListDishes() async {
+  Future<void> _getListDishes({String where = ""}) async {
+    print(where);
+    print('_getListDishes');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString(Constants.USER_TOKEN);
 
@@ -195,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
           listDishesResponseModelToJson(result.body).toString());
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -243,7 +153,8 @@ class _MainScreenState extends State<MainScreen> {
     bool result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => ModifyDishScreen()));
     if (result != null) {
-      _getListDishes();
+      print("_goToAddDish: _getListDishes");
+      _getListDishes(where: '_goToAddDish');
     }
   }
 
@@ -262,7 +173,7 @@ class _MainScreenState extends State<MainScreen> {
       body: Flex(direction: Axis.vertical, children: [
         Expanded(
           child:
-              RefreshIndicator(onRefresh: _getListDishes, child: _buildList()),
+              RefreshIndicator(onRefresh:() => _getListDishes(where: 'onRefresh'), child: _buildList()),
         ),
       ]),
     );
@@ -444,137 +355,12 @@ class _MainScreenState extends State<MainScreen> {
       crossAxisCount: 2,
       itemCount: dishes.length,
       itemBuilder: (BuildContext context, int index) =>
-          _itemCard(dishes[index]),
+          DishCard(dishModel: dishes[index], accountModel: widget.accountModel, getListDish: () {_getListDishes(where: 'itemBuilder');}),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       primary: false,
       shrinkWrap: true,
-    );
-  }
-
-  Widget _itemCard(DishModel dishModel) {
-    return ScopedModelDescendant<CartModel>(builder: (context, child, model) {
-      return Card(
-        color: Colors.white,
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Container(
-          child: InkWell(
-            onTap: () => _goToDishDetail(context, dishModel),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _cartDishPriceWidget(dishModel),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.cartPlus),
-                      onPressed: () {
-                        if (ScopedModel.of<CartModel>(context,
-                                        rebuildOnChange: true)
-                                    .calculateTotal1() %
-                                3 ==
-                            0) {
-                          _addDishToCartDialog(context);
-                        }
-                        model.addProduct(dishModel);
-                      },
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
-                _itemCardImage(dishModel.image[0], dishModel.id),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  dishModel.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: new TextStyle(fontSize: 17.0, color: Colors.black54),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
-  }
-
-  Widget _cartDishPriceWidget(DishModel dishModel) {
-    final currencyFormat =
-        new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
-    String price = currencyFormat.format(dishModel.price);
-    return Text(
-      price,
-      style: new TextStyle(fontSize: 20.0, color: Colors.black),
-    );
-  }
-
-  void _addDishToCartDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (bCtx) {
-          Timer(Duration(milliseconds: 700), () {
-            Navigator.pop(context);
-            dialog(context);
-          });
-          return AlertDialog(
-            backgroundColor: Colors.white.withOpacity(0.5),
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            content: Container(
-              width: MediaQuery.of(bCtx).size.width * 2 / 3,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Lottie.asset(
-                        Assets.animAddToCart,
-                        repeat: true,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        });
-  }
-
-  Widget _itemCardImage(String image, String id) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: CachedNetworkImage(
-        placeholder: (context, url) => Container(
-            width: 150,
-            height: 150,
-            padding: EdgeInsets.all(50),
-            child: CircularProgressIndicator()),
-        imageUrl: image,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 150,
-      ),
     );
   }
 
@@ -611,7 +397,7 @@ class _MainScreenState extends State<MainScreen> {
       animationType: BadgeAnimationType.slide,
       badgeContent: Text(
         ScopedModel.of<CartModel>(context, rebuildOnChange: true)
-            .calculateTotal1()
+            .calculateTotalItem()
             .toString(),
         style: TextStyle(color: Colors.white),
       ),
@@ -621,17 +407,6 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.pushNamed(context, '/cart');
           }),
     );
-  }
-
-  _goToDishDetail(BuildContext context, DishModel dishModel) async {
-    var result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DishDetailScreen(
-                dishModel: dishModel, accountModel: _accountModel)));
-    if (result != null) {
-      _getListDishes();
-    }
   }
 
   _goToProfile(){

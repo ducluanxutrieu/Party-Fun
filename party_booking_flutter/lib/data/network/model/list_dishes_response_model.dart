@@ -68,6 +68,7 @@ class DishModel {
   String name;
   String description;
   int price;
+  int priceNew;
   List<String> categories;
   int discount;
   int quantity;
@@ -82,6 +83,7 @@ class DishModel {
     this.name,
     this.description,
     this.price,
+    this.priceNew,
     this.quantity,
     this.categories,
     this.discount,
@@ -100,6 +102,7 @@ class DishModel {
         name: json["name"],
         description: json["description"],
         price: json["price"],
+        priceNew: json["price_new"],
         categories: List<String>.from(json["categories"].map((x) => x)),
         discount: json["discount"],
         quantity: 1,
@@ -115,6 +118,7 @@ class DishModel {
     name: json["name"],
     description: json["description"],
     price: json["price"],
+    priceNew: json["price_new"],
     categories: List<String>(),
     discount: json["discount"],
     quantity: 1,
@@ -130,6 +134,7 @@ class DishModel {
         "name": name,
         "description": description,
         "price": price,
+        "price_new": priceNew,
         "categories": categories,
         "discount": discount,
         "image": List<dynamic>.from(image.map((x) => x)),
@@ -204,7 +209,7 @@ class CartModel extends Model {
       updateProduct(product, product.quantity + 1);
     else {
       cart.add(product);
-      calculateTotal();
+      calculateTotalBill();
       notifyListeners();
     }
   }
@@ -213,7 +218,7 @@ class CartModel extends Model {
     int index = cart.indexWhere((i) => i.id == product.id);
     cart[index].quantity = 1;
     cart.removeWhere((item) => item.id == product.id);
-    calculateTotal();
+    calculateTotalBill();
     notifyListeners();
   }
 
@@ -222,7 +227,7 @@ class CartModel extends Model {
     cart[index].quantity = qty;
     if (cart[index].quantity == 0) removeProduct(product);
 
-    calculateTotal();
+    calculateTotalBill();
     notifyListeners();
   }
 
@@ -232,10 +237,10 @@ class CartModel extends Model {
     notifyListeners();
   }
 
-  void calculateTotal() {
+  void calculateTotalBill() {
     totalCartValue = 0;
     cart.forEach((f) {
-      totalCartValue += f.price * f.quantity;
+      totalCartValue += f.priceNew * f.quantity;
     });
 
     int i = int.parse(totalCartValue.toStringAsFixed(
@@ -244,7 +249,7 @@ class CartModel extends Model {
     totalMoney = f.format(i);
   }
 
-  int calculateTotal1() {
+  int calculateTotalItem() {
     int totalCartValue = 0;
     cart.forEach((f) {
       totalCartValue += f.quantity;

@@ -10,13 +10,14 @@ import 'package:party_booking/data/network/model/list_dishes_response_model.dart
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/forgot_password_screen.dart';
-import 'package:party_booking/screen/main_screen.dart';
-import 'package:party_booking/screen/register_screen.dart';
+import 'package:party_booking/screen/register/register_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'main_screen/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _goToMainScreen(accountModel, result.body.categories);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result == null || !result.isSuccessful)
         {
           model = BaseResponseModel.fromJson(result.error),
-          UTiu.showToast(model.message),
+          UTiu.showToast(message: model.message, isFalse: true),
         }
       else
         {
@@ -87,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     var result = await AppApiService.create().requestSignIn(username: username, password: password);
     if (result.isSuccessful) {
-      UTiu.showToast(result.body.message);
+      UTiu.showToast(message: result.body.message, isFalse: false);
       saveDataToPrefs(result.body.account);
     } else {
       setState(() {
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 

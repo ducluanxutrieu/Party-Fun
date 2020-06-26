@@ -169,11 +169,11 @@ class DialogUTiu {
     }
 
     if (result.isSuccessful) {
-      UTiu.showToast(result.body.message);
+      UTiu.showToast(message: result.body.message);
       handle();
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 }

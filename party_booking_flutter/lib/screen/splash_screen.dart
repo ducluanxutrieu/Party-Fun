@@ -16,7 +16,7 @@ import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_screen.dart';
-import 'main_screen.dart';
+import 'main_screen/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
               if (result == null || !result.isSuccessful)
                 {
                   model = BaseResponseModel.fromJson(result.error),
-                  UTiu.showToast(model.message),
+                  UTiu.showToast(message: model.message),
                   _getListDishesFromDB(accountModel, prefs)
                 }
               else
@@ -117,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen> {
       _goToMainScreen(accountModel, listDishes, result.body.categories);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 

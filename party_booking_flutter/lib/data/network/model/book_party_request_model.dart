@@ -18,12 +18,14 @@ class BookPartyRequestModel {
   String dateParty;
   int numberTable;
   int numberCustomer;
+  String discountCode;
   List<ListDishes> listDishes;
 
   BookPartyRequestModel({
     this.dateParty,
     this.numberTable,
     this.numberCustomer,
+    this.discountCode,
     this.listDishes,
   });
 
@@ -35,6 +37,7 @@ class BookPartyRequestModel {
         dateParty: json["date_party"],
         numberTable: json["table"],
         numberCustomer: json['count_customer'],
+        discountCode: json['discount_code'],
         listDishes: List<ListDishes>.from(
             json["dishes"].map((x) => ListDishes.fromJson(x))),
       );
@@ -43,6 +46,7 @@ class BookPartyRequestModel {
     "date_party": dateParty,
     "table": numberTable,
     "count_customer": numberCustomer,
+    'discount_code': discountCode,
     "dishes": List<dynamic>.from(listDishes.map((x) => x.toJson())),
   };
 }

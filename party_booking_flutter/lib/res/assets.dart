@@ -6,6 +6,7 @@ class Assets {
   static String get icCheck => 'assets/images/check.png';
   static String get icRating => 'assets/images/ic_rating.png';
 
+//animation
   static String get animBagError => 'assets/jsons/bag_error.json';
   static String get animReviewDish => 'assets/jsons/give-us-a-review.json';
   static String get animBookSuccess => 'assets/jsons/food-around-the-city.json';
@@ -13,4 +14,7 @@ class Assets {
   static String get animAddToCart => 'assets/jsons/addtocart.json';
   static String get animBillManagement => 'assets/jsons/pagseguros-billing-management.json';
   static String get animLoading => 'assets/jsons/loading-paperplane.json';
+
+  //icon
+  static String get icLoadMore => 'assets/icons/more.svg';
 }

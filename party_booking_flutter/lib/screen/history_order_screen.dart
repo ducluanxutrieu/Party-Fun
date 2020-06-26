@@ -28,7 +28,7 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 

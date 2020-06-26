@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_posts_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
@@ -27,7 +28,7 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
     var result = await AppApiService.create()
         .getListPosts(token: token)
         .catchError((onError) {
-      UTiu.showToast(onError.toString());
+      UTiu.showToast(message: onError.toString(), isFalse: true);
     });
 
     if (result.isSuccessful) {
@@ -36,7 +37,7 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -79,14 +80,29 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
                 backgroundImage: NetworkImage(_listPosts[index].featureImage),
                 backgroundColor: Colors.transparent,
               ),
-              subtitle: Text(_listPosts[index].summary,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 16, color: Colors.lightBlueAccent),
-                  overflow: TextOverflow.ellipsis),
+              subtitle: Column(
+                children: <Widget>[
+                  Text(_listPosts[index].summary,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 16, color: Colors.lightBlueAccent),
+                      overflow: TextOverflow.ellipsis),
+                  Text(
+                      DateFormat(Constants.DATE_TIME_FORMAT_SERVER)
+                          .format(_listPosts[index].createAt),
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.lightBlue,
+                          fontStyle: FontStyle.italic),
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
               trailing: Text(_listPosts[index].author,
                   maxLines: 2,
                   style: TextStyle(fontSize: 18, color: Colors.lightBlueAccent),
                   overflow: TextOverflow.ellipsis),
+              isThreeLine: true,
             ),
           );
         },

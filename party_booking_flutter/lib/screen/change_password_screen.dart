@@ -70,7 +70,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
 
       if (result.isSuccessful) {
-        UTiu.showToast(result.body.message);
+        UTiu.showToast(message: result.body.message);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -85,7 +85,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           });
         });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-        UTiu.showToast(model.message);
+        UTiu.showToast(message: model.message, isFalse: true);
       }
     }
   }
