@@ -19,6 +19,7 @@ import 'package:party_booking/screen/cart_detail_screen.dart';
 import 'package:party_booking/screen/history_order_screen.dart';
 import 'package:party_booking/screen/list_posts_screen.dart';
 import 'package:party_booking/screen/login_screen.dart';
+import 'package:party_booking/screen/map_screen.dart';
 import 'package:party_booking/screen/profile_screen.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -317,8 +318,18 @@ class _MainScreenState extends State<MainScreen> {
         _createDrawerItem(
           icon: Icons.location_on,
           text: 'Address',
-          onTap: null,
-        ),
+          onTap:
+
+              () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) => MapPage(),
+    ),
+    );
+    }),
+
+
         _createDrawerItem(
             icon: Icons.history,
             text: 'My Ordered',
