@@ -12,12 +12,12 @@ import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/custom_icons_icons.dart';
-import 'package:party_booking/screen/add_new_dish_screen.dart';
 import 'package:party_booking/widgets/common/dialog_util.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../badges.dart';
+import 'modify_disk/modify_dish_screen.dart';
 
 class DishDetailScreen extends StatefulWidget {
   final DishModel dishModel;
@@ -64,7 +64,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message);
     }
   }
 
@@ -98,19 +98,24 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           _getListCategory(),
           style: style.copyWith(fontSize: 22),
         ),
-        RatingBar(
-          itemCount: 5,
-          initialRating:
-              double.parse((_rateDataModel?.avgRate ??= 0).toString()),
-          minRating: 1,
-          allowHalfRating: true,
-          direction: Axis.horizontal,
-          itemSize: 30,
-          itemBuilder: (context, _) => Icon(
-            Icons.star,
-            color: Colors.amber,
-          ),
-          onRatingUpdate: null,
+        Row(
+          children: <Widget>[
+            RatingBar(
+              itemCount: 5,
+              initialRating:
+                  double.parse((_rateDataModel?.avgRate ??= 0).toString()),
+              minRating: 1,
+              allowHalfRating: true,
+              direction: Axis.horizontal,
+              itemSize: 30,
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: null,
+            ),
+            Text(" (${_rateDataModel.countRate} users rating)", style: style.copyWith(color: Colors.green),),
+          ],
         ),
         SizedBox(
           height: 10,
@@ -184,16 +189,18 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     } else if (index == listRate.length + 1) {
       if ((_rateDataModel.end ??= 0) < (_rateDataModel.totalPage * 10 - 1)) {
         return Container(
-          color: Colors.greenAccent,
-          child: FlatButton(
-            child: Text("Load More"),
-            onPressed: () {
+          height: 40,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          child: InkWell(
+            onTap: () {
               currentPage++;
               _getListRate(_dishModel.id, currentPage);
             },
+            child: Icon(CustomIcons.ic_more, size: 35,)
           ),
         );
-      }else return SizedBox();
+      } else
+        return SizedBox();
     } else {
       return _itemListRating(listRate[index - 1]);
     }
@@ -228,15 +235,12 @@ class _DishDetailScreenState extends State<DishDetailScreen>
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: CachedNetworkImage(
-                  placeholder: (context, url) => Container(
-                      width: 150,
-                      height: 150,
-                      padding: EdgeInsets.all(50),
-                      child: CircularProgressIndicator()),
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: value,
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 250,
+                  height: 150,
                 ),
               ),
             ),
@@ -308,7 +312,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
     var result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddNewDishScreen(dishModel: _dishModel)));
+            builder: (context) => ModifyDishScreen(dishModel: _dishModel)));
     if (result != null) {
       setState(() {
         Navigator.maybePop(context, true);
@@ -336,7 +340,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       animationType: BadgeAnimationType.slide,
       badgeContent: Text(
         ScopedModel.of<CartModel>(context, rebuildOnChange: true)
-            .calculateTotal1()
+            .calculateTotalItem()
             .toString(),
         style: TextStyle(color: Colors.white),
       ),

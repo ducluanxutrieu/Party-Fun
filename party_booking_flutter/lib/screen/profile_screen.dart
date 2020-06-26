@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Constants.ACCOUNT_MODEL_KEY, jsonEncode(_accountModel.toJson()));
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -104,37 +104,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _getImage(source) async {
-    File image = await ImagePicker.pickImage(source: source);
+    final picker = ImagePicker();
+    PickedFile pickedFile = await picker.getImage(source: source);
+    File image = File(pickedFile.path);
 
     if (image != null && image.path != null && image.path.isNotEmpty) {
       var result = await AppImageAPIService.create(context).updateAvatar(image);
       if (result != null) {
         setState(() {
-          UTiu.showToast('Change avatar successful');
+          UTiu.showToast(message: 'Change avatar successful');
           avatarUrl = result.data;
         });
       } else {
-        UTiu.showToast(result.message);
+        UTiu.showToast(message: result.message, isFalse: true);
       }
       print(result.toString());
-    }
-  }
-
-  Future<void> retrieveLostData() async {
-    final LostDataResponse response = await ImagePicker.retrieveLostData();
-    if (response == null) {
-      return;
-    }
-    if (response.file != null) {
-      setState(() {
-        if (response.type == RetrieveType.video) {
-//          _handleVideo(response.file);
-        } else {
-//          _handleImage(response.file);
-        }
-      });
-    } else {
-//      _handleError(response.exception);
     }
   }
 

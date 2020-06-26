@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
@@ -62,7 +63,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final result = await AppApiService.create()
         .requestUpdateUser(token: userToken, model: model);
     if (result.isSuccessful) {
-      UTiu.showToast(result.body.message);
+      UTiu.showToast(message: result.body.message);
       setState(() {
         _stateButton = 2;
       });
@@ -75,7 +76,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _stateButton = 0;
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(model.message);
+      UTiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -163,16 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       mTextInputType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 15.0),
-                    TextFieldWidget(
-                      mAttribute: 'phonenumber',
-                      mHindText: 'Phone Number',
-                      mTextInputType: TextInputType.phone,
-                      mValidators: [
-                        ...listValidators,
-                        FormBuilderValidators.numeric(
-                            errorText: "Phone number invalid")
-                      ],
-                    ),
+                    buildPhoneNumber(MediaQuery.of(context).size.width - 72, listValidators),
                     SizedBox(height: 15.0),
                     _showDatePicker(),
                     SizedBox(height: 15.0),
@@ -196,5 +188,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+
+  Row buildPhoneNumber(double sizeWidth, List<FormFieldValidator> listValidators) {
+    return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+                width: sizeWidth * 0.35,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(32),
+                  border: Border.all(color: Colors.grey),
+                  shape: BoxShape.rectangle,
+                ),
+                child: CountryCodePicker(
+                  onChanged: _onCountryChange,
+                  // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                  initialSelection: 'VN',
+                  favorite: ['+84', 'VN'],
+                  // optional. Shows only country name and flag
+                  showCountryOnly: false,
+                  // optional. Shows only country name and flag when popup is closed.
+                  showOnlyCountryWhenClosed: false,
+                  // optional. aligns the flag and the Text left
+                  alignLeft: false,
+                )),
+            Container(
+              width: sizeWidth * 0.63,
+              child: TextFieldWidget(
+                mAttribute: 'phonenumber',
+                mHindText: 'Phone Number',
+                mTextInputType: TextInputType.phone,
+                mValidators: [
+                  ...listValidators,
+                  FormBuilderValidators.numeric(
+                      errorText: "Phone number invalid")
+                ],
+              ),
+            ),
+          ],
+        );
+  }
+
+  void _onCountryChange(CountryCode countryCode) {
+    print("New Country selected: " + countryCode.toString());
   }
 }

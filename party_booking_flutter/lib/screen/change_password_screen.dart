@@ -61,7 +61,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         result = await AppApiService.create().changePassword(
             token: token,
             model: ConfirmChangePasswordRequestModel(
-                password: code, new_password: newPassword));
+                password: code, newPassword: newPassword));
       }else {
         result = await AppApiService.create().confirmResetPassword(
             model: ConfirmResetPasswordRequestModel(
@@ -70,7 +70,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
 
       if (result.isSuccessful) {
-        UTiu.showToast(result.body.message);
+        UTiu.showToast(message: result.body.message);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -85,7 +85,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           });
         });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-        UTiu.showToast(model.message);
+        UTiu.showToast(message: model.message, isFalse: true);
       }
     }
   }

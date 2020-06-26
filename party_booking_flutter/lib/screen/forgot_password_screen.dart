@@ -29,7 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
       var result = await AppApiService.create().resetPassword(username: username);
       if (result.isSuccessful) {
-        UTiu.showToast("${result.body.message}: ${result.body.data}");
+        UTiu.showToast(message: "${result.body.message}: ${result.body.data}");
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => ChangePasswordScreen(username: username,)));
       }else {
@@ -42,7 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           });
         });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-        UTiu.showToast(model.message);
+        UTiu.showToast(message: model.message, isFalse: true);
       }
     }
   }

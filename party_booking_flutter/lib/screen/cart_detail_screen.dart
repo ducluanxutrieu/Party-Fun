@@ -14,7 +14,6 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           title: Text("Cart"),
@@ -49,7 +48,7 @@ class _CartPageState extends State<CartPage> {
                             return ListTile(
                               title: Text(model.cart[index].name),
                               subtitle: Text(
-                                  "${model.cart[index].quantity.toString()} x ${model.cart[index].price.toString()} = ${(model.cart[index].quantity * model.cart[index].price)}"),
+                                  "${model.cart[index].quantity.toString()} x ${model.cart[index].priceNew.toString()} = ${(model.cart[index].quantity * model.cart[index].priceNew)}"),
                               trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [

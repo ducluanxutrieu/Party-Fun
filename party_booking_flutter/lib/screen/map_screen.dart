@@ -27,15 +27,15 @@ class MapPageState extends State<MapPage> {
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(context),
-          _zoomminusfunction(),
-          _zoomplusfunction(),
+          _zoomMinusFunction(),
+          _zoomPlusFunction(),
           _buildContainer(),
         ],
       ),
     );
   }
 
-  Widget _zoomminusfunction() {
+  Widget _zoomMinusFunction() {
     return Align(
       alignment: Alignment.topLeft,
       child: IconButton(
@@ -47,7 +47,7 @@ class MapPageState extends State<MapPage> {
     );
   }
 
-  Widget _zoomplusfunction() {
+  Widget _zoomPlusFunction() {
     return Align(
       alignment: Alignment.topRight,
       child: IconButton(
@@ -87,8 +87,8 @@ class MapPageState extends State<MapPage> {
                   "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRi-Ap81RvbkYciVAPBVjn3B48p0dYjTjVMog&usqp=CAU",
                   10.870148,
                   106.787261,
-                  "UIT",
-                  "Cơ Sở 1"),
+                  "PartyBooking",
+                  "Cơ Sở 1 - UIT"),
             ),
             SizedBox(width: 10.0),
             Padding(
@@ -97,8 +97,8 @@ class MapPageState extends State<MapPage> {
                   "https://image.bizlive.vn/uploaded/hoangly_tt/2016_09_09/hinh1_keyi_zsxk.jpg",
                   10.883607,
                   106.802840,
-                  "KTX ĐẠI HỌC QUỐC GIA",
-                  "Cơ Sở 2"),
+                  "PartyBooking",
+                  "Cơ Sở 2 - ĐHQG-TP.HCM"),
             ),
           ],
         ),
@@ -202,8 +202,6 @@ class MapPageState extends State<MapPage> {
           _controller.complete(controller);
         },
         markers: {
-          newyork1Marker,
-          newyork2Marker,
           gramercyMarker,
           bernardinMarker
         },
@@ -225,7 +223,7 @@ class MapPageState extends State<MapPage> {
 Marker gramercyMarker = Marker(
   markerId: MarkerId('gramercy'),
   position: LatLng(10.870148, 106.787261),
-  infoWindow: InfoWindow(title: 'UIT'),
+  infoWindow: InfoWindow(title: 'PartyBooking'),
   icon: BitmapDescriptor.defaultMarkerWithHue(
     BitmapDescriptor.hueViolet,
   ),
@@ -234,32 +232,7 @@ Marker gramercyMarker = Marker(
 Marker bernardinMarker = Marker(
   markerId: MarkerId('bernardin'),
   position: LatLng(10.883607, 106.802840),
-  infoWindow: InfoWindow(title: 'KTX ĐẠI HỌC QUỐC GIA'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-
-Marker blueMarker = Marker(
-  markerId: MarkerId('bluehill'),
-  position: LatLng(40.732128, -73.999619),
-  infoWindow: InfoWindow(title: 'Blue Hill'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker newyork1Marker = Marker(
-  markerId: MarkerId('newyork1'),
-  position: LatLng(40.742451, -74.005959),
-  infoWindow: InfoWindow(title: 'Los Tacos'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker newyork2Marker = Marker(
-  markerId: MarkerId('newyork2'),
-  position: LatLng(40.729640, -73.983510),
-  infoWindow: InfoWindow(title: 'Tree Bistro'),
+  infoWindow: InfoWindow(title: 'PartyBooking'),
   icon: BitmapDescriptor.defaultMarkerWithHue(
     BitmapDescriptor.hueViolet,
   ),

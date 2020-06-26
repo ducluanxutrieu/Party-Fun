@@ -22,4 +22,8 @@ class CustomIcons {
   static const _kFontPkg = null;
 
   static const IconData ic_rating = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+
+  
+  static const _kFontFamMore = 'MoreIcon';
+  static const IconData ic_more = IconData(0xe800, fontFamily: _kFontFamMore, fontPackage: _kFontPkg);
 }
