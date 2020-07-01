@@ -63,7 +63,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final result = await AppApiService.create()
         .requestUpdateUser(token: userToken, model: model);
     if (result.isSuccessful) {
-      UTiu.showToast(message: result.body.message);
+      UiUtiu.showToast(message: result.body.message);
       setState(() {
         _stateButton = 2;
       });
@@ -76,7 +76,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _stateButton = 0;
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 

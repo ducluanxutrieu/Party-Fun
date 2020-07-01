@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Constants.ACCOUNT_MODEL_KEY, jsonEncode(_accountModel.toJson()));
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -112,11 +112,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var result = await AppImageAPIService.create(context).updateAvatar(image);
       if (result != null) {
         setState(() {
-          UTiu.showToast(message: 'Change avatar successful');
+          UiUtiu.showToast(message: 'Change avatar successful');
           avatarUrl = result.data;
         });
       } else {
-        UTiu.showToast(message: result.message, isFalse: true);
+        UiUtiu.showToast(message: result.message, isFalse: true);
       }
       print(result.toString());
     }

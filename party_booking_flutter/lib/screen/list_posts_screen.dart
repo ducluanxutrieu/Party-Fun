@@ -28,7 +28,7 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
     var result = await AppApiService.create()
         .getListPosts(token: token)
         .catchError((onError) {
-      UTiu.showToast(message: onError.toString(), isFalse: true);
+      UiUtiu.showToast(message: onError.toString(), isFalse: true);
     });
 
     if (result.isSuccessful) {
@@ -37,7 +37,7 @@ class _ListPostsScreenState extends State<ListPostsScreen> {
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 

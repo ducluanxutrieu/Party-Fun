@@ -79,7 +79,7 @@ class AppImageAPIService {
     if (result.statusCode == 200) {
       response = BaseListResponseModel.fromJson(result.data);
     } else {
-      UTiu.showToast(message: BaseResponseModel.fromJson(result.data).message, isFalse: true);
+      UiUtiu.showToast(message: BaseResponseModel.fromJson(result.data).message, isFalse: true);
     }
     progressDialog.hide();
     return response;

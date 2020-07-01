@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _goToMainScreen(accountModel, result.body.categories);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result == null || !result.isSuccessful)
         {
           model = BaseResponseModel.fromJson(result.error),
-          UTiu.showToast(message: model.message, isFalse: true),
+          UiUtiu.showToast(message: model.message, isFalse: true),
         }
       else
         {
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     var result = await AppApiService.create().requestSignIn(username: username, password: password);
     if (result.isSuccessful) {
-      UTiu.showToast(message: result.body.message, isFalse: false);
+      UiUtiu.showToast(message: result.body.message, isFalse: false);
       saveDataToPrefs(result.body.account);
     } else {
       setState(() {
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 

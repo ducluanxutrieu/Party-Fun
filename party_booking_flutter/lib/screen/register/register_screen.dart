@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void requestRegister(RegisterRequestModel model) async {
     final result = await AppApiService.create().requestRegister(model: model);
     if (result.isSuccessful) {
-      UTiu.showToast(message: result.body.message);
+      UiUtiu.showToast(message: result.body.message);
       setState(() {
         _stateRegisterButton = 2;
       });
@@ -67,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _stateRegisterButton = 0;
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 

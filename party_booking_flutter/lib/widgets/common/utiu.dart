@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class UTiu{
+class UiUtiu{
   static showToast({@required String message, isFalse = false}){
     Fluttertoast.showToast(
         msg: message,

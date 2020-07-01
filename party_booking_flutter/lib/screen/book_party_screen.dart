@@ -86,7 +86,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       if (day != null && num != null) {
         await requestBookParty(day, num, int.parse(cus), discountCode);
       } else {
-        UTiu.showToast(message: 'Please fill all fields', isFalse: true);
+        UiUtiu.showToast(message: 'Please fill all fields', isFalse: true);
       }
     }
   }
@@ -163,14 +163,14 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
     if (result.isSuccessful) {
       ScopedModel.of<CartModel>(context).clearCart();
-      UTiu.showToast(message: result.body.message);
+      UiUtiu.showToast(message: result.body.message);
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => BookPartySuccessScreen(result.body.bill)));
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 }

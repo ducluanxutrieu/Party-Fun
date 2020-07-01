@@ -51,7 +51,7 @@ class ModifyDishFunctions{
     var result =
         await AppApiService.create().updateDish(token: token, model: dishModel);
     if (result.isSuccessful) {
-      UTiu.showToast(message: result.body.message);
+      UiUtiu.showToast(message: result.body.message);
       Navigator.pop(_context, result.body.dish);
     }
   }
@@ -72,7 +72,7 @@ class ModifyDishFunctions{
     Response<SingleDishResponseModel> addNewDishRes =
         await AppApiService.create().addNewDish(token: token, model: dishModel);
     if (addNewDishRes.isSuccessful) {
-      UTiu.showToast(message: addNewDishRes.body.message);
+      UiUtiu.showToast(message: addNewDishRes.body.message);
       Navigator.pop(_context, true);
     }
   }
@@ -98,7 +98,7 @@ class ModifyDishFunctions{
       print(onError.toString());
     });
     if (result.isSuccessful) {
-      UTiu.showToast(message: result.body.message);
+      UiUtiu.showToast(message: result.body.message);
       return true;
     }
     return false;

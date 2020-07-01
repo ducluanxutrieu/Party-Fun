@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
               if (result == null || !result.isSuccessful)
                 {
                   model = BaseResponseModel.fromJson(result.error),
-                  UTiu.showToast(message: model.message),
+                  UiUtiu.showToast(message: model.message),
                   _getListDishesFromDB(accountModel, prefs)
                 }
               else
@@ -117,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen> {
       _goToMainScreen(accountModel, listDishes, result.body.categories);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 

@@ -64,7 +64,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       });
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message);
+      UiUtiu.showToast(message: model.message);
     }
   }
 
@@ -228,7 +228,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           pauseAutoPlayOnTouch: Duration(seconds: 10),
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
-          items: UTiu.mapIndexed(
+          items: UiUtiu.mapIndexed(
             _dishModel.image,
             (index, value) => Container(
               padding: EdgeInsets.all(10),
@@ -259,7 +259,7 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       appBar: AppBar(
         title: Text(_dishModel.name),
         actions: <Widget>[
-          _shoppingCartBadge(widget.dishModel),
+          widget.accountModel != null ? _shoppingCartBadge(widget.dishModel) : SizedBox(),
         ],
       ),
       floatingActionButton: _buildFABEditDish(context),
@@ -290,7 +290,8 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   FloatingActionButton _buildFABEditDish(BuildContext context) {
-    bool isStaff = (widget.accountModel.role == UserRole.Staff.index ||
+    
+    bool isStaff = widget.accountModel != null && (widget.accountModel.role == UserRole.Staff.index ||
         widget.accountModel.role == UserRole.Admin.index);
 
     return isStaff

@@ -8,34 +8,20 @@ import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'history_order_detail_screen.dart';
+import 'history_order_detail/history_order_detail_screen.dart';
 
-class HistoryOrderScreen extends StatefulWidget {
-  @override
-  _HistoryOrderScreenState createState() => _HistoryOrderScreenState();
-}
-
-class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
-  List<UserCart> _listUserCart = List();
-
-  void _getHistoryBooking() async {
+class HistoryOrderScreen extends StatelessWidget {
+  Future<List<UserCart>> _getHistoryBooking() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.USER_TOKEN);
     var result = await AppApiService.create().getUserHistory(token: token);
     if (result.isSuccessful) {
-      setState(() {
-        _listUserCart = result.body.data.userCarts;
-      });
+        return result.body.data.userCarts;
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UTiu.showToast(message: model.message, isFalse: true);
+      UiUtiu.showToast(message: model.message, isFalse: true);
+      return null;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getHistoryBooking();
   }
 
   @override
@@ -46,25 +32,30 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
         backgroundColor: Colors.green,
         title: Text('Order History'),
       ),
-      body: Center(
-          child: ListView.builder(
-        itemCount: _listUserCart.length,
-        itemBuilder: (context, index) {
-          return _buildItemCart(_listUserCart[index]);
+      body: FutureBuilder<List<UserCart>>(
+        future: _getHistoryBooking(),
+        builder: (BuildContext context, AsyncSnapshot<List<UserCart>> snapshot) {
+          if(snapshot.hasData){
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+                return _buildItemCart(snapshot.data[index], context);
+            },
+          );
+          }else return SizedBox();
         },
-      )),
+      ),
     );
   }
 
-  Widget _buildItemCart(UserCart userCart) {
+  Widget _buildItemCart(UserCart userCart, BuildContext context) {
     final currencyFormat =
         new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
-    return Container(
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      color: userCart.paymentStatus == 1 ? Colors.greenAccent : Colors.white,
       margin: EdgeInsets.only(left: 15, right: 15, top: 10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          border: Border.all(color: Colors.green)),
       child: ListTile(
         onTap: () {
           Navigator.push(
@@ -81,8 +72,10 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
               fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
         ),
         subtitle: Text("\t" + currencyFormat.format(userCart.total),
-            style: TextStyle(fontSize: 18, color: Colors.lightBlueAccent)),
-        trailing: userCart.paymentStatus == 1 ? Icon(FontAwesomeIcons.solidCheckCircle) : SizedBox(),
+            style: TextStyle(fontSize: 18, color: Colors.black54)),
+        trailing: userCart.paymentStatus == 1
+            ? Icon(FontAwesomeIcons.solidCheckCircle)
+            : SizedBox(),
       ),
     );
   }

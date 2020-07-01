@@ -1,10 +1,8 @@
-
 import 'dart:io';
 
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
 
 class DBProvider {
   DBProvider._();
@@ -25,25 +23,31 @@ class DBProvider {
     String path = "${documentsDirectory.path}/PartyBookingDB.db";
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE ListDishes (id TEXT PRIMARY KEY,name TEXT,description TEXT,price INTEGER,discount INTEGER,currency TEXT)");
-      await db.execute("CREATE TABLE ListCategory (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, dish_id TEXT, category TEXT)");
-      await db.execute("CREATE TABLE ListImages (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, dish_id TEXT, image TEXT)");
+      await db.execute(
+          "CREATE TABLE ListDishes (id TEXT PRIMARY KEY,name TEXT,description TEXT,price INTEGER,discount INTEGER,currency TEXT)");
+      await db.execute(
+          "CREATE TABLE ListCategory (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, dish_id TEXT, category TEXT)");
+      await db.execute(
+          "CREATE TABLE ListImages (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, dish_id TEXT, image TEXT)");
     });
   }
 
   newDish(DishModel model) async {
     final db = await database;
-    var res = await db.rawInsert("INSERT Into ListDishes (id, name, description, price, discount, currency)"
+    var res = await db.rawInsert(
+        "INSERT Into ListDishes (id, name, description, price, discount, currency)"
         " VALUES ('${model.id}', '${model.name}','${model.description}',${model.price},${model.discount},'${model.currency}')");
 
     //insert list category
     model.categories.forEach((category) async {
-      await db.rawInsert("INSERT Into ListCategory (dish_id, category) VALUES ('${model.id}', '$category')");
+      await db.rawInsert(
+          "INSERT Into ListCategory (dish_id, category) VALUES ('${model.id}', '$category')");
     });
 
     //insert list image
     model.image.forEach((image) async {
-      await db.rawInsert("INSERT Into ListImages (dish_id, image) VALUES ('${model.id}', '$image')");
+      await db.rawInsert(
+          "INSERT Into ListImages (dish_id, image) VALUES ('${model.id}', '$image')");
     });
     print("insert dish to db" + res.toString());
     return res;
@@ -70,10 +74,19 @@ class DBProvider {
 //    return res;
 //  }
 
-  Future<DishModel> getDish(int id) async {
+  Future<DishModel> getDish(String id) async {
     final db = await database;
     var res = await db.query("ListDishes", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? DishModel.fromJson(res.first) : Null;
+    DishModel dishModel;
+    if(res.isNotEmpty){}
+    dishModel = DishModel.fromJsonDB(res.first);
+    if(dishModel != null){
+      List<ImageDb> images = await getListImageByDishId(dishModel.id, db);
+      images.forEach((imageModel) {
+        dishModel.image.add(imageModel.image);
+      });
+    }
+    return dishModel;
   }
 
   Future<List<DishModel>> getAllDishes() async {
@@ -83,24 +96,33 @@ class DBProvider {
         ? List<DishModel>()
         : res.map((c) => DishModel.fromJsonDB(c)).toList();
 
-    for(int index = 0; index < listDishes.length; index ++) {
-      var resCategories = await db.query("ListCategory", where: "dish_id = ? ", whereArgs: [listDishes[index].id]);
-      var resImages = await db.query("ListImages", where: "dish_id = ? ", whereArgs: [listDishes[index].id]);
+    for (int index = 0; index < listDishes.length; index++) {
+      var resCategories = await db.query("ListCategory",
+          where: "dish_id = ? ", whereArgs: [listDishes[index].id]);
       print("**************");
       print(resCategories);
-      List<CategoryDb> categories = resCategories.map((c) => CategoryDb.fromJson(c)).toList();
-      List<ImageDb> images = resImages.map((c) => ImageDb.fromJson(c)).toList();
+      List<CategoryDb> categories =
+          resCategories.map((c) => CategoryDb.fromJson(c)).toList();
 
       categories.forEach((category) {
         listDishes[index].categories.add(category.category);
       });
 
+      List<ImageDb> images = await getListImageByDishId(listDishes[index].id, db);
       images.forEach((imageModel) {
         listDishes[index].image.add(imageModel.image);
       });
     }
 
     return listDishes;
+  }
+
+  Future<List<ImageDb>> getListImageByDishId(
+    String dishID, Database db,
+  ) async {
+    var resImages = await db
+        .query("ListImages", where: "dish_id = ? ", whereArgs: [dishID]);
+    return resImages.map((c) => ImageDb.fromJson(c)).toList();
   }
 
 /*  getBlockedListDishes() async {
