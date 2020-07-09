@@ -151,7 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
   }
 
-  _getImage(source) async {
+  void _getImage(source) async {
     final picker = ImagePicker();
     PickedFile pickedFile = await picker.getImage(source: source);
     File image = File(pickedFile.path);

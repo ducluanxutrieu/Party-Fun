@@ -114,7 +114,10 @@ class _DishDetailScreenState extends State<DishDetailScreen>
               ),
               onRatingUpdate: null,
             ),
-            Text(" (${_rateDataModel.countRate} users rating)", style: style.copyWith(color: Colors.green),),
+            Text(
+              " (${_rateDataModel.countRate} users rating)",
+              style: style.copyWith(color: Colors.green),
+            ),
           ],
         ),
         SizedBox(
@@ -192,12 +195,14 @@ class _DishDetailScreenState extends State<DishDetailScreen>
           height: 40,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
           child: InkWell(
-            onTap: () {
-              currentPage++;
-              _getListRate(_dishModel.id, currentPage);
-            },
-            child: Icon(CustomIcons.ic_more, size: 35,)
-          ),
+              onTap: () {
+                currentPage++;
+                _getListRate(_dishModel.id, currentPage);
+              },
+              child: Icon(
+                CustomIcons.ic_more,
+                size: 35,
+              )),
         );
       } else
         return SizedBox();
@@ -235,8 +240,11 @@ class _DishDetailScreenState extends State<DishDetailScreen>
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: CachedNetworkImage(
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error,
+                    size: 80,
+                    color: Colors.red,
+                  ),
                   imageUrl: value,
                   fit: BoxFit.cover,
                   width: double.infinity,
@@ -259,7 +267,9 @@ class _DishDetailScreenState extends State<DishDetailScreen>
       appBar: AppBar(
         title: Text(_dishModel.name),
         actions: <Widget>[
-          widget.accountModel != null ? _shoppingCartBadge(widget.dishModel) : SizedBox(),
+          widget.accountModel != null
+              ? _shoppingCartBadge(widget.dishModel)
+              : SizedBox(),
         ],
       ),
       floatingActionButton: _buildFABEditDish(context),
@@ -290,9 +300,9 @@ class _DishDetailScreenState extends State<DishDetailScreen>
   }
 
   FloatingActionButton _buildFABEditDish(BuildContext context) {
-    
-    bool isStaff = widget.accountModel != null && (widget.accountModel.role == UserRole.Staff.index ||
-        widget.accountModel.role == UserRole.Admin.index);
+    bool isStaff = widget.accountModel != null &&
+        (widget.accountModel.role == UserRole.Staff.index ||
+            widget.accountModel.role == UserRole.Admin.index);
 
     return isStaff
         ? FloatingActionButton.extended(

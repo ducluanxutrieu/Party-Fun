@@ -99,9 +99,7 @@ class MainDrawer extends StatelessWidget {
         _createDrawerItem(
             icon: FontAwesomeIcons.signOutAlt,
             text: 'Logout',
-            onTap: () {
-              _signOut(context);
-            }),
+            onTap: () => _showDialogConfirmLogout(context)),
         Center(
           child: Text(
             'Version\nAlpha 1.0.0',
@@ -154,5 +152,34 @@ class MainDrawer extends StatelessWidget {
           MaterialPageRoute(builder: (context) => LoginScreen()),
           (Route<dynamic> route) => false);
     }
+  }
+
+  void _showDialogConfirmLogout(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext bCtx) {
+          return AlertDialog(
+            title: Text('Logout!'),
+            content: Text('Do you sure want to logout!'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Close',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              FlatButton(
+                onPressed: () => _signOut(context),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

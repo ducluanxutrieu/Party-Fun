@@ -4,8 +4,9 @@ class InfoCard extends StatelessWidget {
   final String text;
   final IconData icon;
   final Function onPressed;
+  final bool isShowEdit;
 
-  const InfoCard({Key key, this.text, this.icon, this.onPressed}) : super(key: key);
+  const InfoCard({Key key, this.text, this.icon, this.onPressed, this.isShowEdit = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class InfoCard extends StatelessWidget {
               color: Colors.teal,
             ),
           ),
+          trailing: isShowEdit ? Icon(Icons.edit) : null,
         ),
       ),
     );

@@ -121,9 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 20,
             ),
             CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(_accountModel.avatar)
-            ),
+                radius: 50,
+                backgroundImage: NetworkImage(_accountModel.avatar)),
             Text(
               _accountModel.username,
               style: TextStyle(
@@ -145,10 +144,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.account_box,
             ),
             InfoCard(
-              text: _accountModel.phoneNumber.toString(),
+              text: _accountModel.countryCode + _accountModel.phoneNumber.toString(),
               icon: Icons.phone,
               onPressed: () async {
-                String removeSpaceFromPhoneNumber = _accountModel.phoneNumber
+                String removeSpaceFromPhoneNumber = _accountModel.countryCode + _accountModel.phoneNumber
                     .toString()
                     .replaceAll(new RegExp(r"\s+\b|\b\s"), "");
                 final phoneCall = 'tel:$removeSpaceFromPhoneNumber';
@@ -169,7 +168,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.mail,
               onPressed: () async {
                 final emailAddress = 'mailto:${_accountModel.email}';
-
                 if (await launcher.canLaunch(emailAddress)) {
                   await launcher.launch(emailAddress);
                 } else {
@@ -196,6 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             InfoCard(
               text: '****',
               icon: Icons.lock,
+              isShowEdit: true,
               onPressed: () {
                 _goToChangePassScreen();
               },

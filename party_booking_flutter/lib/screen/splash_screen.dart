@@ -34,12 +34,10 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkAlreadyLogin() async {
     new Future.delayed(const Duration(seconds: 5), () => "5");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
-    print(DateTime.now().millisecondsSinceEpoch);
-    if (accountJson != null && accountJson.isNotEmpty) {
-      AccountModel _accountModel =
-          AccountModel.fromJson(json.decode(accountJson));
-      _getListDishes(_accountModel);
+    String token = prefs.getString(Constants.USER_TOKEN);
+    if (token != null && token.isNotEmpty) {
+      _updateUserProfile(token, prefs);
+      _getListDishes(token, prefs);
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -70,7 +68,9 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               'Easy to book a party and\nenjoy with your relatives',
               style: TextStyle(
-                  fontFamily: 'Source Sans Pro', color: Colors.orange, fontSize: 28),
+                  fontFamily: 'Source Sans Pro',
+                  color: Colors.orange,
+                  fontSize: 28),
               textAlign: TextAlign.center,
             ),
           ],
@@ -79,28 +79,19 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<void> _getListDishes(AccountModel accountModel) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _token = prefs.getString(Constants.USER_TOKEN);
-
+  Future<void> _getListDishes(String token, SharedPreferences prefs) async {
     BaseResponseModel model;
     await AppApiService.create()
-        .getListDishes(token: _token)
+        .getListDishes(token: token)
         .catchError((onError) {
       print(onError);
-      _getListDishesFromDB(accountModel, prefs);
+      _getListDishesFromDB(prefs);
     }).then((result) => {
-              if (result == null || !result.isSuccessful)
-                {
-                  model = BaseResponseModel.fromJson(result.error),
-                  UiUtiu.showToast(message: model.message),
-                  _getListDishesFromDB(accountModel, prefs)
-                }
+              if (result == null || !result.isSuccessful) _getListDishesFromDB(prefs)
               else
                 {
                   _saveListDishesToDB(result.body.listDishes),
-                  _getListCategories(
-                      prefs, result.body.listDishes, accountModel),
+                  _getListCategories(prefs, result.body.listDishes),
                 }
             });
   }
@@ -108,21 +99,23 @@ class _SplashScreenState extends State<SplashScreen> {
   void _getListCategories(
     SharedPreferences prefs,
     List<DishModel> listDishes,
-    AccountModel accountModel,
   ) async {
     var result = await AppApiService.create().getCategories();
     if (result.isSuccessful) {
       prefs.setString(Constants.LIST_CATEGORIES_KEY,
           listCategoriesResponseModelToJson(result.body));
-      _goToMainScreen(accountModel, listDishes, result.body.categories);
+      _goToMainScreen(listDishes, result.body.categories, prefs);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 
-  void _goToMainScreen(accountModel, List<DishModel> listDishes,
-      List<Category> categories) async {
+  void _goToMainScreen(List<DishModel> listDishes, List<Category> categories,
+      SharedPreferences prefs) async {
+    final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
+    AccountModel accountModel = AccountModel.fromJson(json.decode(accountJson));
+
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -133,13 +126,12 @@ class _SplashScreenState extends State<SplashScreen> {
                 )));
   }
 
-  Future<void> _getListDishesFromDB(
-      AccountModel accountModel, SharedPreferences prefs) async {
+  Future<void> _getListDishesFromDB(SharedPreferences prefs) async {
     List<DishModel> listDishes = await DBProvider.db.getAllDishes();
     ListCategoriesResponseModel categories =
         listCategoriesResponseModelFromJson(
             prefs.getString(Constants.LIST_CATEGORIES_KEY));
-    _goToMainScreen(accountModel, listDishes, categories.categories);
+    _goToMainScreen(listDishes, categories.categories, prefs);
   }
 
   void _saveListDishesToDB(List<DishModel> listDishes) async {
@@ -148,5 +140,13 @@ class _SplashScreenState extends State<SplashScreen> {
       await DBProvider.db.newDish(element);
       print(element);
     });
+  }
+
+  void _updateUserProfile(String token, SharedPreferences prefs) async {
+    var result = await AppApiService.create().getUserProfile(token: token);
+    if (result.isSuccessful) {
+      prefs.setString(Constants.ACCOUNT_MODEL_KEY,
+          jsonEncode(result.body.account.toJson()));
+    }
   }
 }

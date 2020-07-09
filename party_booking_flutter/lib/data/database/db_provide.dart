@@ -24,7 +24,7 @@ class DBProvider {
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute(
-          "CREATE TABLE ListDishes (id TEXT PRIMARY KEY,name TEXT,description TEXT,price INTEGER,discount INTEGER,currency TEXT)");
+          "CREATE TABLE ListDishes (id TEXT PRIMARY KEY,name TEXT,description TEXT,price INTEGER,discount INTEGER,currency TEXT,feature_image TEXT, price_new INTEGER)");
       await db.execute(
           "CREATE TABLE ListCategory (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, dish_id TEXT, category TEXT)");
       await db.execute(
@@ -35,8 +35,8 @@ class DBProvider {
   newDish(DishModel model) async {
     final db = await database;
     var res = await db.rawInsert(
-        "INSERT Into ListDishes (id, name, description, price, discount, currency)"
-        " VALUES ('${model.id}', '${model.name}','${model.description}',${model.price},${model.discount},'${model.currency}')");
+        "INSERT Into ListDishes (id, name, description, price, discount, currency, feature_image, price_new)"
+        " VALUES ('${model.id}', '${model.name}','${model.description}',${model.price},${model.discount},'${model.currency}','${model.featureImage}',${model.priceNew})");
 
     //insert list category
     model.categories.forEach((category) async {
