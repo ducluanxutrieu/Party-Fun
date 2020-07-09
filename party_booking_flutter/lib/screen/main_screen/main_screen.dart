@@ -150,6 +150,7 @@ class _MainScreenState extends State<MainScreen> {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
     }
+    return;
   }
 
   void _initListDishData(List<DishModel> model) {
@@ -176,12 +177,14 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: buildFABAddNewDish(),
       drawer: MainDrawer(accountModel: _accountModel,),
-      body: MainListMenu(
-        accountModel: _accountModel,
-        listMenu: _listMenuFiltered,
-        onRefresh: () {
-          _getListDishes(where: 'body');
-        },
+      body: RefreshIndicator(onRefresh: () => _getListDishes(where: 'body'),
+        child: MainListMenu(
+          accountModel: _accountModel,
+          listMenu: _listMenuFiltered,
+          onRefresh: () {
+            _getListDishes(where: 'body');
+          },
+        ),
       ),
     );
   }

@@ -8,7 +8,7 @@ import 'package:party_booking/data/network/model/list_dishes_response_model.dart
 
 import 'dish_cart.dart';
 
-class MainListMenu extends StatefulWidget {
+class MainListMenu extends StatelessWidget {
   final List<MenuModel> listMenu;
   final AccountModel accountModel;
   final Function onRefresh;
@@ -21,36 +21,25 @@ class MainListMenu extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MainListMenuState createState() => _MainListMenuState();
-}
-
-class _MainListMenuState extends State<MainListMenu> {
-  @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(onRefresh: widget.onRefresh, child: _buildList());
-  }
-
-  Widget _buildList() {
-    List<MenuModel> listMenu = widget.listMenu;
-
     return listMenu.isNotEmpty
         ? ListView.builder(
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: listMenu.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _itemMenu(listMenu[index]);
-            })
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        itemCount: listMenu.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _itemMenu(listMenu[index], context);
+        })
         : Center(
-            child: Lottie.asset(
-              Assets.animBagError,
-              repeat: true,
-            ),
-          );
+      child: Lottie.asset(
+        Assets.animBagError,
+        repeat: true,
+      ),
+    );
   }
 
-  Widget _itemMenu(MenuModel menuModel) {
+  Widget _itemMenu(MenuModel menuModel, BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -60,12 +49,12 @@ class _MainListMenuState extends State<MainListMenu> {
           child: new Text(menuModel.menuName,
               style: new TextStyle(fontSize: 20.0, color: Colors.white)),
         ),
-        _itemGridView(menuModel.listDish)
+        _itemGridView(menuModel.listDish, context)
       ],
     );
   }
 
-  Widget _itemGridView(List<DishModel> dishes) {
+  Widget _itemGridView(List<DishModel> dishes, BuildContext context) {
     return StaggeredGridView.countBuilder(
       scrollDirection: Axis.vertical,
       crossAxisCount:
@@ -73,8 +62,8 @@ class _MainListMenuState extends State<MainListMenu> {
       itemCount: dishes.length,
       itemBuilder: (BuildContext context, int index) => DishCard(
           dishModel: dishes[index],
-          accountModel: widget.accountModel,
-          getListDish: () => widget.onRefresh),
+          accountModel: accountModel,
+          getListDish: () => onRefresh),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
