@@ -120,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     void onLoginPressed() {
       if(_fbKey.currentState.saveAndValidate()){
+        FocusScope.of(context).unfocus();
         String username =
             _fbKey.currentState.fields['username'].currentState.value;
         String password =

@@ -13,6 +13,7 @@ class UpdateProfileRequestModel {
   String fullName;
   String phoneNumber;
   String birthday;
+  String countryCode;
   int gender;
 
   UpdateProfileRequestModel({
@@ -20,6 +21,7 @@ class UpdateProfileRequestModel {
     this.fullName,
     this.phoneNumber,
     this.birthday,
+    this.countryCode,
     this.gender,
   });
 
@@ -28,6 +30,7 @@ class UpdateProfileRequestModel {
   factory UpdateProfileRequestModel.fromJson(Map<String, dynamic> json) => UpdateProfileRequestModel(
     email: json["email"],
     fullName: json["full_name"],
+    countryCode: json['country_code'],
     phoneNumber: json["phone"],
     birthday: json["birthday"],
     gender: json["gender"],
@@ -36,6 +39,7 @@ class UpdateProfileRequestModel {
   Map<String, dynamic> toJson() => {
     "email": email,
     "full_name": fullName,
+    'country_code': countryCode,
     "phone": phoneNumber,
     "birthday": birthday,
     "gender": gender,

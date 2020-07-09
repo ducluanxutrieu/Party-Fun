@@ -4,33 +4,38 @@
 
 import 'dart:convert';
 
-AccountResponseModel accountResponseModelFromJson(String str) => AccountResponseModel.fromJson(json.decode(str));
+AccountResponseModel accountResponseModelFromJson(String str) =>
+    AccountResponseModel.fromJson(json.decode(str));
 
-String accountResponseModelToJson(AccountResponseModel data) => json.encode(data.toJson());
+String accountResponseModelToJson(AccountResponseModel data) =>
+    json.encode(data.toJson());
 
-class AccountResponseModel{
+class AccountResponseModel {
   AccountModel account;
   String message;
 
   AccountResponseModel({
-    this.message, this.account,
+    this.message,
+    this.account,
   });
 
   static AccountResponseModel fromJsonFactory(Map<String, dynamic> json) =>
       AccountResponseModel.fromJson(json);
 
-  factory AccountResponseModel.fromJson(Map<String, dynamic> json) => AccountResponseModel(
-    message: json['message'],
-    account: AccountModel.fromJson(json["data"]),
-  );
+  factory AccountResponseModel.fromJson(Map<String, dynamic> json) =>
+      AccountResponseModel(
+        message: json['message'],
+        account: AccountModel.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    'message': message,
-    "data": account.toJson(),
-  };
+        'message': message,
+        "data": account.toJson(),
+      };
 }
 
-AccountModel accountModelFromJson(String str) => AccountModel.fromJson(json.decode(str));
+AccountModel accountModelFromJson(String str) =>
+    AccountModel.fromJson(json.decode(str));
 
 String accountModelToJson(AccountModel data) => json.encode(data.toJson());
 
@@ -39,13 +44,12 @@ class AccountModel {
   String username;
   String fullName;
   String email;
+  String countryCode;
   int phoneNumber;
-  String birthday;
+  DateTime birthday;
   int gender;
   int role;
   String avatar;
-  String createAt;
-  String updateAt;
   String token;
 
   AccountModel({
@@ -53,13 +57,12 @@ class AccountModel {
     this.username,
     this.fullName,
     this.email,
+    this.countryCode,
     this.phoneNumber,
     this.birthday,
     this.gender,
     this.role,
     this.avatar,
-    this.createAt,
-    this.updateAt,
     this.token,
   });
 
@@ -67,34 +70,32 @@ class AccountModel {
       AccountModel.fromJson(json);
 
   factory AccountModel.fromJson(Map<String, dynamic> json) => AccountModel(
-    id: json["_id"],
-    username: json["username"],
-    fullName: json["full_name"],
-    email: json["email"],
-    phoneNumber: json["phone"],
-    birthday: json["birthday"],
-    gender: json["gender"],
-    role: json["role"],
-    avatar: json["avatar"],
-    createAt: json["createAt"],
-    updateAt: json["updateAt"],
-    token: json["token"],
-  );
+        id: json["_id"],
+        username: json["username"],
+        fullName: json["full_name"],
+        email: json["email"],
+        countryCode: json['country_code'],
+        phoneNumber: json["phone"],
+        birthday: DateTime.parse(json["birthday"]),
+        gender: json["gender"],
+        role: json["role"],
+        avatar: json["avatar"],
+        token: json["token"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "username": username,
-    "full_name": fullName,
-    "email": email,
-    "phone": phoneNumber,
-    "birthday": birthday,
-    "gender": gender,
-    "role": role,
-    "avatar": avatar,
-    "createAt": createAt,
-    "updateAt": updateAt,
-    "token": token,
-  };
+        "_id": id,
+        "username": username,
+        "full_name": fullName,
+        "email": email,
+        'country_code': countryCode,
+        "phone": phoneNumber,
+        "birthday": birthday.toIso8601String(),
+        "gender": gender,
+        "role": role,
+        "avatar": avatar,
+        "token": token,
+      };
 }
 
 enum UserRole {
@@ -104,19 +105,14 @@ enum UserRole {
   Admin,
 }
 
-enum UserGender{
+enum UserGender {
   Other,
   Male,
   Female,
 }
 
-enum Role{
-  BlockedUser,
-  Customer,
-  Staff,
-  Admin
-}
+enum Role { BlockedUser, Customer, Staff, Admin }
 
-String getGenderStringFromIndex(int index){
+String getGenderStringFromIndex(int index) {
   return UserGender.values[index].toString().replaceAll("UserGender.", "");
 }
