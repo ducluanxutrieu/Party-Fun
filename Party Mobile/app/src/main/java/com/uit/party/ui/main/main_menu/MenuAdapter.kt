@@ -56,7 +56,7 @@ class MenuAdapter : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
         val listDrink = ArrayList<DishModel>()
         val listDessert = ArrayList<DishModel>()
         for (row in dishes) {
-            when (row.type) {
+            when (row.categories?.get(0) ?: "") {
                 "Holiday Offers" -> listHolidayOffers.add(row)
                 "First Dishes" -> listFirstDishes.add(row)
                 "Main Dishes" -> listMainDishes.add(row)

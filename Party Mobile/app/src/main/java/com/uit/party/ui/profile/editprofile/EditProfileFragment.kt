@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentEditProfileBinding
+import com.uit.party.model.UserGender
 
 @Suppress("DEPRECATION")
 class EditProfileFragment : Fragment(){
@@ -39,9 +40,9 @@ class EditProfileFragment : Fragment(){
             }
         }
 
-        when (mViewModel.account?.sex){
-            "Male" -> binding.rbMale.isChecked = true
-            "Female" -> binding.rbFemale.isChecked = true
+        when (mViewModel.account?.gender){
+            UserGender.Male.ordinal -> binding.rbMale.isChecked = true
+            UserGender.Female.ordinal -> binding.rbFemale.isChecked = true
         }
     }
 }

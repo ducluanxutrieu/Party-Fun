@@ -21,7 +21,7 @@ interface ServiceRetrofit {
         @Body body: RegisterModel
     ): Call<AccountResponse>
 
-    @POST("user/signout")
+    @GET("user/signout")
     fun logout(
         @Header("authorization") token: String
     ): Call<BaseResponse>
@@ -51,6 +51,11 @@ interface ServiceRetrofit {
     fun getProfile(
         @Header("authorization") token: String
     ): Call<AccountResponse>
+
+    @GET("/user/get_history_cart")
+    fun getHistoryBooking(
+        @Header("authorization") token: String
+    ): Call<GetHistoryCartResponse>
 
     @POST("user/updateuser")
     fun updateUser(
@@ -85,7 +90,7 @@ interface ServiceRetrofit {
         @Body body: UpdateDishRequestModel
         ): Call<UpdateDishResponse>
 
-    @GET("product/finddish")
+    @GET("product/dishs")
     fun getListDishes(
         @Header("authorization") token: String
     ): Call<DishesResponse>

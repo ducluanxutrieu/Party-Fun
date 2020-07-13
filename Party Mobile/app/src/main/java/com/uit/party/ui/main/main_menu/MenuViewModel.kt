@@ -5,10 +5,8 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
-import com.uit.party.model.Account
-import com.uit.party.model.BaseResponse
-import com.uit.party.model.DishModel
-import com.uit.party.model.DishesResponse
+import com.uit.party.model.*
+import com.uit.party.model.UserRole
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel
@@ -64,7 +62,7 @@ class MenuViewModel : ViewModel(){
                     mShowLoading.set(false)
                     onComplete(true)
                     if (response.isSuccessful){
-                        val dishes = response.body()?.lishDishs
+                        val dishes = response.body()?.listDishes
                         if (dishes != null){
                             listMenu = dishes
                             mMenuAdapter.setData(listMenu)
@@ -103,6 +101,6 @@ class MenuViewModel : ViewModel(){
     private fun checkAdmin(): Boolean {
         val role =
             SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
-        return role.equals("nhanvien")
+        return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
     }
 }

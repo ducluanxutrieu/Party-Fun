@@ -77,7 +77,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
         mPrice.set(mDishModel?.price)
         mPriceText = mDishModel?.price.toString()
 
-        mTypeText = mDishModel?.type.toString()
+        mTypeText = mDishModel?.categories.toString()
 
         mShowUploadImageDish.set(View.GONE)
         mEnableSendButton.set(true)

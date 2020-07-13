@@ -19,12 +19,13 @@ data class DishModel(
     @SerializedName("_id") val _id: String? = null,
     @SerializedName("name") val name: String? = null,
     @SerializedName("price") val price: String? = null,
+    @SerializedName("price_new") val newPrice: String? = null,
+    @SerializedName("discount") val discount: Int? = 0,
     @SerializedName("description") val description: String? = null,
-    @SerializedName("type") val type: String? = null,
+    @SerializedName("categories") val categories: ArrayList<String>? = null,
     @SerializedName("image") val image: ArrayList<String>? = null,
     @SerializedName("updateAt") val updateAt: String? = null,
-    @SerializedName("createAt") val createAt: String? = null,
-    @SerializedName("rate") val rate: RateModel? = null
+    @SerializedName("createAt") val createAt: String? = null
 ) : Serializable
 
 data class RateModel(

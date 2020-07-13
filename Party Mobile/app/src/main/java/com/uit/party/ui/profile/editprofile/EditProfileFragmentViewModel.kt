@@ -72,8 +72,8 @@ class EditProfileFragmentViewModel : ViewModel() {
             emailValid = true
             checkEnableButtonUpdate()
         }
-        if (!account?.phoneNumber.isNullOrEmpty()) {
-            mPhoneNumber.set(account?.phoneNumber)
+        if (account?.phone != null) {
+            mPhoneNumber.set(account.phone.toString())
             phoneNumberValid = true
             checkEnableButtonUpdate()
         }

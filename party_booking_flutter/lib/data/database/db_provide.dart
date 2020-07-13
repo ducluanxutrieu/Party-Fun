@@ -49,7 +49,6 @@ class DBProvider {
       await db.rawInsert(
           "INSERT Into ListImages (dish_id, image) VALUES ('${model.id}', '$image')");
     });
-    print("insert dish to db" + res.toString());
     return res;
   }
 
@@ -99,8 +98,6 @@ class DBProvider {
     for (int index = 0; index < listDishes.length; index++) {
       var resCategories = await db.query("ListCategory",
           where: "dish_id = ? ", whereArgs: [listDishes[index].id]);
-      print("**************");
-      print(resCategories);
       List<CategoryDb> categories =
           resCategories.map((c) => CategoryDb.fromJson(c)).toList();
 

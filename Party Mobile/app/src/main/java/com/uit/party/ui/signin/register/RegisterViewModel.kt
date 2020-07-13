@@ -298,19 +298,17 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     fun onRegisterClicked(view: View) {
         val model =
             RegisterModel(fullNameText, usernameText, emailText, phoneNumberText, passwordText)
-        register(model) { registerResponse ->
-            if (registerResponse?.success!!) {
+        register(model) { isSuccess ->
+            if (isSuccess) {
                 ToastUtil.showToast(StringUtil.getString(R.string.register_successful))
                 view.findNavController().popBackStack()
-            } else {
-                ToastUtil.showToast("Register false: ${registerResponse.message}")
             }
         }
     }
 
     private fun register(
         model: RegisterModel,
-        onComplete: (AccountResponse?) -> Unit
+        onComplete: (Boolean) -> Unit
     ) {
         mShowLoading.set(true)
         serviceRetrofit.register(model)
@@ -328,7 +326,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                     mShowLoading.set(false)
                     val repo = response.body()
                     if (repo != null) {
-                        onComplete(repo)
+                        onComplete(true)
                     } else {
                         try {
                             val jObjError = JSONObject(response.errorBody()!!.string())
@@ -340,6 +338,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
                         } catch (e: Exception) {
                             Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
                         }
+                        onComplete(false)
                     }
                 }
             })

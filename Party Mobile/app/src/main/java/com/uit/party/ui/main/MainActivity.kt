@@ -75,8 +75,8 @@ class MainActivity : AppCompatActivity(){
 
     private fun setNavHeader(){
         val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
-        if (!account?.imageurl.isNullOrEmpty()) {
-            Glide.with(applicationContext).load(account?.imageurl).apply { RequestOptions.circleCropTransform() }
+        if (!account?.avatar.isNullOrEmpty()) {
+            Glide.with(applicationContext).load(account?.avatar).apply { RequestOptions.circleCropTransform() }
                 .into(headerBinding.ivAvatar)
         }
 

@@ -17,51 +17,48 @@ class RegisterModel(
 ) : Serializable
 
 class AccountResponse(
-    @SerializedName("account") val account: Account? = null
+    @SerializedName("data") val account: Account? = null
 ) : BaseResponse()
 
 class Account {
     @SerializedName("_id")
-    var _id: String? = null
-    @SerializedName("email")
-    var email: String? = null
-    @SerializedName("fullName")
-    var fullName: String? = null
-    @SerializedName("phoneNumber")
-    var phoneNumber: String? = null
+    val id : String ?= null
+
+    @SerializedName("full_name")
+    val fullName : String  ?= null
+
     @SerializedName("username")
-    var username: String? = null
+    val username : String  ?= null
+
+    @SerializedName("email")
+    val email : String ?= null
+
+    @SerializedName("phone")
+    val phone : Int ?= 0
+
     @SerializedName("birthday")
-    var birthday: String? = null
-    @SerializedName("sex")
-    var sex: String? = null
-    @SerializedName("token")
-    var token: String? = null
+    val birthday : String ?= null
+
+    @SerializedName("gender")
+    val gender : Int ?= 0
+
     @SerializedName("role")
-    var role: String? = null
-    @SerializedName("imageurl")
-    var imageurl: String? = null
-    @SerializedName("createAt")
-    val createAt: String? = null
-    @SerializedName("userCart")
-    var userCart: ArrayList<UserCart>? = null
+    val role : Int ?= 0
+
+    @SerializedName("avatar")
+    val avatar : String ?= null
+
+    @SerializedName("country_code")
+    val countryCode : Int ?= 0
+
+    @SerializedName("token")
+    val token : String ?= null
 }
 
-class UserCart(
-    @SerializedName("_id") val _id: String? = null,
-    @SerializedName("lishDishs") val listDishesCart: ArrayList<ListDishesCart>? = null,
-    @SerializedName("dateParty") val dateParty: String? = null,
-    @SerializedName("numbertable") val numbertable: Int? = 0,
-    @SerializedName("username") val username: String? = null,
-    @SerializedName("createAt") val createAt: String? = null,
-    @SerializedName("paymentstatus") val paymentstatus: Boolean? = false,
-    @SerializedName("totalMoney") val totalMoney: Int? = 0,
-    @SerializedName("userpayment") val userpayment: String? = null,
-    @SerializedName("paymentAt") val paymentAt: String? = null
-)
+internal enum class UserRole {
+    UserDeleted, Customer, Staff, Admin
+}
 
-class ListDishesCart(
-    @SerializedName("_id") val _id: String,
-    @SerializedName("numberDish") val numberDish: Int,
-    @SerializedName("name") val name: String
-)
+internal enum class UserGender {
+    Other, Male, Female
+}

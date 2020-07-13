@@ -6,14 +6,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemDishUserCartBinding
-import com.uit.party.model.ListDishesCart
+import com.uit.party.model.DishCart
 
 class ItemDishUserCartAdapter : RecyclerView.Adapter<ItemDishUserCartAdapter.UserCardViewHolder>(){
-    private val mListDishes =  ArrayList<ListDishesCart>()
+    private val mListDishes =  ArrayList<DishCart>()
 
     class UserCardViewHolder(private val binding: ItemDishUserCartBinding): RecyclerView.ViewHolder(binding.root){
-        fun bindData(dishCart: ListDishesCart) {
-            binding.tvDishesNumber.text = dishCart.numberDish.toString()
+        fun bindData(dishCart: DishCart) {
+            binding.tvDishesNumber.text = dishCart.count.toString()
             binding.tvNameDish.text = dishCart.name
         }
     }
@@ -31,7 +31,7 @@ class ItemDishUserCartAdapter : RecyclerView.Adapter<ItemDishUserCartAdapter.Use
         holder.bindData(mListDishes[position])
     }
 
-    fun setData(items: ArrayList<ListDishesCart>) {
+    fun setData(items: ArrayList<DishCart>) {
         mListDishes.clear()
         mListDishes.addAll(items)
         notifyDataSetChanged()

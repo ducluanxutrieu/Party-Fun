@@ -173,11 +173,9 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
 
                 override fun onResponse(call: Call<BillModel>, response: Response<BillModel>) {
                     mShowLoading.set(false)
-                    if (response.code() == 200){
+                    if (response.isSuccessful){
                         response.body()?.message?.let { ToastUtil.showToast(it) }
-                        if (response.body()?.success == true){
-                            view.findNavController().navigate(R.id.action_CartDetailFragment_to_BookingSuccessFragment)
-                        }
+                        view.findNavController().navigate(R.id.action_CartDetailFragment_to_BookingSuccessFragment)
                     }else{
                         ToastUtil.showToast(response.message())
                     }

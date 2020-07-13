@@ -80,7 +80,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _getListDishes(String token, SharedPreferences prefs) async {
-    BaseResponseModel model;
     await AppApiService.create()
         .getListDishes(token: token)
         .catchError((onError) {

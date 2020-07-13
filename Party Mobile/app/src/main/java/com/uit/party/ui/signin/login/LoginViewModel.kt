@@ -57,7 +57,7 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    private fun startMainActivity(view: View){
+    private fun startMainActivity(view: View) {
         val context = view.context as SignInActivity
         val intent = Intent(context, MainActivity::class.java)
         context.startActivity(intent)
@@ -76,18 +76,9 @@ class LoginViewModel : ViewModel() {
                     model: Response<AccountResponse>
                 ) {
                     val repos = model.body()
-                    if (repos != null) {
-                        try {
-                            if (repos.success) {
-                                saveToMemory(repos)
-                                onComplete("Success")
-                            } else {
-                                repos.message?.let { ToastUtil.showToast(it) }
-                            }
-                        } catch (e: java.lang.Exception) {
-                            onComplete(e.message)
-                        }
-
+                    if (repos != null && model.isSuccessful) {
+                        saveToMemory(repos)
+                        onComplete("Success")
                     } else {
                         try {
                             val jObjError = JSONObject(model.errorBody()!!.string())
@@ -190,7 +181,7 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun onForgotPasswordClicked(view: View){
+    fun onForgotPasswordClicked(view: View) {
         view.findNavController().navigate(R.id.action_LoginFragment_to_ResetPasswordFragment)
     }
 

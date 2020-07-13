@@ -9,11 +9,13 @@ import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
+import com.uit.party.model.UserGender
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
+import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.ToastUtil
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
@@ -41,10 +43,10 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
     init {
         mName.set(mAccount?.fullName)
         mEmail.set(mAccount?.email)
-        mSex.set(mAccount?.sex)
-        mBirthDay.set(mAccount?.birthday)
-        mAvatar.set(mAccount?.imageurl)
-        mMobile.set(mAccount?.phoneNumber)
+        mSex.set(UserGender.values()[mAccount?.gender ?: 0].name)
+        mBirthDay.set(TimeFormatUtil.formatDateToClient(mAccount?.birthday))
+        mAvatar.set(mAccount?.avatar)
+        mMobile.set(mAccount?.phone.toString())
         mUsername.set(mAccount?.username)
     }
 

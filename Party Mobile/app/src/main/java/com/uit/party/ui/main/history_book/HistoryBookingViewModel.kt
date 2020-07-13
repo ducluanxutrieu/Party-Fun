@@ -4,13 +4,13 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.library.baseAdapters.BR
-import com.uit.party.data.GetData.getUserProfile
-import com.uit.party.model.UserCart
+import com.uit.party.data.GetData.getHistoryBooking
+import com.uit.party.model.CartItem
 
 class HistoryBookingViewModel : BaseObservable(){
     val mShowLoading = ObservableBoolean(false)
     @get: Bindable
-    var mListOrdered = ArrayList<UserCart>()
+    var mListOrdered = ArrayList<CartItem>()
     private set(value) {
         field = value
         notifyPropertyChanged(BR.mListOrdered)
@@ -20,10 +20,10 @@ class HistoryBookingViewModel : BaseObservable(){
 
     init {
         mShowLoading.set(true)
-        getUserProfile{account ->
+        getHistoryBooking{historyBooking ->
             mShowLoading.set(false)
-            if (account?.userCart != null){
-                mListOrdered = account.userCart!!
+            if (historyBooking?.cartItems != null){
+                mListOrdered = historyBooking.cartItems
             }
         }
     }

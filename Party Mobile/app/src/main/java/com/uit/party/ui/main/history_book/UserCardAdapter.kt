@@ -8,23 +8,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemUserCardBinding
-import com.uit.party.model.UserCart
+import com.uit.party.model.CartItem
 import com.uit.party.util.BindableAdapter
 import com.uit.party.util.TimeFormatUtil
 
-class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>(), BindableAdapter<UserCart>{
-    private val mListUserCart =  ArrayList<UserCart>()
+class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>(), BindableAdapter<CartItem>{
+    private val mListUserCart =  ArrayList<CartItem>()
 
     class UserCardViewHolder(private val binding: ItemUserCardBinding): RecyclerView.ViewHolder(binding.root){
         private val itemDishAdapter = ItemDishUserCartAdapter()
         private var isExpand = false
 
         @SuppressLint("SetTextI18n")
-        fun bindData(userCart: UserCart) {
+        fun bindData(userCart: CartItem) {
             binding.tvTimeBooking.text = TimeFormatUtil.formatTime12hToClient(userCart.dateParty)
-            binding.tvNumberTableBooking.text = userCart.numbertable.toString()
-            binding.tvTotalPrice.text = "${userCart.totalMoney} VND"
-            userCart.listDishesCart?.let { itemDishAdapter.setData(it) }
+            binding.tvNumberTableBooking.text = userCart.table.toString()
+            binding.tvTotalPrice.text = "${userCart.total} VND"
+            itemDishAdapter.setData(userCart.dishes)
             binding.rvListDishes.adapter = itemDishAdapter
             binding.rvListDishes.hasFixedSize()
 
@@ -53,7 +53,7 @@ class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>
         holder.bindData(mListUserCart[position])
     }
 
-    override fun setData(items: ArrayList<UserCart>) {
+    override fun setData(items: ArrayList<CartItem>) {
         mListUserCart.clear()
         mListUserCart.addAll(items)
         notifyDataSetChanged()

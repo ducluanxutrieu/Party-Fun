@@ -14,6 +14,7 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.uit.party.R
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
+import com.uit.party.model.UserRole
 import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.rxbus.RxBus
@@ -50,7 +51,7 @@ class DetailDishFragment : Fragment() {
     private fun checkIsStaff(): Boolean {
         val role =
             SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
-        return role.equals("nhanvien")
+        return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
     }
 
     private fun setupToolbar() {

@@ -12,8 +12,6 @@ import com.uit.party.R
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
-import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
 import com.uit.party.util.rxbus.RxBus
@@ -57,10 +55,11 @@ class DetailDishViewModel : BaseObservable() {
         }
         mAdapter.setData(listImages)
         mPrice.set("Price: ${mDishModel?.price} VND")
-        setRatingContent()
+        //TODO change rating
+//        setRatingContent()
     }
 
-    private fun setRatingContent() {
+    /*private fun setRatingContent() {
         mDishModel?.rate?.average?.let { mRatingShow.set(it) }
         mListRates = mDishModel?.rate?.listRates ?: ArrayList()
         val account = SharedPrefs()[USER_INFO_KEY, Account::class.java]
@@ -71,7 +70,7 @@ class DetailDishViewModel : BaseObservable() {
                 break
             }
         }
-    }
+    }*/
 
     fun onSubmitClicked() {
         val requestModel =
@@ -113,7 +112,8 @@ class DetailDishViewModel : BaseObservable() {
                         val repo = response.body()
                         if (repo != null) {
                             mDishModel = repo.dish
-                            setRatingContent()
+                            //TODO change rating
+//                            setRatingContent()
                             RxBus.publish(
                                 RxEvent.AddDish(
                                     repo.dish,

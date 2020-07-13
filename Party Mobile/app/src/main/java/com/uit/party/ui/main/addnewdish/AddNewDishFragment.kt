@@ -44,7 +44,7 @@ class AddNewDishFragment : Fragment() {
         if (mViewModel.mDishModel != null) {
             mViewModel.initData()
             for (i in Thumbnail.values().indices){
-                if (Thumbnail.values()[i].dishName == mViewModel.mDishModel?.type){
+                if (Thumbnail.values()[i].dishName == mViewModel.mDishModel?.categories?.get(0) ?: "Main Dish"){
                     val spinnerPosition = mSpinnerAdapter.getPosition(Thumbnail.values()[i])
                     mBinding.spinnerDishType.setSelection(spinnerPosition)
                 }

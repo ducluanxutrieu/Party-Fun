@@ -47,7 +47,7 @@ class DishRatingAdapter : RecyclerView.Adapter<DishRatingAdapter.DishRatingViewH
             binding.tvUsernameRating.text = listRate.username
             binding.tvContentRating.text = listRate.content
             binding.ratingBar.rating = listRate.scorerate ?: 5f
-            binding.tvTimeRating.text = TimeFormatUtil.formatDate12hToClient(listRate.createAt)
+            binding.tvTimeRating.text = TimeFormatUtil.formatDateToClient(listRate.createAt)
         }
     }
 }
