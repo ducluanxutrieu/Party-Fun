@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:party_booking/data/network/model/get_history_cart_model.dart';
@@ -16,22 +17,26 @@ class DetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     TextStyle textStyle = TextStyle(
         fontFamily: 'Montserrat', fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black87);
+    double sizeWidth = MediaQuery.of(context).size.width - 30;
 
-    return Container(
-      width: double.infinity,
+    return Card(
+      elevation: 10,
       margin: EdgeInsets.fromLTRB(20, 10, 0, 10),
-      child: Card(
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
-        ),
-        child: Expanded(
-          child: Container(
-            margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
-            child: Row(
-              children: <Widget>[
-                Column(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+      ),
+      child: Container(
+        margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+        child: SingleChildScrollView(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            verticalDirection: VerticalDirection.down,
+            children: <Widget>[
+              Container(
+                width: sizeWidth * 0.55,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('Total bill'),
@@ -77,13 +82,13 @@ class DetailHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                Spacer(),
-                Container(
-                    width: 190,
-                    height: 190,
-                    child: Lottie.asset(Assets.animBillManagement)),
-              ],
-            ),
+              ),
+              Spacer(),
+              Container(
+                  width: sizeWidth * 0.45,
+                  height: 190,
+                  child: Lottie.asset(Assets.animBillManagement)),
+            ],
           ),
         ),
       ),
