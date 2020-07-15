@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 
 class FormModifyDish extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      TextStyle mStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
       double sizeWidth = (MediaQuery.of(context).size.width - 30);
 
     return Column(
@@ -28,7 +28,7 @@ class FormModifyDish extends StatelessWidget {
           ),
           child: FormBuilderTextField(
               attribute: 'description',
-              style: mStyle,
+              style: kPrimaryTextStyle,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(

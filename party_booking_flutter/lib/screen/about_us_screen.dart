@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:party_booking/src/constant.dart';
+import 'package:party_booking/res/constants.dart';
 
 class AboutUsScreen extends StatefulWidget {
   @override

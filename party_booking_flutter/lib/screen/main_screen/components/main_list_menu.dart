@@ -6,7 +6,7 @@ import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 
-import 'dish_cart.dart';
+import 'dish_card.dart';
 
 class MainListMenu extends StatelessWidget {
   final List<MenuModel> listMenu;

@@ -7,7 +7,7 @@ import 'package:party_booking/data/network/model/list_dishes_response_model.dart
 import 'package:party_booking/screen/main_screen/components/add_to_cart_dialog.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import '../../dish_detail_screen.dart';
+import '../../dish_detail/dish_detail_screen.dart';
 
 class DishCard extends StatelessWidget {
   final DishModel dishModel;
@@ -41,13 +41,8 @@ class DishCard extends StatelessWidget {
                     IconButton(
                       icon: Icon(FontAwesomeIcons.cartPlus),
                       onPressed: () {
-                        if (ScopedModel.of<CartModel>(context,
-                                        rebuildOnChange: true)
-                                    .calculateTotalItem() %
-                                3 ==
-                            0) {
-                          AddToCartDialog.addDishToCartDialog(context);
-                        }
+                        int totalItem = ScopedModel.of<CartModel>(context, rebuildOnChange: true).calculateTotalItem();
+                        AddToCartDialog.addDishToCartAnimation(context, totalItem);
                         model.addProduct(dishModel);
                       },
                     ),
@@ -95,11 +90,15 @@ class DishCard extends StatelessWidget {
         children: <Widget>[
           Text(
             price,
-            style: new TextStyle(fontSize: 17.0, color: Colors.black, decoration: TextDecoration.lineThrough),
+            style: new TextStyle(
+                fontSize: 17.0,
+                color: Colors.black,
+                decoration: TextDecoration.lineThrough),
           ),
           Text(
             priceNew,
-            style: new TextStyle(fontSize: 20.0, color: Colors.red, fontWeight: FontWeight.bold),
+            style: new TextStyle(
+                fontSize: 20.0, color: Colors.red, fontWeight: FontWeight.bold),
           ),
         ],
       );

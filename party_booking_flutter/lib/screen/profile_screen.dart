@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 import 'change_password_screen.dart';
-import 'edit_profile_screen/edit_profile_screen.dart';
+import 'edit_profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final AccountModel mAccountModel;

@@ -12,7 +12,7 @@ import 'package:party_booking/data/network/model/update_profile_request_model.da
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/data/network/service/app_image_api_service.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/edit_profile_screen/edit_profile_form.dart';
+import 'package:party_booking/screen/edit_profile/edit_profile_form.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';

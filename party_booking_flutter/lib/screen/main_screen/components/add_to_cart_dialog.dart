@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:party_booking/res/assets.dart';
 
-import '../../cart_detail_screen.dart';
+import '../../cart_detail/cart_detail_screen.dart';
 
-class AddToCartDialog{
-  static void addDishToCartDialog(BuildContext context) {
+class AddToCartDialog {
+  static void addDishToCartAnimation(BuildContext context, int numItem) {
     showDialog(
         context: context,
         builder: (bCtx) {
-          Timer(Duration(milliseconds: 700), () {
+          Timer(Duration(milliseconds: 1000), () {
             Navigator.pop(context);
-            dialog(context);
+            if(numItem % 4 == 0 && numItem != 0)
+              dialogAskForReviewCart(context);
           });
           return AlertDialog(
             backgroundColor: Colors.white.withOpacity(0.5),
@@ -25,32 +26,17 @@ class AddToCartDialog{
             ),
             content: Container(
               width: MediaQuery.of(bCtx).size.width * 2 / 3,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Lottie.asset(
-                        Assets.animAddToCart,
-                        repeat: true,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-                ),
+              padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
+              child: Lottie.asset(
+                Assets.animAddToCart,
+                repeat: true,
               ),
             ),
           );
         });
   }
 
-static void dialog(BuildContext context) {
+  static void dialogAskForReviewCart(BuildContext context) {
     showDialog(
         context: context,
         builder: (bCtx) {
@@ -63,40 +49,29 @@ static void dialog(BuildContext context) {
             ),
             content: Container(
               width: MediaQuery.of(bCtx).size.width * 2 / 3,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        'Added to your Cart',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Do you want to check your Cart ?',
-                        style: TextStyle(
+              padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Added to your Cart',
+                      style: TextStyle(
                           fontFamily: 'Montserrat',
-                          fontSize: 18,
-                        ),
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      'Do you want to check your Cart ?',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 18,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -114,17 +89,15 @@ static void dialog(BuildContext context) {
         });
   }
 
-    static Widget _actionButton(String text, Function handle) {
+  static Widget _actionButton(String text, Function handle) {
     return FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.green,
         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         onPressed: handle,
         child: Text(
           text,
           textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.green, fontSize: 20),
         ));
   }
 }

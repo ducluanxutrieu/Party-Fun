@@ -90,6 +90,7 @@ abstract class AppApiService extends ChopperService {
   @Get(path: 'user/get_history_cart')
   Future<Response<GetHistoryCartModel>> getUserHistory({
     @Header('authorization') String token,
+    @Query('page') int page,
   });
 
   @Post(path: 'product/book')

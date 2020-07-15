@@ -32,7 +32,7 @@ class MainDrawer extends StatelessWidget {
           child: UserAccountsDrawerHeader(
             accountName: Text(
               _accountModel.fullName ??= "",
-              style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+              style: kPrimaryTextStyle,
             ),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(_accountModel.avatar ??= ""),
@@ -40,7 +40,7 @@ class MainDrawer extends StatelessWidget {
             ),
             accountEmail: Text(
               _accountModel.email ??= "",
-              style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0),
+              style: kPrimaryTextStyle.copyWith(fontSize: 15),
             ),
             onDetailsPressed: () => _goToProfile(context),
           ),

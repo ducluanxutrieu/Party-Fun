@@ -14,6 +14,7 @@ class Assets {
   static String get animAddToCart => 'assets/jsons/addtocart.json';
   static String get animBillManagement => 'assets/jsons/pagseguros-billing-management.json';
   static String get animLoading => 'assets/jsons/loading-paperplane.json';
+  static String get animNoCartItem => 'assets/jsons/empty_cart.json';
 
   //icon
   static String get icLoadMore => 'assets/icons/more.svg';

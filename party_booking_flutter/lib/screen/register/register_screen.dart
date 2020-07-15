@@ -15,7 +15,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   int _stateRegisterButton = 0;
   String _countryCode = '+84';

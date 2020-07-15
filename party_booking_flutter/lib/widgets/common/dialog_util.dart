@@ -10,7 +10,6 @@ import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DialogUTiu {
-  static TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   static final myController = TextEditingController();
 
   static Future<bool> showDialogRating(BuildContext context, String dishId, String rateId) async {
@@ -96,7 +95,7 @@ class DialogUTiu {
         child: Text(
           text.toUpperCase(),
           textAlign: TextAlign.center,
-          style: style.copyWith(
+          style: kPrimaryTextStyle.copyWith(
             color: Colors.green,
             fontWeight: FontWeight.bold,
             fontSize: 18

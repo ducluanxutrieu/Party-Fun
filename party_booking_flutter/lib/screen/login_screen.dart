@@ -25,7 +25,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   int _stateLoginButton = 0;
 

@@ -5,23 +5,42 @@ import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/get_history_cart_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/res/custom_icons_icons.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'history_order_detail/history_order_detail_screen.dart';
 
-class HistoryOrderScreen extends StatelessWidget {
-  Future<List<UserCart>> _getHistoryBooking() async {
+class HistoryOrderScreen extends StatefulWidget {
+  @override
+  _HistoryOrderScreenState createState() => _HistoryOrderScreenState();
+}
+
+class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
+  int currentPage = 0;
+  int totalPage = -1;
+  List<UserCart> listUserCart = List<UserCart>();
+
+  _getHistoryBooking() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.USER_TOKEN);
-    var result = await AppApiService.create().getUserHistory(token: token);
+    currentPage++;
+    var result = await AppApiService.create()
+        .getUserHistory(token: token, page: currentPage);
     if (result.isSuccessful) {
-        return result.body.data.userCarts;
+      totalPage = result.body.data.totalPage;
+      setState(() => {listUserCart.addAll(result.body.data.userCarts)});
+      print(listUserCart.length);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
-      return null;
     }
+  }
+
+  @override
+  void initState() {
+    _getHistoryBooking();
+    super.initState();
   }
 
   @override
@@ -32,17 +51,10 @@ class HistoryOrderScreen extends StatelessWidget {
         backgroundColor: Colors.green,
         title: Text('Order History'),
       ),
-      body: FutureBuilder<List<UserCart>>(
-        future: _getHistoryBooking(),
-        builder: (BuildContext context, AsyncSnapshot<List<UserCart>> snapshot) {
-          if(snapshot.hasData){
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-                return _buildItemCart(snapshot.data[index], context);
-            },
-          );
-          }else return SizedBox();
+      body: ListView.builder(
+        itemCount: ((listUserCart.length == 0 ? -1 : listUserCart.length) + 1),
+        itemBuilder: (context, index) {
+          return _locationItem(index, context);
         },
       ),
     );
@@ -78,5 +90,29 @@ class HistoryOrderScreen extends StatelessWidget {
             : SizedBox(),
       ),
     );
+  }
+
+  Widget _locationItem(int index, BuildContext context) {
+    if (index == listUserCart.length &&
+        totalPage != -1 &&
+        currentPage < totalPage) {
+      return Container(
+        height: 40,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: InkWell(
+            onTap: () {
+              print(currentPage);
+              _getHistoryBooking();
+            },
+            child: Icon(
+              CustomIcons.ic_more,
+              size: 35,
+            )),
+      );
+    } else {
+      if(index == listUserCart.length && currentPage == totalPage)
+        return SizedBox();
+      return _buildItemCart(listUserCart[index], context);
+    }
   }
 }

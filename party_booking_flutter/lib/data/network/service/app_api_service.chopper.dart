@@ -131,10 +131,13 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<GetHistoryCartModel>> getUserHistory({String token}) {
+  Future<Response<GetHistoryCartModel>> getUserHistory(
+      {String token, int page}) {
     final $url = 'user/get_history_cart';
+    final $params = <String, dynamic>{'page': page};
     final $headers = {'authorization': token};
-    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    final $request = Request('GET', $url, client.baseUrl,
+        parameters: $params, headers: $headers);
     return client.send<GetHistoryCartModel, GetHistoryCartModel>($request);
   }
 

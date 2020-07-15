@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/res/constants.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String mHindText;
@@ -21,13 +22,12 @@ class TextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle mStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
     return FormBuilderTextField(
         attribute: mAttribute,
         obscureText: mShowObscureText,
         readOnly: readOnly,
         maxLines: 1,
-        style: mStyle,
+        style: kPrimaryTextStyle,
         keyboardType: mTextInputType,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(

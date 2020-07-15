@@ -37,7 +37,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       format: DateFormat(Constants.DATE_TIME_FORMAT_SERVER),
-      style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+      style: kPrimaryTextStyle,
       decoration: InputDecoration(
           labelText: 'Your booking Date',
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -57,7 +57,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       // initialValue: 'Male',
       hint: Text(
         'Number Tables',
-        style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+        style: kPrimaryTextStyle,
       ),
       validators: [FormBuilderValidators.required()],
       items: List.generate(15, (generator) => generator + 1)

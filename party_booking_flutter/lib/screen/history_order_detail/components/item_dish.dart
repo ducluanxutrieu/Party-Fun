@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/get_history_cart_model.dart';
-import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/screen/dish_detail_screen.dart';
+import 'package:party_booking/res/util_functions.dart';
 
 class ItemDish extends StatelessWidget {
   const ItemDish({
@@ -22,7 +20,7 @@ class ItemDish extends StatelessWidget {
       color: Colors.white70,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
-        onTap: () => _goToDishDetail(dish.id, context),
+        onTap: () => UtilFunction.goToDishDetail(dish.id, context),
         contentPadding: EdgeInsets.all(10),
         title: Text(
           dish.name,
@@ -44,17 +42,5 @@ class ItemDish extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _goToDishDetail(String dishId, BuildContext context) async {
-    DishModel dishModel = await DBProvider.db.getDish(dishId);
-    print(dishId);
-    print(dishModel);
-    if (dishModel != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DishDetailScreen(dishModel: dishModel)));
-    }
   }
 }

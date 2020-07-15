@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:party_booking/res/constants.dart';
 
 class ImageList extends StatefulWidget {
   final List<String> oldImages;
@@ -42,7 +43,7 @@ class _ImageListState extends State<ImageList> {
         ),
         Text(
           widget.isOldImage ? 'Old Images' : 'New Images',
-          style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+          style: kPrimaryTextStyle,
         ),
         ConstrainedBox(
           constraints: BoxConstraints(

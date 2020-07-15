@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:party_booking/res/constants.dart';
 
 class PickImageButton extends StatelessWidget {
   final Function loadAssets;
@@ -7,7 +8,6 @@ class PickImageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle mStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -18,7 +18,7 @@ class PickImageButton extends StatelessWidget {
           child: Text(
             'Pick Dish Image',
             textAlign: TextAlign.center,
-            style: mStyle.copyWith(
+            style: kPrimaryTextStyle.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),

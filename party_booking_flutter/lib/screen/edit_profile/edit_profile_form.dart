@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:party_booking/res/constants.dart';
 
 import '../../data/network/model/account_response_model.dart';
 import '../../widgets/common/text_field.dart';
@@ -10,6 +11,7 @@ class EditProfileForm extends StatelessWidget {
   final AccountModel mAccountModel;
   final GlobalKey<FormBuilderState> fbKey;
   final Function onCountryCodeChange;
+  
 
   const EditProfileForm(
       {Key key,
@@ -17,6 +19,7 @@ class EditProfileForm extends StatelessWidget {
       @required this.fbKey,
       @required this.onCountryCodeChange,})
       : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,16 +76,16 @@ class EditProfileForm extends StatelessWidget {
   Widget _selectGender() {
     return FormBuilderDropdown(
       attribute: "gender",
-      style: TextStyle(
-          fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black),
+      style: kPrimaryTextStyle,
       decoration: InputDecoration(
           labelText: "Gender",
+          labelStyle: kPrimaryTextStyle,
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
       // initialValue: 'Male',
       hint: Text(
         'Select Gender',
-        style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+        style: kPrimaryTextStyle,
       ),
       validators: [FormBuilderValidators.required()],
       items: ['Male', 'Female', 'Other']
@@ -96,9 +99,9 @@ class EditProfileForm extends StatelessWidget {
       attribute: "birthday",
       inputType: InputType.date,
       format: DateFormat("MM/dd/yyyy"),
-      style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0),
+      style: kPrimaryTextStyle,
       decoration: InputDecoration(
-          labelText: 'Select Gender',
+          labelText: 'Birthday',
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
     );
@@ -113,7 +116,7 @@ class EditProfileForm extends StatelessWidget {
             width: sizeWidth * 0.35,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: Colors.grey,),
               shape: BoxShape.rectangle,
             ),
             child: CountryCodePicker(

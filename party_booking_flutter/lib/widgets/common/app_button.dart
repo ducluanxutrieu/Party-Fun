@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:party_booking/res/constants.dart';
 
 class AppButtonWidget extends StatelessWidget {
   final Function buttonHandler;
@@ -6,7 +7,7 @@ class AppButtonWidget extends StatelessWidget {
   final int stateButton;
 
   AppButtonWidget(
-      {this.buttonHandler, @required this.buttonText, this.stateButton = 0});
+      {Key key, this.buttonHandler, @required this.buttonText, this.stateButton = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +24,12 @@ class AppButtonWidget extends StatelessWidget {
   }
 
   Widget setUpButtonChild() {
-    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
     switch (stateButton) {
       case 0:
         return new Text(
           buttonText,
           textAlign: TextAlign.center,
-          style: style.copyWith(
+          style: kPrimaryTextStyle.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
