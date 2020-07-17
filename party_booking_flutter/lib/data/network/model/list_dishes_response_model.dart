@@ -107,7 +107,7 @@ class DishModel {
         discount: json["discount"],
         quantity: 1,
         image: List<String>.from(json["image"].map((x) => x)),
-        featureImage: json["feature_image"],
+        featureImage: json["feature_image"] ??= 'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg',
         currency: json["currency"],
         updateAt: json["updateAt"],
         createAt: json["createAt"],

@@ -37,7 +37,7 @@ class ItemDish extends StatelessWidget {
         dense: true,
         leading: CircleAvatar(
           radius: 25,
-          backgroundImage: NetworkImage(dish.featureImage),
+          backgroundImage: NetworkImage(dish.featureImage ??= 'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg'),
           backgroundColor: Colors.transparent,
         ),
       ),
