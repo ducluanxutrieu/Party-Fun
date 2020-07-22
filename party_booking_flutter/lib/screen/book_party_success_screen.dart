@@ -45,7 +45,7 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
             requestSource(widget.mBill);
           }),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,      
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 10),
@@ -104,7 +104,8 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                       ),
                       Container(
                           width: sizeWidth * 0.45,
-                          child: Lottie.asset(Assets.animPayment, fit: BoxFit.contain)),
+                          child: Lottie.asset(Assets.animPayment,
+                              fit: BoxFit.contain)),
                     ],
                   ),
                   SizedBox(
@@ -134,8 +135,8 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                   fontSize: 20),
             ),
           ),
-          Container(
-            height: 400,
+          Flexible(
+            fit: FlexFit.loose,
             child: ListView.builder(
                 itemCount: widget.mBill.dishes.length,
                 itemBuilder: (bCtx, index) {
@@ -192,13 +193,17 @@ class ItemDishLine extends StatelessWidget {
           dish.name,
           style: TextStyle(fontSize: 17, color: Colors.blue),
         ),
-        subtitle: Text(dish.price.toString(), style: kPrimaryTextStyle.copyWith(fontSize: 15),),
+        subtitle: Text(
+          dish.price.toString(),
+          style: kPrimaryTextStyle.copyWith(fontSize: 15),
+        ),
         selected: false,
         trailing: Text(dish.count.toString()),
         dense: true,
         leading: CircleAvatar(
           radius: 25,
-          backgroundImage: NetworkImage(dish.featureImage ??= 'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg'),
+          backgroundImage: NetworkImage(dish.featureImage ??=
+              'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg'),
           backgroundColor: Colors.transparent,
         ),
       ),

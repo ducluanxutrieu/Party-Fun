@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:party_booking/data/bloc_providers.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/main.dart';
+import 'package:party_booking/res/colors.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -96,6 +99,7 @@ class MainDrawer extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AboutUsScreen()));
             }),
+        ChangeThemeWidget(),
         _createDrawerItem(
             icon: FontAwesomeIcons.signOutAlt,
             text: 'Logout',
@@ -154,7 +158,7 @@ class MainDrawer extends StatelessWidget {
     }
   }
 
-  void _showDialogConfirmLogout(BuildContext context){
+  void _showDialogConfirmLogout(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext bCtx) {
@@ -181,5 +185,33 @@ class MainDrawer extends StatelessWidget {
             ],
           );
         });
+  }
+}
+
+class ChangeThemeWidget extends StatefulWidget {
+  @override
+  _ChangeThemeWidgetState createState() => _ChangeThemeWidgetState();
+}
+
+class _ChangeThemeWidgetState extends State<ChangeThemeWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final DarkThemeBloc themeBloc = BlocProvider.of(context);
+    return StreamBuilder(
+      stream: themeBloc.dartThemeEnabledStream,
+      builder: (BuildContext context, snapshot) {
+        return SwitchListTile(
+          title: Text('Dark Theme'),
+          onChanged: (value) {
+            setState(() {
+              AppColors.darkThemeEnabled = value;
+              themeBloc.changeTheme(value);
+            });
+            themeBloc.changeTheme(value);
+          },
+          value: AppColors.darkThemeEnabled,
+        );
+      },
+    );
   }
 }
