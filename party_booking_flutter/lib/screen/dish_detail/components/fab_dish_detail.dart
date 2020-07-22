@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/res/custom_icons_icons.dart';
+import 'package:party_booking/res/custom_icons.dart';
 import 'package:party_booking/screen/modify_disk/modify_dish_screen.dart';
 
 class FabDishDetail extends StatelessWidget {

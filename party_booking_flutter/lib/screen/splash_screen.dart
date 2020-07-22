@@ -15,7 +15,7 @@ import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login_screen.dart';
+import 'login/login_screen.dart';
 import 'main_screen/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {

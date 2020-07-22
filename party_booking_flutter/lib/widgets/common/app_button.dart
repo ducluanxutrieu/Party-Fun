@@ -4,10 +4,10 @@ import 'package:party_booking/res/constants.dart';
 class AppButtonWidget extends StatelessWidget {
   final Function buttonHandler;
   final String buttonText;
-  final int stateButton;
+  final AppButtonState stateButton;
 
   AppButtonWidget(
-      {Key key, this.buttonHandler, @required this.buttonText, this.stateButton = 0}) : super(key: key);
+      {Key key, this.buttonHandler, @required this.buttonText, this.stateButton = AppButtonState.None}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class AppButtonWidget extends StatelessWidget {
 
   Widget setUpButtonChild() {
     switch (stateButton) {
-      case 0:
+      case AppButtonState.None:
         return new Text(
           buttonText,
           textAlign: TextAlign.center,
@@ -36,13 +36,13 @@ class AppButtonWidget extends StatelessWidget {
         );
         break;
 
-      case 1:
+      case AppButtonState.Loading:
         return CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         );
         break;
 
-      case 2:
+      case AppButtonState.Success:
         return Icon(Icons.check, color: Colors.white);
         break;
 
@@ -50,4 +50,11 @@ class AppButtonWidget extends StatelessWidget {
         return Icon(Icons.error, color: Colors.white);
     }
   }
+}
+
+enum AppButtonState{
+  None,
+  Loading,
+  Success,
+  Error,
 }

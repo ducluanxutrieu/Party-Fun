@@ -6,7 +6,7 @@ import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/res/custom_icons_icons.dart';
+import 'package:party_booking/res/custom_icons.dart';
 import 'package:party_booking/screen/dish_detail/components/badge_add_to_cart.dart';
 import 'package:party_booking/screen/dish_detail/components/fab_dish_detail.dart';
 import 'package:party_booking/screen/dish_detail/components/header.dart';

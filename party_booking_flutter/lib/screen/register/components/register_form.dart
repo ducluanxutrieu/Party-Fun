@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:party_booking/res/static_variable.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 
@@ -11,10 +12,6 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<FormFieldValidator> listValidators = <FormFieldValidator>[
-      FormBuilderValidators.required(),
-    ];
-
     double sizeWidth = MediaQuery.of(context).size.width - 72;
 
     var validatorRePassword = (dynamic value) {
@@ -44,7 +41,7 @@ class RegisterForm extends StatelessWidget {
             mAttribute: 'fullname',
             mHindText: 'Full Name',
             mValidators: [
-              ...listValidators,
+              ...StaticVariable.listValidatorsRequired,
               FormBuilderValidators.minLength(6)
             ],
           ),
@@ -53,7 +50,7 @@ class RegisterForm extends StatelessWidget {
             mAttribute: 'username',
             mHindText: 'Username',
             mValidators: [
-              ...listValidators,
+              ...StaticVariable.listValidatorsRequired,
               (dynamic value) {
                 if ((value as String).contains(" ")) {
                   return 'Username invalid';
@@ -66,27 +63,24 @@ class RegisterForm extends StatelessWidget {
           TextFieldWidget(
             mAttribute: 'email',
             mHindText: 'Email',
-            mValidators: [...listValidators, FormBuilderValidators.email()],
+            mValidators: [...StaticVariable.listValidatorsRequired, FormBuilderValidators.email()],
             mTextInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 15.0),
           //
-          buildPhoneNumber(sizeWidth, listValidators),
+          buildPhoneNumber(sizeWidth, StaticVariable.listValidatorsRequired),
           SizedBox(height: 15.0),
           TextFieldWidget(
             mAttribute: 'password',
             mHindText: 'Password',
-            mValidators: [
-              ...listValidators,
-              FormBuilderValidators.minLength(6)
-            ],
+            mValidators: StaticVariable.listValidatorsMinSix,
             mShowObscureText: true,
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
             mAttribute: 'retypepassword',
             mHindText: 'Retype Password',
-            mValidators: [...listValidators, validatorRePassword],
+            mValidators: [...StaticVariable.listValidatorsRequired, validatorRePassword],
             mShowObscureText: true,
           ),
           SizedBox(

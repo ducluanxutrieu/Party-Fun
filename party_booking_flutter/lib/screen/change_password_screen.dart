@@ -8,13 +8,14 @@ import 'package:party_booking/data/network/model/change_password_request_model.d
 import 'package:party_booking/data/network/model/change_password_request_model_2.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/res/static_variable.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login_screen.dart';
+import 'login/login_screen.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   final String username;
@@ -28,14 +29,8 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateChangeButton = 0;
+  AppButtonState _stateChangeButton = AppButtonState.None;
   bool isChangePassword = false;
-
-  List<FormFieldValidator> listValidators = <FormFieldValidator>[
-    FormBuilderValidators.required(),
-    FormBuilderValidators.minLength(6,
-        errorText: 'Value must have at least 6 characters'),
-  ];
 
   @override
   void initState() {
@@ -46,7 +41,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void _changePasswordClicked(BuildContext context) async {
     if (_fbKey.currentState.saveAndValidate()) {
       setState(() {
-        _stateChangeButton = 1;
+        _stateChangeButton = AppButtonState.Loading;
       });
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -77,11 +72,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             (Route<dynamic> route) => false);
       }else {
         setState(() {
-          _stateChangeButton = 3;
+          _stateChangeButton = AppButtonState.Error;
         });
         Timer(Duration(milliseconds: 1500), () {
           setState(() {
-            _stateChangeButton = 0;
+            _stateChangeButton = AppButtonState.None;
           });
         });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
@@ -126,7 +121,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 TextFieldWidget(
                   mHindText: isChangePassword ? 'Your Password': 'Code',
                   mAttribute: 'code',
-                  mValidators: listValidators,
+                  mValidators: StaticVariable.listValidatorsMinSix,
                 ),
                 SizedBox(
                   height: 25,
@@ -135,7 +130,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   mHindText: 'New Password',
                   mAttribute: 'new_password',
                   mShowObscureText: true,
-                  mValidators: listValidators,
+                  mValidators: StaticVariable.listValidatorsMinSix,
                 ),
                 SizedBox(
                   height: 25,
@@ -144,7 +139,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   mAttribute: 'retype_password',
                   mHindText: 'Retype Password',
                   mShowObscureText: true,
-                  mValidators: [...listValidators, validator],
+                  mValidators: [...StaticVariable.listValidatorsMinSix, validator],
                 ),
                 SizedBox(
                   height: 30,

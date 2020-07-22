@@ -73,7 +73,7 @@ class _ModifyDishBodyState extends State<ModifyDishBody> {
                   child: AppButtonWidget(
                     buttonText: isAddNewDish ? 'Add New' : 'Update',
                     buttonHandler: () => ModifyDishFunctions.addNewDishClicked(_fbKey, context, oldImages, newImages, isAddNewDish, widget.dishModel),
-                    stateButton: 0,
+                    stateButton: AppButtonState.None,
                   ),
                 ),
                 SizedBox(

@@ -16,13 +16,13 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateRegisterButton = 0;
+  AppButtonState _stateRegisterButton = AppButtonState.None;
   String _countryCode = '+84';
 
   void onRegisterClicked() {
     if (_fbKey.currentState.saveAndValidate()) {
       setState(() {
-        _stateRegisterButton = 1;
+        _stateRegisterButton = AppButtonState.Loading;
       });
 
       final fullName =
@@ -56,14 +56,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (result.isSuccessful) {
       UiUtiu.showToast(message: result.body.message);
       setState(() {
-        _stateRegisterButton = 2;
+        _stateRegisterButton = AppButtonState.Loading;
       });
       Timer(Duration(milliseconds: 1500), () {
         Navigator.pop(context);
       });
     } else {
       setState(() {
-        _stateRegisterButton = 0;
+        _stateRegisterButton = AppButtonState.None;
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/res/static_variable.dart';
 
 import '../../data/network/model/account_response_model.dart';
 import '../../widgets/common/text_field.dart';
@@ -23,10 +24,6 @@ class EditProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<FormFieldValidator> listValidators = <FormFieldValidator>[
-      FormBuilderValidators.required(),
-    ];
-
     return FormBuilder(
       key: fbKey,
       autovalidate: false,
@@ -46,21 +43,18 @@ class EditProfileForm extends StatelessWidget {
           TextFieldWidget(
             mAttribute: 'fullname',
             mHindText: 'Full Name',
-            mValidators: [
-              ...listValidators,
-              FormBuilderValidators.minLength(6)
-            ],
+            mValidators: StaticVariable.listValidatorsMinSix
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
             mAttribute: 'email',
             mHindText: 'Email',
-            mValidators: [...listValidators, FormBuilderValidators.email()],
+            mValidators: [...StaticVariable.listValidatorsRequired, FormBuilderValidators.email()],
             mTextInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 15.0),
           buildPhoneNumber(
-              MediaQuery.of(context).size.width - 72, listValidators),
+              MediaQuery.of(context).size.width - 72),
           SizedBox(height: 15.0),
           _showDatePicker(),
           SizedBox(height: 15.0),
@@ -87,7 +81,7 @@ class EditProfileForm extends StatelessWidget {
         'Select Gender',
         style: kPrimaryTextStyle,
       ),
-      validators: [FormBuilderValidators.required()],
+      validators: StaticVariable.listValidatorsRequired,
       items: ['Male', 'Female', 'Other']
           .map((gender) => DropdownMenuItem(value: gender, child: Text(gender)))
           .toList(),
@@ -107,8 +101,7 @@ class EditProfileForm extends StatelessWidget {
     );
   }
 
-  Widget buildPhoneNumber(
-      double sizeWidth, List<FormFieldValidator> listValidators) {
+  Widget buildPhoneNumber(double sizeWidth) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -134,7 +127,7 @@ class EditProfileForm extends StatelessWidget {
             mHindText: 'Phone Number',
             mTextInputType: TextInputType.phone,
             mValidators: [
-              ...listValidators,
+              ...StaticVariable.listValidatorsRequired,
               FormBuilderValidators.numeric(errorText: "Phone number invalid")
             ],
           ),

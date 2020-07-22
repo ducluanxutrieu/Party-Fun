@@ -6,6 +6,7 @@ import 'package:party_booking/data/network/model/book_party_request_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/res/static_variable.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
@@ -21,9 +22,7 @@ class BookPartyScreen extends StatefulWidget {
 
 class _BookPartyScreenState extends State<BookPartyScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  List<FormFieldValidator> listValidators = <FormFieldValidator>[
-    FormBuilderValidators.required(),
-  ];
+
   static var now = new DateTime.now();
   var twoDaysFromNow = now.add(new Duration(days: 2));
 
@@ -59,7 +58,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
         'Number Tables',
         style: kPrimaryTextStyle,
       ),
-      validators: [FormBuilderValidators.required()],
+      validators: StaticVariable.listValidatorsRequired,
       items: List.generate(15, (generator) => generator + 1)
           .map((item) => DropdownMenuItem(value: item, child: Text("$item")))
           .toList(),
@@ -71,7 +70,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
       mAttribute: "cus",
       mTextInputType: TextInputType.phone,
       mHindText: 'Number of Customer',
-      mValidators: listValidators,
+      mValidators: StaticVariable.listValidatorsRequired,
     );
   }
 

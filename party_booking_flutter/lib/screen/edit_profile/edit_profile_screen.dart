@@ -28,14 +28,14 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateButton = 0;
+  AppButtonState _stateButton = AppButtonState.None;
   String _countryCode;
   String avatarUrl;
 
   void _onUpdateClicked() {
     if (_fbKey.currentState.saveAndValidate()) {
       setState(() {
-        _stateButton = 1;
+        _stateButton = AppButtonState.Loading;
       });
 
       final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
@@ -65,7 +65,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (result.isSuccessful) {
       UiUtiu.showToast(message: result.body.message);
       setState(() {
-        _stateButton = 2;
+        _stateButton = AppButtonState.Loading;
       });
       prefs.setString(Constants.ACCOUNT_MODEL_KEY, accountModelToJson(result.body.account));
       Timer(Duration(milliseconds: 1500), () {
@@ -73,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
     } else {
       setState(() {
-        _stateButton = 0;
+        _stateButton = AppButtonState.None;
       });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);

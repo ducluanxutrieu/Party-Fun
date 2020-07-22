@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/res/static_variable.dart';
 import 'package:party_booking/screen/change_password_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
@@ -17,12 +18,12 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateButton = 0;
+  AppButtonState _stateButton = AppButtonState.None;
 
   void onNextClicked() async {
     if (_fbKey.currentState.saveAndValidate()) {
       setState(() {
-        _stateButton = 1;
+        _stateButton = AppButtonState.Loading;
       });
       final String username =
           _fbKey.currentState.fields['username'].currentState.value;
@@ -34,11 +35,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             MaterialPageRoute(builder: (context) => ChangePasswordScreen(username: username,)));
       }else {
         setState(() {
-          _stateButton = 3;
+          _stateButton = AppButtonState.Error;
         });
         Timer(Duration(milliseconds: 1500), () {
           setState(() {
-            _stateButton = 0;
+            _stateButton = AppButtonState.None;
           });
         });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
@@ -75,7 +76,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   TextFieldWidget(
                     mHindText: "Username",
                     mAttribute: "username",
-                    mValidators: [FormBuilderValidators.required()],
+                    mValidators: StaticVariable.listValidatorsRequired,
                   ),
                   SizedBox(
                     height: 35.0,

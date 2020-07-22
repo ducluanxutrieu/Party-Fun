@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/res/static_variable.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 
 class FormModifyDish extends StatelessWidget {
@@ -16,7 +17,7 @@ class FormModifyDish extends StatelessWidget {
         TextFieldWidget(
           mAttribute: 'name',
           mHindText: 'Dish name',
-          mValidators: [FormBuilderValidators.required()],
+          mValidators: StaticVariable.listValidatorsRequired,
         ),
         SizedBox(
           height: 15,
@@ -36,7 +37,7 @@ class FormModifyDish extends StatelessWidget {
                   contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(32))),
-              validators: [FormBuilderValidators.required()]),
+              validators: StaticVariable.listValidatorsRequired),
         ),
         SizedBox(
           height: 15,
@@ -53,7 +54,7 @@ class FormModifyDish extends StatelessWidget {
               child: TextFieldWidget(
                 mAttribute: 'price',
                 mHindText: 'Price',
-                mValidators: [FormBuilderValidators.required()],
+                mValidators: StaticVariable.listValidatorsRequired,
                 mTextInputType: TextInputType.number,
               ),
             ),
@@ -62,7 +63,7 @@ class FormModifyDish extends StatelessWidget {
               child: TextFieldWidget(
                 mAttribute: 'discount',
                 mHindText: 'Discount(%)',
-                mValidators: [FormBuilderValidators.required(), FormBuilderValidators.max(100)],
+                mValidators: [...StaticVariable.listValidatorsRequired, FormBuilderValidators.max(100)],
                 mTextInputType: TextInputType.number,
               ),
             ),
@@ -82,7 +83,7 @@ class FormModifyDish extends StatelessWidget {
           labelText: "Dish Type",
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
-      validators: [FormBuilderValidators.required()],
+      validators: StaticVariable.listValidatorsRequired,
       options: [
         FormBuilderFieldOption(value: "Holiday Offers"),
         FormBuilderFieldOption(value: "First Dishes"),
