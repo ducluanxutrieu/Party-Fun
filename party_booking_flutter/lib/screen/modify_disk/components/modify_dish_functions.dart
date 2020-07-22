@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/base_list_response_model.dart';
 import 'package:party_booking/data/network/model/dish_create_request_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
@@ -15,7 +16,7 @@ class ModifyDishFunctions{
   static BuildContext _context;
   static String _token;
 
-  static void addNewDishClicked(GlobalKey<FormBuilderState> _fbKey, BuildContext context, List<String> oldImages, List<Asset> newImages, bool isAddNewDish, DishModel dishOrigin) async {
+  static void addNewDishClicked(GlobalKey<FormBuilderState> _fbKey, BuildContext context, List<String> oldImages, List<File> newImages, bool isAddNewDish, DishModel dishOrigin) async {
     String token = await _getToken();
     _context = context;
     if (_fbKey.currentState.saveAndValidate()) {
@@ -77,7 +78,7 @@ class ModifyDishFunctions{
     }
   }
 
-  static Future<List<String>> _uploadImage(List<Asset> newImages) async {
+  static Future<List<String>> _uploadImage(List<File> newImages) async {
     if (newImages != null && newImages.isNotEmpty) {
       BaseListResponseModel uploadImageRes =
           await AppImageAPIService.create(_context).uploadImages(newImages);

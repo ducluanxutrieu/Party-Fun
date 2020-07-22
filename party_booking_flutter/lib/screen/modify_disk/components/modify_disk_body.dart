@@ -1,6 +1,8 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/screen/modify_disk/components/form_modify_dish.dart';
 import 'package:party_booking/screen/modify_disk/components/modify_dish_functions.dart';
@@ -21,7 +23,7 @@ class ModifyDishBody extends StatefulWidget {
 }
 
 class _ModifyDishBodyState extends State<ModifyDishBody> {
-  List<Asset> newImages = List<Asset>();
+  List<File> newImages = List<File>();
   List<String> oldImages;
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool isAddNewDish;
@@ -102,11 +104,11 @@ class _ModifyDishBodyState extends State<ModifyDishBody> {
   }
 
     Future<void> loadAssets() async {
-    List<Asset> resultList;
+    List<File> resultList;
 
     try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 10,
+      resultList = await FilePicker.getMultiFile(
+        type: FileType.image
       );
     } on Exception catch (e) {
       print(e.toString());

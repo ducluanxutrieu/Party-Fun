@@ -4,11 +4,10 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/data/network/model/base_list_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/file_extention.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -45,17 +44,16 @@ class AppImageAPIService {
     return response;
   }
 
-  Future<BaseListResponseModel> uploadImages(List<Asset> listImage) async {
+  Future<BaseListResponseModel> uploadImages(List<File> listImage) async {
     var listMultiPath = List();
 
     for(int i = 0; i < listImage.length; i++) {
       var image = listImage[i];
-      var path =
-      await FlutterAbsolutePath.getAbsolutePath(image.identifier);
+      var path = listImage[i].path;
       listMultiPath.add(
           MapEntry(
             'image', MultipartFile.fromFileSync(path,
-              filename: image.name,
+              filename: await FileExtension.getFileNameWithExtension(image),
               contentType: MediaType('image', 'jpeg'))),
           );
     }
