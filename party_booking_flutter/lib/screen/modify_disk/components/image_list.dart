@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:party_booking/res/constants.dart';
 
 class ImageList extends StatefulWidget {
   final List<String> oldImages;
-  final List<Asset> newImages;
+  final List<File> newImages;
   final bool isOldImage;
 //  final Function onRemovePress;
 
@@ -66,8 +67,8 @@ class _ImageListState extends State<ImageList> {
                   child: Stack(children: <Widget>[
                     widget.isOldImage
                         ? Image.network(widget.oldImages[index], fit: BoxFit.cover,)
-                        : AssetThumb(
-                            asset: widget.newImages[index],
+                        : Image.file(
+                            widget.newImages[index],
                             width: 300,
                             height: 300,
                           ),
