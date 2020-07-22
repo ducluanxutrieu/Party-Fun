@@ -106,9 +106,9 @@ abstract class AppApiService extends ChopperService {
   });
   @Get(path: 'product/rate')
   Future<Response<RateResponseModelData>> getRate(
-      @Query('id') String id,
-      @Query('page') int page,
-      );
+    @Query('id') String id,
+    @Query('page') int page,
+  );
   @Post(path: 'product/dish')
   Future<Response<SingleDishResponseModel>> addNewDish({
     @Header('authorization') String token,
@@ -127,9 +127,10 @@ abstract class AppApiService extends ChopperService {
 
   //Post
   @Get(path: 'product/posts')
-  Future<Response<ListPostsResponseModel>> getListPosts(
-      {@Header('authorization') String token});
-
+  Future<Response<ListPostsResponseModel>> getListPosts({
+    @Header('authorization') String token,
+    @Query('page') int page,
+  });
 
   @Get(path: 'product/categories')
   Future<Response<ListCategoriesResponseModel>> getCategories();
@@ -154,8 +155,8 @@ abstract class AppApiService extends ChopperService {
       RegisterRequestModel: RegisterRequestModel.fromJsonFactory,
       ListDishesResponseModel: ListDishesResponseModel.fromJsonFactory,
       DishModel: DishModel.fromJsonFactory,
-    //  RateModel: RateModel.fromJsonFactory,
-     // RateItemModel: RateItemModel.fromJsonFactory,
+      //  RateModel: RateModel.fromJsonFactory,
+      // RateItemModel: RateItemModel.fromJsonFactory,
       LoginResponseModel: LoginResponseModel.fromJsonFactory,
       BaseResponseModel: BaseResponseModel.fromJsonFactory,
       RateResponseModelData: RateResponseModelData.fromJsonFactory,

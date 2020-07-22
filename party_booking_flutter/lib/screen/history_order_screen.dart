@@ -48,7 +48,6 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.green,
         title: Text('Order History'),
       ),
       body: ListView.builder(

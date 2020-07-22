@@ -208,10 +208,13 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<ListPostsResponseModel>> getListPosts({String token}) {
+  Future<Response<ListPostsResponseModel>> getListPosts(
+      {String token, int page}) {
     final $url = 'product/posts';
+    final $params = <String, dynamic>{'page': page};
     final $headers = {'authorization': token};
-    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    final $request = Request('GET', $url, client.baseUrl,
+        parameters: $params, headers: $headers);
     return client
         .send<ListPostsResponseModel, ListPostsResponseModel>($request);
   }
