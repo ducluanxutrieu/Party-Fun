@@ -1,10 +1,8 @@
-
-
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:party_booking/data/bloc_providers.dart';
 import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
@@ -12,38 +10,38 @@ import 'package:party_booking/data/network/model/list_categories_response_model.
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/screen/main_screen/main_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginBloc extends BlocBase{
-  StreamController loginStatusController = StreamController<AppButtonState>.broadcast();
+part 'login_event.dart';
+part 'login_state.dart';
 
-  Sink get loginStatusSink => loginStatusController.sink;
-  Stream<AppButtonState> get loginButtonStatusStream => loginStatusController.stream;
-
-  loginPressed(GlobalKey<FormBuilderState> fbKey, BuildContext context){
-    onLoginPressed(fbKey, context);
-  }
-
-  void loginStatusChange(AppButtonState status){
-    loginStatusSink.add(status);
-  }
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  LoginBloc() : super(LoginState(state: AppButtonState.None));
 
   @override
-  void dispose() {
-    loginStatusController.close();
+  Stream<LoginState> mapEventToState(
+    LoginEvent event,
+  ) async* {
+    yield LoginState(state: AppButtonState.Loading);
+    try {
+      MapEntry result = await requestLogin(event.username, event.password);
+      yield LoginState(state: AppButtonState.Success, accountModel: result.key, categories: result.value);
+    } catch (ex) {
+      yield LoginState(state: AppButtonState.Error);
+      Future.delayed(Duration(seconds: 2), () {});
+      yield LoginState(state: AppButtonState.None);
+    }
   }
 
-  void _saveListDishesToDB(List<DishModel> listDishes) async {
+  Future<void> _saveListDishesToDB(List<DishModel> listDishes) async {
     await DBProvider.db.deleteAll();
     listDishes.forEach((element) async {
       await DBProvider.db.newDish(element);
       print(element);
     });
   }
-
 
   Future<void> _getListDishes() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,55 +65,34 @@ class LoginBloc extends BlocBase{
     });
   }
 
-  void requestLogin(String username, String password, BuildContext context) async {
-    loginStatusChange(AppButtonState.Loading);
+  Future<MapEntry<AccountModel, dynamic>> requestLogin(String username, String password) async {
     var result = await AppApiService.create().requestSignIn(username: username, password: password);
     if (result.isSuccessful) {
       UiUtiu.showToast(message: result.body.message, isFalse: false);
-      _saveDataToPrefs(result.body.account, context);
+      return MapEntry(result.body.account, await _saveDataToPrefs(result.body.account));
     } else {
-      loginStatusChange(AppButtonState.Error);
-      Timer(Duration(milliseconds: 1500), () {
-        loginStatusChange(AppButtonState.None);
-      });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
     }
   }
 
-  void _saveDataToPrefs(AccountModel model, BuildContext context) async {
-    loginStatusChange(AppButtonState.Success);
+  Future<List<Category>> _saveDataToPrefs(AccountModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constants.ACCOUNT_MODEL_KEY, accountModelToJson(model));
     prefs.setString(Constants.USER_TOKEN, model.token);
     _getListDishes();
-    _getListCategories(prefs, model, context);
+    return await _getListCategories(prefs, model);
   }
 
-  void _getListCategories(SharedPreferences prefs, AccountModel accountModel, BuildContext context) async {
+  Future<List<Category>> _getListCategories(SharedPreferences prefs, AccountModel accountModel) async {
     var result = await AppApiService.create().getCategories();
     if (result.isSuccessful) {
       prefs.setString(Constants.LIST_CATEGORIES_KEY, listCategoriesResponseModelToJson(result.body));
-      _goToMainScreen(accountModel, result.body.categories, context);
+      return result.body.categories;
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
     }
-  }
-
-  void _goToMainScreen(accountModel, List<Category> categories, BuildContext context) async {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel, listCategories: categories,)));
-  }
-
-  onLoginPressed(GlobalKey<FormBuilderState> _fbKey, BuildContext context) {
-    if(_fbKey.currentState.saveAndValidate()){
-      FocusScope.of(context).unfocus();
-      String username =
-          _fbKey.currentState.fields['username'].currentState.value;
-      String password =
-          _fbKey.currentState.fields['password'].currentState.value;
-      requestLogin(username, password, context);
-    }
+    return null;
   }
 }

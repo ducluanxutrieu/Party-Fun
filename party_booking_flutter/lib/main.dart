@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:party_booking/bloc/login/login_bloc.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'screen/cart_detail/cart_detail_screen.dart';
 import 'package:party_booking/screen/splash_screen.dart';
@@ -27,14 +29,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<CartModel>(
       model: model,
-      child: MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.green,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => LoginBloc(),
+          ),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+          ),
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          home: SplashScreen(),
+          routes: {'/cart': (context) => CartPage()},
         ),
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        home: SplashScreen(),
-        routes: {'/cart': (context) => CartPage()},
       ),
     );
   }

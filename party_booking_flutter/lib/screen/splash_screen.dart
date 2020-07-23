@@ -11,11 +11,11 @@ import 'package:party_booking/data/network/model/list_dishes_response_model.dart
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/screen/login/login_screen.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'login/login_screen.dart';
 import 'main_screen/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {

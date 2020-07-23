@@ -54,6 +54,9 @@ dependencies:
   json_annotation: ^3.0.1
   google_maps_flutter: ^0.4.0
   country_code_picker: ^1.4.0
+  equatable: ^1.2.2
+  bloc: ^6.0.1
+  flutter_bloc: ^6.0.1
 
 dev_dependencies:
   flutter_test:
