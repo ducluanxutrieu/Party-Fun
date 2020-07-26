@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:party_booking/data/network/model/get_history_cart_model.dart';
+import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/screen/history_order_detail/components/header.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'components/item_dish.dart';
 
@@ -14,6 +18,13 @@ class HistoryOrderDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Receipt Detail"),
+      ),
+      floatingActionButton: Visibility(
+        visible: userCart.paymentStatus == 0,
+        child: FloatingActionButton.extended(onPressed: () => getPayment(id: userCart.id), label: Row(children: <Widget>[
+          Icon(Icons.payment),
+          Text('  Pay',)
+        ],)),
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -54,5 +65,31 @@ class HistoryOrderDetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+
+  Future<void> getPayment({String id}) async {
+    final sharedPref = await SharedPreferences.getInstance();
+    String token = sharedPref.getString(Constants.USER_TOKEN);
+    await AppApiService.create().getPayment(token: token, id: id).then(
+            (onValue) async {
+          String urlSession = onValue.body.data.id;
+          String url = "http://139.180.131.30/client/payment/mobile/$urlSession";
+          if (await canLaunch(url)) {
+            await launch(url);
+            /*Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => SplashScreen()),
+                    (Route<dynamic> route) => false);*/
+          } else {
+            throw 'Could not launch $url';
+          }
+        }, onError: setError);
+  }
+
+  void setError(dynamic error) {
+    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+    _scaffoldKey.currentState
+        .showSnackBar(SnackBar(content: Text(error.toString())));
   }
 }

@@ -125,7 +125,10 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
                   _selectNumberCustomer(),
                   SizedBox(height: 15.0),
                   TextFieldWidget(
-                      mHindText: 'Discount Code', mAttribute: 'discount_code', mValidators: List(),),
+                    mHindText: 'Discount Code',
+                    mAttribute: 'discount_code',
+                    mValidators: List(),
+                  ),
                   SizedBox(
                     height: 15.0,
                   ),
@@ -146,7 +149,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
   Future requestBookParty(
       DateTime day, int num, int cus, String discountCode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    listDish.clear();
     ScopedModel.of<CartModel>(context, rebuildOnChange: true).cart.forEach(
         (item) =>
             {listDish.add(ListDishes(id: item.id, numberDish: item.quantity))});

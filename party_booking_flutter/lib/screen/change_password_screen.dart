@@ -106,7 +106,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         title: Text(widget.username == null ? 'Change Password' : ' Reset Password'),
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 36, right: 36),
+        padding: const EdgeInsets.only(left: 36, right: 36),
         child: SingleChildScrollView(
           child: FormBuilder(
             key: _fbKey,
@@ -116,6 +116,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                SizedBox(height: 50,),
                 LogoAppWidget(
                   mLogoSize: 150,
                   imageUrl: widget.avatarUrl,

@@ -74,9 +74,9 @@ class DishCard extends StatelessWidget {
         MaterialPageRoute(
             builder: (context) => DishDetailScreen(
                 dishModel: dishModel, accountModel: accountModel)));
-    if (result != null) {
+    if (result != null && result) {
       print('dishCart');
-      getListDish(where: 'dishCart');
+      getListDish();
     }
   }
 

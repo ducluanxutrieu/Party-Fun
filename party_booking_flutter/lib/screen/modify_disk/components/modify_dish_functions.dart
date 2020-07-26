@@ -49,6 +49,9 @@ class ModifyDishFunctions{
 
   static void _updateDish(String token, DishModel dishModel, List<String> oldImages) async {
     dishModel.image.addAll(oldImages);
+    if(dishModel.image.isNotEmpty) {
+      dishModel.featureImage = dishModel.image[0];
+    }
     var result =
         await AppApiService.create().updateDish(token: token, model: dishModel);
     if (result.isSuccessful) {

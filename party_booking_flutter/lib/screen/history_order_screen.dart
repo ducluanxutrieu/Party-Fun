@@ -21,7 +21,12 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
   int totalPage = -1;
   List<UserCart> listUserCart = List<UserCart>();
 
-  _getHistoryBooking() async {
+  _getHistoryBooking({bool isRefresh = false}) async {
+    if(isRefresh){
+      currentPage = 0;
+      listUserCart.clear();
+    }
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Constants.USER_TOKEN);
     currentPage++;
@@ -50,11 +55,14 @@ class _HistoryOrderScreenState extends State<HistoryOrderScreen> {
       appBar: AppBar(
         title: Text('Order History'),
       ),
-      body: ListView.builder(
-        itemCount: ((listUserCart.length == 0 ? -1 : listUserCart.length) + 1),
-        itemBuilder: (context, index) {
-          return _locationItem(index, context);
-        },
+      body: RefreshIndicator(
+        onRefresh: () => _getHistoryBooking(isRefresh: true),
+        child: ListView.builder(
+          itemCount: ((listUserCart.length == 0 ? -1 : listUserCart.length) + 1),
+          itemBuilder: (context, index) {
+            return _locationItem(index, context);
+          },
+        ),
       ),
     );
   }

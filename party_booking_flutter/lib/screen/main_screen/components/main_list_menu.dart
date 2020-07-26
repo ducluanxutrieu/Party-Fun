@@ -24,19 +24,19 @@ class MainListMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return listMenu.isNotEmpty
         ? ListView.builder(
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemCount: listMenu.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _itemMenu(listMenu[index], context);
-        })
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemCount: listMenu.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _itemMenu(listMenu[index], context);
+            })
         : Center(
-      child: Lottie.asset(
-        Assets.animBagError,
-        repeat: true,
-      ),
-    );
+            child: Lottie.asset(
+              Assets.animBagError,
+              repeat: true,
+            ),
+          );
   }
 
   Widget _itemMenu(MenuModel menuModel, BuildContext context) {
@@ -63,7 +63,9 @@ class MainListMenu extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) => DishCard(
           dishModel: dishes[index],
           accountModel: accountModel,
-          getListDish: () => onRefresh),
+          getListDish: () {
+            onRefresh();
+          }),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,

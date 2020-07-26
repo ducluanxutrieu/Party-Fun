@@ -1,6 +1,6 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
@@ -27,15 +27,13 @@ class MapPageState extends State<MapPage> {
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(context),
-          _zoomMinusFunction(),
-          _zoomPlusFunction(),
           _buildContainer(),
         ],
       ),
     );
   }
 
-  Widget _zoomMinusFunction() {
+/*  Widget _zoomMinusFunction() {
     return Align(
       alignment: Alignment.topLeft,
       child: IconButton(
@@ -45,9 +43,9 @@ class MapPageState extends State<MapPage> {
             _minus(zoomVal);
           }),
     );
-  }
+  }*/
 
-  Widget _zoomPlusFunction() {
+/*  Widget _zoomPlusFunction() {
     return Align(
       alignment: Alignment.topRight,
       child: IconButton(
@@ -57,9 +55,9 @@ class MapPageState extends State<MapPage> {
             _plus(zoomVal);
           }),
     );
-  }
+  }*/
 
-  Future<void> _minus(double zoomVal) async {
+/*  Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(10.870148, 106.787261), zoom: zoomVal)));
@@ -69,7 +67,7 @@ class MapPageState extends State<MapPage> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(10.883607, 106.802840), zoom: zoomVal)));
-  }
+  }*/
 
   Widget _buildContainer() {
     return Align(
