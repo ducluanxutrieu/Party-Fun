@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { api } from '../_api/apiUrl';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-//Models
+// Models
 import { Item } from '../_models/item.model';
 import { ApiResponse } from '../_models/response.model';
+// Services
+import { ToastrService } from 'ngx-toastr';
 
-declare var toastr;
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -13,13 +14,10 @@ export class ProductService {
     cartItems: Item[] = [];
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private toastr: ToastrService
     ) {
         this.loadCartItems();
-        toastr.options = {
-            "timeOut": "1500",
-            "positionClass": "toast-top-center",
-        }
     }
     // Lấy danh sách sản phẩm
     get_DishList() {
@@ -106,7 +104,7 @@ export class ProductService {
                 });
             }
             this.saveCartItems();
-            toastr.success("Added to cart!")
+            this.toastr.success("Added to cart!")
         }
         return false;
     };

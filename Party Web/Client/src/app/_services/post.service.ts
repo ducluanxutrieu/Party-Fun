@@ -22,4 +22,9 @@ export class PostService {
     get_posts_list(page: number) {
         return this.http.get<ApiResponse>(api.post + `?page=${page}`);
     }
+
+    // Lấy danh sách bài viết theo tên tác giả
+    get_posts_list_byAuthor(author_name: string) {
+        return this.http.get<ApiResponse>(api.post + `?author=${author_name}`);
+    }
 }

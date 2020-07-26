@@ -3,10 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
 import { api } from '../../../../_api/apiUrl';
-//Models
+// Services
+import { ToastrService } from 'ngx-toastr';
+// Models
 import { ApiResponse } from '../../../../_models/response.model';
-
-declare var toastr;
 
 @Component({
   selector: 'app-edit-picture',
@@ -20,6 +20,7 @@ export class EditPictureComponent implements OnInit {
   avatarFile: any[];
   constructor(
     private http: HttpClient,
+    private toastr: ToastrService
   ) {
     this.avatarFile = [];
   }
@@ -40,10 +41,10 @@ export class EditPictureComponent implements OnInit {
         sessionStorage.setItem('response', JSON.stringify(res));
         localStorage.setItem('avatar', res.data);
         location.reload();
-        toastr.success("Update success!");
+        this.toastr.success("Update success!");
       },
       err => {
-        toastr.error("Error: " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
@@ -53,7 +54,7 @@ export class EditPictureComponent implements OnInit {
       this.avatarFile = event.target.files;
     }
     else {
-      toastr.warning("Not a jpeg, png or gif file!");
+      this.toastr.warning("Not a jpeg, png or gif file!");
       this.avatarForm.reset();
     }
   }

@@ -34,6 +34,7 @@ import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-
 import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/payment-mobile.component';
 import { PostListComponent } from './pages/post/post-list/post-list.component';
 import { PostDetailComponent } from './pages/post/post-detail/post-detail.component';
+import { MapComponent } from './pages/map/map.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
@@ -85,6 +86,7 @@ const routes: Routes = [
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'category/:filter', component: ProductCategoryComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'map', component: MapComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];

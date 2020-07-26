@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+
 // Services
 import { api } from '../_api/apiUrl';
 // Models
@@ -14,6 +16,7 @@ export class StaffService {
     ////////////////////
     constructor(
         private http: HttpClient,
+        private toastr: ToastrService
     ) { }
 
     // Lấy danh sách nhân viên
@@ -37,12 +40,12 @@ export class StaffService {
         this.http.put(api.downgrade_role, body, { headers: headers }).subscribe(
             res => {
                 sessionStorage.setItem('response', JSON.stringify(res));
-                alert("Downgrade user success!");
+                this.toastr.success("Downgrade user success!");
                 window.location.reload();
             },
             err => {
-                alert("Error: " + err.error.message);
-                sessionStorage.setItem('error', JSON.stringify(err));
+                this.toastr.error("Error downrade user!");
+                console.log("Error: " + err.error.message);
             }
         );
     }
@@ -57,12 +60,12 @@ export class StaffService {
         this.http.put(api.upgrade_role, body, { headers: headers }).subscribe(
             res => {
                 sessionStorage.setItem('response', JSON.stringify(res));
-                alert("Upgrade user success!");
+                this.toastr.success("Upgrade user success!");
                 window.location.reload();
             },
             err => {
-                alert("Error: " + err.error.message);
-                sessionStorage.setItem('error', JSON.stringify(err));
+                this.toastr.error("Error upgrade user!");
+                console.log("Error" + err.error.message);
             });
     }
 }

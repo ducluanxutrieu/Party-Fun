@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, Input } from '@angular/core';
 import { StaffService } from '../../../_services/staff.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
 // declare jquery;
 declare var $: any;
 
@@ -17,11 +17,16 @@ interface Staff {
   styleUrls: ['./employees-list.component.css']
 })
 export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit {
-  staffs_List: Staff[] = [];
+  @Input('data') staffs_List: Staff[] = [];
+  page: number = 1;
+  total_pages: number;
+
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
-    private staffService: StaffService
+    private staffService: StaffService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   downgrade(user_id: string) {
@@ -44,18 +49,25 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.get_staffList();
+    this.loaddata();
+  }
+
+  loaddata() {
+    this.activatedRoute.params.subscribe(params => {
+      this.page = params['page'];
+      this.get_staffList(this.page);
+    })
   }
 
   // Lấy danh sách nhân viên
-  get_staffList() {
-    this.staffService.get_staffsList(1).subscribe(
+  get_staffList(page: number) {
+    this.staffService.get_staffsList(page).subscribe(
       res => {
         this.staffs_List = res.data.value as Staff[];
+        this.total_pages = res.data.total_page;
       },
       err => {
-        console.log("Error: " + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
+        console.error("Error: " + err.error.message);
       },
       () => {
         setTimeout(() => {
@@ -64,6 +76,13 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
         })
       });
   }
+
+  get_page(page: number) {
+    this.router.navigate(['/employees/list', page]).then(() => {
+      window.location.reload();
+    });
+  }
+
   ngAfterViewInit(): void {
     // this.dtTrigger.next();
   }

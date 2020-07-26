@@ -14,7 +14,7 @@
         <div class="container-fluid">
           <div class="navbar-holder d-flex align-items-center justify-content-between">
             <div class="navbar-header">
-              <!-- Navbar Brand --><a class="navbar-brand d-none d-sm-inline-block" href="dashboard">
+              <!-- Navbar Brand --><a class="navbar-brand d-none d-sm-inline-block" routerLink="/dashboard">
                 <div class="brand-text d-none d-lg-inline-block"><span>Party </span><strong>Dashboard</strong></div>
                 <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>PD</strong></div>
               </a>
@@ -39,7 +39,7 @@
       </nav>
     </header>
     <ng-container>
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="sidebar_functionality()"></router-outlet>
     </ng-container>
   </div>
 

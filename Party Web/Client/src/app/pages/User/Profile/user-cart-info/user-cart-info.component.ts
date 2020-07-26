@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 //Models
 import { User } from '../../../../_models/user.model';
 import { Bill } from '../../../../_models/bill.model';
@@ -6,9 +6,9 @@ import { Bill } from '../../../../_models/bill.model';
 import { UserService } from '../../../../_services/user.service';
 import { ProductService } from '../../../../_services/product.service';
 import { PaymentService } from '../../../../_services/payment.service';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $: any;
-declare var toastr;
 
 @Component({
   selector: 'app-user-cart-info',
@@ -16,18 +16,20 @@ declare var toastr;
   styleUrls: ['./user-cart-info.component.css']
 })
 export class UserCartInfoComponent implements OnInit {
+  @Input('data') cart_history: Bill[] = [];
+  page: number = 1;
   total_pages: number;
 
   checkout_session_id: string;
   userData: User;
-  cart_history: Bill[] = [];
   cartDetail = [];
   payment_status: boolean;
 
   constructor(
     private userService: UserService,
     public productService: ProductService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -42,9 +44,10 @@ export class UserCartInfoComponent implements OnInit {
       res => {
         this.cart_history = res.data.value as Bill[];
         this.total_pages = res.data.total_page;
+        this.page = page;
       },
       err => {
-        toastr.error("Error: " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )
@@ -78,7 +81,7 @@ export class UserCartInfoComponent implements OnInit {
         this.checkout_session_id = res_data.data.id;
       },
       err => {
-        toastr.error("Error: " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )

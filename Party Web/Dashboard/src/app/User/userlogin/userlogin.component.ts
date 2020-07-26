@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 //services
@@ -14,7 +13,6 @@ import { AuthenticationService } from '../../_services/authentication.service';
 export class UserloginComponent implements OnInit {
   @ViewChild('userlogin', null) thisForm: NgForm;
   constructor(
-    private http: HttpClient,
     private router: Router,
     private authenticationService: AuthenticationService
   ) { }

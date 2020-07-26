@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { api } from '../../../_api/apiUrl';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 // Services
 import { ProductService } from '../../../_services/product.service';
+import { ToastrService } from 'ngx-toastr';
 // Models
 import { Product } from '../../../_models/product.model';
 // jquery;
@@ -19,18 +18,19 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
-    private productService: ProductService
+    private productService: ProductService,
+    private toastr: ToastrService
   ) { }
 
   // Xóa món ăn
   product_delete(id: string) {
     this.productService.delete_dish(id).subscribe(
       res => {
-        alert("Delete product success!");
-        window.location.reload();
+        this.toastr.success("Delete product success!");
+        this.onload();
       },
       err => {
-        alert("Error: " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )
@@ -53,9 +53,16 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
         "paging": false
       });
     }
+    // var productTable = $('#productTable').DataTable({
+    //   "paging": false
+    // });
+    // var productTable_info = productTable.page.info();
   }
 
   ngOnInit() {
+    this.onload();
+  }
+  private onload() {
     this.get_dishList();
   }
 
@@ -74,7 +81,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
       () => {
         setTimeout(() => {
           this.datatable_generate();
-        }, 1000)
+        })
       }
     )
   }

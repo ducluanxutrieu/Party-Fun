@@ -1,8 +1,12 @@
-import { Item } from "./item.model";
+import { ReceiptItem } from "./item.model";
 
 export class Receipt {
-    items: Item[];
-    numOfTable: number;
-    dateParty: Date;
-    total_price: number;
+    dishes: ReceiptItem[];
+    table: number;
+    customer: string;
+    count_customer: number;
+    currency: string;
+    date_party: Date;
+    total: number;
+    create_at: Date;
 }

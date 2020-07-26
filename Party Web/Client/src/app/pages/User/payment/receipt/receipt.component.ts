@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 //Models
 import { Receipt } from '../../../../_models/receipt.model'
-import { Item } from '../../../../_models/item.model';
+import { ReceiptItem } from '../../../../_models/item.model';
 //Services
 import { PaymentService } from '../../../../_services/payment.service';
 
@@ -13,7 +13,7 @@ import { PaymentService } from '../../../../_services/payment.service';
 })
 export class ReceiptComponent implements OnInit {
   receipt: Receipt;
-  receipt_items: Item[] = [];
+  receipt_items: ReceiptItem[] = [];
 
   bill_id: string;
   checkout_session_id: string;
@@ -25,7 +25,7 @@ export class ReceiptComponent implements OnInit {
 
   ngOnInit() {
     this.receipt = JSON.parse(sessionStorage.getItem('current_receipt'));
-    this.receipt_items = this.receipt.items;
+    this.receipt_items = this.receipt.dishes;
     this.activatedRoute.params.subscribe(params => {
       this.bill_id = params['bill_id'];
     })

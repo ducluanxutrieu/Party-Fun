@@ -12,18 +12,30 @@
           <i class="fa fa-list"></i> Category
         </div>
         <div class="list-group">
-          <a [routerLink]="['/category', 'Holiday Offers']" class="list-group-item category-title"
-            *ngIf="product_filter('Holiday Offers')?.length >0"><span><img src="assets/icon/gift.svg" class="pbicon"> Holiday Offers</span></a>
-          <a [routerLink]="['/category', 'First Dishes']" class="list-group-item category-title"
-            *ngIf="product_filter('First Dishes')?.length >0"><span><img src="assets/icon/salad.svg" class="pbicon"> First Dishes</span></a>
-          <a [routerLink]="['/category', 'Main Dishes']" class="list-group-item category-title"
-            *ngIf="product_filter('Main Dishes')?.length >0"><span><img src="assets/icon/pizza-slice-solid.svg" class="pbicon"> Main Dishes</span></a>
-          <a [routerLink]="['/category', 'Seafood']" class="list-group-item category-title"
-            *ngIf="product_filter('Seafood')?.length >0"><span><img src="assets/icon/seafood.svg" class="pbicon"> Seafood</span></a>
-          <a [routerLink]="['/category', 'Drinks']" class="list-group-item category-title"
-            *ngIf="product_filter('Drinks')?.length >0"><span><img src="assets/icon/cocktail-solid.svg" class="pbicon"> Drinks</span></a>
-          <a [routerLink]="['/category', 'Dessert']" class="list-group-item category-title"
-            *ngIf="product_filter('Dessert')?.length >0"><span><img src="assets/icon/cake-svgrepo-com.svg" class="pbicon"> Dessert</span></a>
+          <a [routerLink]="['/category', 'Holiday Offers' || 'all']" class="list-group-item category-title"
+            *ngIf="product_filter('Holiday Offers')?.length >0">
+            <span><img src="assets/icon/gift.svg" class="pbicon"> Holiday Offers</span>
+          </a>
+          <a [routerLink]="['/category', 'First Dishes' || 'all']" class="list-group-item category-title"
+            *ngIf="product_filter('First Dishes')?.length >0">
+            <span><img src="assets/icon/salad.svg" class="pbicon"> First Dishes</span>
+          </a>
+          <a [routerLink]="['/category', 'Main Dishes' || 'all']" class="list-group-item category-title"
+            *ngIf="product_filter('Main Dishes')?.length >0">
+            <span><img src="assets/icon/pizza-slice-solid.svg" class="pbicon"> Main Dishes</span>
+          </a>
+          <a [routerLink]="['/category', 'Seafood' || 'all']" class="list-group-item category-title"
+            *ngIf="product_filter('Seafood')?.length >0">
+            <span><img src="assets/icon/seafood.svg" class="pbicon"> Seafood</span>
+          </a>
+          <a [routerLink]="['/category', 'Drinks' || 'all']" class="list-group-item category-title"
+            *ngIf="product_filter('Drinks')?.length >0">
+            <span><img src="assets/icon/cocktail-solid.svg" class="pbicon"> Drinks</span>
+          </a>
+          <a [routerLink]="['/category', 'Dessert' || 'all']" class="list-group-item category-title"
+            *ngIf="product_filter('Dessert')?.length >0">
+            <span><img src="assets/icon/cake-svgrepo-com.svg" class="pbicon"> Dessert</span>
+          </a>
         </div>
       </div>
       <div class="col-lg-9 pr-0">
@@ -78,7 +90,10 @@
                     <h5 class="card-title">
                       <a [routerLink]="['/product', item._id]">{{item.name}}</a>
                     </h5>
-                    <h6>{{item.price | number}} VND</h6>
+                    <h6>
+                      {{item.price_new | number}} VND
+                      <span class="discount-percent" *ngIf="item?.discount>0">{{item?.discount}}% off</span>
+                    </h6>
                     <p class="card-text">{{item.description}}</p>
                   </div>
                   <div class="card-footer">

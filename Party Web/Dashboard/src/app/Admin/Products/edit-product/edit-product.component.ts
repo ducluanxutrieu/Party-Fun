@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 // Services
 import { ProductService } from '../../../_services/product.service';
 import { CommonService } from '../../../_services/common.service';
+import { ToastrService } from 'ngx-toastr';
 // Models
 import { Product } from '../../../_models/product.model';
 import { Select2OptionData } from 'ng-select2';
@@ -29,6 +30,7 @@ export class EditProductComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
     private commonService: CommonService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -73,7 +75,7 @@ export class EditProductComponent implements OnInit {
       },
       err => {
         console.log("Error: " + err.error.message);
-        alert("Error while getting dish info!");
+        this.toastr.error("Error while getting dish info!");
       }
     )
   }
@@ -93,8 +95,8 @@ export class EditProductComponent implements OnInit {
           this.product_imgs_url = res.data;
         },
         err => {
-          alert("Error: Upload image error!");
-          sessionStorage.setItem('error', JSON.stringify(err));
+          this.toastr.error("Error: Upload image error!");
+          console.log("Error: " + err.error.message);
           return;
         },
         // Sau khi upload hoàn tất, gửi request cập nhật món ăn
@@ -120,11 +122,11 @@ export class EditProductComponent implements OnInit {
     let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.categories)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
     this.productService.update_dish(body).subscribe(
       res => {
-        alert("Edit product success");
+        this.toastr.success("Edit product success");
         // window.location.reload();
       },
       err => {
-        alert("Error while update dish!");
+        this.toastr.error("Error while update dish!");
         console.log(`Error + ${err.error.message}`);
       }
     )

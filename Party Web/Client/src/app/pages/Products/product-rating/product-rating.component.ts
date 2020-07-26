@@ -5,11 +5,15 @@ import { api } from '../../../_api/apiUrl';
 import { Rating } from '../../../_models/rating.model';
 //Services
 import { AuthenticationService } from '../../../_services/authentication.service';
+import { ToastrService } from 'ngx-toastr';
+import { ProductService } from '../../../_services/product.service';
 
-declare var toastr;
 declare var $: any;
 
 interface Dish_rating {
+  start: number;
+  end: number;
+  total_page: number;
   count_rate: number;
   avg_rate: number;
   list_rate: Rating[];
@@ -30,6 +34,10 @@ interface rateOverall {
 export class ProductRatingComponent implements OnInit {
   @Input() productId: string;
   @Input() productRating: Dish_rating;
+  @Input('data') list_rate: Rating[] = [];
+  page: number = 1;
+  total_pages: number;
+
   current_user_id: string;  // Để so xác nhận comment nào là của mình
   // product_rating: any;
   reviewOverall: rateOverall = {
@@ -40,11 +48,23 @@ export class ProductRatingComponent implements OnInit {
     five: 0
   }
   rate = 0;
+
+  edit_trigger = false;
+  edit_id: string;
+  edit_rating = 0;
+  edit_review: string;
+
   constructor(
     private http: HttpClient,
     public authenticationService: AuthenticationService,
+    private toastr: ToastrService,
+    private productService: ProductService,
   ) { }
   ngOnInit() {
+    this.loaddata();
+  }
+
+  loaddata() {
     if (localStorage.getItem('userinfo')) {
       this.current_user_id = JSON.parse(localStorage.getItem('userinfo')).username;
     }
@@ -52,6 +72,8 @@ export class ProductRatingComponent implements OnInit {
     if (!this.authenticationService.loggedIn()) {
       $('#reviewbtn').text('Login to write review');
     }
+
+    this.get_rating_page(1);
   }
 
   // Xác nhận comment
@@ -63,23 +85,25 @@ export class ProductRatingComponent implements OnInit {
       let headers = new HttpHeaders({
         'Content-type': 'application/x-www-form-urlencoded',
         'Authorization': localStorage.getItem('token')
-      })
+      });
       let body = `id=${this.productId}&score=${data.rating}&comment=${data.comment}`;
       this.http.post(api.product_rate, body, { headers: headers, observe: 'response' }).subscribe(
-        res_data => {
-          // this.productService.getDishList();
-          sessionStorage.setItem('response', JSON.stringify(res_data.body));
-          toastr.success("Posted comment successfully!");
-          window.location.reload();
+        res => {
+          this.toastr.success("Posted review successfully!");
+          this.loaddata();
+          $('#new-review').val('')
+          data.comment = '';
+          data.rating = 0;
+          this.rate = 0;
         },
         err => {
-          toastr.error("Error: " + err.status + " " + err.error.message);
-          sessionStorage.setItem('error', JSON.stringify(err));
+          this.toastr.error("Error posting review");
+          console.log("Error: " + err.error.message);
         }
       )
     }
     else {
-      toastr.warning("You must be logged in to post a comment!");
+      this.toastr.warning("You must be logged in to post a comment!");
     }
   }
 
@@ -108,16 +132,69 @@ export class ProductRatingComponent implements OnInit {
       }
     }
   }
-  // Thay comment thành editor
-  edit_clicked(review: Rating) {
-    if ($('.review-block-description').text() == review.comment) {
-      var $el = $('.review-block-description')
-    }
-    let $textarea = $('<textarea/>').val(review.comment);
-    $el.replaceWith($textarea);
-  }
-  // Sửa comment
-  edit_comment(comment_id: string) {
 
+  // Thay review thành editor
+  edit_clicked(review: Rating, index: number) {
+    this.edit_trigger = true;
+    this.edit_review = review.comment;
+    this.edit_rating = review.score;
+    this.edit_id = review._id;
+    $(`#review${index}`).replaceWith($('#edit_review'));
+  }
+  // Sửa review
+  update_review() {
+    let headers = new HttpHeaders({
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Authorization': localStorage.getItem('token')
+    });
+    const body = `id=${this.edit_id}&score=${this.edit_rating}&comment=${this.edit_review}`;
+    this.http.put(api.product_rate, body, { headers: headers }).subscribe(
+      res => {
+        this.toastr.success("Update comment successfully!");
+        window.location.reload();
+      },
+      err => {
+        this.toastr.error("Error updating review!");
+        console.log("Error: " + err.error.message);
+      }
+    )
+  }
+
+  // Xóa review
+  delete_review(review: Rating) {
+    let headers = new HttpHeaders({
+      'Authorization': localStorage.getItem('token')
+    });
+    const options = {
+      headers: headers,
+      body: {
+        id: review._id
+      }
+    }
+    this.http.delete(api.product_rate, options).subscribe(
+      res => {
+        this.toastr.success("Delete comment successfully!");
+        this.loaddata();
+      },
+      err => {
+        this.toastr.error("Error deleting review!");
+        console.log("Error: " + err.error.message);
+      }
+    )
+  }
+
+  // Get rating page
+  get_rating_page(page: number) {
+    this.productService.get_dishRating(this.productId, page).subscribe(
+      res => {
+        this.list_rate = (res.data as Dish_rating).list_rate;
+        this.total_pages = res.data.total_page;
+        this.page = page;
+      },
+      err => {
+        console.log("Error: " + err.error.message);
+        sessionStorage.setItem('error', JSON.stringify(err));
+      }
+    )
   }
 }

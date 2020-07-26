@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-//Services
+// Services
 import { AuthenticationService } from '../../../_services/authentication.service';
-//Models
+import { ToastrService } from 'ngx-toastr';
+// Models
 import { User } from '../../../_models/user.model';
-
-declare var toastr;
 
 @Component({
   selector: 'app-userlogin',
@@ -17,12 +16,9 @@ export class UserloginComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private location: Location
-  ) {
-    toastr.options = {
-      "timeOut": "1500"
-    }
-  }
+    private location: Location,
+    private toastr: ToastrService
+  ) { }
   onClickSubmit(data: { username: string; pwd: string; }) {
     return this.authenticationService.signin(data.username, data.pwd).subscribe(
       res => {
@@ -35,7 +31,7 @@ export class UserloginComponent implements OnInit {
         this.location.back();
       },
       err => {
-        toastr.error("Error: " + err.status + " " + err.error.message);
+        this.toastr.error("Error: " + err.status + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       });
   }

@@ -21,3 +21,22 @@ export class StaffStatistic {
     count_bill: number;
     total_money: number;
 }
+
+export interface NewUpdateModel {
+    user_new: {
+        length: number;
+        data: [];
+    };
+    post_new: {
+        length: number;
+        data: []
+    };
+    invoice_new: {
+        length: number;
+        data: [];
+    };
+    dish_new: {
+        length: number;
+        data: [];
+    };
+}

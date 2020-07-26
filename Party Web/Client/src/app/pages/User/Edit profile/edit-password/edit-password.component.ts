@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { api } from '../../../../_api/apiUrl';
-
-declare var toastr;
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-password',
@@ -13,6 +12,7 @@ declare var toastr;
 export class EditPasswordComponent implements OnInit {
   constructor(
     private http: HttpClient,
+    private toastr: ToastrService
   ) { }
 
   onClickSubmit(data: {
@@ -26,12 +26,12 @@ export class EditPasswordComponent implements OnInit {
     })
     return this.http.put(api.change_password, body, { headers: headers }).subscribe(
       res => {
-        toastr.success("Change success!");
+        this.toastr.success("Change success!");
         sessionStorage.setItem('response', JSON.stringify(res));
-        toastr.success("Change password success!");
+        this.toastr.success("Change password success!");
       },
       err => {
-        toastr.error("Error: " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }

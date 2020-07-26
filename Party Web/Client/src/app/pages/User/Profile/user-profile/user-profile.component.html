@@ -6,23 +6,35 @@
     <hr>
     <div class="user-info-section">
         <div class="info-group">
-            <label class="info-label">Full name: <span class="info-content">{{userInfo?.full_name}}</span></label>
+            <label class="info-label">
+                Full name: <span class="info-content">{{userInfo?.full_name}}</span>
+            </label>
         </div>
         <div class="info-group">
-            <label class="info-label">Gender: <span class="info-content" *ngIf="userInfo?.gender=='1'">Male</span><span class="info-content" *ngIf="userInfo?.gender=='2'">Female</span></label>
+            <label class="info-label">
+                Gender: 
+                <span class="info-content" *ngIf="userInfo?.gender==1">Male</span>
+                <span class="info-content" *ngIf="userInfo?.gender==2">Female</span>
+            </label>
         </div>
         <div class="info-group">
-            <label class="info-label">Birthday: <span class="info-content">{{userInfo?.birthday | date: 'dd/MM/yyyy'}}</span></label>
+            <label class="info-label">
+                Birthday: <span class="info-content">{{userInfo?.birthday | date: 'dd/MM/yyyy'}}</span>
+            </label>
         </div>
         <div class="info-group">
-            <label class="info-label">Phone number: <span class="info-content">{{userInfo?.phone}}</span></label>
+            <label class="info-label">
+                Phone number: <span class="info-content">{{userInfo?.phone}}</span>
+            </label>
         </div>
         <div class="info-group">
-            <label class="info-label">Email: <span class="info-content">{{userInfo?.email}}</span></label>
+            <label class="info-label">
+                Email: <span class="info-content">{{userInfo?.email}}</span>
+            </label>
         </div>
-        <div class="info-group">
+        <!-- <div class="info-group">
             <label class="info-label">Date joined: <span class="info-content">{{userInfo?.create_at}}</span></label>
-        </div>
+        </div> -->
     </div>
     <div class="user-avatar text-center">
         <img class="rounded img-thumbnail img-fluid" src={{userInfo?.avatar}} alt="avatar">

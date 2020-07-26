@@ -19,14 +19,14 @@
         <div class="breadcrumb-holder container-fluid">
           <ul class="breadcrumb">
             <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
-            <li class="breadcrumb-item active">Recent bills</li>
+            <li class="breadcrumb-item active">Recent Bills</li>
           </ul>
         </div>
         <section class="tables">
           <div class="container-fluid">
             <div class="card">
               <div class="card-header d-flex align-items-center">
-                <h3 class="h4">Recent bills</h3>
+                <h3 class="h4">Recent Bills</h3>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -115,7 +115,7 @@
                       </tr>
                     </tbody>
                   </table>
-                  <pagination [total_pages]="total_pages" (onChange)="get_recentBills($event)"></pagination>
+                  <!-- <pagination [total_pages]="total_pages" (onChange)="get_recentBills($event)"></pagination> -->
                 </div>
               </div>
             </div>

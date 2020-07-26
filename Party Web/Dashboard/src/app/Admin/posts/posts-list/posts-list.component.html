@@ -28,7 +28,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table id="employeTable" class="table table-bordered table-striped employee-table">
+                  <table id="postsTable" class="table table-bordered table-striped">
                     <thead class="thead-dark">
                       <tr>
                         <th class="text-center">#</th>
@@ -40,25 +40,32 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let post of posts_list; let i = index">
+                      <tr
+                        *ngFor="let post of posts_list | paginate:{itemsPerPage:10,currentPage: page,totalItems:total_pages*10}; let i = index">
                         <th scope="row" class="align-middle text-center">{{i+1}}</th>
                         <td class="align-middle"><span class="table-text">{{post?.title}}</span></td>
                         <td class="align-middle text-center">{{post?.author}}</td>
                         <td class="align-middle text-center">{{post?.create_at | date:'dd-MM-yyyy'}}</td>
                         <td class="align-middle text-center">{{post?.update_at | date:'dd-MM-yyyy'}}</td>
                         <td class="text-center">
-                            <a href="post/edit/{{post?._id}}" class="pr-1">
-                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
-                            </a>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip"
-                                data-placement="top" title="Delete this post" (click)="post_delete(post?._id)">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
+                          <a href="post/edit/{{post?._id}}" class="pr-1">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip"
+                              data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                          </a>
+                          <!-- <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip"
+                            data-placement="top" title="Delete this post" (click)="post_delete(post?._id)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                          </button> -->
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <pagination [total_pages]="total_pages" (onChange)="get_posts_list($event)"></pagination>
+                  <!-- <pagination [total_pages]="total_pages" (onChange)="get_posts_list($event)"></pagination> -->
+                  <div class="has-text-centered pb-pagination text-right">
+                    <pagination-controls (pageChange)="get_page($event)" previousLabel="Previous" nextLabel="Next"
+                      autoHide="true">
+                    </pagination-controls>
+                  </div>
                 </div>
               </div>
             </div>

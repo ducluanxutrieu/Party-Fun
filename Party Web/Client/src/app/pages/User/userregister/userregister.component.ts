@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../../../_services/authentication.service';
-
-declare var toastr;
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-userregister',
@@ -14,6 +13,7 @@ export class UserregisterComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
+    private toastr: ToastrService
   ) { }
   onClickSubmit(data: {
     name: string;
@@ -24,12 +24,12 @@ export class UserregisterComponent implements OnInit {
   }) {
     this.authenticationService.signup(data).subscribe(
       res => {
-        toastr.success("Register success!");
+        this.toastr.success("Register success!");
         sessionStorage.setItem('response', JSON.stringify(res.body));
         this.router.navigate(['/user_login']);
       },
       err => {
-        toastr.error("Error: " + err.status + " " + err.error.message);
+        this.toastr.error("Error: " + err.status + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )

@@ -13,6 +13,66 @@
               <h2 class="no-margin-bottom">Dashboard</h2>
             </div>
           </header>
+          <!-- Dashboard Counts Section-->
+          <section class="dashboard-counts no-padding-bottom">
+            <div class="container-fluid">
+              <div class="row bg-white has-shadow">
+                
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center">
+                    <div class="icon bg-violet"><i class="fa fa-user"></i></div>
+                    <div class="title"><span>New<br>Users</span>
+                      <!-- <div class="progress">
+                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
+                      </div> -->
+                    </div>
+                    <div class="number"><strong>{{new_updates?.user_new?.length}}</strong></div>
+                    <span *ngIf="new_updates?.user_new?.length > 0" class="icon"><i class="fa fa-long-arrow-up fa-2x text-success"></i></span>
+                  </div>
+                </div>
+                
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center">
+                    <div class="icon bg-red"><i class="fa fa-sticky-note"></i></div>
+                    <div class="title"><span>New<br>Posts</span>
+                      <!-- <div class="progress">
+                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
+                      </div> -->
+                    </div>
+                    <div class="number"><strong>{{new_updates?.post_new?.length}}</strong></div>
+                    <span *ngIf="new_updates?.post_new?.length > 0" class="icon"><i class="fa fa-long-arrow-up fa-2x text-success"></i></span>
+                  </div>
+                </div>
+                
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center">
+                    <div class="icon bg-green"><i class="fa fa-money"></i></div>
+                    <div class="title"><span>New<br>Invoices</span>
+                      <!-- <div class="progress">
+                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"></div>
+                      </div> -->
+                    </div>
+                    <div class="number"><strong>{{new_updates?.invoice_new?.length}}</strong></div>
+                    <span *ngIf="new_updates?.invoice_new?.length > 0" class="icon"><i class="fa fa-long-arrow-up fa-2x text-success"></i></span>
+                  </div>
+                </div>
+                
+                <div class="col-xl-3 col-sm-6">
+                  <div class="item d-flex align-items-center">
+                    <div class="icon bg-orange"><i class="fa fa-cutlery"></i></div>
+                    <div class="title"><span>New<br>Products</span>
+                      <!-- <div class="progress">
+                        <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"></div>
+                      </div> -->
+                    </div>
+                    <div class="number"><strong>{{new_updates?.dish_new?.length}}</strong></div>
+                    <span *ngIf="new_updates?.dish_new?.length > 0" class="icon"><i class="fa fa-long-arrow-up fa-2x text-success"></i></span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
           <!-- Charts-->
           <section class="charts">
             <div class="container-fluid">
@@ -26,7 +86,11 @@
                           <div id="productBtn" class="col lg-12 mt-1 text-right">
                             <button type="button" value="day" class="btn btn-primary mr-1 chart-btn active" (click)="product_range_changed('day')">Day</button>
                             <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="product_range_changed('week')">Week</button>
-                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="product_range_changed('month')">Month</button>
+                            <button type="button" value="month" class="btn btn-primary mr-1 chart-btn" (click)="product_range_changed('month')">Month</button>
+                            <a href="#productCustom" type="button" class="btn btn-primary chart-btn" aria-expanded="false" data-toggle="collapse">Custom</a>
+                            <div id="productCustom" class="form-group collapse list-unstyled mt-3">
+                              <input #productCustomInput type="date" class="form-control" (change)="product_range_changed('custom', productCustomInput.value)">
+                            </div>
                           </div>
                       </div>
                     </div>
@@ -63,13 +127,13 @@
                           [labels]="moneyChartLabels"
                           [options]="moneyChartOptions"
                           [legend]="barChartLegend"
-                          [chartType]="lineChartType">
+                          [chartType]="barChartType">
                         </canvas>                                  
                     </div>
                   </div>
                 </div>
                 <!-- Customers Statistic -->
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                   <div class="card">
                     <div class="card-header">
                       <div class="row">
@@ -77,24 +141,35 @@
                           <div id="customerBtn" class="col lg-12 mt-1 text-right">
                             <button type="button" value="day" class="btn btn-primary mr-1 chart-btn active" (click)="customer_range_changed('day')">Day</button>
                             <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="customer_range_changed('week')">Week</button>
-                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="customer_range_changed('month')">Month</button>
+                            <button type="button" value="month" class="btn btn-primary mr-1 chart-btn" (click)="customer_range_changed('month')">Month</button>
+                            <a href="#customerCustom" type="button" class="btn btn-primary chart-btn" aria-expanded="false" data-toggle="collapse">Custom</a>
+                            <div id="customerCustom" class="form-group collapse list-unstyled mt-3">
+                              <input #customerCustomInput type="date" class="form-control" (change)="customer_range_changed('custom', customerCustomInput.value)">
+                            </div>
                           </div>
                       </div>
                     </div>
                     <span *ngIf="!isCustomerDataAvailable"  class="text-center pt-2 pb-2">No data available</span>
                     <div class="card-body" *ngIf="isCustomerDataAvailable">
-                        <canvas baseChart
-                          [datasets]="customerChartData"
-                          [labels]="customerChartLabels"
-                          [options]="customerChartOptions"
-                          [legend]="barChartLegend"
-                          [chartType]="barChartType">
-                        </canvas>     
+                      <!-- <div class="chartWrapper">
+                        <div class="chartAreaWrapper">
+                          <div class="chartAreaWrapper2"> -->
+                            <canvas baseChart
+                              [datasets]="customerChartData"
+                              [labels]="customerChartLabels"
+                              [options]="customerChartOptions"
+                              [legend]="barChartLegend"
+                              [chartType]="barChartType">
+                            </canvas>
+                          <!-- </div>
+                        </div>
+                          <canvas id="myChartAxis" height="300" width="0"></canvas>
+                      </div> -->
                     </div>
                   </div>
                 </div>
                 <!-- Staffs Statistic -->
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                   <div class="card">
                     <div class="card-header">
                       <div class="row">
@@ -102,7 +177,11 @@
                           <div id="staffBtn" class="col lg-12 mt-1 text-right">
                             <button type="button" value="day" class="btn btn-primary mr-1 chart-btn active" (click)="staff_range_changed('day')">Day</button>
                             <button type="button" value="week" class="btn btn-primary mr-1 chart-btn" (click)="staff_range_changed('week')">Week</button>
-                            <button type="button" value="month" class="btn btn-primary chart-btn" (click)="staff_range_changed('month')">Month</button>
+                            <button type="button" value="month" class="btn btn-primary mr-1 chart-btn" (click)="staff_range_changed('month')">Month</button>
+                            <a href="#employeeCustom" type="button" class="btn btn-primary chart-btn" aria-expanded="false" data-toggle="collapse">Custom</a>
+                            <div id="employeeCustom" class="form-group collapse list-unstyled mt-3">
+                              <input #employeeCustomInput type="date" class="form-control" (change)="staff_range_changed('custom', employeeCustomInput.value)">
+                            </div>
                           </div>
                       </div>
                     </div>

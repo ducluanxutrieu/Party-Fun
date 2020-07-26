@@ -4,7 +4,17 @@
     font-family: 'Montserrat', sans-serif;
     background-color: #f6f6f6;
 }
-.nav-btn{
+
+.nav-btn {
     font-family: Roboto, Helvetica, sans-serif;
     color: white!important;
+}
+
+.checkout-item img {
+    width: 34px;
+    height: 34px;
+}
+
+.discount {
+    font-size: 6px;
 }

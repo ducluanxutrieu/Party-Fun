@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 // Services
 import { PostService } from '../../../_services/post.service';
 import { CommonService } from '../../../_services/common.service';
+import { ToastrService } from 'ngx-toastr';
 /// Models
 import { Post } from '../../../_models/post.model';
 import { api } from '../../../_api/apiUrl';
@@ -58,7 +59,8 @@ export class PostsEditComponent implements OnInit {
   constructor(
     private postService: PostService,
     private commonService: CommonService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class PostsEditComponent implements OnInit {
           this.post.feature_image = res.data;
         },
         err => {
-          alert("Error: Upload image error!");
+          this.toastr.error("Error: Upload image error!");
           return;
         },
         () => {
@@ -99,11 +101,11 @@ export class PostsEditComponent implements OnInit {
     let body = `_id=${this.post_id}&title=${content.title}&feature_image=${this.post.feature_image}&content=${encodeURIComponent(this.post.content)}`;
     this.postService.edit_post(body).subscribe(
       res => {
-        alert("Edit post success!");
-        window.location.reload();
+        this.toastr.success("Edit post success!");
+        // window.location.reload();
       },
       err => {
-        alert("Error while uploading post!");
+        this.toastr.error("Error while uploading post!");
         console.log("Error" + err.error.message);
       }
     )

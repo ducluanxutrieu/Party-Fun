@@ -3,6 +3,7 @@ export class Product {
     name: string;
     description: string;
     price: number;
+    price_new: number;
     discount: number;
     image: string[];
     create_at: string;

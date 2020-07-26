@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 // Services
 import { api } from '../../_api/apiUrl';
 import { UserService } from '../../_services/user.service';
+import { ToastrService } from 'ngx-toastr';
 // Models
 import { User } from '../../_models/user.model';
 
@@ -20,10 +21,15 @@ export class ProfileComponent implements OnInit {
   constructor(
     public userService: UserService,
     private http: HttpClient,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
+    this.onload();
+  }
+
+  private onload() {
     this.get_userInfo();
   }
   // Lấy thông tin user
@@ -47,15 +53,14 @@ export class ProfileComponent implements OnInit {
     birthday: string;
   }) {
     this.birthday = this.datepipe.transform(data.birthday, 'MM/dd/yyyy');
-    let body = `full_name=${data.name}&sex=${data.gender}&birthday=${this.birthday}&phone=${data.phone}&email=${data.email}`;
+    let body = `full_name=${data.name}&gender=${data.gender}&birthday=${this.birthday}&phone=${data.phone}&email=${data.email}`;
     this.userService.update_userInfo(body).subscribe(
       res => {
-        sessionStorage.setItem('response_body', JSON.stringify(res));
-        alert("Update info success!");
-        window.location.reload();
+        this.toastr.success("Update info success!");
+        this.onload();
       },
       err => {
-        alert("Error: " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )
@@ -72,11 +77,11 @@ export class ProfileComponent implements OnInit {
     this.http.put(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        window.location.reload();
+        this.onload();
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
+        this.toastr.error("Error while change avatar!");
+        console.log("Error: " + err.error.message);
       })
   }
 

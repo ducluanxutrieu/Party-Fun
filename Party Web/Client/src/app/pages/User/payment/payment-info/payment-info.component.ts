@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from "ngx-stripe";
-
-declare var toastr;
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-payment-info',
@@ -51,7 +50,8 @@ export class PaymentInfoComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private stripeService: StripeService
+    private stripeService: StripeService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -96,7 +96,7 @@ export class PaymentInfoComponent implements OnInit {
           // Use the token to create a charge or a customer
           // https://stripe.com/docs/charges
           console.log(result.token);
-          toastr.success("Payment success!");
+          this.toastr.success("Payment success!");
         } else if (result.error) {
           // Error creating the token
           console.log(result.error.message);

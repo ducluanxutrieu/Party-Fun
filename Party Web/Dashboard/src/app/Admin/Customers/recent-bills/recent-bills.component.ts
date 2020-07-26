@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 // Services
 import { StatisticalService } from '../../../_services/statistical.service';
@@ -19,17 +20,17 @@ declare var $: any;
 
 export class RecentBillsComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
-  total_pages: number;
   recent_bills: Bill[] = [];
   bill_detail: Bill_item[] = [];
   current_bill: Bill;
 
-  dtTrigger: Subject<any> = new Subject(); 
+  dtTrigger: Subject<any> = new Subject();
 
   constructor(
     public statisticalService: StatisticalService,
     public paymentService: PaymentService,
     public productService: ProductService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -40,10 +41,9 @@ export class RecentBillsComponent implements OnInit {
     }
   }
 
-  //Generate datatable 
+  // Generate datatable 
   datatable_generate() {
     if ($.fn.DataTable.isDataTable('#recentbillTable')) {
-      console.log(1);
       $('#recentbillTable').DataTable().fnDraw();
     }
 
@@ -78,23 +78,48 @@ export class RecentBillsComponent implements OnInit {
     };
   }
 
-  // Lấy danh sách bill và tạo datatable
+  // Lấy danh sách bill gần đây và tạo datatable
   get_recentBills(page: number) {
     this.paymentService.get_bills_list(page).subscribe(
       res => {
         this.recent_bills = res.data.value as Bill[];
-        this.total_pages = res.data.total_page;
         this.dtTrigger.next();
       },
       err => {
         console.log("Error: " + err.error.text);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
-      // () => {
-      //   setTimeout(() => {
-      //     this.datatable_generate();
-      //   }, 1000)
-      // }
+      () => {
+        setTimeout(() => {
+          this.datatable_generate();
+        })
+      }
+    )
+  }
+
+  // Xác nhận đơn hàng
+  confirm_bill(bill_id: string, note: string) {
+    this.paymentService.confirm_bill(bill_id, note).subscribe(
+      res => {
+        this.toastr.success("Confirm bill success!");
+      },
+      err => {
+        this.toastr.error("Failed confirm bill!");
+        console.log("Error: " + err.error.message);
+      }
+    )
+  }
+
+  // Hủy đơn hàng
+  cancel_bill(bill_id: string, note: string) {
+    this.paymentService.cancel_bill(bill_id, note).subscribe(
+      res => {
+        this.toastr.success("Cancel bill success!");
+      },
+      err => {
+        this.toastr.error("Failed cancel bill!");
+        console.log("Error: " + err.error.message);
+      }
     )
   }
 }

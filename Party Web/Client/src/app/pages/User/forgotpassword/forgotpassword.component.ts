@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { api } from '../../../_api/apiUrl';
-
-declare var toastr;
+// Services
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forgotpassword',
@@ -16,7 +16,8 @@ export class ForgotpasswordComponent implements OnInit {
   username: string
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
 
   onClickSubmit(data: {
@@ -35,7 +36,7 @@ export class ForgotpasswordComponent implements OnInit {
           this.username = data.username;
         },
         err => {
-          toastr.error("Error: " + err.status + " " + err.error.message);
+          this.toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }
@@ -45,12 +46,12 @@ export class ForgotpasswordComponent implements OnInit {
       console.log(body);
       this.http.put(api.confirm_otp, body, { headers: headers, observe: 'response' }).subscribe(
         res => {
-          toastr.success("Change password success!");
+          this.toastr.success("Change password success!");
           this.router.navigate(['/user_login']);
           this.is_authorized = false;
         },
         err => {
-          toastr.error("Error: " + err.status + " " + err.error.message);
+          this.toastr.error("Error: " + err.status + " " + err.error.message);
           sessionStorage.setItem('error', JSON.stringify(err));
         })
     }

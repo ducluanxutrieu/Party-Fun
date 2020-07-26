@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 import { api } from '../_api/apiUrl';
 // Models
@@ -10,8 +11,9 @@ import { ApiResponse } from '..//_models/response.model';
 export class AuthenticationService {
     constructor(
         private http: HttpClient,
-        private router: Router
-    ) { }
+        private router: Router,
+        private toastr: ToastrService
+    ) {}
     // Đăng nhập
     login(username: string, password: string) {
         const body = `username=${username}&password=${password}`;
@@ -28,11 +30,11 @@ export class AuthenticationService {
                     localStorage.setItem('avatar', res.data.avatar);
                     this.router.navigate(['/dashboard']);
                 } else {
-                    alert("Must be staff or admin account!");
+                    this.toastr.error("Must be staff or admin account!");
                 }
             },
             err => {
-                alert("Error: " + err.error.message);
+                this.toastr.error("Error: " + err.error.message);
                 sessionStorage.setItem('error', JSON.stringify(err));
             });
     }

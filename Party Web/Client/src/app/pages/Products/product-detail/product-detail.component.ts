@@ -7,6 +7,9 @@ import { Product } from '../../../_models/product.model';
 import { Rating } from '../../../_models/rating.model';
 
 interface Dish_rating {
+  start: number;
+  end: number;
+  total_page: number;
   count_rate: number;
   avg_rate: number;
   list_rate: Rating[];
@@ -37,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
       this.productService.get_dish(product_id).subscribe(
         res => {
           this.product_data = res.data as Product;
-          this.get_suggestList(this.product_data.categories);
+          this.get_suggestList(this.product_data.categories[0]);
           // this.product_filter(this.product_data.categories); // tạm thời
         },
         err => {

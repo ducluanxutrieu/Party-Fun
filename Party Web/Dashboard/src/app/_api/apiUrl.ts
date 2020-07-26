@@ -19,11 +19,14 @@ export const api = {
     moneyStatistics: `${apiUrl}/product/statistic_money`,       // Thống kê tổng hóa đơn theo 7 lần gần nhất
     customerStatistics: `${apiUrl}/product/statistic_customer`, // Thống kê tiền khách hàng thanh toán trong 1 ngày/tháng/tuần
     staffStatistics: `${apiUrl}/product/statistic_staff`,       // Thống kê số tiền nhân viên đã thanh toán trong 1 ngày/tuần/tháng 
+    new_update: `${apiUrl}/product/get_dashboard`,              // Thống kê các cập nhật mới trong tuần
 
     // Payment
     get_bills_list: `${apiUrl}/product/bill`,                   // Lấy danh sách hóa đơn
+    bill_confirm: `${apiUrl}/product/bill`,                     // Xác nhận đơn hàng
+    bill_cancel: `${apiUrl}/product/bill`,                      // Hủy đơn hàng
     pay_bill: `${apiUrl}/product/payment`,                      // Thanh toán đơn hàng
-    delete_bill: `${apiUrl}/product/deletebill`,                // Xóa đơn hàng
+    // delete_bill: `${apiUrl}/product/deletebill`,                // Xóa đơn hàng
 
     // Dishes
     add_dish: `${apiUrl}/product/dish`,                         // Thêm món ăn mới
@@ -34,6 +37,10 @@ export const api = {
 
     // Posts
     post: `${apiUrl}/product/posts`,                            // Thao tác với post
+
+    // Discounts
+    create_discount: `${apiUrl}/product/discount`,              // Tạo mã giảm giá
+    get_discounts_list: `${apiUrl}/product/discount_expiresIn`, // Lấy danh sách mã giảm giá
 
     // Others
     upload_image: `${apiUrl}/product/upload_image`,             // Upload ảnh

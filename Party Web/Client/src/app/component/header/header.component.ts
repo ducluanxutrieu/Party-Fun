@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 //Service
 import { AuthenticationService } from '../../_services/authentication.service';
-
-declare var toastr;
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -16,11 +15,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     public authenticationService: AuthenticationService,
     private router: Router,
-  ) {
-    toastr.options = {
-      "timeOut": "1500"
-    }
-  }
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.get_userInfo();
@@ -41,7 +37,7 @@ export class HeaderComponent implements OnInit {
       },
       err => {
         sessionStorage.setItem('error', JSON.stringify(err));
-        toastr.error("Cannot logout!");
+        this.toastr.error("Cannot logout!");
       })
   }
   // fbLibrary() {

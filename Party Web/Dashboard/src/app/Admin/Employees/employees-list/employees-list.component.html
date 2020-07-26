@@ -1,63 +1,72 @@
 <!DOCTYPE html>
 <html>
-  
-<body>
-    <div class="page">
-        <div class="page-content d-flex align-items-stretch">
-          <!-- Sidebar -->
-          <app-sidebar></app-sidebar>
 
-          <!-- Page content-->
-          <div class="content-inner">
-            <header class="page-header">
-                <div class="container-fluid">
-                  <h2 class="no-margin-bottom">Employees</h2>
-                </div>
-            </header>
-            <!-- Breadcrumb-->
-            <div class="breadcrumb-holder container-fluid">
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
-                <li class="breadcrumb-item active">Employees list</li>
-            </ul>
-            </div>
-            <section class="tables">
-                <div class="container-fluid">
-                    <div class="card">
-                      <div class="card-header d-flex align-items-center">
-                        <h3 class="h4">Employees list</h3>
-                      </div>
-                      <div class="card-body">
-                        <div class="table-responsive">
-                          <table id="employeTable" class="table table-bordered table-striped employee-table">
-                            <thead class="thead-dark">
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">Employee Name</th>
-                                <th class="text-center">Username</th>
-                                <th class="text-center">Actions</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor="let staff of staffs_List; let i = index">
-                                <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                                <td class="align-middle text-center">{{staff.full_name}}</td>
-                                <td class="align-middle text-center">{{staff.username}}</td>
-                                <td class="text-center">
-                                  <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Downgrade this user" (click)="downgrade(staff._id)">
-                                    <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-            </section>
+<body>
+  <div class="page">
+    <div class="page-content d-flex align-items-stretch">
+      <!-- Sidebar -->
+      <app-sidebar></app-sidebar>
+
+      <!-- Page content-->
+      <div class="content-inner">
+        <header class="page-header">
+          <div class="container-fluid">
+            <h2 class="no-margin-bottom">Employees</h2>
           </div>
+        </header>
+        <!-- Breadcrumb-->
+        <div class="breadcrumb-holder container-fluid">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+            <li class="breadcrumb-item active">Employees list</li>
+          </ul>
         </div>
+        <section class="tables">
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Employees list</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="employeTable" class="table table-bordered table-striped employee-table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Employee Name</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let staff of staffs_List | paginate:{itemsPerPage:10,currentPage: page,totalItems:total_pages*10}; let i = index">
+                        <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                        <td class="align-middle text-center">{{staff.full_name}}</td>
+                        <td class="align-middle text-center">{{staff.username}}</td>
+                        <td class="text-center">
+                          <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip"
+                            data-placement="top" title="Downgrade this user" (click)="downgrade(staff._id)">
+                            <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- Pagination -->
+                  <div class="has-text-centered pb-pagination text-right">
+                    <pagination-controls (pageChange)="get_page($event)" previousLabel="Previous" nextLabel="Next"
+                      autoHide="true">
+                    </pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
+  </div>
 </body>
+
 </html>

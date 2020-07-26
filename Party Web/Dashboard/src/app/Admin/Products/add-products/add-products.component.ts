@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { CommonService } from '../../../_services/common.service';
 import { ProductService } from '../../../_services/product.service';
 import { Select2OptionData } from 'ng-select2';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-products',
@@ -26,6 +27,7 @@ export class AddProductsComponent implements OnInit {
   constructor(
     private commonService: CommonService,
     private productService: ProductService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -68,8 +70,8 @@ export class AddProductsComponent implements OnInit {
         this.product_imgs_urls = res.data;
       },
       err => {
-        alert("Error: Upload image error!");
-        sessionStorage.setItem('error', JSON.stringify(err));
+        this.toastr.error("Error: Upload image error!");
+        console.log("Error: " + err.error.message);
         return;
       },
       () => {
@@ -78,12 +80,12 @@ export class AddProductsComponent implements OnInit {
         this.productService.add_dish(body).subscribe(
           res => {
             sessionStorage.setItem('response', JSON.stringify(res));
-            alert("Add product success");
+            this.toastr.success("Add product success");
             this.product_form.reset();
           },
           err => {
-            alert("Error: " + err.error.message);
-            sessionStorage.setItem('error', JSON.stringify(err));
+            this.toastr.error("Error while adding dish!");
+            console.log("Error: " + err.error.message);
           }
         )
       }

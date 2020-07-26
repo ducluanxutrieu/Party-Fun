@@ -9,3 +9,34 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.dark-grey-text {
+    color: #4f4f4f !important;
+}
+
+/* .dark-grey-text:hover, .dark-grey-text:focus {
+    color: #4f4f4f !important;
+} */
+
+.pb-pagination /deep/ .ngx-pagination .current {
+    background-color: #2ecc71;
+    border-radius: 100%;
+    transition: 0.2s;
+}
+
+.pb-pagination /deep/ .ngx-pagination li a:hover {
+    border-radius: 100%;
+}
+
+.original-price {
+    margin-left: .5rem;
+    font-size: .8em;
+    font-weight: normal;
+    color: rgb(120, 120, 120)!important;
+    text-decoration: line-through;
+}
+
+.discount-percent {
+    text-transform: uppercase;
+    color: #ff5252;
+}

@@ -1,7 +1,7 @@
 <!-- <body> -->
 <app-header></app-header>
 <div class="text-center" *ngIf="!post?.content">
-  <img src="assets/images/hakase-walking.gif" alt="loading">
+  <div class="spinner-border" role="status"></div>
   <h4>Loading...</h4>
 </div>
 <!-- Main -->
@@ -15,15 +15,15 @@
         <span>Written by <strong>{{post?.author}}</strong>, {{post?.create_at | date: 'dd.MM.yyyy'}}</span>
       </div>
       <!--Featured Image-->
-      <div class="card mb-4">
+      <div class="card mb-4 border-0">
         <img src={{post?.feature_image}} alt="..." class="img-fluid post-feature">
       </div>
       <!-- Post content -->
-      <div class="card mb-4">
+      <div class="card mb-4 post-content-wrapper">
         <div class="card-body post-content" [innerHTML]="post?.content | safeHtml"></div>
       </div>
       <!-- Author -->
-      <div class="card mb-4">
+      <!-- <div class="card mb-4">
 
         <div class="card-header font-weight-bold">
           <span>About author</span>
@@ -56,22 +56,22 @@
           </div>
 
         </div>
-      </div>
+      </div> -->
     </div>
     <!-- Side content -->
     <div class="col-md-4">
       <!-- Similar posts -->
-      <div class="card">
-        <div class="card-header">Similar posts</div>
+      <div class="card mb-4">
+        <div class="card-header">Same author's posts</div>
         <div class="card-body">
-          <ul class="list-unstyled" *ngFor="let post of similar_posts">
-            <li class="media">
+          <ul class="list-unstyled" *ngFor="let post of similar_posts ; let i=index">
+            <li class="media side-content" *ngIf="i < 11">
               <img class="d-flex mr-3" width="70" height="70" src={{post?.feature_image}} alt="post_image">
               <div class="media-body">
                 <a [routerLink]="['/post/detail', post?._id]">
-                  <h5 class="mt-0 mb-1 font-weight-bold">{{post?.title}}</h5>
+                  <h5 class="mt-0 mb-1 font-weight-bold dark-grey-text side-post-title text-2line">{{post?.title}}</h5>
                 </a>
-                <span class="summary-text">{{post?.summary}}</span>
+                <span class="text-2line">{{post?.summary}}</span>
               </div>
             </li>
           </ul>

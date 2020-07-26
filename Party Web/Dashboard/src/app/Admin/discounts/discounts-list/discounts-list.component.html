@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+          <!-- Sidebar -->
+          <app-sidebar></app-sidebar>
+
+          <!-- Page content -->
+          <div class="content-inner">
+            <header class="page-header">
+                <div class="container-fluid">
+                  <h2 class="no-margin-bottom">Discount</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+              <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                  <li class="breadcrumb-item active">Discounts list</li>
+              </ul>
+            </div>
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="card">
+                      <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Discounts list</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table id="discountTable" class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Discount code</th>
+                                <th class="text-center">Value</th>
+                                <th class="text-center">Expired</th>
+                                <th class="text-center">Author</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let discount of discounts_list; let i = index">
+                                <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                                <td class="align-middle text-center">{{discount.code}}</td>
+                                <td class="align-middle text-center">{{discount.discount | number}}</td>
+                                <td class="align-middle text-center">{{discount.expiresIn | date:'dd-MM-yyyy'}}</td>
+                                <td class="align-middle text-center">{{discount.author}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </section>
+          </div>
+        </div>
+    </div>
+</body>
+</html>

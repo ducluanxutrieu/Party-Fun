@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+
 // Services
 import { api } from '../../../_api/apiUrl';
 import { PostService } from '../../../_services/post.service';
 import { CommonService } from '../../../_services/common.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-post',
@@ -14,10 +16,13 @@ export class PostComponent implements OnInit {
   post_feature_image;
   constructor(
     private postService: PostService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private toastr: ToastrService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.onload();
+  }
 
   options: Object = {
     pastePlain: true,
@@ -63,6 +68,8 @@ export class PostComponent implements OnInit {
     // }
   }
 
+  private onload() { }
+
   // Thêm bài viết
   add_post(content: {
     title: string
@@ -73,18 +80,20 @@ export class PostComponent implements OnInit {
         post_feature_image_url = res.data;
       },
       err => {
-        alert("Error: Upload image error!");
+        this.toastr.error("Error: Upload image error!");
         return;
       },
       () => {
         let body = `title=${content.title}&feature_image=${post_feature_image_url}&content=${encodeURIComponent(this.post_content)}`;
         this.postService.add_post(body).subscribe(
           res => {
-            alert("Add post success!");
-            window.location.reload();
+            this.toastr.success("Add post success!");
+            // window.location.reload();
+            this.onload();
           },
           err => {
-            alert("Error: " + err.error.message);
+            this.toastr.error("Error while adding post!");
+            console.log("Error" + err.error.message);
           }
         )
       }

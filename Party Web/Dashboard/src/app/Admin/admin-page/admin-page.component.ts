@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 // services
 import { StatisticalService } from '../../_services/statistical.service';
 // Models
 import { MoneyStatistic, DishStatistic, CustomerStatistic, StaffStatistic } from '../../_models/statistic.model';
-
+import { NewUpdateModel } from '../../_models/statistic.model';
 declare var $: any;
 
 @Component({
@@ -14,6 +15,7 @@ declare var $: any;
   styleUrls: ['./admin-page.component.css']
 })
 export class AdminPageComponent implements OnInit {
+  new_updates: NewUpdateModel;
   dishes_statistics: DishStatistic[] = [];
 
   // Option cho biểu đồ thống kê món ăn
@@ -39,21 +41,30 @@ export class AdminPageComponent implements OnInit {
 
   // Option cho biểu đồ thống kê doanh thu
   public moneyChartOptions = {
-    // scaleShowVerticalLines: false,
+    scaleShowVerticalLines: false,
     responsive: true,
-    // scales: {
-    //   xAxes: [{
-    //     barPercentage: 0.4,
-    //     maxBarThickness: 50,
-    //   }],
-    //   yAxes: [
-    //     {
-    //       ticks: {
-    //         beginAtZero: true
-    //       }
-    //     }
-    //   ]
-    // }
+    scales: {
+      xAxes: [{
+        barPercentage: 0.4,
+        maxBarThickness: 50,
+      }],
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+            userCallback: function (value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+
+              // Convert the array to a string and format the output
+              value = value.join('.');
+              return value;
+            }
+          }
+        }
+      ]
+    }
   };
 
   // Option cho biểu đồ thống kê tiền khách hàng thanh toán
@@ -80,7 +91,16 @@ export class AdminPageComponent implements OnInit {
         {
           id: 'y-axis-1',
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            userCallback: function (value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+
+              // Convert the array to a string and format the output
+              value = value.join('.');
+              return value;
+            }
           },
           position: 'right',
           gridLines: {
@@ -126,6 +146,7 @@ export class AdminPageComponent implements OnInit {
 
   constructor(
     private statisticalService: StatisticalService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -134,6 +155,7 @@ export class AdminPageComponent implements OnInit {
     this.product_range_changed('day');
     this.customer_range_changed('day');
     this.staff_range_changed('day');
+    this.get_newUpdate();
   }
 
   // Lấy Thống kê tổng hóa đơn theo 7 ngày gần nhất và tạo biểu đồ tương ứng
@@ -146,8 +168,8 @@ export class AdminPageComponent implements OnInit {
         });
       },
       err => {
-        console.log("Error: " + err.error.message);
-        alert("Error while getting money statistic!");
+        console.error("Error: " + err.error.message);
+        this.toastr.error("Error while getting money statistic!");
       });
   }
 
@@ -248,12 +270,13 @@ export class AdminPageComponent implements OnInit {
   }
 
   // Khi thay đổi phạm vi thống kê món ăn
-  product_range_changed(value: string) {
-    $('.chart-btn').on('click', function () {
+  product_range_changed(value: string, date?: string) {
+    $('#productBtn > .chart-btn').on('click', function () {
       $('#productBtn > .chart-btn').removeClass('active');
       $(this).addClass('active');
+      $('#productCustom').collapse('hide');
     });
-    this.statisticalService.get_productStatistics(value).subscribe(
+    this.statisticalService.get_productStatistics(value, date).subscribe(
       res => {
         if (res.data.length > 0) {
           this.isProductDataAvailable = true;
@@ -265,19 +288,20 @@ export class AdminPageComponent implements OnInit {
         });
       },
       err => {
-        console.log("Error: " + err.error.message);
-        alert("Error while getting product statistic!");
+        console.error("Error: " + err.error.message);
+        this.toastr.error("Error while getting product statistic!");
       }
     );
   }
 
   // Khi thay đổi phạm vi thống kê khách hàng
-  customer_range_changed(value: string) {
-    $('.chart-btn').on('click', function () {
+  customer_range_changed(value: string, date?: string) {
+    $('#customerBtn > .chart-btn').on('click', function () {
       $('#customerBtn > .chart-btn').removeClass('active');
       $(this).addClass('active');
+      $('#customerCustom').collapse('hide');
     });
-    this.statisticalService.get_customerStatistics(value, null).subscribe(
+    this.statisticalService.get_customerStatistics(value, null, date).subscribe(
       res => {
         if (res.data.length > 0) {
           this.isCustomerDataAvailable = true;
@@ -289,19 +313,20 @@ export class AdminPageComponent implements OnInit {
         });
       },
       err => {
-        console.log("Error: " + err.error.message);
-        alert("Error while getting customer statistic!");
+        console.error("Error: " + err.error.message);
+        this.toastr.error("Error while getting customer statistic!");
       }
     );
   }
 
   // Khi thay đổi phạm vi thống kê nhân viên
-  staff_range_changed(value: string) {
-    $('.chart-btn').on('click', function () {
+  staff_range_changed(value: string, date?: string) {
+    $('#staffBtn > .chart-btn').on('click', function () {
       $('#staffBtn > .chart-btn').removeClass('active');
       $(this).addClass("active");
+      $('#employeeCustom').collapse('hide');
     });
-    this.statisticalService.get_staffStatistics(value).subscribe(
+    this.statisticalService.get_staffStatistics(value, date).subscribe(
       res => {
         if (res.data.length > 0) {
           this.isStaffDataAvailable = true;
@@ -313,9 +338,18 @@ export class AdminPageComponent implements OnInit {
         });
       },
       err => {
-        console.log("Error: " + err.error.message);
-        alert("Error while getting staff statistic!");
+        console.error("Error: " + err.error.message);
+        this.toastr.error("Error while getting staff statistic!");
       }
     );
+  }
+
+  // Lấy các update mới
+  get_newUpdate() {
+    this.statisticalService.get_newUpdate().subscribe(
+      res => {
+        this.new_updates = res.data as NewUpdateModel;
+      }
+    )
   }
 }

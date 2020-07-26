@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // Services
@@ -12,10 +12,11 @@ import { Product } from '../../../_models/product.model';
   styleUrls: ['./product-category.component.css']
 })
 export class ProductCategoryComponent implements OnInit {
-  // products_data: Product[] = [];
-  filtered_products: Product[] = [];
-  cat_filter: string;
+  @Input('data') filtered_products: Product[] = [];
+  page: number = 1;
   total_pages: number;
+
+  cat_filter: string;
   // pageOfItems: Array<any>;
 
   constructor(
@@ -28,12 +29,17 @@ export class ProductCategoryComponent implements OnInit {
     this.productService.addCartItem(id, 1);
   }
 
+  get_page(page: number) {
+    this.get_dishes_byCate(this.cat_filter, page);
+  }
+
   // Lấy danh sách món ăn theo category
   get_dishes_byCate(category: string, page: number) {
     this.productService.get_dish_by_category(category, page).subscribe(
       res => {
         this.filtered_products = res.data.value as Product[];
         this.total_pages = res.data.total_page;
+        this.page = page;
       },
       err => {
         console.log("Error: " + err.error.message);

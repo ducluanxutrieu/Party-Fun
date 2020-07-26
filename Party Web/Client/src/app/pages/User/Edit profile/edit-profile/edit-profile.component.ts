@@ -3,11 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
 import { api } from '../../../../_api/apiUrl';
-//Models
+// Services
+import { ToastrService } from 'ngx-toastr';
+// Models
 import { User } from '../../../../_models/user.model';
 import { ApiResponse } from '../../../../_models/response.model';
-
-declare var toastr;
 
 @Component({
   selector: 'app-edit-profile',
@@ -20,6 +20,7 @@ export class EditProfileComponent implements OnInit {
   constructor(
     private http: HttpClient,
     public datepipe: DatePipe,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -42,10 +43,10 @@ export class EditProfileComponent implements OnInit {
       res => {
         sessionStorage.setItem('response', JSON.stringify(res));
         localStorage.setItem('userinfo', JSON.stringify(res.data));
-        toastr.success("Update success!");
+        this.toastr.success("Update success!");
       },
       err => {
-        toastr.error("Error: " + " " + err.error.message);
+        this.toastr.error("Error: " + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
