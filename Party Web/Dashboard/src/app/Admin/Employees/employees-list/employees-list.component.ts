@@ -1,11 +1,14 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, Input } from '@angular/core';
 import { StaffService } from '../../../_services/staff.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
 // declare jquery;
 declare var $: any;
 
 interface Staff {
-  user: any[]
+  _id: string;
+  username: string;
+  full_name: string;
+  avatar: string;
 }
 
 @Component({
@@ -14,17 +17,21 @@ interface Staff {
   styleUrls: ['./employees-list.component.css']
 })
 export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit {
-  // staffsList = [];
-  staffsList: Staff;
+  @Input('data') staffs_List: Staff[] = [];
+  page: number = 1;
+  total_pages: number;
+
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
-    private staffService: StaffService
+    private staffService: StaffService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
-  downgrade(username: string) {
-    if (confirm("Are you sure to downgrade this user? " + username)) {
-      this.staffService.downgradeStaff(username);
+  downgrade(user_id: string) {
+    if (confirm("Are you sure to downgrade this user?")) {
+      this.staffService.downgradeStaff(user_id);
     };
   }
 
@@ -42,13 +49,25 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.staffService.get_staffsList().subscribe(
-      res_data => {
-        this.staffsList = res_data.body as Staff;
+    this.loaddata();
+  }
+
+  loaddata() {
+    this.activatedRoute.params.subscribe(params => {
+      this.page = params['page'];
+      this.get_staffList(this.page);
+    })
+  }
+
+  // Lấy danh sách nhân viên
+  get_staffList(page: number) {
+    this.staffService.get_staffsList(page).subscribe(
+      res => {
+        this.staffs_List = res.data.value as Staff[];
+        this.total_pages = res.data.total_page;
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
+        console.error("Error: " + err.error.message);
       },
       () => {
         setTimeout(() => {
@@ -56,6 +75,12 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
           this.datatable_generate();
         })
       });
+  }
+
+  get_page(page: number) {
+    this.router.navigate(['/employees/list', page]).then(() => {
+      window.location.reload();
+    });
   }
 
   ngAfterViewInit(): void {

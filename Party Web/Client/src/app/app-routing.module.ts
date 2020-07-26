@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 //Guard
 import { AuthGuard } from './_guard/auth.guard';
 import { PaymentGuard } from './_guard/payment.guard';
+import { CheckoutGuard } from './_guard/checkout.guard';
 
 //Components
 import { AppComponent } from './app.component';
@@ -31,6 +32,9 @@ import { PaymentSuccessComponent } from './pages/User/payment/payment-success/pa
 import { PaymentFailComponent } from './pages/User/payment/payment-fail/payment-fail.component';
 import { PaymentInfoComponent } from './pages/User/payment/payment-info/payment-info.component';
 import { PaymentMobileComponent } from './pages/User/payment/payment-mobile/payment-mobile.component';
+import { PostListComponent } from './pages/post/post-list/post-list.component';
+import { PostDetailComponent } from './pages/post/post-detail/post-detail.component';
+import { MapComponent } from './pages/map/map.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'mainpage', pathMatch: 'full' },
@@ -58,7 +62,7 @@ const routes: Routes = [
   { path: 'forgotpassword', component: ForgotpasswordComponent },
   { path: 'homepage', component: AppComponent },
   { path: 'cart', component: UserCartComponent },
-  { path: 'checkout', component: UserCheckoutComponent, canActivate: [AuthGuard] },
+  { path: 'checkout', component: UserCheckoutComponent, canActivate: [AuthGuard, CheckoutGuard] },
   { path: 'receipt/:bill_id', component: ReceiptComponent, canActivate: [AuthGuard, PaymentGuard] },
   {
     path: 'payment', component: PaymentComponent,
@@ -70,10 +74,19 @@ const routes: Routes = [
       { path: 'mobile/:session_id', component: PaymentMobileComponent }
     ]
   },
+  {
+    path: 'post',
+    children: [
+      { path: '', redirectTo: 'list', pathMatch: 'full' },
+      { path: 'list', component: PostListComponent },
+      { path: 'detail/:id', component: PostDetailComponent }
+    ]
+  },
   { path: 'mainpage', component: MainpageComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'category/:filter', component: ProductCategoryComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'map', component: MapComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];

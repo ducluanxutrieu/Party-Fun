@@ -30,7 +30,9 @@
               "src/assets/css/bootstrap.min.css",
               "src/assets/css/style.default.css",
               "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
-              "node_modules/froala-editor/css/froala_style.min.css"
+              "node_modules/froala-editor/css/froala_style.min.css",
+              "node_modules/select2/dist/css/select2.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/vendor/jquery/jquery.min.js",
@@ -40,8 +42,9 @@
               "src/assets/vendor/jquery-validation/jquery.validate.min.js",
               "src/assets/js/front.js",
               "node_modules/datatables.net/js/jquery.dataTables.min.js",
-              "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
-			]
+              "node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+              "node_modules/select2/dist/js/select2.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -79,7 +82,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "admin-dashboard:build",
-			"port": 5000
+            "port": 5000
           },
           "configurations": {
             "production": {

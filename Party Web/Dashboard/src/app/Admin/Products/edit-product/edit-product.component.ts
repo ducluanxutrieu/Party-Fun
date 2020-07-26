@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { api } from '../../../_api/apiUrl';
-import { UserService } from '../../../_services/user.service';
+import { ActivatedRoute } from '@angular/router';
+// Services
 import { ProductService } from '../../../_services/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from '../../../_services/common.service';
+import { ToastrService } from 'ngx-toastr';
+// Models
+import { Product } from '../../../_models/product.model';
+import { Select2OptionData } from 'ng-select2';
 
 @Component({
   selector: 'app-edit-product',
@@ -11,50 +14,125 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./edit-product.component.css']
 })
 export class EditProductComponent implements OnInit {
-  product_data;
+  product_id: string;
+  product_data: Product = new Product;
+  product_imgs_files: any[];
+  product_imgs_url: string[] = [];  // Mảng chứa url hình server trả về sau khi upload ảnh
+  product_categories: string[] = []; // Mảng chứa dish category
 
+  dish_categories: Array<Select2OptionData>;
+  select2_options = {
+    multiple: true,
+    width: '300',
+    tags: true
+  };
   constructor(
-    private http: HttpClient,
-    public userService: UserService,
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
-    private router: Router
+    private commonService: CommonService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      var product_id = params['id'];
-      this.product_data = this.productService.find(product_id);
-    })
+      this.product_id = params['id'];
+      this.get_dish(this.product_id);
+    });
+    this.dish_categories = [
+      {
+        id: 'Holiday Offers',
+        text: 'Holiday Offers'
+      },
+      {
+        id: 'First Dishes',
+        text: 'First Dishes'
+      },
+      {
+        id: 'Main Dishes',
+        text: 'Main Dishes'
+      },
+      {
+        id: 'Seafood',
+        text: 'Seafood'
+      },
+      {
+        id: 'Dessert',
+        text: 'Dessert'
+      },
+      {
+        id: 'Drinks',
+        text: 'Drinks'
+      }
+    ]
   }
 
-  onClickSubmit(data: {
+  // Lấy thông tin món ăn
+  get_dish(dish_id: string) {
+    this.productService.get_dish(dish_id).subscribe(
+      res => {
+        this.product_data = res.data as Product;
+        this.product_imgs_url = this.product_data.image;
+      },
+      err => {
+        console.log("Error: " + err.error.message);
+        this.toastr.error("Error while getting dish info!");
+      }
+    )
+  }
+  // Xác nhận cập nhật món ăn
+  update_confirm(data: {
     name: string;
     description: string;
-    type: string;
+    categories: string;
     price: number;
-    promotion: number;
-    // image1: File;
+    discount: number;
   }) {
-    let body = `_id=${this.product_data._id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=0&type=${data.type}`;
-    // this.createFormData(body, 'image', this.imgArr);
-    // body.append('image', this.imgArr[0]);
-    let headers = new HttpHeaders({
-      'Content-type': 'application/x-www-form-urlencoded',
-      'Authorization': localStorage.getItem('token')
-    })
-    this.http.post(api.updateDish, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-      sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-      alert("Edit product success");
-      this.router.navigate(['/products/list']);
-    },
-      err => {
-        alert("Error: " + err.status + " " + err.statusText + "\n" + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
-      })
+    console.log(data.categories);
+    // Upload image lên server trước
+    if (this.product_imgs_files) {
+      this.commonService.upload_image(this.product_imgs_files).subscribe(
+        res => {
+          this.product_imgs_url = res.data;
+        },
+        err => {
+          this.toastr.error("Error: Upload image error!");
+          console.log("Error: " + err.error.message);
+          return;
+        },
+        // Sau khi upload hoàn tất, gửi request cập nhật món ăn
+        () => {
+          this.update_dish(data);
+        }
+      )
+    }
+    else {
+      this.update_dish(data);
+    }
   }
-  // fileChanged(event: any) {
-  //   // this.imgArr.push(event.target.files);
-  //   this.imgArr = event.target.files;
-  // }
+
+  // Update dish
+  update_dish(data: {
+    name: string;
+    description: string;
+    categories: string;
+    price: number;
+    discount: number;
+  }) {
+    // this.product_categories.push(data.categories); // Push category vào mảng
+    let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.categories)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
+    this.productService.update_dish(body).subscribe(
+      res => {
+        this.toastr.success("Edit product success");
+        // window.location.reload();
+      },
+      err => {
+        this.toastr.error("Error while update dish!");
+        console.log(`Error + ${err.error.message}`);
+      }
+    )
+  }
+  // Lưu ảnh vào mảng
+  fileChanged(event: any) {
+    this.product_imgs_files = event.target.files;
+  }
 }

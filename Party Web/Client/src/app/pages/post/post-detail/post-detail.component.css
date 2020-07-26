@@ -1,0 +1,50 @@
+a:hover {
+    text-decoration: none!important;
+}
+
+/* body {
+    background-color: #eee !important;
+} */
+
+.card {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.side-post-title {
+    transition: all .3s ease 0s;
+}
+
+.side-post-title:hover {
+    color: #4DAD16!important;
+}
+
+.post-feature {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.post-content-wrapper {
+    overflow: hidden;
+}
+
+.post-content img {
+    width: 100%!important;
+}
+
+.side-content .media-body h5 {
+    font-size: 1.1em;
+}
+
+.side-content .media-body span {
+    font-size: 0.9em;
+}
+
+.text-2line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* number of lines to show */
+    -webkit-box-orient: vertical;
+}

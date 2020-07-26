@@ -2,44 +2,33 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { api } from '../_api/apiUrl';
 import { Injectable } from '@angular/core';
 
+// Models
+import { User } from '../_models/user.model';
+import { ApiResponse } from '../_models/response.model';
+
 @Injectable()
 export class UserService {
 
-    user_info;
+    user_info: User;
     constructor(
         private http: HttpClient
     ) {
-        this.get_userData();
+        // this.get_userData();
     }
 
-    //Lấy userData từ api
-    get_userData() {
+    // Lấy thông tin user
+    get_userInfo() {
         let headers = new HttpHeaders({
             'Authorization': localStorage.getItem('token')
-        })
-        this.http.get(api.profile, { headers: headers, observe: 'response' }).subscribe(
-            res_data => {
-                sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-                var res_body = JSON.parse(sessionStorage.getItem('response_body'));
-                this.user_info = res_body.account;
-            },
-            err => {
-                console.log("Error: " + err.status + " - " + err.statusText);
-                sessionStorage.setItem('error', JSON.stringify(err));
-            }
-        )
+        });
+        return this.http.get<ApiResponse>(api.get_profile, { headers: headers });
     }
-
-    //Trả vể user info
-    get_userInfo(): any {
-        if (this.user_info) {
-            return this.user_info;
-        }
-    }
-
-    get_userAvatar(): string {
-        if (this.user_info) {
-            return this.user_info.imageurl;
-        }
+    // Cập nhật thông tin user
+    update_userInfo(body: string) {
+        let headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': localStorage.getItem('token')
+        });
+        return this.http.put<ApiResponse>(api.update_user, body, { headers: headers });
     }
 }

@@ -1,13 +1,22 @@
-html,body{
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100,300,400,600,700|Work+Sans:100,200,300,400,500,600');
+.navbar-custom {
+	background-color: #4DAD16;
+}
+
+.brand-name {
+	font-family: 'Josefin Sans', Roboto, Helvetica;
+	font-weight: bold;
+}
+
+.nav-item .nav-link {
 	color: white;
+	transition: transform .3s;
 }
-.header h1{
-color:#14a6fa;
-text-align: center;
-margin: 0px;
-padding: 0.5em;
+
+.nav-link:hover {
+	transform: scale(1.1);
 }
-.header a{
-	text-decoration:none;
-	font-family: 'Lucida Sans';
+
+.logo {
+	border-radius: 5px;
 }

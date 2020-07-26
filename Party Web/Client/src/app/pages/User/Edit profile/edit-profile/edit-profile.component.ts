@@ -3,9 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
 import { api } from '../../../../_api/apiUrl';
-import { Router } from '@angular/router';
-
-declare var toastr;
+// Services
+import { ToastrService } from 'ngx-toastr';
+// Models
+import { User } from '../../../../_models/user.model';
+import { ApiResponse } from '../../../../_models/response.model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -14,12 +16,11 @@ declare var toastr;
 })
 export class EditProfileComponent implements OnInit {
   private birthday;
-  apiUrl = api.updateuser;
-  userInfo;
+  userInfo: User;
   constructor(
     private http: HttpClient,
     public datepipe: DatePipe,
-    private router: Router
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -30,32 +31,27 @@ export class EditProfileComponent implements OnInit {
     gender: string;
     birthday: string;
     phonenumber: number;
-    email: string
+    email: string;
   }) {
     this.birthday = this.datepipe.transform(this.birthday, 'MM/dd/yyyy');
-    let body = `fullName=${data.fullname}&sex=${data.gender}&birthday=${this.birthday}&phoneNumber=${data.phonenumber}&email=${data.email}`;
-    var token = localStorage.getItem('token');
+    let body = `full_name=${data.fullname}&sex=${data.gender}&birthday=${this.birthday}&phone=${data.phonenumber}&email=${data.email}`;
     let headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': token
+      'Authorization': localStorage.getItem('token'),
     })
-    // console.log(body);
-    var result;
-    return this.http.post(this.apiUrl, body, { headers: headers, observe: 'response' }).subscribe(res_data => {
-      result = res_data.body;
-      sessionStorage.setItem('response', JSON.stringify(res_data.body));
-      localStorage.setItem('userinfo', JSON.stringify(result.account));
-      toastr.success("Update success!");
-      this.router.navigate(['/profile']);
-      
-    },
+    return this.http.put<ApiResponse>(api.update_user, body, { headers: headers }).subscribe(
+      res => {
+        sessionStorage.setItem('response', JSON.stringify(res));
+        localStorage.setItem('userinfo', JSON.stringify(res.data));
+        this.toastr.success("Update success!");
+      },
       err => {
-        toastr.error("Error: " + err.status + " " + err.error.message);
+        this.toastr.error("Error: " + " " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
   getuserInfo() {
-    this.userInfo = JSON.parse(localStorage.getItem('userinfo'));
+    this.userInfo = JSON.parse(localStorage.getItem('userinfo')) as User;
     this.birthday = this.datepipe.transform(this.userInfo.birthday, 'yyyy/MM/dd');
   }
   changeOfDate(event: any) {

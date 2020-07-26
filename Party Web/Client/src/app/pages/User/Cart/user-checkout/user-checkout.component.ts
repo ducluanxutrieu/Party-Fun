@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-
-import { Item } from '../../../../_models/item.model';
-import { ProductService } from '../../../../_services/product.service';
+// Services
 import { api } from '../../../../_api/apiUrl';
-
+import { ProductService } from '../../../../_services/product.service';
+import { ToastrService } from 'ngx-toastr';
+// Models
+import { Item } from '../../../../_models/item.model';
 import { Bill } from '../../../../_models/bill.model';
-
-declare var toastr;
+import { ApiResponse } from '../../../../_models/response.model';
 
 @Component({
   selector: 'app-user-checkout',
@@ -24,21 +24,24 @@ export class UserCheckoutComponent implements OnInit {
   // private deliveryTime;
 
   constructor(
-    private productService: ProductService,
     private http: HttpClient,
     public datepipe: DatePipe,
-    private router: Router
+    private router: Router,
+    private productService: ProductService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
     this.loadCart();
   }
 
-  order_comfirm() {
-    var token = localStorage.getItem('token');
+  order_comfirm(data: {
+    customer_number: number;
+    discount: string;
+  }) {
     let headers = new HttpHeaders({
-      'Authorization': token,
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': localStorage.getItem('token'),
     })
     var item_ordered: any[] = [];
     for (var i = 0; i < this.items.length; i++) {
@@ -46,32 +49,22 @@ export class UserCheckoutComponent implements OnInit {
       item_ordered.push(
         {
           _id: item.product._id,
-          numberDish: item.quantity
+          count: item.quantity
         }
       )
     }
-    let body = `lishDishs=${JSON.stringify(item_ordered)}&numbertable=${this.numOfTable}&dateParty=${this.deliveryDate}&discount="0"`;
-    this.http.post(api.orderConfirm, body, { headers: headers, observe: 'response' }).subscribe(
-      res_data => {
-        let temp = res_data.body as Bill;
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        toastr.success("Order success!");
+    let body = `dishes=${JSON.stringify(item_ordered)}&table=${this.numOfTable}&date_party=${this.deliveryDate}&count_customer=${data.customer_number}&discount_code=${data.discount}`;
+    this.http.post<ApiResponse>(api.book, body, { headers: headers }).subscribe(
+      res => {
+        let receipt = res.data as Bill;
+        this.toastr.success("Order success!");
         localStorage.removeItem('cart');
-        sessionStorage.setItem('current_receipt', JSON.stringify({
-          items: this.items,
-          numOfTable: this.numOfTable,
-          dateParty: this.deliveryDate,
-          total_price: this.total
-        }))
-        this.router.navigate(['/receipt/' + temp.bill._id]);
+        this.productService.cartItems = [];
+        sessionStorage.setItem('current_receipt', JSON.stringify(res.data));
+        this.router.navigate(['/receipt/' + receipt._id]);
       },
       err => {
-        console.log(err);
-        if (err.status == 400) {
-          toastr.warning('Please fill all the field with valid value!');
-        } else {
-          toastr.error("Error: " + err.status + " " + err.error.message);
-        }
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       })
   }
@@ -79,13 +72,11 @@ export class UserCheckoutComponent implements OnInit {
   changeOfTable(event: any) {
     this.numOfTable = event.target.value;
   }
+
   changeOfDate(event: any) {
     this.deliveryDate = event.target.value;
     this.deliveryDate = this.datepipe.transform(this.deliveryDate, 'MM/dd/yyyy HH:mm');
   }
-  // changeOfTime(event: any) {
-  //   this.deliveryTime = event.target.value;
-  // }
 
   loadCart(): void {
     this.total = 0;

@@ -6,20 +6,17 @@
         <form #editProfile = "ngForm" (ngSubmit) = "onClickSubmit(editProfile.value)" id="editprofileForm">
             <header style="font-weight: 500">Profile</header>
             <label for="fullname">Full Name</label>
-            <input id="fullname" type="text" name="fullname" ngModel required [(ngModel)]="userInfo.fullName" #fname="ngModel">
+            <input id="fullname" type="text" name="fullname" ngModel required [(ngModel)]="userInfo.full_name" #fname="ngModel">
             <div class="invalid-alert" role="alert" *ngIf="fname.invalid && fname.touched">Please enter full name</div>
             <label for="gender">Gender</label>
-            <!--input id="gender" type="text" name="gender" ngModel-->
-            <select id="gender" name="gender" ngModel [(ngModel)]="userInfo.sex">
-                <!-- <option value="Hide">Hide</option> -->
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <!-- <option value="undefined">?</option> -->
+            <select id="gender" name="gender" ngModel [(ngModel)]="userInfo.gender">
+                <option value="1">Male</option>
+                <option value="2">Female</option>
             </select>
             <label for="birthday">Birthday</label>
             <input id="birthday" type="date" name="birthday" ngModel [ngModel]="userInfo.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" (change)="changeOfDate($event)">
             <label for="phonenumber">Phone number</label>
-            <input id="phonenumber" type="tel" name="phonenumber" ngModel required [(ngModel)]="userInfo.phoneNumber" maxlength="12" minlength="10" ngModel #phonenum="ngModel">
+            <input id="phonenumber" type="tel" name="phonenumber" ngModel required [(ngModel)]="userInfo.phone" maxlength="12" minlength="10" ngModel #phonenum="ngModel">
             <div class="invalid-alert" role="alert" *ngIf="phonenum.invalid && phonenum.touched">Please enter a valid phone number</div>
             <label for="email">E-mail</label>
             <input id="email" type="email" name="email" ngModel email required [(ngModel)]="userInfo.email" #email="ngModel">

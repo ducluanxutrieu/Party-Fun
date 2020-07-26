@@ -1,62 +1,49 @@
-<!DOCTYPE html>
-<html>
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 </head>
-<body>
-    <main class="page payment-page">
-        <section class="payment-form dark">
-            <div class="container">
-                <form>
-                    <div class="products">
-                    <h3 class="title">Checkout</h3>
-                    <div class="item" *ngFor="let item of items">
-                        <span class="price">{{item.product.price | number }} x{{item.quantity}}</span>
-                        <p class="item-name">{{item.product.name}}</p>
-                    </div>
-            
-                    <div class="total">Total<span class="price">{{total | number}}</span></div>
-                    </div>
-                    <div class="card-details">
-                    <h3 class="title">Additional info</h3>
-                    <div class="row">
-                        <div class="form-group col-sm-3">
-                            <label for="num-of-tables">Num of table</label>
-                            <input id="num-of-tables" type="number" class="form-control" aria-label="num-of-tables" aria-describedby="basic-addon1" min="1" value="1" (change)="changeOfTable($event)">
-                        </div>
-                        <!-- <div class="form-group col-sm-5">
-                        <label for="">Expiration Date</label>
-                        <div class="input-group expiration-date">
-                            <input type="text" class="form-control" placeholder="MM" aria-label="MM" aria-describedby="basic-addon1">
-                            <span class="date-separator">/</span>
-                            <input type="text" class="form-control" placeholder="YY" aria-label="YY" aria-describedby="basic-addon1">
-                        </div>
-                        </div> -->
-                        <!-- <div class="form-group col-sm-12">
-                            <label for="address">Địa chỉ</label>
-                            <input id="address" type="text" class="form-control" placeholder="Địa chỉ giao hàng" aria-label="Địa chỉ" aria-describedby="basic-addon1">
-                        </div> -->
-                        <div class="form-group col-sm-9">
-                            <label for="delivery-date">Party day</label>
-                            <input id="delivery-date" type="datetime-local" class="form-control" required (change)="changeOfDate($event)">
-                        </div>
-                        <!-- <div class="form-group col-sm-4">
-                            <label for="delivery-time">Giờ giao</label>
-                            <input id="delivery-time" type="time" class="form-control" required (change)="changeOfTime($event)">
-                        </div> -->
-                        <!-- <div class="form-group col-sm-4">
-                        <label for="cvc">CVC</label>
-                        <input id="cvc" type="text" class="form-control" placeholder="CVC" aria-label="Card Holder" aria-describedby="basic-addon1">
-                        </div> -->
-                        <div class="form-group col-sm-12">
-                        <button type="button" class="btn btn-primary btn-block" (click)="order_comfirm()">Confirm</button>
-                        </div>
-                    </div>
-                    </div>
-                </form>
+<app-header></app-header>
+<main class="page payment-page">
+  <section class="payment-form dark">
+    <div class="container">
+      <form #checkout="ngForm">
+        <div class="products">
+          <h3 class="title">Checkout</h3>
+          <div class="item" *ngFor="let item of items">
+            <span class="price">{{item.product.price | number }} x{{item.quantity}}</span>
+            <p class="item-name">{{item.product.name}}</p>
+          </div>
+          <div class="total">Total<span class="price">{{total | number}}</span></div>
+        </div>
+        <div class="card-details">
+          <h3 class="title">Additional info</h3>
+          <div class="row">
+            <div class="form-group col-sm-3">
+              <label for="num-of-tables">Num of table</label>
+              <input id="num-of-tables" type="number" class="form-control" aria-label="num-of-tables" min="1" value="1"
+                (change)="changeOfTable($event)">
             </div>
-        </section>
-    </main>
-    
-</body>
-</html>
+            <div class="form-group col-sm-9">
+              <label for="deliveryDate">Party day</label>
+              <input id="deliveryDate" name="deliveryDate" type="datetime-local" class="form-control" required ngModel
+                (change)="changeOfDate($event)">
+            </div>
+            <div class="form-group col-sm-4">
+              <label for="customer_num">Number of Customer</label>
+              <input id="customer_num" name="customer_number" type="number" class="form-control" min="1" required
+                ngModel>
+            </div>
+            <div class="form-group col-sm-12">
+              <label for="discount">Discount</label>
+              <input type="text" id="discount" name="discount" class="form-control" ngModel>
+            </div>
+            <div class="form-group col-sm-12">
+              <button type="button" class="btn btn-primary btn-block confirm-btn"
+                (click)="order_comfirm(checkout.value)" [disabled]="checkout.invalid">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<app-footer></app-footer>

@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../_services/user.service';
-import { api } from '../../_api/apiUrl';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
+// Services
+import { api } from '../../_api/apiUrl';
+import { UserService } from '../../_services/user.service';
+import { ToastrService } from 'ngx-toastr';
+// Models
+import { User } from '../../_models/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -11,44 +15,55 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  profile_info;
+  user_info: User = new User;
   private birthday;
 
   constructor(
     public userService: UserService,
     private http: HttpClient,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
-    // this.profile_info = this.userService.get_userInfo();
-    // console.log(this.profile_info);
+    this.onload();
   }
-  
+
+  private onload() {
+    this.get_userInfo();
+  }
+  // Lấy thông tin user
+  get_userInfo() {
+    this.userService.get_userInfo().subscribe(
+      res => {
+        this.user_info = res.data as User;
+      },
+      err => {
+        console.log("Get user info error!");
+      }
+    )
+  }
+
+  // Cập nhật thông tin profile
   updateSubmit(data: {
     name: string;
     email: string;
-    phone: string;
+    phone: number;
     gender: string;
     birthday: string;
   }) {
     this.birthday = this.datepipe.transform(data.birthday, 'MM/dd/yyyy');
-    let body = `fullName=${data.name}&sex=${data.gender}&birthday=${this.birthday}&phoneNumber=${data.phone}&email=${data.email}`;
-    console.log(body);
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': localStorage.getItem('token')
-    })
-    this.http.post(api.updateuser, body, { headers: headers, observe: 'response' }).subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        alert("Update info success!");
-        window.location.reload();
+    let body = `full_name=${data.name}&gender=${data.gender}&birthday=${this.birthday}&phone=${data.phone}&email=${data.email}`;
+    this.userService.update_userInfo(body).subscribe(
+      res => {
+        this.toastr.success("Update info success!");
+        this.onload();
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
-      })
+      }
+    )
   }
 
   avatarChanged(event: any) {
@@ -59,14 +74,14 @@ export class ProfileComponent implements OnInit {
     let headers = new HttpHeaders({
       'Authorization': localStorage.getItem('token')
     })
-    this.http.post(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(
+    this.http.put(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        window.location.reload();
+        this.onload();
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
+        this.toastr.error("Error while change avatar!");
+        console.log("Error: " + err.error.message);
       })
   }
 

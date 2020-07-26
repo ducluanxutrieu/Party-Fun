@@ -1,0 +1,64 @@
+.wrapper {
+    margin: 15px;
+    padding: 10px;
+}
+
+.wrapper div {
+    background: #E8E8E8;
+}
+
+.wrapper .square {
+    width: 100%;
+    height: 300px;
+    margin: 0 0 10px;
+}
+
+.wrapper .line {
+    height: 16px;
+    margin: 0 0 10px;
+}
+
+.wrapper .line:nth-child(2) {
+    width: 100%;
+}
+
+.wrapper .line:nth-child(3) {
+    width: 60%;
+}
+
+.wrapper .line:nth-child(4) {
+    width: 80%;
+}
+
+/* 
+  --------------
+  Wave effect animation 
+  Activated by adding a '.wave' class to the placeholder
+  --------------
+*/
+
+.wrapper.wave div {
+    animation: wave 1s infinite linear forwards;
+    -webkit-animation: wave 1s infinite linear forwards;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+}
+
+@keyframes wave {
+    0% {
+        background-position: -468px 0
+    }
+    100% {
+        background-position: 468px 0
+    }
+}
+
+@-webkit-keyframes wave {
+    0% {
+        background-position: -468px 0
+    }
+    100% {
+        background-position: 468px 0
+    }
+}

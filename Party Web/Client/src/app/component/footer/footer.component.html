@@ -1,83 +1,53 @@
-<!doctype html>
-<html>
-
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<style>
-		html,
-		body {
-			font-family: Roboto, Helvetica, sans-serif;
-		}
-
-		.footer-text {
-			color: white;
-		}
-
-		.footer h3 {
-			font-size: 0.8em;
-		}
-
-		hr {
-			margin-top: 0px;
-		}
-	</style>
-</head>
-
-<body>
-	<section id="footer">
-		<div class="container">
-			<div class="row text-center text-xs-center text-sm-left text-md-left">
-				<div class="col-xs-12 col-sm-5 col-md-5">
-					<h5>Introduction</h5>
-					<p class="footer-text">
-						Hãy đến với PartyBooking để trải nghiệm những món ăn và trải nghiệm tuyệt vời nhất. <br>
-						PartyBooking là website giúp đặt bàn cho các buổi tiệc, sự kiện tại các cửa hàng thuộc hệ thống.
-					</p>
-				</div>
-				<div class="col-xs-12 col-sm-4 col-md-4">
-					<h5>Contacts</h5>
-					<p class="footer-text"><i class="fa fa-map-marker" aria-hidden="true"></i> Address: Trường Đại học
-						Công nghệ Thông tin ĐHQG TP.HCM, khu phố 6, Thủ Đức, Hồ Chí Minh</p>
-					<p class="footer-text"><i class="fa fa-phone" aria-hidden="true"></i> Phone: 0392615412</p>
-					<p class="footer-text"><i class="fa fa-envelope" aria-hidden="true"></i> Email:
-						16520223@gm.uit.edu.vn</p>
-				</div>
-				<div class="col-xs-12 col-sm-3 col-md-3">
-					<h5>Quick links</h5>
-					<ul class="list-unstyled quick-links">
-						<li><a href="mainpage"><i class="fa fa-angle-double-right"></i>Home</a></li>
-						<li><a href="about"><i class="fa fa-angle-double-right"></i>About us</a></li>
-						<li><a href="profile"><i class="fa fa-angle-double-right"></i>Account</a></li>
-						<li><a href="https://play.google.com/store/apps/details?id=com.uit.party" target="_blank"
-								rel="noopener noreferrer"><i class="fa fa-angle-double-right"></i>Mobile app</a></li>
-						<!-- <li><a href="#"><i class="fa fa-angle-double-right"></i>Câu hỏi thường gặp</a></li>
-						<li><a href="#"><i class="fa fa-angle-double-right"></i>Chính sách</a></li> -->
-					</ul>
-				</div>
+<section id="footer">
+	<div class="container">
+		<div class="row text-center text-xs-center text-sm-left text-md-left">
+			<div class="col-xs-12 col-sm-5 col-md-5">
+				<h5>Introduction</h5>
+				<p class="footer-text">
+					Hãy đến với PartyBooking để trải nghiệm những món ăn và trải nghiệm tuyệt vời nhất. <br>
+					PartyBooking là website giúp đặt bàn cho các buổi tiệc, sự kiện tại các cửa hàng thuộc hệ thống.
+				</p>
 			</div>
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
-					<ul class="list-unstyled list-inline social text-center">
-						<li class="list-inline-item"><a href="https://www.facebook.com/cateyes0609" target="_blank"
-								rel="noopener noreferrer"><i class="fa fa-facebook"></i></a></li>
-						<li class="list-inline-item"><a href="https://twitter.com/cateye0609" target="_blank"
-								rel="noopener noreferrer"><i class="fa fa-twitter"></i></a></li>
-						<li class="list-inline-item"><a href="https://www.instagram.com/the_six_paths/" target="_blank"
-								rel="noopener noreferrer"><i class="fa fa-instagram"></i></a></li>
-						<!-- <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus"></i></a></li> -->
-					</ul>
-				</div>
-				<hr>
+			<div class="col-xs-12 col-sm-4 col-md-4">
+				<h5>Contacts</h5>
+				<p class="footer-text"><i class="fa fa-map-marker" aria-hidden="true"></i> Address: Trường Đại học
+					Công nghệ Thông tin ĐHQG TP.HCM, khu phố 6, Thủ Đức, Hồ Chí Minh</p>
+				<p class="footer-text"><i class="fa fa-phone" aria-hidden="true"></i> Phone: 0392615412</p>
+				<p class="footer-text"><i class="fa fa-envelope" aria-hidden="true"></i> Email:
+					16520223@gm.uit.edu.vn</p>
 			</div>
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
-					<p class="h6">&copy; 2019 PartyBooking</p>
-				</div>
-				<hr>
+			<div class="col-xs-12 col-sm-3 col-md-3">
+				<h5>Quick links</h5>
+				<ul class="list-unstyled quick-links">
+					<li><a [routerLink]="['/mainpage']"><i class="fa fa-angle-double-right"></i>Home</a></li>
+					<li><a [routerLink]="['/about']"><i class="fa fa-angle-double-right"></i>About us</a></li>
+					<li><a [routerLink]="['/profile']"><i class="fa fa-angle-double-right"></i>Account</a></li>
+					<li><a href="https://play.google.com/store/apps/details?id=com.uit.party" target="_blank"
+							rel="noopener noreferrer"><i class="fa fa-angle-double-right"></i>Mobile app</a></li>
+					<!-- <li><a href="#"><i class="fa fa-angle-double-right"></i>Câu hỏi thường gặp</a></li>
+					<li><a href="#"><i class="fa fa-angle-double-right"></i>Chính sách</a></li> -->
+				</ul>
 			</div>
 		</div>
-	</section>
-</body>
-
-</html>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+				<ul class="list-unstyled list-inline social text-center">
+					<li class="list-inline-item"><a href="https://www.facebook.com/cateyes0609" target="_blank"
+							rel="noopener noreferrer"><i class="fa fa-facebook"></i></a></li>
+					<li class="list-inline-item"><a href="https://twitter.com/cateye0609" target="_blank"
+							rel="noopener noreferrer"><i class="fa fa-twitter"></i></a></li>
+					<li class="list-inline-item"><a href="https://www.instagram.com/cateye0609/" target="_blank"
+							rel="noopener noreferrer"><i class="fa fa-instagram"></i></a></li>
+					<!-- <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus"></i></a></li> -->
+				</ul>
+			</div>
+			<hr>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+				<p class="h6">&copy; 2019 PartyBooking</p>
+			</div>
+			<hr>
+		</div>
+	</div>
+</section>

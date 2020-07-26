@@ -1,29 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
-import { api } from '../../../_api/apiUrl';
-
+// Services
 import { StatisticalService } from '../../../_services/statistical.service';
 import { PaymentService } from '../../../_services/payment.service';
 import { ProductService } from '../../../_services/product.service';
+// Models
+import { Bill, Bill_item } from '../../../_models/bill.model';
+import { Subject } from 'rxjs';
 
 // declare jquery;
 declare var $: any;
 
-interface RecentBill {
-  _id: string;
-  lishDishs: [];
-  dateParty: string;
-  numbertable: number;
-  username: string;
-  createAt: string;
-  paymentstatus: boolean;
-  totalMoney: number;
-  userpayment;
-  paymentAt: string;
-  phoneNumber: number;
-  email: string;
-}
 @Component({
   selector: 'app-recent-bills',
   templateUrl: './recent-bills.component.html',
@@ -31,81 +19,106 @@ interface RecentBill {
 })
 
 export class RecentBillsComponent implements OnInit {
-  recent_billList = [];
-  bill_detail = [];
-  current_bill: RecentBill;
+  dtOptions: DataTables.Settings = {};
+  recent_bills: Bill[] = [];
+  bill_detail: Bill_item[] = [];
+  current_bill: Bill;
 
-  // dtTrigger: Subject<any> = new Subject();
-
-  headers = new HttpHeaders({
-    'Authorization': localStorage.getItem('token')
-  })
+  dtTrigger: Subject<any> = new Subject();
 
   constructor(
     public statisticalService: StatisticalService,
     public paymentService: PaymentService,
     public productService: ProductService,
-    private http: HttpClient,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
     // this.recent_billList = this.statisticalService.get_billData();
-    this.get_recentBills();
-  }
-
-  //Generate datatable 
-  datatable_generate() {
-    var recentbillTable = $('#recentbillTable').DataTable();
-    var recentbillTable_info = recentbillTable.page.info();
-
-    if (recentbillTable_info.pages == 1) {
-      recentbillTable.destroy();
-      $('#recentbillTable').DataTable({
-        "paging": false
-      });
+    this.get_recentBills(1);
+    this.dtOptions = {
+      "paging": false,
     }
   }
 
-  itemClicked(item: any) {
+  // Generate datatable 
+  datatable_generate() {
+    if ($.fn.DataTable.isDataTable('#recentbillTable')) {
+      $('#recentbillTable').DataTable().fnDraw();
+    }
+
+    $('#recentbillTable').DataTable({
+      "paging": false,
+      "bInfo": false,
+    });
+  }
+
+  // Khi click vào bill trong list
+  itemClicked(item: Bill) {
     if ($('#CartDetailModal').hasClass('show')) {
       $('#CartDetailModal').modal('hide');
     }
     else {
       this.current_bill = item;
-      this.bill_detail = item.lishDishs;
+      this.bill_detail = item.dishes;
     }
   }
 
+  // Thanh toán bill
   pay(bill_id: string) {
     if (confirm("Pay this bill?")) {
       this.paymentService.pay_bill(bill_id);
     };
   }
 
+  // Xóa bill
   delete_bill(bill_id) {
     if (confirm("Are you sure to delete this bill?")) {
       this.paymentService.delete_bill(bill_id);
     };
   }
 
-  get_recentBills() {
-    this.http.get(api.billStatistics, { headers: this.headers, observe: 'response' }).subscribe(
-      res_data => {
-        sessionStorage.setItem('recent_bills', JSON.stringify(res_data.body));
-        this.recent_billList = JSON.parse(sessionStorage.getItem('recent_bills'));
-        // this.dtTrigger.next();
-        // setTimeout(() => {
-        //   this.datatable_generate();
-        // }, 1000)
+  // Lấy danh sách bill gần đây và tạo datatable
+  get_recentBills(page: number) {
+    this.paymentService.get_bills_list(page).subscribe(
+      res => {
+        this.recent_bills = res.data.value as Bill[];
+        this.dtTrigger.next();
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.text);
+        console.log("Error: " + err.error.text);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
       () => {
         setTimeout(() => {
           this.datatable_generate();
         })
+      }
+    )
+  }
+
+  // Xác nhận đơn hàng
+  confirm_bill(bill_id: string, note: string) {
+    this.paymentService.confirm_bill(bill_id, note).subscribe(
+      res => {
+        this.toastr.success("Confirm bill success!");
+      },
+      err => {
+        this.toastr.error("Failed confirm bill!");
+        console.log("Error: " + err.error.message);
+      }
+    )
+  }
+
+  // Hủy đơn hàng
+  cancel_bill(bill_id: string, note: string) {
+    this.paymentService.cancel_bill(bill_id, note).subscribe(
+      res => {
+        this.toastr.success("Cancel bill success!");
+      },
+      err => {
+        this.toastr.error("Failed cancel bill!");
+        console.log("Error: " + err.error.message);
       }
     )
   }

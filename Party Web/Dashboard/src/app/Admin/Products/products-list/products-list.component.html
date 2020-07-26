@@ -17,7 +17,7 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
               <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                  <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
                   <li class="breadcrumb-item active">Products list</li>
               </ul>
             </div>
@@ -40,13 +40,16 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngFor="let product of product_data; let i = index">
+                              <tr *ngFor="let product of product_list; let i = index">
                                 <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                                <td class="align-middle text-center">{{product.name}}</td>
-                                <td class="align-middle text-center">{{product.type}}</td>
+                                <td class="align-middle text-center">
+                                  <!-- <div class="product-img has-shadow"><img src={{product.image[0]}} alt="..." class="img-fluid"></div> -->
+                                  {{product.name}}
+                                </td>
+                                <td class="align-middle text-center">{{product.categories}}</td>
                                 <td class="align-middle text-center">{{product.price | number}}</td>
                                 <td class="text-center">
-                                  <a href="products/edit/{{product._id}}">
+                                  <a routerLink="/products/edit/{{product._id}}">
                                     <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
                                   </a>
                                   <span class="tab-space"></span>

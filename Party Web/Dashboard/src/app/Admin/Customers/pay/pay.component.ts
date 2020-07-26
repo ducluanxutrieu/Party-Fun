@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { api } from '../../../_api/apiUrl';
+import { ToastrService } from 'ngx-toastr';
 
-import { ProductService } from '../../../_services/product.service';
+// Services
 import { PaymentService } from '../../../_services/payment.service';
+// Models
+import { Bill, Bill_item } from '../../../_models/bill.model';
 
 @Component({
   selector: 'app-pay',
@@ -11,70 +12,53 @@ import { PaymentService } from '../../../_services/payment.service';
   styleUrls: ['./pay.component.css']
 })
 export class PayComponent implements OnInit {
-  bill_info = [];
+  bill_info: Bill[] = [];
   haveBill: boolean;
-  bill_detail = [];
-  headers = new HttpHeaders({
-    'Content-type': 'application/x-www-form-urlencoded',
-    'Authorization': localStorage.getItem('token')
-  })
+  bill_detail: Bill_item[] = [];
 
   constructor(
-    public productService: ProductService,
     public paymentService: PaymentService,
-    private http: HttpClient
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
+    this.onload();
   }
-  itemClicked(item: any) {
-    this.bill_detail = item.lishDishs;
+  onload() { }
+  // Khi click vào đơn hàng trong danh sách
+  itemClicked(item: Bill) {
+    this.bill_detail = item.dishes;
   }
 
+  // Tìm danh sách đơn hàng theo username nhập vào
   searchBill(data: {
     username: string
   }) {
-    let body = `name=${data.username}`;
-    // const option = {
-    //   headers: this.headers,
-    //   body: {
-    //     name: data.username
-    //   },
-    // }
-    this.http.post(api.findbill, body, { headers: this.headers }).subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data));
-        var temp = JSON.parse(sessionStorage.getItem('response_body'));
-        this.bill_info = temp.bill;
-        // console.log(this.bill_info);
+    this.paymentService.get_bills_by_username(data.username).subscribe(
+      res => {
+        this.bill_info = res.data as Bill[];
         this.haveBill = true;
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
-        sessionStorage.setItem('error', JSON.stringify(err));
+        this.toastr.error("Error while searching bills");
+        console.log("Error: " + err.error.message);
         this.haveBill = false;
       }
     )
   }
+
+  // Thanh toán đơn hàng
   pay(id: string) {
     if (confirm("Pay this bill?")) {
-      let body = `_id=${id}`;
-      this.http.post(api.pay, body, { headers: this.headers }).subscribe(
-        res_data => {
-          sessionStorage.setItem('response_body', JSON.stringify(res_data));
-          alert("Paid success!");
-        },
-        err => {
-          alert("Error: " + err.status + " - " + err.error.message);
-          sessionStorage.setItem('error', JSON.stringify(err));
-        }
-      )
+      this.paymentService.pay_bill(id);
     };
   }
-  delete_bill(bill_id) {
+
+  // Xóa đơn hàng
+  delete_bill(bill_id: string) {
     if (confirm("Are you sure to delete this bill?")) {
       this.paymentService.delete_bill(bill_id);
-      window.location.reload();
+      this.onload();
     };
   }
 }

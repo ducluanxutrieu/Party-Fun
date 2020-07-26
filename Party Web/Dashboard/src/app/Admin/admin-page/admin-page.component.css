@@ -1,7 +1,42 @@
-/* ::-webkit-scrollbar {
-    width: 0px; 
-    background: transparent;
-} */
-#productChart{
+#productChart {
     width: 100wh!important;
 }
+
+.chart-btn {
+    background-color: white;
+    color: #796AEE;
+}
+
+.chart-btn:hover {
+    background-color: #796AEE;
+    border-color: #796AEE;
+    color: white;
+}
+
+/* .chart-btn.active {
+    background-color: #5a48ea;
+    border-color: blue;
+    color: white;
+} */
+
+/* .chartWrapper {
+    position: relative;
+}
+
+.chartWrapper>canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+}
+
+.chartAreaWrapper {
+    overflow-x: scroll;
+    position: relative;
+    width: 100%;
+}
+
+.chartAreaWrapper2 {
+    position: relative;
+    height: 300px;
+} */

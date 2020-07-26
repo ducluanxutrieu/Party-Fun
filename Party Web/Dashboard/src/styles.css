@@ -1,4 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css');
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.pb-pagination /deep/ .ngx-pagination .current {
+    background-color: #796AEE;
+    transition: 0.2s;
+}

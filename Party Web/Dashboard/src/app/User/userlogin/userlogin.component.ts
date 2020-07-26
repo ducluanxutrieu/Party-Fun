@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 //services
@@ -14,10 +13,10 @@ import { AuthenticationService } from '../../_services/authentication.service';
 export class UserloginComponent implements OnInit {
   @ViewChild('userlogin', null) thisForm: NgForm;
   constructor(
-    private http: HttpClient,
     private router: Router,
     private authenticationService: AuthenticationService
   ) { }
+
   onClickSubmit(data: { username: string; pwd: string; }) {
     this.authenticationService.login(data.username, data.pwd);
     // this.thisForm.reset();
@@ -41,7 +40,7 @@ export class UserloginComponent implements OnInit {
   // }
 
   ngOnInit() {
-    if (this.authenticationService.loggedIn()) {
+    if (this.authenticationService.is_loggedIn()) {
       this.router.navigate(['/dashboard']);
     }
   }

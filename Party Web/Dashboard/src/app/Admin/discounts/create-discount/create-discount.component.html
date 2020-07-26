@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <!-- Sidebar -->
+            <app-sidebar></app-sidebar>
+
+            <!-- Page content -->
+            <div class="content-inner">
+                <header class="page-header">
+                    <div class="container-fluid">
+                      <h2 class="no-margin-bottom">Discount</h2>
+                    </div>
+                </header>
+                <!-- Breadcrumb-->
+                <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                    <li class="breadcrumb-item active">Create Discount</li>
+                </ul>
+                </div>
+                <!-- Forms Section-->
+                <section class="forms">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <h3 class="h4">Create Discount</h3>
+                            </div>
+                            <div class="card-body">
+                            <p>Please fill all the fields</p>
+                            <form #discountForm = "ngForm" (ngSubmit) = "create_discount(discountForm.value)" id="addDiscount">
+                                <div class="form-group">
+                                    <label class="form-control-label">Discount code</label>
+                                    <input type="text" placeholder="Discount code" class="form-control" 
+                                        name="code" ngModel required #discountcode="ngModel" maxlength="20" (keydown.space)="$event.preventDefault();">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="discountcode.invalid">
+                                        Please enter a discount code.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Expired</label>
+                                    <input type="date" class="form-control" name="expired" required ngModel #expired="ngModel">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="expired.invalid">
+                                        Please choose a expired date.
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">Value (%)</label>
+                                    <input type="number" value="0" min="0" max="100" class="form-control" name="value" ngModel required #value="ngModel" [(ngModel)]="discountValue" (change)="check_discountValue()">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="value.invalid">
+                                        Please enter a value.
+                                    </div>
+                                </div>
+                                <div class="form-group">       
+                                    <input type="submit" value="Comfirm" class="btn btn-primary" form="addDiscount" [disabled]="discountForm.invalid">
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

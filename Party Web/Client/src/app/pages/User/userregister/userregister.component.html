@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<body>
+<div class="content_wrapper">
+    <app-header></app-header>
     <div class="form_container">
         <form #userreg = "ngForm" (ngSubmit) = "onClickSubmit(userreg.value)" id="regform">
             <header>Register</header>
@@ -22,9 +20,9 @@
             <div class="invalid-alert" role="alert" *ngIf="pw.invalid && pw.dirty">Please enter password with at least 6 characters.</div>
             <button type="submit" form="regform" value="Đăng ký" [disabled]="userreg.invalid">Register</button>
             <div class="bottom-text">
-                <p>Already have an account?<a style="font-weight: 500" href="user_login">Login</a></p>
+                <p>Already have an account?<a style="font-weight: 500" [routerLink]="['/user_login']">Login</a></p>
             </div>
         </form>
     </div>
-</body>
-</html>
+    <app-footer></app-footer>
+</div>

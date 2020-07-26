@@ -1,0 +1,56 @@
+<div class="main-wrapper">
+  <!-- Header -->
+  <app-header></app-header>
+  <!-- Main -->
+  <div class="container mt-1 pl-5 pr-5 pb-3">
+    <h4 class="font-weight-bold mb-4 mt-2">Posts list</h4>
+    <!-- Loading -->
+    <div *ngIf="post_list.length < 1">
+      <div class="row">
+        <div class="col-md-6" *ngFor="let item of [].constructor(4)">
+          <div class="card mb-4">
+            <card-loading></card-loading>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Posts list -->
+    <div class="row">
+      <div class="col-md-6"
+        *ngFor="let post of post_list | paginate:{itemsPerPage:10,currentPage: page,totalItems:total_pages*10}">
+        <div class="card mb-4 card-shadow">
+          <!-- Feature image -->
+          <a [routerLink]="['/post/detail', post?._id]">
+            <div class="img-wrapper">
+              <img src={{post?.feature_image}} alt="..." class="img-fluid feature-image">
+            </div>
+          </a>
+          <div class="text-right mr-2 mt-1">
+            <span class="badge badge-success category">{{post?.type}}</span>
+          </div>
+          <!-- Card body -->
+          <div class="card-body">
+            <a [routerLink]="['/post/detail', post?._id]">
+              <h4 class="font-weight-bold dark-grey-text mb-1"><strong class="post-title">{{post?.title}}</strong></h4>
+            </a>
+            <div class="meta mb-1"><span><i class="fa fa-user"></i> {{post?.author}}</span><span><i
+                  class="fa fa-calendar-o"></i> {{post?.create_at | date: 'dd/MM/yyyy'}}</span><span><i
+                  class="fa fa-tags"></i> {{post?.type}}</span></div>
+            <p class="post-summary">
+              {{post?.summary}}
+            </p>
+            <a class="btn more-link" [routerLink]="['/post/detail', post?._id]">Read more &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="has-text-centered pb-pagination text-center">
+      <pagination-controls (pageChange)="get_posts_list($event)" previousLabel="Previous" nextLabel="Next"
+        autoHide="true">
+      </pagination-controls>
+    </div>
+  </div>
+  <scroll-to-top></scroll-to-top>
+  <!-- Footer -->
+  <app-footer></app-footer>
+</div>

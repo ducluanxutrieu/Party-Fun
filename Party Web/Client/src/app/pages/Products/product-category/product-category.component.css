@@ -1,22 +1,59 @@
-.card-text{
-    height: 3em;
-    overflow: hidden;
-  }
-.item-thumb{
-  max-height: 10em;
-}
-html,body{
+html, body {
   min-height: 100vh;
   font-family: Roboto, Helvetica, sans-serif;
   background-color: #f1f1f1;
 }
-.content-container{
+
+a:hover {
+  text-decoration: none;
+}
+
+.card-text {
+  font-size: 0.9em;
+  height: 3em;
+  overflow: hidden;
+}
+
+.product-card {
+  -webkit-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+  box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.35);
+  border: none;
+}
+
+.item-thumb-wrapper {
+  overflow: hidden;
+}
+
+.item-thumb {
+  height: 11em;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: .3s ease-in-out;
+  transition: .3s ease-in-out;
+}
+
+.item-thumb:hover {
+  /* Blur effect
+    webkit-filter: blur(4px);
+    filter: blur(4px); */
+  -webkit-transform: scale(1.3);
+  transform: scale(1.3);
+}
+
+.item-thumb {
+  max-height: 10em;
+}
+
+.content-container {
   padding: 20px;
 }
-.main-content{
+
+.main-content {
   width: 100%;
   height: 100%;
 }
+
 /* .grid-container {
   height: 100%;
   width: 90%;
@@ -25,24 +62,96 @@ html,body{
   padding: 10px;
   grid-gap:50px;
 } */
-.pagination-bar{
+
+.pagination-bar {
   text-align: center;
 }
-.category{
-  color: black;
+
+.custom-panel {
+  background-color: #4DAD16;
 }
-.category:hover{
-  cursor: pointer;
-}
-.custom-panel{
-  background-color: #f37d42;
-}
-.category-title{
-  color: #f37d42;
-}
-.left-panel{
+
+.category {
   padding: 0;
 }
-.jw-pagination .pagination li.page-number{
+
+.list-group-item:first-child {
+  border-radius: 0;
+}
+
+.pbicon {
+  display: inline-block;
+  height: 1em;
+  vertical-align: -1px;
+  overflow: hidden;
+  margin-right: 5px;
+}
+
+.category-title {
+  color: black;
+  display: inline-block;
+  border: none;
+  padding: 0.75em 1.25em;
+  transition: transform .3s;
+}
+
+.category-title:hover {
+  background-color: #4DAD16;
+  color: white;
+}
+
+.category-title:hover span {
+  font-size: 1.2em;
+}
+
+.category-title:hover img {
+  filter: brightness(0) invert(1);
+}
+
+.section-title {
+  color: #2ecc71;
+}
+
+.add-cart-btn {
+  transition: transform .3s;
+}
+
+.add-cart-btn:hover {
+  background-color: #ef4d4d;
+  color: white !important;
+  transform: scale(1.1);
+}
+
+.jw-pagination .pagination li.page-number {
   display: none;
+}
+
+.pagination ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 10px 18px;
+  color: #222;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  padding: 0;
+  text-align: center;
+}
+
+.pagination a.active {
+  background-color: #2ecc71;
+  border-radius: 100%;
+  color: #fff;
+}
+
+.pagination a:not(.active):hover {
+  background-color: #4DAD16;
+  border-radius: 100%;
+  color: #fff;
+  cursor: pointer;
 }

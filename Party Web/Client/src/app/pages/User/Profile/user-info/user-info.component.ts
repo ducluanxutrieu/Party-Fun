@@ -7,12 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserInfoComponent implements OnInit {
   userInfo;
-  avtUrl = "https://i.imgur.com/N6PJloU.png";
   constructor() { }
 
   getuserInfo() {
     this.userInfo = JSON.parse(localStorage.getItem('userinfo'));
-    this.avtUrl = this.userInfo.imageurl;
   }
 
   ngOnInit() {

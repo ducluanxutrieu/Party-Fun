@@ -1,53 +1,14 @@
 <!doctype html>
 <html>
-
-<head>
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-	<title>Home</title>
-</head>
-
-<body>
-	<div class="homepage">
-		<!-- <app-header></app-header> -->
-		<nav class="navbar navbar-custom navbar-expand-lg navbar-dark static-top">
-			<a class="navbar-brand brand-name" href="mainpage">PartyBooking</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ml-auto">
-					<!-- <form class="form-inline">
-						<div class="md-form my-0">
-							<input class="form-control mr-sm-5" name="search" type="text" placeholder="Tìm kiếm" aria-label="Search">
-						</div>
-					</form> -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false" *ngIf="authenticationService.loggedIn()" style="cursor:pointer">
-						<i class="fa fa-user"></i> {{userInfo.username}} </a>
-						<div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-							<a class="dropdown-item" *ngIf="authenticationService.loggedIn()" href="profile">Account</a>
-							<a class="dropdown-item" style="cursor:pointer" *ngIf="authenticationService.loggedIn()" (click)="logout()">Logout</a>
-						</div>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="user_login">Login</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" *ngIf="!authenticationService.loggedIn()" href="user_register">Register</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="cart"><i class="fa fa-shopping-cart"></i> Cart</a>
-					</li>
-				</ul>
-			</div>
-		</nav>
-		<div class="mainpage">
-			<router-outlet (activate)="changeOfRoutes()"></router-outlet>
+	<head>
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="homepage">
+			<!-- <app-header></app-header> -->
+				<router-outlet></router-outlet>
+			<!-- <app-footer></app-footer> -->
 		</div>
-		<app-footer></app-footer>
-	</div>
-</body>
-
+	</body>
 </html>

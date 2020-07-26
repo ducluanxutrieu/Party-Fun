@@ -1,17 +1,15 @@
 export class Product {
-    createAt;
-    description: string;
-    discount: string;
-    image: string[];
-    name: string;
-    rate: {
-        average: number,
-        listRate: [],
-        totalpeople: number
-    }
-    price: number;
-    type: string;
-    updateAt: Date;
-    usercreate: string;
     _id: string;
+    name: string;
+    description: string;
+    price: number;
+    price_new: number;
+    discount: number;
+    image: string[];
+    create_at: string;
+    update_at: string;
+    user_create: string;
+    categories: string;
+    feature_image: string;
+    currency: string;
 }

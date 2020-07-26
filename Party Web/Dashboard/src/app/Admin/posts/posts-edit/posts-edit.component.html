@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div class="page">
+        <div class="page-content d-flex align-items-stretch">
+            <!-- Sidebar -->
+            <app-sidebar></app-sidebar>
+            <!-- Page content -->
+            <div class="content-inner">
+                <header class="page-header">
+                    <div class="container-fluid">
+                      <h2 class="no-margin-bottom">Post</h2>
+                    </div>
+                </header>
+                <!-- Breadcrumb-->
+                <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                    <li class="breadcrumb-item"><a [routerLink]="['/post/list']">Post List</a></li>
+                    <li class="breadcrumb-item active">Edit Post</li>
+                </ul>
+                </div>
+                <!-- Forms Section-->
+                <section class="forms">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <h3 class="h4">Edit Post</h3>
+                            </div>
+                            <div class="card-body">
+                            <p>Please fill all the fields</p>
+                            <form #editPostForm = "ngForm" (ngSubmit) = "edit_confirm(editPostForm.value)" id="editDish">
+                                <div class="form-group">
+                                    <label class="form-control-label">Post title</label>
+                                    <input type="text" placeholder="Post title" class="form-control" name="title" ngModel required #postTitle="ngModel" [(ngModel)]="post.title">
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="postTitle.invalid && postTitle.dirty">
+                                      Please write a title.
+                                    </div>
+                                  </div>
+                                <div class="form-group row">
+                                    <label for="postimage" class="col-sm-2 form-control-label pr-0 d-flex align-items-center">Featured Image</label>
+                                    <div class="col-sm-3 pl-0">
+                                        <input id="postimage" type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" name="image" (change)="fileChanged($event)" ngModel #image="ngModel">
+                                    </div>
+                                    <div class="col-sm-12 pt-2">
+                                        <img src={{post?.feature_image}} alt="post_image" class="post-image">
+                                    </div>
+                                    <div class="invalid-feedback d-block" role="alert" *ngIf="image.invalid && image.dirty">
+                                        Please choose a image.
+                                    </div>
+                                </div>
+                                <!-- Post content -->
+                                <div class="form-group">
+                                    <label class="form-control-label">Post content</label>
+                                    <div id="postEditor" [froalaEditor]="options" [(froalaModel)]="post.content"></div>
+                                </div>
+                                <div class="form-group">       
+                                    <input type="submit" value="Comfirm" class="btn btn-primary" form="editDish" [disabled]="editPostForm.invalid">
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

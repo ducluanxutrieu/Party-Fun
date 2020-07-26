@@ -39,7 +39,7 @@ export class AddEmployeeComponent implements OnInit {
           'Authorization': localStorage.getItem('token')
         })
         let body = `userupgrade=${data.username}`
-        this.http.post(api.upgraderole, body, { headers: headers, observe: 'response' }).subscribe(
+        this.http.post(api.upgrade_role, body, { headers: headers, observe: 'response' }).subscribe(
           res_data => {
             sessionStorage.setItem('response_body2', JSON.stringify(res_data.body));
             alert("Add Employee Success!");
@@ -62,7 +62,7 @@ export class AddEmployeeComponent implements OnInit {
       'Authorization': localStorage.getItem('token')
     })
     let body = `userupgrade=${data.username}`;
-    this.http.post(api.upgraderole, body, { headers: headers, observe: 'response' }).subscribe(
+    this.http.post(api.upgrade_role, body, { headers: headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
         alert("Add Employee Success!");

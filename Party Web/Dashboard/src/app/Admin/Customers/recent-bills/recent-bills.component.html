@@ -1,116 +1,129 @@
 <!DOCTYPE html>
 <html>
-<body>
-    <div class="page">
-        <div class="page-content d-flex align-items-stretch">
-            <!-- Sidebar -->
-            <app-sidebar></app-sidebar>
 
-            <!-- Page content-->
-            <div class="content-inner">
-                <!-- Page Header-->
-                <header class="page-header">
-                    <div class="container-fluid">
-                        <h2 class="no-margin-bottom">Customers</h2>
-                    </div>
-                </header>
-                <!-- Breadcrumb-->
-                <div class="breadcrumb-holder container-fluid">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-                        <li class="breadcrumb-item active">Recent bills</li>
-                    </ul>
-                </div>
-                <section class="tables">
-                    <div class="container-fluid">
-                        <div class="card">
-                            <div class="card-header d-flex align-items-center">
-                            <h3 class="h4">Recent bills</h3>
-                            </div>
-                            <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped" id="recentbillTable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="text-center">#</th>
-                                        <th scope="col" class="text-center">Username</th>
-                                        <th scope="col" class="text-center">Date created</th>
-                                        <th scope="col" class="text-center">Party date </th>
-                                        <th scope="col" class="text-center">Num of tables</th>
-                                        <th scope="col" class="text-center">Total</th>
-                                        <th scope="col" class="text-center">Status</th>
-                                        <th scope="col" class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let bill of recent_billList; let i = index" data-toggle="modal" data-target="#CartDetailModal" (click)="itemClicked(bill)">
-                                        <th scope="row" class="align-middle text-center">{{i+1}}</th>
-                                        <td class="align-middle text-center">{{bill.username}}</td>
-                                        <td class="align-middle text-center">{{bill.createAt | date:'dd-MM-yyyy'}}</td>
-                                        <td class="align-middle text-center">{{bill.dateParty | date:'dd-MM-yyyy, HH:mm'}}</td>
-                                        <td class="align-middle text-center">{{bill.numbertable}}</td>
-                                        <td class="align-middle text-center">{{bill.totalMoney | number}}</td>
-                                        <td class="align-middle text-center"><span *ngIf="bill.userpayment!=null">Paid</span><span *ngIf="bill.userpayment==null">Unpaid</span></td>
-                                        <td class="text-center">
-                                            <button [style.visibility]="bill.userpayment!=null ? 'hidden' : 'visible'" type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button>
-                                            <span [style.visibility]="bill.userpayment!=null ? 'hidden' : 'visible'" class="tab-space"></span>
-                                            <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Delete this bill" (click)="delete_bill(bill._id)"><i class="fa fa-trash"></i></button>
-                                        </td>
-                                        <!-- Cart Detail Modal-->
-                                        <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog" aria-labelledby="CartDetailModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="CartDetailModalLabel">Bill detail</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Username: {{current_bill?.username}}</p>
-                                                    <P>Phone: {{current_bill?.phoneNumber}}</P>
-                                                    <p>Email: {{current_bill?.email}}</p>
-                                                    <p>Date created: {{current_bill?.createAt | date:'dd-MM-yyyy'}}</p>
-                                                    <p>Party date: {{current_bill?.dateParty | date:'dd-MM-yyyy, HH:mm'}}</p>
-                                                    <p>Num of tables: {{current_bill?.numbertable}}</p>
-                                                    <p>Total: {{current_bill?.totalMoney | number}} VND</p>
-                                                    <p>Status: <span *ngIf="current_bill?.userpayment!=null">Paid</span><span *ngIf="current_bill?.userpayment==null">Unpaid</span></p>
-                                                    <h6>Items in each table</h6>
-                                                    <table class="table table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Name</th>
-                                                                <th>Price</th>
-                                                                <th class="text-center">Quantity</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let itemDetail of bill_detail; let i = index">
-                                                                <th scope="row">{{i+1}}</th>
-                                                                <td>{{itemDetail.name}}</td>
-                                                                <td>{{productService.find(itemDetail._id).price | number}}</td>
-                                                                <td class="text-center">{{itemDetail.numberDish | number}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </tr>
-                                </tbody>
-                                </table>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
+<body>
+  <div class="page">
+    <div class="page-content d-flex align-items-stretch">
+      <!-- Sidebar -->
+      <app-sidebar></app-sidebar>
+
+      <!-- Page content-->
+      <div class="content-inner">
+        <!-- Page Header-->
+        <header class="page-header">
+          <div class="container-fluid">
+            <h2 class="no-margin-bottom">Customers</h2>
+          </div>
+        </header>
+        <!-- Breadcrumb-->
+        <div class="breadcrumb-holder container-fluid">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+            <li class="breadcrumb-item active">Recent Bills</li>
+          </ul>
         </div>
+        <section class="tables">
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h3 class="h4">Recent Bills</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="recentbillTable">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-center">#</th>
+                        <th scope="col" class="text-center">Username</th>
+                        <th scope="col" class="text-center">Date created</th>
+                        <th scope="col" class="text-center">Party date </th>
+                        <th scope="col" class="text-center">Num of tables</th>
+                        <th scope="col" class="text-center">Total</th>
+                        <th scope="col" class="text-center">Status</th>
+                        <th scope="col" class="text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let bill of recent_bills; let i = index" data-toggle="modal"
+                        data-target="#CartDetailModal" (click)="itemClicked(bill)">
+                        <th scope="row" class="align-middle text-center">{{i+1}}</th>
+                        <td class="align-middle text-center">{{bill?.customer}}</td>
+                        <td class="align-middle text-center">{{bill?.create_at | date:'dd-MM-yyyy'}}</td>
+                        <td class="align-middle text-center">{{bill?.date_party | date:'dd-MM-yyyy, HH:mm'}}</td>
+                        <td class="align-middle text-center">{{bill?.table}}</td>
+                        <td class="align-middle text-center">{{bill?.total | number}}</td>
+                        <td class="align-middle text-center"><span *ngIf="bill?.payment_status==1">Paid</span><span
+                            *ngIf="bill?.payment_status==0">Unpaid</span></td>
+                        <td class="text-center">
+                          <button [style.visibility]="bill?.payment_status==1 ? 'hidden' : 'visible'" type="button"
+                            class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top"
+                            title="Pay this bill" (click)="pay(bill._id)"><i class="fa fa-usd"></i></button>
+                          <span [style.visibility]="bill?.payment_status==1 ? 'hidden' : 'visible'"
+                            class="tab-space"></span>
+                          <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip"
+                            data-placement="top" title="Delete this bill" (click)="delete_bill(bill._id)"><i
+                              class="fa fa-trash"></i></button>
+                        </td>
+                        <!-- Cart Detail Modal-->
+                        <div class="modal fade" id="CartDetailModal" tabindex="-1" role="dialog"
+                          aria-labelledby="CartDetailModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="CartDetailModalLabel">Bill detail</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p>Username: {{current_bill?.customer}}</p>
+                                <!-- <P>Phone: {{current_bill?.phone}}</P>
+                                                        <p>Email: {{current_bill?.email}}</p> -->
+                                <p>Date created: {{current_bill?.create_at | date:'dd-MM-yyyy'}}</p>
+                                <p>Party date: {{current_bill?.date_party | date:'dd-MM-yyyy, HH:mm'}}</p>
+                                <p>Num of tables: {{current_bill?.table}}</p>
+                                <p>Total: {{current_bill?.total | number}} {{current_bill?.currency}}</p>
+                                <p>Status: <span *ngIf="current_bill?.payment_status!=null">Paid</span><span
+                                    *ngIf="current_bill?.payment_status==null">Unpaid</span></p>
+                                <p>Bill id: {{current_bill?._id}}</p>
+                                <h6>Items in each table</h6>
+                                <table class="table table-hover">
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Name</th>
+                                      <th>Price</th>
+                                      <th class="text-center">Quantity</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let itemDetail of bill_detail; let i = index">
+                                      <th scope="row">{{i+1}}</th>
+                                      <td>{{itemDetail.name}}</td>
+                                      <td>{{itemDetail.price | number}}</td>
+                                      <td class="text-center">{{itemDetail.count | number}}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- <pagination [total_pages]="total_pages" (onChange)="get_recentBills($event)"></pagination> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
+  </div>
 </body>
+
 </html>

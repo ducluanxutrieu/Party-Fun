@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { api } from '../../../_api/apiUrl';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+// Services
 import { ProductService } from '../../../_services/product.service';
-
-// declare jquery;
+import { ToastrService } from 'ngx-toastr';
+// Models
+import { Product } from '../../../_models/product.model';
+// jquery;
 declare var $: any;
 
 @Component({
@@ -12,46 +13,36 @@ declare var $: any;
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
-  product_data = [];
+  product_list: Product[] = [];
 
   // dtTrigger: Subject<any> = new Subject();
 
   constructor(
-    private http: HttpClient,
-    private productService: ProductService
+    private productService: ProductService,
+    private toastr: ToastrService
   ) { }
 
+  // Xóa món ăn
   product_delete(id: string) {
-    let headers = new HttpHeaders({
-      'Authorization': localStorage.getItem('token')
-    })
-    const option = {
-      headers: headers,
-      body: {
-        _id: id
-      },
-    }
-    this.http.delete(api.deleteDish, option).subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data));
-        alert("Delete product success!");
-        window.location.reload();
+    this.productService.delete_dish(id).subscribe(
+      res => {
+        this.toastr.success("Delete product success!");
+        this.onload();
       },
       err => {
-        alert("Error: " + err.status + " - " + err.error.message);
+        this.toastr.error("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       }
     )
   }
-
+  // Xác nhận xóa
   delete_clicked(id: string, name: string) {
     if (confirm("Are you sure to delete this?\n" + name)) {
       this.product_delete(id);
-      console.log(id);
     }
   }
 
-  //Generate datatable 
+  // Generate datatable 
   datatable_generate() {
     var productTable = $('#productTable').DataTable();
     var productTable_info = productTable.page.info();
@@ -62,41 +53,38 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
         "paging": false
       });
     }
+    // var productTable = $('#productTable').DataTable({
+    //   "paging": false
+    // });
+    // var productTable_info = productTable.page.info();
   }
 
   ngOnInit() {
-    //this.product_data = JSON.parse(localStorage.getItem('dish-list'));
-    // this.product_data = this.productService.findAll();
-    // this.productService.productList.subscribe(
-    //   data => {
-    //     this.product_data = data;
-    //   },
-    //   err => console.log(err),
-    //   () => {
-    //     setTimeout(() => {
-    //       // this.dtTrigger.next();
-    //       this.datatable_generate();
-    //     }, 1000)
-    //   });
-    this.productService.getDishList().subscribe(
-      res_data => {
-        sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        var response_body = JSON.parse(sessionStorage.getItem('response_body'));
-        localStorage.setItem('dish-list', JSON.stringify(response_body.lishDishs));
-        this.product_data = response_body.lishDishs;
+    this.onload();
+  }
+  private onload() {
+    this.get_dishList();
+  }
+
+  // Lấy danh sách món ăn
+  get_dishList() {
+    this.productService.get_dishList().subscribe(
+      res => {
+        sessionStorage.setItem('response', JSON.stringify(res));
+        localStorage.setItem('dish-list', JSON.stringify(res.data));
+        this.product_list = res.data as Product[];
       },
       err => {
-        console.log("Error: " + err.status + " " + err.error.message);
+        console.log("Error: " + err.error.message);
         sessionStorage.setItem('error', JSON.stringify(err));
       },
       () => {
         setTimeout(() => {
           this.datatable_generate();
-        }, 1000)
+        })
       }
     )
   }
-
   ngAfterViewInit(): void {
     // this.dtTrigger.next();
   }

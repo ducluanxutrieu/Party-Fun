@@ -38,7 +38,7 @@ form input {
 }
 form select{
     display: block;
-    width: 20%;
+    width: 23%;
     margin-left: 20px;
     padding: 5px 20px;
     font-size: 1em;
@@ -54,7 +54,7 @@ form button {
     transform: translate(-50%, 0);
     font-family: inherit;
     color: white;
-    background: #ffae70;
+    background: #28a745;
     outline: none;
     border: none;
     padding: 5px 15px;

@@ -1,16 +1,16 @@
 export class User {
     _id: string;
-    email: string;
-    phoneNumber: string;
-    birthday;
-    fullName: string;
     username: string;
-    sex: string;
-    role: string;
-    imageurl: string;
-    password: string;
+    full_name: string;
+    email: string;
+    phone: string;
+    birthday: string;
+    gender: number;
+    role: number;
+    avatar: string;
+    otp_register: string;
+    otp_register_at: string;
+    create_at: string;
+    update_at: string;
     token: string;
-    createAt;
-    updateAt;
-    userCart: [];
 }
