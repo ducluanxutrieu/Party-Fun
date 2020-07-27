@@ -63,18 +63,18 @@ class _ProfileScreenState extends State<AboutUsScreen> {
                         SymptomCard(
                           image: "assets/images/avatar_dong.png",
                           title: "Trần Ngọc Quang Đông",
-                          text: "17520561",
+                          text: "16520223",
                           isActive: true,
                         ),
                         SymptomCard(
                           image: "assets/images/avatar_trung.png",
                           title: "Trần Đức Trung",
-                          text: "17520561",
+                          text: "16521328",
                         ),
                         SymptomCard(
                           image: "assets/images/avatar_luan.png",
                           title: "Trần Đức Luân",
-                          text: "17520561",
+                          text: "16520349",
                         ),
                         SymptomCard(
                           image: "assets/images/check.png",

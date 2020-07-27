@@ -134,8 +134,8 @@ class _BookPartySuccessScreenState extends State<BookPartySuccessScreen> {
                   fontSize: 20),
             ),
           ),
-          Container(
-            height: 400,
+          Flexible(
+            fit: FlexFit.loose,
             child: ListView.builder(
                 itemCount: widget.mBill.dishes.length,
                 itemBuilder: (bCtx, index) {
