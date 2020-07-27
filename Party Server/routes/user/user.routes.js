@@ -1,43 +1,71 @@
-var app = require('express').Router();
-var controller = require('./user.controllers')
-var auth = require('../authorization')
-//dang nhap user
-app.post('/signin', controller.signin);
 
-// dang ki
-app.post('/signup', auth.checkinDataSignup, controller.signup);
+    var app=require('express').Router();
+    var controller = require('./user.controllers')
+    var auth=require('../authorization')
+    var multer =require('multer');
+    let diskStorage = multer.diskStorage({
+        destination: (req, file, callback) => {
+          // Định nghĩa nơi file upload sẽ được lưu lại
+          callback(null, "uploads");
+        },
+        filename: (req, file, callback) => {
+          // ở đây các bạn có thể làm bất kỳ điều gì với cái file nhé.
+          // Mình ví dụ chỉ cho phép tải lên các loại ảnh png & jpg
+          let math = ["image/png", "image/jpeg"];
+          if (math.indexOf(file.mimetype) === -1) {
+            let errorMess = `The file <strong>${file.originalname}</strong> is invalid. Only allowed to upload image jpeg or png.`;
+            return callback(errorMess, null);
+          }
+          // Tên của file thì mình nối thêm một cái nhãn thời gian để đảm bảo không bị trùng.
+          let filename = `${file.originalname}`;
+          callback(null, filename);
+        }
+      });
+      var upload = multer({ storage: diskStorage })
+    //dang nhap user
+    app.post('/signin', controller.signin);
 
-//dang xuat
-app.post('/signout', auth.isAuthenticated, controller.signout);
+    // dang nhap admin
+    app.post('/sign_admin', controller.signin_admin);
 
-//doi mat khau
-app.post('/changepassword', auth.isAuthenticated, auth.checkinDataChangePassword, controller.changepassword);
+    // dang ki
+    app.post('/signup', auth.checkinDataSignup, controller.signup);
 
-//upload avatar
-app.post('/uploadavatar', auth.isAuthenticated, controller.uploadavatar);
+    //dang xuat
+    app.get('/signout', controller.signout);
 
-//reset password
-app.post('/resetpassword', controller.resetpassword);
+    //doi mat khau
+    app.put('/change_pwd',auth.isAuthenticated, auth.checkinDataChangePassword, controller.changepassword);
 
-//reset password confirm
-app.post('/resetconfirm', auth.checkinDataResetPassword, controller.resetconfirm);
+    //upload avatar
+    app.put('/avatar', upload.single('image'),auth.isAuthenticated, controller.uploadavatar);
 
-//update thong tin user
-app.post('/updateuser', auth.isAuthenticated, auth.checkinDataUpdateUser, controller.updateuser);
+    //reset password
+    app.get('/reset_password', controller.resetpassword);
 
-// get thong tin user
-app.get('/profile', auth.isAuthenticated, controller.profile);
+    //reset password confirm
+    app.put('/confirm_otp', auth.checkinDataResetPassword, controller.resetconfirm);
 
-// nang cap quyen
-app.post('/upgraderole', auth.isAuthenticated, auth.checkinDateUpgraderole, controller.upgraderole);
+    //update thong tin user
+    app.put('/update', auth.isAuthenticated, auth.checkinDataUpdateUser, controller.updateuser);
 
-// xoa quyen nhan vien
-app.delete('/demotionrole', auth.isAuthenticated, auth.checkinDateUpgraderole, controller.demotionrole);
+    // get thong tin user
+    app.get('/get_me', auth.isAuthenticated, controller.profile);
 
-// get danh sach username nhan vien
-app.get('/findusernv', auth.isAuthenticated, auth.isStaff, controller.findusernv);
+    app.get('/get_history_cart', auth.isAuthenticated, controller.get_history_cart);
+    app.get('/get_history_cart/:id', auth.isAuthenticated, controller.get_detail_history_cart);
 
-// get danh sach username khach hang
-app.get('/finduserkh', auth.isAuthenticated, auth.isStaff, controller.finduserkh);
+    // nang cap quyen
+    app.put('/add_staff', auth.isAuthenticated, auth.checkinDateUpgraderole, controller.upgraderole);
 
-module.exports = app;
+    // xoa quyen nhan vien
+    app.put('/del_staff', auth.isAuthenticated, auth.checkinDateUpgraderole, controller.demotionrole);
+
+   // xuat all danh sach user
+    app.get('/customers', auth.isAuthenticated, auth.isStaff, controller.finduserkh);
+   // xuat all danh sach user nhanvien
+    app.get('/staffs', auth.isAuthenticated, auth.isStaff, controller.findusernv);
+    // search
+    app.get('/search', auth.isAuthenticated, auth.isStaff, controller.search_customer);
+
+module.exports=app;

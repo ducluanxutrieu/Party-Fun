@@ -7,61 +7,110 @@ const ip = "139.180.131.30";
 const port = "3000";
 const nodemailer = require('nodemailer');
 const MongoClient = mongodb.MongoClient;
+var path=require('path');
+var CronJob = require('cron').CronJob;
+var ObjectId =  require('mongodb').ObjectId;
 
+// cron check user là khách hàng bạc / vàng / đồng theo thời gian tham gia vào nhóm
+let cron= new CronJob({
+    cronTime: '0 0 0 */1 * *',
+    // cronTime: '0 * * * * *',
+    onTick: async function () {
+        MongoClient.connect(
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            function (err, db) {
+                var User = db.collection("User");
+                User.find({}).toArray(function(err, data) {
+                    let now = new Date();
+                    for (let index of data) {
+                        let check_update = 0;
+                        if ((now.getTime() - index.create_at.getTime() < 30 * 86400*1000) && (now.getTime() - index.create_at.getTime() >= 86400 *1000))
+                        {
+                            // neu nguoi dung do đăng kí được 1 ngày đến 1 tháng thì sẽ thuộc loại đồng / người mới
+                            if (index.type.indexOf("new")==-1) 
+                            {
+                                // chua co thi insert vao mang
+                                check_update = 1;
+                                index.type.push("new");
+                            }
+                        }
+                        else
+                        if ((now.getTime() - index.create_at.getTime() >= 30 * 86400*1000) && (now.getTime() - index.create_at.getTime() < 30 * 86400 *1000 * 30 * 6))
+                        {
+                            // neu nguoi dung do đăng kí được 1 tháng đến 6 tháng thì sẽ thuộc loại bạc / thân thuộc
+                            if (index.type.indexOf("familiar")==-1) 
+                            {
+                                // neu co thi update mang
+                                if (index.type.indexOf("new")!=-1) index.type[index.type.indexOf("new")]="familiar";
+                                else 
+                                index.type.push("familiar");
+                                check_update = 1;
+                            }
+                        }
+                        else
+                        if (now.getTime() - index.create_at.getTime() >= 30 * 86400 * 1000 * 30 * 60)
+                        {
+                            // neu nguoi dung do đăng kí được hơn 6 tháng thì sẽ thuộc loại vàng    // lâu năm
+                            if (index.type.indexOf("vip")==-1) 
+                            {
+                                // neu co thi update mang
+                                if (index.type.indexOf("familiar")!=-1) index.type[index.type.indexOf("familiar")]="vip";
+                                else 
+                                index.type.push("vip");
+                                check_update = 1;
+                            }
+                        }
+                        if (check_update == 1) User.update({_id: new ObjectId(index._id)}, {$set: {type: index.type}}, function(err, data) {
+                        });
+                    }
+                })
+            })
+    },
+    timeZone: "Asia/Ho_Chi_Minh",
+    start: true,
+})
 module.exports = {
     signin: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 if (req.headers && req.headers.authorization) {
                     var tokenreq = req.headers.authorization;
                     jwt.verify(tokenreq, config.secret, function (err, dec) {
-                        if (err) {
-                            res.status(401).send({ success: false, message: 'Failed to authenticate token', account: null });
+                        if (err || !dec) {
+                            res.status(401).send({message: "Mã token không chính xác hoặc đã hết hạn", data: "false"});
                         }
                         else {
-                            collection.findOne({ username: dec.username }, (function (err2, decoded) {
+                            collection.findOne({ username: dec.username }, function (err2, decoded) {
                                 if (err2 || !decoded)
-                                    return res.status(401).send({ success: false, message: 'Failed to authenticate token', account: null });
-
+                                    return res.status(401).send({message: "Mã token không chính xác hoặc đã hết hạn", data: "false" });
                                 else {
                                     delete decoded.password;
-                                    var response =
-                                    {
-                                        success: true,
-                                        message: "Sign in success",
-                                        account: decoded
-                                    }
-                                    res.status(200).send(response);
+                                    decoded.token= null;
+                                    res.status(200).send({message: "Đăng nhập token thành công", data: decoded});
                                 }
-                            }))
+                            })
                         }
                     });
                 }
                 else {
-                    if (req.body.username == undefined || req.body.password == undefined)
-                        res.status(400).send({ success: false, message: "Username and password is not string", account: null })
+                    if (!(req.body.username && req.body.password))
+                        res.status(400).send({ message: "Trường username và password không được trống", data: "false" })
                     else {
-                        collection.find({ username: req.body.username }).toArray(function (err, resl) {
-                            if (Array.isArray(resl) && resl.length == 0) res.status(400).send({ success: false, message: 'Signin failed, user not found', account: null });
+                        collection.findOne({ username: req.body.username },function (err, data) {
+                            if (err || !data) res.status(400).send({message: 'Không tìm thấy username trong hệ thống', data: "false" });
                             else {
-                                bcrypt.compare(req.body.password, resl[0].password, function (err, reslt) {
-                                    if (reslt) {
+                                bcrypt.compare(req.body.password, data.password, function (err, crypt) {
+                                    if (crypt) {
                                         var token = jwt.sign({ username: req.body.username }, config.secret, {
                                             expiresIn: '2400h'
                                         });
-                                        delete resl[0].password;
-                                        resl[0].token = token;
-                                        var response =
-                                        {
-                                            success: true,
-                                            message: "Sign in success",
-                                            account: resl[0]
-                                        }
-                                        res.status(200).send(response);
+                                        delete data.password;
+                                        data.token = token;
+                                        res.status(200).send({message: "Đăng nhập thành công", data: data });
                                     }
-                                    else res.status(400).send({ success: false, message: "Wrong Password", account: null });
+                                    else res.status(400).send({message: "Mật khẩu không chính xác", data: "false" });
                                 });
                             }
                         });
@@ -69,90 +118,128 @@ module.exports = {
                 }
             });
     },
-
-    signup: function (req, res) {
+    signin_admin: function(req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ username: req.body.username }).toArray(function (err, docs) {
-                    if (Array.isArray(docs) && docs.length === 0) {
+                if (req.headers && req.headers.authorization) {
+                    var tokenreq = req.headers.authorization;
+                    jwt.verify(tokenreq, config.secret, function (err, dec) {
+                        if (err || !dec) {
+                            res.status(401).send({message: "Mã token không chính xác hoặc đã hết hạn", data: "false"});
+                        }
+                        else {
+                            collection.findOne({ username: dec.username }, function (err2, decoded) {
+                                if (err2 || !decoded)
+                                    return res.status(401).send({message: "Mã token không chính xác hoặc đã hết hạn", data: "false" });
+                                else 
+                                if (decoded.role == 2 || decoded == 3) 
+                                {
+                                    delete decoded.password;
+                                    decoded.token= null;
+                                    res.status(200).send({message: "Đăng nhập token thành công", data: decoded});
+                                }
+                                else res.status(400).send({message: "Bạn không có quyền sử dụng tính năng này", data: "false"})
+                            })
+                        }
+                    });
+                }
+                else {
+                    if (!(req.body.username && req.body.password))
+                        res.status(400).send({ message: "Trường username và password không được trống", data: "false" })
+                    else {
+                        collection.findOne({ username: req.body.username },function (err, data) {
+                            if (err || !data) res.status(400).send({message: 'Không tìm thấy username trong hệ thống', data: "false" });
+                            else {
+                                bcrypt.compare(req.body.password, data.password, function (err, crypt) {
+                                    if (crypt) 
+                                    {
+                                        if (data.role == 2 || data.role == 3)
+                                            {
+                                            var token = jwt.sign({ username: req.body.username }, config.secret, {
+                                                expiresIn: '2400h'
+                                            });
+                                            delete data.password;
+                                            data.token = token;
+                                            res.status(200).send({message: "Đăng nhập thành công", data: data });
+                                        }
+                                        else res.status(400).send({message: "Bạn không có quyền sử dụng tính năng này", data: "false"})
+                                    }
+                                    else res.status(400).send({message: "Mật khẩu không chính xác", data: "false" });
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+    },
+    signup: function (req, res) {
+        MongoClient.connect(
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            function (err, db) {
+                if (err) console.log(err);
+                var collection = db.collection("User");
+                collection.findOne({ username: req.body.username },function (err, data) {
+                    if (!(data)) {
                         var acc = req.body;
                         var hashedPassword = bcrypt.hashSync(acc.password, 8);
                         acc.password = hashedPassword;
-                        acc.birthday = "";
-                        acc.sex = "";
-                        acc.role = "khachhang";
-                        acc.imageurl = "http://" + ip + ":" + port + "/open_image?image_name=default.png";
-                        acc.resetpassword = "";
-                        var date = new Date();
-                        acc.createAt = date.toLocaleString();
-                        acc.updateAt = acc.createAt;
+                        acc.birthday = new Date();
+                        acc.gender = 1;
+                        acc.role = 1;
+                        acc.type = [];
+                        acc.avatar = "http://" + ip + ":" + port + "/open_image?image_name=default.png";
+                        acc.otp_register = null;
+                        acc.otp_register_at = null;
+                        acc.create_at = new Date();
+                        acc.update_at = new Date();
+                        if (!acc.country_code) acc.country_code = "+84"
                         collection.insert(acc, (function (err, reslute) {
                             if (err) {
-                                res.status(500).send({ success: false, message: err, account: null });
+                                res.status(500).send({message: "Lỗi khi insert database", data: "false"});
                             }
                             else {
                                 delete acc.password;
                                 var response =
                                 {
-                                    success: true,
-                                    message: "Sign Up success",
-                                    account: acc
+                                    message: "Đăng kí thành công",
+                                    data: acc
                                 };
                                 res.status(200).send(response);
                             }
                         }));
                     }
                     else {
-                        var response =
-                        {
-                            success: false,
-                            message: "Account already exists",
-                            account: req.body
-                        };
-                        res.status(400).send(response);
+                        res.status(400).send({message: "Tài khoản đã tồn tại", data: "false"});
                     }
                 })
             })
     },
 
     signout: function (req, res) {
-        MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
-            function (err, db) {
-                var collection = db.collection("User");
-                collection.findOne({ username: req.body.username }, (function (err2, decoded) {
-                    if (err2 || !decoded)
-                        return res.status(401).send({ success: false, message: 'Failed to authenticate token' });
-                    else
-                        res.status(200).send({ success: true, message: "Sign Out success" });
-                }))
-            })
+        res.status(200).send({message: "Đăng xuất thành công", data: "true" });
     },
 
     changepassword: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                var requestpass = req.body.password;
-                collection.find({ username: req.body.username }).toArray(function (err2, decoded) {
-                    var user = decoded[0].username;
-                    if (err2 || decoded.length == 0)
-                        return res.status(401).send({ success: false, message: 'Failed to authenticate token' });
-
+                collection.findOne({ username: req.body.username }, function (err2, decoded) {
+                    if (err2)
+                        return res.status(400).send({ message: 'User không tồn tại', data: "false" });
                     else {
-                        bcrypt.compare(requestpass, decoded[0].password, function (err2, reslt) {
+                        bcrypt.compare(req.body.password, decoded.password, function (err2, reslt) {
                             if (reslt) {
-                                var requestpassnew = bcrypt.hashSync(req.body.newpassword, 8);
-                                collection.update({ username: user },
-                                    { $set: { password: requestpassnew } }, function (err2, reslt) {
-                                        if (err2) res.send({ success: false, message: err2 });
-                                        res.status(200).send({ success: true, message: "Password updated" });
+                                let requestpassnew = bcrypt.hashSync(req.body.new_password, 8);
+                                collection.update({ username: decoded.username },
+                                    { $set: { password: requestpassnew } }, function (err2, data) {
+                                        if (err2) res.send({ message: "Lỗi khi cập nhật mật khẩu mới", data: null });
+                                        else res.status(200).send({ message: "Cập nhật mật khẩu thành công", data: "true" });
                                     })
                             }
-                            else res.status(400).send({ success: false, message: "Wrong Password" });
+                            else res.status(400).send({ message: "Mật khẩu không chính xác", data: "false" });
                         })
                     }
                 })
@@ -161,34 +248,24 @@ module.exports = {
 
     uploadavatar: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ username: req.body.username }).toArray(function (err2, decoded) {
-                    if (err2 || decoded.length == 0)
-                        return res.status(401).send({ success: false, message: 'Failed to authenticate token' });
+                collection.findOne({ username: req.body.username },function (err2, decoded) {
+                    if (err2 || !decoded)
+                        return res.status(401).send({ message: 'Tài khoản không tồn tại', data: "false" });
                     else {
-                        let formidable = require('formidable');
-                        var form = new formidable.IncomingForm();
-                        form.uploadDir = "./uploads";
-                        form.keepExtensions = true;
-                        form.maxFieldsSize = 10 * 1024 * 1024;
-                        form.multiples = true;
-
-                        form.parse(req, function (err2, fields, files) {
-                            if (files["image"] == undefined || files["image"] == null ||
-                                files["image"].type.match(/.(jpg|jpeg|png|form-data)$/i) == null)
-                                res.status(400).send({ success: false, message: "No image to upload" });
-                            else {
-                                var url = "http://" + ip + ":" + port + "/open_image?image_name=" + files["image"].path.split('/')[1];
-                                collection.update({ username: decoded[0].username }, { $set: { imageurl: url } }, function (err3, reslt) {
-                                    if (err3) res.status(500).send({ success: false, message: err3 });
-                                    else {
-                                        res.status(200).send({ success: true, message: url });
-                                    }
-                                });
-                            }
-                        });
+                        if (req.file && req.file.filename) 
+                        {
+                            var url = "http://" + ip + ":" + port + "/open_image?image_name=" + req.file.filename;
+                            collection.update({ username: decoded.username }, { $set: { avatar: url } }, function (err3, reslt) {
+                                if (err3) res.status(500).send({message: "Lỗi khi cập nhật ảnh đại diện", data: "false"});
+                                else {
+                                    res.status(200).send({ message: "Cập nhật ảnh đại diện thành công", data: url });
+                                }
+                            });
+                        }
+                        else res.status(400).send({message: "Không tồn tài ảnh đại diện đính kèm. Vui lòng chọn 1 hình ảnh làm ảnh đại diện", data: "false"});
                     }
                 })
             })
@@ -196,12 +273,12 @@ module.exports = {
 
     resetpassword: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ username: req.body.username }).toArray(function (err, docs) {
-                    if (Array.isArray(docs) && docs.length != 0) {
-                        if (docs[0].email === undefined) res.status(400).send({ success: "false", message: "Your account has not updated its email address" });
+                collection.findOne({ username: req.query.username },function (err, data) {
+                    if (data && data.length != 0) {
+                        if (data.email.length==0) res.status(400).send({message: "Tài khoản bạn chưa cập nhật địa chỉ email", data: "false" });
                         var accmail = 'partyuitk11@gmail.com';
                         var passmail = 'partyuit123';
                         var smtptransport = nodemailer.createTransport({
@@ -214,65 +291,65 @@ module.exports = {
                                 pass: passmail
                             }
                         })
-                        var resetpassword = (Math.floor(Math.random() * 888888 + 111111)).toString(); // random 1 so tu 111111 den 999999
-                        collection.update({ username: docs[0].username }, { $set: { resetpassword: resetpassword } }, function (err, re) {
-                            if (err) res.status(500).send({ success: "false", message: err });
+                        var resetpassword = (Math.floor(Math.random() * 888888 + 111111)); // random 1 so tu 111111 den 999999
+                        collection.update({ username:data.username }, { $set: { otp_register: resetpassword, otp_register_at: new Date() } }, function (err, re) {
+                            if (err) res.status(500).send({message: "Lỗi khi cập nhật mã OTP code", data: err });
                         })
-                        var data = {
+                        var data_send = {
                             from: accmail,
-                            to: docs[0].email,
+                            to: data.email,
                             subject: "Reset Password PartyBooking",
-                            html: '<body> <tr> <td> <p style="font-weight:500; font-size:16px;"> Party Booking </p> </td> </tr> <p> Hello ' + req.body.username + '</p> <p> </p> <div> We have received a request change password your PartyBooking account. </div> Please input below code to application: <table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collspse; margin-top:9px;margin-bottom:15px"><tbody> <tr> <td style="font-size:11px;font-famili:LucidaGrande,tahoma,verdana,arial,sans-serif;padding:10px;backgroup-color:#f2f2f2;border-left:1px solid #ccc; border-right:1px solid #cc"><span class="m_48" style="font-family:Helvetica Neue, Helvetica, Lucida Grande, tahoma, verdana, arial, sans-serif; font-size:16px;line-height:21px; color:#141823">' + resetpassword + '</span></td></tr></tbody></table><p></p> </body>'
+                            html: '<body> <tr> <td> <p style="font-weight:500; font-size:16px;"> Party Booking </p> </td> </tr> <p> Hello ' + req.query.username + '</p> <p> </p> <div> We have received a request change password your PartyBooking account. </div> Please input below code to application: <table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collspse; margin-top:9px;margin-bottom:15px"><tbody> <tr> <td style="font-size:11px;font-famili:LucidaGrande,tahoma,verdana,arial,sans-serif;padding:10px;backgroup-color:#f2f2f2;border-left:1px solid #ccc; border-right:1px solid #cc"><span class="m_48" style="font-family:Helvetica Neue, Helvetica, Lucida Grande, tahoma, verdana, arial, sans-serif; font-size:16px;line-height:21px; color:#141823">' + resetpassword + '</span></td></tr></tbody></table><p></p> </body>'
                         };
-                        smtptransport.sendMail(data, function (err) {
-                            if (err) res.status(500).send({ success: false, message: err });
-                            else res.status(200).send({ success: true, message: "Please check your email" + docs[0].email });
+                        smtptransport.sendMail(data_send, function (err) {
+                            if (err) res.status(500).send({ message: "Lỗi khi gửi email", data: "false" });
+                            else res.status(200).send({message: "Yêu cầu reset mật khẩu thành công. Làm ơn kiểm tra email " + data.email, data: data.email });
                         })
                     }
-                    else res.status(400).send({ success: false, message: "Find not found username: " + req.body.username });
+                    else res.status(400).send({message: "Tài khoản không tồn tại", data: "false" });
                 })
             })
     },
 
     resetconfirm: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ resetpassword: req.body.resetpassword }).toArray(function (err, docs) {
-                    if (docs.length != 0) {
-                        var password = bcrypt.hashSync(req.body.passwordnew, 8);
-                        collection.update({ resetpassword: req.body.resetpassword }, { $set: { password: password, resetpassword: "" } }, function (err2, resl) {
-                            if (err2) res.status(500).send({ success: false, message: err2 });
-                            else res.status(200).send({ success: true, message: "Update password success" });
+                collection.findOne({ otp_register: Number(req.body.otp_code), username: req.body.username },function (err, data) {
+                    if (data && (new Date().getTime() < (data.otp_register_at.getTime()+60*60*1000))) {
+                        var password = bcrypt.hashSync(req.body.password, 8);
+                        collection.update({ username: req.body.username }, { $set: { password: password, otp_register: null } }, function (err2, resl) {
+                            if (err2) res.status(500).send({ message: "Lỗi khi cập nhật password mới", data: "false" });
+                            else res.status(200).send({ message: "Cập nhật mật khẩu thành công", data: "true" });
                         })
                     }
-                    else res.status(400).send({ success: false, message: "Code OTP incorrect" });
+                    else res.status(400).send({ message: "Code OTP không chính xác hoặc đã hết hạn" });
                 })
             })
     },
 
     updateuser: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ username: req.body.username }).toArray(function (err2, decoded) {
-                    if (err2 || decoded.length == 0)
-                        return res.status(401).send({ success: false, message: 'Failed to authenticate token', account: null });
+                collection.findOne({ username: req.body.username} ,function (err2, data) {
+                    if (err2 || !data)
+                        return res.status(401).send({message: 'Tài khoản không tồn tại', data: "false" });
                     else {
-                        var date = new Date();
-                        var updateat = date.toLocaleString();
-                        collection.update({ username: decoded[0].username }, {
+                        var updateat =new Date();
+                        collection.update({ username: data.username }, {
                             $set: {
-                                fullName: req.body.fullName, sex: req.body.sex,
-                                birthday: req.body.birthday, phoneNumber: req.body.phoneNumber, email: req.body.email, updateAt: updateat
+                                full_name: req.body.full_name, gender: Number(req.body.gender),
+                                birthday: req.body.birthday, phone: Number(req.body.phone), 
+                                email: req.body.email, update_at: updateat
                             }
                         }, function (err2, resl) {
-                            if (err2) res.status(500).send({ success: false, message: err2, account: null });
-                            collection.find({ username: decoded[0].username }).toArray(function (err, doc) {
-                                delete doc[0].password;
-                                res.status(200).send({ success: true, message: "Update success", account: doc[0] });
+                            if (err2) res.status(500).send({ message: "Lỗi khi update user", data: "false" });
+                            else collection.findOne({ username: data.username },function (err, doc) {
+                                delete doc.password;
+                                res.status(200).send({message: "Cập nhật thông tin user thành công", data: doc });
                             })
                         });
                     }
@@ -282,49 +359,74 @@ module.exports = {
 
     profile: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
-                console.log(req.connection.remoteAddress + " request Get profile username: " + req.body.username);
                 var User = db.collection('User');
-                User.aggregate([
-                    {
-                        $match: {
-                            'username': req.body.username,
-                        }
-                    },
-                    {
-                        $lookup: {
-                            from: 'Bill',
-                            localField: 'username',
-                            foreignField: 'username',
-                            as: 'userCart'
-                        }
-                    },
-                    { $project: { password: 0 } }
-                ]).toArray(function (err, data) {
-                    if (err) res.status(500).send({ success: false, message: err, account: null });
-                    else res.status(200).send({ success: true, message: "Profile User", account: data[0] });
+                User.findOne({username: req.body.username}, function(err, data) {
+                    if (data) {
+                        delete data.password;
+                        res.status(200).send({ message: "Lấy thông tin user", data: data })
+                    }
+                    else res.status(400).send({message: "Tài khoản không tồn tại", data: "false"})
+                })
+            })
+    },
+    get_history_cart: function(req, res) {
+        MongoClient.connect(
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            async function (err, db) {
+                var Bill = db.collection('Bill');
+                if (!req.query.page || req.query.page < 1) req.query.page = 1;
+                let total_page = (await Bill.find({customer: req.body.username}).toArray()).length;
+                total_page = Math.ceil(total_page / 10);
+                Bill.find({customer: req.body.username}).sort({date_party: -1}).limit(10).skip(10*Number(req.query.page -1))
+                .toArray(function (err, data) {
+                    if (err) res.status(500).send({ message: "Bill rỗng", data: "false" });
+                    else {
+                        res.status(200).send({ message: "Lấy lịch sử đặt hàng thành công", data: {
+                            total_page: total_page,
+                            start: 10 * (req.query.page -1),
+                            end: (10 * (req.query.page) -1),
+                            value: data,
+                         } });
+                    }
+                })
+            })
+    },
+    get_detail_history_cart: function(req, res) {
+        MongoClient.connect(
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            async function (err, db) {
+                var Bill = db.collection('Bill');
+                var ObjectID = require('mongodb').ObjectID;
+
+                Bill.findOne({_id: new ObjectID(req.params.id)},
+                function (err, data) {
+                    if (err) res.status(500).send({ message: "Bill rỗng", data: "false" });
+                    else {
+                        res.status(200).send({ message: "Lấy chi tiết lịch sử đặt hàng thành công", data});
+                    }
                 })
             })
     },
 
     upgraderole: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ username: req.body.username }).toArray(function (err2, decoded) {
-                    if (err2 || decoded.length == 0)
-                        return res.status(500).send({ success: false, message: err2 });
+                collection.findOne({ username: req.body.username },function (err2, decoded) {
+                    if (err2 || !decoded)
+                        return res.status(500).send({message: "Tài khoản đăng nhập không tồn tại", data: "false" });
                     else {
-                        if (decoded[0].role == "Admin") {
-                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "nhanvien" } }, { returnOriginal: false }, function (err, resl) {
-                                if (err) res.status(500).send({ success: false, message: err });
-                                else if (resl.value == null) res.status(400).send({ success: false, message: "Can't find user" });
-                                else res.status(200).send({ success: true, message: "Upgrade Role success" });
+                        if (decoded.role == 3) {
+                            var ObjectID = require('mongodb').ObjectID;
+                            collection.findOneAndUpdate({ _id: new ObjectID(req.body.user_id), role: 1 }, { $set: { role: 2 } }, { returnOriginal: false }, function (err, resl) {
+                                if (err || resl.value == null) res.status(400).send({  message: "User cần thêm không chính xác", data: "false" });
+                                else res.status(200).send({ message: "Cập nhật quyền thành công", data: "true" });
                             });
                         }
-                        else res.status(400).send({ success: false, message: "You need signin with Administrator" });
+                        else res.status(400).send({ message: "Bạn không có quyền thực hiện tính năng này", data: "false" });
                     }
                 })
             })
@@ -332,21 +434,21 @@ module.exports = {
 
     demotionrole: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab',
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
-                collection.find({ username: req.body.username }).toArray(function (err2, decoded) {
-                    if (err2 || decoded.length == 0)
-                        return res.status(500).send({ success: false, message: err2 });
+                collection.findOne({ username: req.body.username },function (err2, decoded) {
+                    if (err2 || !decoded)
+                        return res.status(500).send({message: "Tài khoản đăng nhập không tồn tại", data: "false" });
                     else {
-                        if (decoded[0].role == "Admin") {
-                            collection.findOneAndUpdate({ username: req.body.userupgrade }, { $set: { role: "khachhang" } }, { returnOriginal: false }, function (err, resl) {
-                                if (err) res.status(500).send({ success: false, message: err });
-                                else if (resl.value == null) res.status(400).send({ success: false, message: "Can't find user" });
-                                else res.status(200).send({ success: true, message: "Demotion Role success" });
+                        if (decoded.role == 3) {
+                            var ObjectID = require('mongodb').ObjectID;
+                            collection.findOneAndUpdate({ _id: new ObjectID(req.body.user_id), role: 2 }, { $set: { role: 1 } }, { returnOriginal: false }, function (err, resl) {
+                                if (err || resl.value == null) res.status(400).send({  message: "User cần xóa không chính xác", data: "false" });
+                                else res.status(200).send({ message: "Cập nhật quyền thành công", data: "true" });
                             });
                         }
-                        else res.status(400).send({ success: false, message: "You need signin with Administrator" });
+                        else res.status(400).send({ message: "Bạn không có quyền thực hiện tính năng này", data: "false" });
                     }
                 })
             })
@@ -367,21 +469,55 @@ module.exports = {
     },
     findusernv: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab', function (err, db) {
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', async function (err, db) {
                 var User = db.collection('User');
-                User.find({ role: 'nhanvien' }, { username: 1, fullName: 1, imageurl: 1 }).toArray(function (err, data) {
-                    if (err) res.status(400).send({ success: false, message: "Error " + err, user: null });
-                    else res.status(200).send({ success: true, message: 'Find all user success', user: data })
+                if (!req.query.page || req.query.page < 1) req.query.page = 1;
+                let total_page = (await User.find({role: 2}).toArray()).length;
+                total_page = Math.ceil(total_page / 10);
+                User.find({ role: 2 }, { username: 1, full_name: 1, avatar: 1 }).limit(10).skip(10*Number(req.query.page -1 )).toArray(function (err, data) {
+                    if (err) res.status(400).send({message: "Lỗi khi tìm nhân viên",data: "false" });
+                    else res.status(200).send({ message: 'In tất cả nhân viên', data: {
+                        total_page: total_page,
+                        start: 10 * (req.query.page -1),
+                        end: (10 * (req.query.page) -1),
+                        value: data,
+                    } })
                 })
             })
     },
     finduserkh: function (req, res) {
         MongoClient.connect(
-            'mongodb://localhost/Android_Lab', function (err, db) {
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', async function (err, db) {
                 var User = db.collection('User');
-                User.find({ role: 'khachhang' }, { username: 1, fullName: 1, imageurl: 1 }).toArray(function (err, data) {
-                    if (err) res.status(400).send({ success: false, message: 'Error' + err, user: null });
-                    else res.status(200).send({ success: true, message: 'Find all user success', user: data })
+                if (!req.query.page || req.query.page < 1) req.query.page = 1;
+                let total_page = (await User.find({role: 1}).toArray()).length;
+                total_page = Math.ceil(total_page / 10);
+                User.find({ role: 1 }, { username: 1, full_name: 1, avatar: 1 }).limit(10).skip(10*Number(req.query.page - 1)).toArray(function (err, data) {
+                    if (err) res.status(400).send({message: "Lỗi khi tìm danh sách khách hàng", data: "false" });
+                    else res.status(200).send({message: "In tất cả khách hàng", data: {
+                        total_page: total_page,
+                        start: 10 * (req.query.page -1),
+                        end: (10 * (req.query.page) -1),
+                        value: data,
+                    } })
+                })
+            })
+    },
+    search_customer: function(req, res) {
+        MongoClient.connect(
+            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', function (err, db) {
+                var User = db.collection('User');
+                User.find({username: {'$regex': req.query.key}}).toArray(function (err, data) {
+                    if (err) res.status(400).send({message: "Lỗi khi search", data: "false" });
+                    else 
+                    {
+                        if (data && data.length!=0) {
+                            for (let index of data) {
+                                delete index.password;
+                            }
+                        }
+                        res.status(200).send({message: "Tìm kiếm user theo username", data: data });
+                    }
                 })
             })
     }
