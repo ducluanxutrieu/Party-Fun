@@ -27,37 +27,16 @@ class MapPageState extends State<MapPage> {
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(context),
-          _zoomMinusFunction(),
-          _zoomPlusFunction(),
+       //   _zoomMinusFunction(),
+       //   _zoomPlusFunction(),
           _buildContainer(),
         ],
       ),
     );
   }
 
-  Widget _zoomMinusFunction() {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: IconButton(
-          icon: Icon(FontAwesomeIcons.searchMinus, color: Color(0xff6200ee)),
-          onPressed: () {
-            zoomVal--;
-            _minus(zoomVal);
-          }),
-    );
-  }
 
-  Widget _zoomPlusFunction() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: IconButton(
-          icon: Icon(FontAwesomeIcons.searchPlus, color: Color(0xff6200ee)),
-          onPressed: () {
-            zoomVal++;
-            _plus(zoomVal);
-          }),
-    );
-  }
+
 
   Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
