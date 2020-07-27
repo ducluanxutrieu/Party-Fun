@@ -27,6 +27,8 @@ class MapPageState extends State<MapPage> {
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(context),
+       //   _zoomMinusFunction(),
+       //   _zoomPlusFunction(),
           _buildContainer(),
         ],
       ),
