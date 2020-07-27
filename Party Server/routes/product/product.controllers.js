@@ -1,6 +1,6 @@
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var ip = "139.180.131.30";
+var ip = "localhost";
 var port = "3000";
 var khongdau = require('khong-dau');
 var ObjectId =  require('mongodb').ObjectId;
@@ -906,7 +906,7 @@ module.exports = {
 		if (req.files && req.files.length != 0) {
 			let array_image = [];
 			for (let index of req.files) {
-				array_image.push("http://139.180.131.30:3000/open_image?image_name=" + index.filename)
+				array_image.push("http://localhost:3000/open_image?image_name=" + index.filename)
 			}
 			if (req.body.type)
 				res.status(200).send({message: "Upload ảnh thành công", data: array_image, link: array_image[0]}) 
@@ -990,12 +990,12 @@ module.exports = {
 					req.body.link = khongdau(req.body.title, ['chuyen', 'url']);
 					if (req.body.link[0] == '-') req.body.link = req.body.link.slice(1, req.body.link.length);
                     if (req.body.link[req.body.link.length - 1] == '-') req.body.link = req.body.link.slice(0, req.body.link.length - 1);
-					req.body.link = "http://139.180.131.30/client/post/detail/"+req.body.link
+					req.body.link = "http://localhost/client/post/detail/"+req.body.link
 					Posts.findOne({ link: req.body.link},function (err, data) {
 						if (!data && !err) {
 							if (!req.body.content) req.body.content = "";
 							if (!req.body.type) req.body.type = "post";
-							if (!req.body.feature_image) req.body.feature_image = "http://139.180.131.30:3000/open_image?image_name=default.png";
+							if (!req.body.feature_image) req.body.feature_image = "http://localhost:3000/open_image?image_name=default.png";
 							req.body.author = req.body.username;
 							req.body.create_at = new Date();
 							req.body.update_at = new Date();
@@ -1020,11 +1020,11 @@ module.exports = {
 					req.body.link = khongdau(req.body.title, ['chuyen', 'url']);
 					if (req.body.link[0] == '-') req.body.link = req.body.link.slice(1, req.body.link.length);
                     if (req.body.link[req.body.link.length - 1] == '-') req.body.link = req.body.link.slice(0, req.body.link.length - 1);
-					req.body.link = "http://139.180.131.30/client/post/detail/"+req.body.link
+					req.body.link = "http://localhost/client/post/detail/"+req.body.link
 					Posts.findOne({ link: req.body.link},function (err, data) {
 						if (!err && (!data || data._id==req.body._id)) {
 							if (!req.body.content) req.body.content = "";
-							if (!req.body.feature_image) req.body.feature_image = "http://139.180.131.30:3000/open_image?image_name=default.png";
+							if (!req.body.feature_image) req.body.feature_image = "http://localhost:3000/open_image?image_name=default.png";
 							Posts.findOneAndUpdate({_id: new ObjectId(req.body._id)}, {$set: {
 								title: req.body.title, link: req.body.link, feature_image: req.body.feature_image,
 								content: req.body.content, update_at: new Date()
@@ -1052,7 +1052,7 @@ module.exports = {
 							}
 							else res.status(400).send({message: "Không tìm thấy Id bài viết",data: "false"});
 						})
-					else Posts.findOne({ link: "http://139.180.131.30/client/post/detail/" + req.params.id},function (err, data) {
+					else Posts.findOne({ link: "http://localhost/client/post/detail/" + req.params.id},function (err, data) {
 						if (!err && data) {
 							res.status(200).send({message: "Lấy nội dung bài viết", data: data});
 						}
@@ -1127,13 +1127,33 @@ module.exports = {
 	},
 	get_status_cpu: async (req, res) => {
 		var cpu = osu.cpu
-		let usage = cpu.usage();
-		let free = cpu.free();
-		let loadavg= cpu.loadavg()
+		let usage =await cpu.usage();
+		let free =await cpu.free();
+		let loadavg= await cpu.loadavg();
+		let average= cpu.average()
+		let count = cpu.count()
+
+		var drive = osu.drive
+		let info = await drive.info()
+		
+
+		var mem = osu.mem
+		let mem_info = await mem.info()
+		
+		
 		return res.status(200).send({
-			usage,
-			free,
-			loadavg
+			cpu: {
+				usage,
+				free,
+				average,
+				count
+			},
+			drive: {
+				info,
+			},
+			memory:  mem_info,
+			
+			
 		})
 	}
 
