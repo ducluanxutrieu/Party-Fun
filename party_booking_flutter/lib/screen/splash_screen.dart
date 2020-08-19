@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
 import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
@@ -19,31 +20,15 @@ import 'login_screen.dart';
 import 'main_screen/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => SplashScreen());
+  }
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    print(DateTime.now().millisecondsSinceEpoch);
-    checkAlreadyLogin();
-    super.initState();
-  }
-
-  void checkAlreadyLogin() async {
-    new Future.delayed(const Duration(seconds: 5), () => "5");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString(Constants.USER_TOKEN);
-    if (token != null && token.isNotEmpty) {
-      _updateUserProfile(token, prefs);
-      _getListDishes(token, prefs);
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +71,8 @@ class _SplashScreenState extends State<SplashScreen> {
       print(onError);
       _getListDishesFromDB(prefs);
     }).then((result) => {
-              if (result == null || !result.isSuccessful) _getListDishesFromDB(prefs)
+              if (result == null || !result.isSuccessful)
+                _getListDishesFromDB(prefs)
               else
                 {
                   _saveListDishesToDB(result.body.listDishes),

@@ -32,7 +32,7 @@ abstract class AppApiService extends ChopperService {
   });
 
   @Post(path: 'user/signup')
-  Future<Response<BaseResponseModel>> requestRegister({
+  Future<Response<AccountResponseModel>> requestRegister({
     @body RegisterRequestModel model,
   });
 

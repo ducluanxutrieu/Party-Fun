@@ -21,10 +21,11 @@ class MainScreen extends StatefulWidget {
   final List<DishModel> listDishModel;
   final List<Category> listCategories;
 
-  MainScreen(
-      {@required this.accountModel,
-      @required this.listCategories,
-      this.listDishModel});
+  static Route route(AccountModel accountModel) {
+    return MaterialPageRoute<void>(builder: (_) => MainScreen(accountModel: accountModel,));
+  }
+
+  MainScreen({this.accountModel, this.listCategories, this.listDishModel});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -176,8 +177,11 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       floatingActionButton: buildFABAddNewDish(),
-      drawer: MainDrawer(accountModel: _accountModel,),
-      body: RefreshIndicator(onRefresh: () => _getListDishes(where: 'body'),
+      drawer: MainDrawer(
+        accountModel: _accountModel,
+      ),
+      body: RefreshIndicator(
+        onRefresh: () => _getListDishes(where: 'body'),
         child: MainListMenu(
           accountModel: _accountModel,
           listMenu: _listMenuFiltered,

@@ -4,10 +4,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 
-class RegisterForm extends StatelessWidget {
+class RegisterFillForm extends StatelessWidget {
   final GlobalKey<FormBuilderState> fbKey;
   final Function countryCodeChange;
-  const RegisterForm({Key key, @required this.fbKey, this.countryCodeChange}) : super(key: key);
+  const RegisterFillForm({Key key, @required this.fbKey, this.countryCodeChange}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class RegisterForm extends StatelessWidget {
                   shape: BoxShape.rectangle,
                 ),
                 child: CountryCodePicker(
-                  onChanged: _onCountryChange,
+                  onChanged: (countryCode) => countryCodeChange(countryCode.toString()),
                   // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                   initialSelection: 'VN',
                   favorite: ['+84', 'VN'],
@@ -135,10 +135,5 @@ class RegisterForm extends StatelessWidget {
             ),
           ],
         );
-  }
-
-  void _onCountryChange(CountryCode countryCode) {
-    countryCodeChange(countryCode.toString());
-    print("New Country selected: " + countryCode.toString());
   }
 }

@@ -41,7 +41,7 @@ class FormModifyDish extends StatelessWidget {
         SizedBox(
           height: 15,
         ),
-        _selectDishType(),
+        // _selectDishType(),
         SizedBox(
           height: 15,
         ),
@@ -75,22 +75,22 @@ class FormModifyDish extends StatelessWidget {
     );
   }
 
-    Widget _selectDishType() {
-    return FormBuilderCheckboxList(
-      attribute: "type",
-      decoration: InputDecoration(
-          labelText: "Dish Type",
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
-      validators: [FormBuilderValidators.required()],
-      options: [
-        FormBuilderFieldOption(value: "Holiday Offers"),
-        FormBuilderFieldOption(value: "First Dishes"),
-        FormBuilderFieldOption(value: "Main Dishes"),
-        FormBuilderFieldOption(value: "Seafood"),
-        FormBuilderFieldOption(value: "Drinks"),
-        FormBuilderFieldOption(value: "Dessert"),
-      ],
-    );
-  }
+    // Widget _selectDishType() {
+    // return FormBuilderCheckboxGroup(
+    //   attribute: "type",
+    //   decoration: InputDecoration(
+    //       labelText: "Dish Type",
+    //       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+    //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
+    //   validators: [FormBuilderValidators.required()],
+    //   options: [
+    //     FormBuilderFieldOption(value: "Holiday Offers"),
+    //     FormBuilderFieldOption(value: "First Dishes"),
+    //     FormBuilderFieldOption(value: "Main Dishes"),
+    //     FormBuilderFieldOption(value: "Seafood"),
+    //     FormBuilderFieldOption(value: "Drinks"),
+    //     FormBuilderFieldOption(value: "Dessert"),
+    //   ],
+    // );
+  // }
 }

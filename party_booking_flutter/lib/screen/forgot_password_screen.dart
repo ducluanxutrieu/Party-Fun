@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
@@ -17,13 +15,10 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateButton = 0;
+
 
   void onNextClicked() async {
     if (_fbKey.currentState.saveAndValidate()) {
-      setState(() {
-        _stateButton = 1;
-      });
       final String username =
           _fbKey.currentState.fields['username'].currentState.value;
 
@@ -33,14 +28,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => ChangePasswordScreen(username: username,)));
       }else {
-        setState(() {
-          _stateButton = 3;
-        });
-        Timer(Duration(milliseconds: 1500), () {
-          setState(() {
-            _stateButton = 0;
-          });
-        });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
         UiUtiu.showToast(message: model.message, isFalse: true);
       }
@@ -83,7 +70,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   AppButtonWidget(
                     buttonText: 'Next',
                     buttonHandler: onNextClicked,
-                    stateButton: _stateButton,
+                    // stateButton: _stateButton,
                   ),
                   SizedBox(
                     height: 5,

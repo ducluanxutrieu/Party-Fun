@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:formz/formz.dart';
 import 'package:party_booking/res/constants.dart';
 
 class AppButtonWidget extends StatelessWidget {
   final Function buttonHandler;
   final String buttonText;
-  final int stateButton;
+  final FormzStatus stateButton;
 
   AppButtonWidget(
-      {Key key, this.buttonHandler, @required this.buttonText, this.stateButton = 0}) : super(key: key);
+      {Key key, this.buttonHandler, @required this.buttonText, this.stateButton = FormzStatus.pure}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class AppButtonWidget extends StatelessWidget {
 
   Widget setUpButtonChild() {
     switch (stateButton) {
-      case 0:
+      case FormzStatus.pure:
         return new Text(
           buttonText,
           textAlign: TextAlign.center,
@@ -36,13 +37,13 @@ class AppButtonWidget extends StatelessWidget {
         );
         break;
 
-      case 1:
+      case FormzStatus.submissionInProgress:
         return CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         );
         break;
 
-      case 2:
+      case FormzStatus.submissionSuccess:
         return Icon(Icons.check, color: Colors.white);
         break;
 

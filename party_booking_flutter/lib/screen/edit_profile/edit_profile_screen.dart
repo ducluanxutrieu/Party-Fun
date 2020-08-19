@@ -28,16 +28,11 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateButton = 0;
   String _countryCode;
   String avatarUrl;
 
   void _onUpdateClicked() {
     if (_fbKey.currentState.saveAndValidate()) {
-      setState(() {
-        _stateButton = 1;
-      });
-
       final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
       final email = _fbKey.currentState.fields['email'].currentState.value;
       final birthday = _fbKey.currentState.fields['birthday'].currentState.value;
@@ -64,17 +59,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         .requestUpdateUser(token: userToken, model: model);
     if (result.isSuccessful) {
       UiUtiu.showToast(message: result.body.message);
-      setState(() {
-        _stateButton = 2;
-      });
       prefs.setString(Constants.ACCOUNT_MODEL_KEY, accountModelToJson(result.body.account));
       Timer(Duration(milliseconds: 1500), () {
         Navigator.pop(context, result.body.account);
       });
     } else {
-      setState(() {
-        _stateButton = 0;
-      });
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
     }
@@ -111,7 +100,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             AppButtonWidget(
               buttonText: 'Update',
               buttonHandler: _onUpdateClicked,
-              stateButton: _stateButton,
+              // stateButton: _stateButton,
             ),
             SizedBox(
               height: 5,

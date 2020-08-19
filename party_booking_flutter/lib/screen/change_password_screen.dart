@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -28,7 +26,6 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  int _stateChangeButton = 0;
   bool isChangePassword = false;
 
   List<FormFieldValidator> listValidators = <FormFieldValidator>[
@@ -45,10 +42,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   void _changePasswordClicked(BuildContext context) async {
     if (_fbKey.currentState.saveAndValidate()) {
-      setState(() {
-        _stateChangeButton = 1;
-      });
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString(Constants.USER_TOKEN);
 
@@ -76,14 +69,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             MaterialPageRoute(builder: (context) => LoginScreen()),
             (Route<dynamic> route) => false);
       }else {
-        setState(() {
-          _stateChangeButton = 3;
-        });
-        Timer(Duration(milliseconds: 1500), () {
-          setState(() {
-            _stateChangeButton = 0;
-          });
-        });
         BaseResponseModel model = BaseResponseModel.fromJson(result.error);
         UiUtiu.showToast(message: model.message, isFalse: true);
       }
@@ -153,7 +138,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 AppButtonWidget(
                   buttonText: 'Change',
                   buttonHandler: () => _changePasswordClicked(context),
-                  stateButton: _stateChangeButton,
+                  // stateButton: _stateChangeButton,
                 )
               ],
             ),

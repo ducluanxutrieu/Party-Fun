@@ -26,12 +26,12 @@ class _$AppApiService extends AppApiService {
   }
 
   @override
-  Future<Response<BaseResponseModel>> requestRegister(
+  Future<Response<AccountResponseModel>> requestRegister(
       {RegisterRequestModel model}) {
     final $url = 'user/signup';
     final $body = model;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<BaseResponseModel, BaseResponseModel>($request);
+    return client.send<AccountResponseModel, AccountResponseModel>($request);
   }
 
   @override
