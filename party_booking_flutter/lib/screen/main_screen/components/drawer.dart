@@ -5,12 +5,12 @@ import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../profile/profile_page.dart';
 import '../../about_us_screen.dart';
 import '../../history_order_screen.dart';
 import '../../list_posts_screen.dart';
 import '../../login_screen.dart';
 import '../../map_screen.dart';
-import '../../profile_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({
@@ -133,9 +133,7 @@ class MainDrawer extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(
-          mAccountModel: _accountModel,
-        ),
+        builder: (context) => ProfilePage(),
       ),
     );
   }

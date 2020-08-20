@@ -84,7 +84,7 @@ class ModifyDishFunctions{
   static Future<List<String>> _uploadImage(List<File> newImages) async {
     if (newImages != null && newImages.isNotEmpty) {
       BaseListResponseModel uploadImageRes =
-          await AppImageAPIService.create(_context).uploadImages(newImages);
+          await AppImageAPIService.create().uploadImages(newImages);
       if (uploadImageRes != null) {
         List<String> imageList = uploadImageRes.data;
         return imageList;

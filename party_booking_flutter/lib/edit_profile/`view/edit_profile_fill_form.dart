@@ -2,30 +2,28 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/widgets/common/text_field.dart';
 
-import '../../data/network/model/account_response_model.dart';
-import '../../widgets/common/text_field.dart';
+import 'submitted_button.dart';
 
-class EditProfileForm extends StatelessWidget {
+class EditProfileFillForm extends StatelessWidget {
   final AccountModel mAccountModel;
   final GlobalKey<FormBuilderState> fbKey;
-  final Function onCountryCodeChange;
-  
 
-  const EditProfileForm(
-      {Key key,
-      @required this.mAccountModel,
-      @required this.fbKey,
-      @required this.onCountryCodeChange,})
-      : super(key: key);
-
+  const EditProfileFillForm({
+    Key key,
+    @required this.mAccountModel,
+    @required this.fbKey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<FormFieldValidator> listValidators = <FormFieldValidator>[
       FormBuilderValidators.required(),
     ];
+String _countryCode = mAccountModel.countryCode ?? "+84";
 
     return FormBuilder(
       key: fbKey,
@@ -60,7 +58,7 @@ class EditProfileForm extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           buildPhoneNumber(
-              MediaQuery.of(context).size.width - 72, listValidators),
+              MediaQuery.of(context).size.width - 72, listValidators, _countryCode),
           SizedBox(height: 15.0),
           _showDatePicker(),
           SizedBox(height: 15.0),
@@ -68,6 +66,7 @@ class EditProfileForm extends StatelessWidget {
           SizedBox(
             height: 35.0,
           ),
+          SubmitEditProfileButton(fbKey: fbKey, countryCode: _countryCode),
         ],
       ),
     );
@@ -108,7 +107,7 @@ class EditProfileForm extends StatelessWidget {
   }
 
   Widget buildPhoneNumber(
-      double sizeWidth, List<FormFieldValidator> listValidators) {
+      double sizeWidth, List<FormFieldValidator> listValidators, String countryCodeString) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -116,11 +115,13 @@ class EditProfileForm extends StatelessWidget {
             width: sizeWidth * 0.35,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: Colors.grey,),
+              border: Border.all(
+                color: Colors.grey,
+              ),
               shape: BoxShape.rectangle,
             ),
             child: CountryCodePicker(
-              onChanged: (countryCode) => onCountryCodeChange(countryCode),
+              onChanged: (countryCode) => countryCodeString = countryCode.toString(),
               initialSelection: mAccountModel.countryCode,
               favorite: ['+84', 'VN'],
               showCountryOnly: false,

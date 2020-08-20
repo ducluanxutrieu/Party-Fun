@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:formz/formz.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/register/bloc/register_bloc.dart';
-import 'file:///D:/Party-Fun/party_booking_flutter/lib/register/view/register_fill_form.dart';
+import 'package:party_booking/register/view/register_fill_form.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 
 class RegisterForm extends StatelessWidget {

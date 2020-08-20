@@ -2,23 +2,20 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:party_booking/data/network/model/base_list_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/file_extention.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppImageAPIService {
   static String token;
   final Dio dio;
-  ProgressDialog progressDialog;
+  // ProgressDialog progressDialog;
 
-  AppImageAPIService({this.dio, this.progressDialog});
+  AppImageAPIService({this.dio});
 
   Future<BaseResponseModel> updateAvatar(File imageToUpdate) async {
     FormData formData = new FormData.fromMap({
@@ -34,13 +31,13 @@ class AppImageAPIService {
       data: formData,
     )
         .catchError((onError) {
-      progressDialog.hide();
+      // progressDialog.hide();
     });
 
     if (result.statusCode == 200) {
       response = BaseResponseModel.fromJson(result.data);
     }
-    progressDialog.hide();
+    // progressDialog.hide();
     return response;
   }
 
@@ -66,38 +63,38 @@ class AppImageAPIService {
     BaseListResponseModel response;
     var result = await dio.post('product/upload_image', data: formData,
         onSendProgress: (int sent, int total) {
-      _updateProgress(sent, total);
+      // _updateProgress(sent, total);
     }).catchError((onError) {
       print(onError);
-      progressDialog.hide();
+      // progressDialog.hide();
     });
 
-    progressDialog.hide();
+    // progressDialog.hide();
 
     if (result.statusCode == 200) {
       response = BaseListResponseModel.fromJson(result.data);
     } else {
       UiUtiu.showToast(message: BaseResponseModel.fromJson(result.data).message, isFalse: true);
     }
-    progressDialog.hide();
+    // progressDialog.hide();
     return response;
   }
 
-  void _updateProgress(int sent, int total) {
-    progressDialog.update(
-      progress: (sent ~/ total * 100).toDouble(),
-      message: "Please wait...",
-      progressWidget: Container(
-          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
-      maxProgress: 100.0,
-      progressTextStyle: TextStyle(
-          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-    );
-  }
+  // void _updateProgress(int sent, int total) {
+  //   progressDialog.update(
+  //     progress: (sent ~/ total * 100).toDouble(),
+  //     message: "Please wait...",
+  //     progressWidget: Container(
+  //         padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+  //     maxProgress: 100.0,
+  //     progressTextStyle: TextStyle(
+  //         color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+  //     messageTextStyle: TextStyle(
+  //         color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+  //   );
+  // }
 
-  static AppImageAPIService create(BuildContext context) {
+  static AppImageAPIService create() {
     var random = Random();
     String boundary = 'dio-boundary-' +
         random.nextInt(4294967296).toString().padLeft(10, '0');
@@ -135,24 +132,24 @@ class AppImageAPIService {
         responseHeader: true));
 
     //Progress
-    ProgressDialog progressDialog = new ProgressDialog(context,
-        type: ProgressDialogType.Download,
-        isDismissible: false,
-        showLogs: true);
-    progressDialog.style(
-        message: 'Uploading images...',
-        borderRadius: 10.0,
-        backgroundColor: Colors.white,
-        progressWidget: CircularProgressIndicator(),
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        progress: 0.0,
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
-    progressDialog.show();
-    return AppImageAPIService(dio: dio, progressDialog: progressDialog);
+    // ProgressDialog progressDialog = new ProgressDialog(context,
+    //     type: ProgressDialogType.Download,
+    //     isDismissible: false,
+    //     showLogs: true);
+    // progressDialog.style(
+    //     message: 'Uploading images...',
+    //     borderRadius: 10.0,
+    //     backgroundColor: Colors.white,
+    //     progressWidget: CircularProgressIndicator(),
+    //     elevation: 10.0,
+    //     insetAnimCurve: Curves.easeInOut,
+    //     progress: 0.0,
+    //     maxProgress: 100.0,
+    //     progressTextStyle: TextStyle(
+    //         color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+    //     messageTextStyle: TextStyle(
+    //         color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+    // progressDialog.show();
+    return AppImageAPIService(dio: dio);
   }
 }

@@ -37,6 +37,8 @@ class AuthenticationBloc
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationRepository.logOut();
+    } else if (event is AuthenticationUpdateUser) {
+      yield await _mapAuthenticationGetUserInfoToState(event);
     }
   }
 
@@ -65,7 +67,24 @@ class AuthenticationBloc
 
   Future<AccountModel> _tryGetUser() async {
     try {
-      final user = await _userRepository.getUser();
+      final user = await _userRepository.getUserFromPrefs();
+      return user;
+    } on Exception {
+      return null;
+    }
+  }
+
+  Future<AuthenticationState> _mapAuthenticationGetUserInfoToState(
+      AuthenticationUpdateUser event) async {
+    final user = await _tryGetUserInfo();
+    return user != null
+        ? AuthenticationState.authenticatedAndUpdated(user)
+        : const AuthenticationState.unauthenticated();
+  }
+
+  Future<AccountModel> _tryGetUserInfo() async {
+    try {
+      final user = await _userRepository.getUserFromServer();
       return user;
     } on Exception {
       return null;
