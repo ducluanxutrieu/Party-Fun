@@ -26,7 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     LoginState state,
   ) async* {
-    yield state.copyWith(status: FormzStatus.submissionInProgress, username: event.username, password: event.password);
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
       String result = await _authenticationRepository.logIn(
         username: event.username,

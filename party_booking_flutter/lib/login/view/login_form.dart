@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:formz/formz.dart';
 import 'package:party_booking/login/bloc/login_bloc.dart';
 import 'package:party_booking/register/view/register_page.dart';
-import 'package:party_booking/screen/forgot_password_screen.dart';
+import 'package:party_booking/forgot_password/forgot_password_page.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
@@ -87,7 +87,7 @@ class LoginForm extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ForgotPasswordScreen()));
+                            builder: (context) => ForgotPasswordPage()));
                   },
                   child: Text(
                     "Forgot your password",

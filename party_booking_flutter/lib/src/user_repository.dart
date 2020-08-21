@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,5 +32,15 @@ class UserRepository {
     }
 
     return _user;
+  }
+
+  Future<MapEntry<String, bool>> resetPassword(String username) async {
+    var result = await AppApiService.create().resetPassword(username: username);
+      if (result.isSuccessful) {
+        return MapEntry("${result.body.message}", true);
+      }else {
+        BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+        return MapEntry(model.message, false);
+      }
   }
 }
