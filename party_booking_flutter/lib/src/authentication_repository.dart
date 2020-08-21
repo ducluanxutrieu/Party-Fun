@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum AuthenticationStatus {
   unknown,
   authenticated,
-  authenticatedAndUpdated,
+  authenticatedOnlyServerUpdate,
   unauthenticated
 }
 
@@ -79,9 +79,7 @@ class AuthenticationRepository {
     final result = await AppApiService.create()
         .requestUpdateUser(token: userToken, model: updateProfileModel);
     if (result.isSuccessful) {
-      prefs.setString(
-          Constants.ACCOUNT_MODEL_KEY, accountModelToJson(result.body.account));
-      _controller.add(AuthenticationStatus.authenticatedAndUpdated);
+      _controller.add(AuthenticationStatus.authenticatedOnlyServerUpdate);
       return "Update Profile Successful!";
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);

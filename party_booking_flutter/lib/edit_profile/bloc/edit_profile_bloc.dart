@@ -57,17 +57,19 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
     try {
       String result = await _updateAvatar(event.imageSource);
-      if (result != null)
+      if (result != null) {
+        _authenticationRepository.changeAuthenticationStatus(
+            AuthenticationStatus.authenticatedOnlyServerUpdate);
         yield EditProfileState.avatarChanged(result);
-      else {
+      } else {
         yield EditProfileState.avatarChangeFailed();
         await Future<void>.delayed(const Duration(seconds: 1));
         yield EditProfileState.unknown();
       }
     } on Exception catch (_) {
-        yield EditProfileState.avatarChangeFailed();
-        await Future<void>.delayed(const Duration(seconds: 1));
-        yield EditProfileState.unknown();
+      yield EditProfileState.avatarChangeFailed();
+      await Future<void>.delayed(const Duration(seconds: 1));
+      yield EditProfileState.unknown();
     }
   }
 

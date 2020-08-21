@@ -21,7 +21,7 @@ class AuthenticationBloc
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => add(AuthenticationStatusChanged(status)),
+      (status) => {add(AuthenticationStatusChanged(status))},
     );
   }
 
@@ -37,8 +37,6 @@ class AuthenticationBloc
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationRepository.logOut();
-    } else if (event is AuthenticationUpdateUser) {
-      yield await _mapAuthenticationGetUserInfoToState(event);
     }
   }
 
@@ -56,30 +54,27 @@ class AuthenticationBloc
       case AuthenticationStatus.unauthenticated:
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
-        final user = await _tryGetUser();
+        final user = await _tryGetLocalUser();
         return user != null
             ? AuthenticationState.authenticated(user)
+            : const AuthenticationState.unauthenticated();
+      case AuthenticationStatus.authenticatedOnlyServerUpdate:
+        final user = await _tryGetUserInfo();
+        return user != null
+            ? AuthenticationState.authenticatedAndUpdated(user)
             : const AuthenticationState.unauthenticated();
       default:
         return const AuthenticationState.unknown();
     }
   }
 
-  Future<AccountModel> _tryGetUser() async {
+  Future<AccountModel> _tryGetLocalUser() async {
     try {
       final user = await _userRepository.getUserFromPrefs();
       return user;
     } on Exception {
       return null;
     }
-  }
-
-  Future<AuthenticationState> _mapAuthenticationGetUserInfoToState(
-      AuthenticationUpdateUser event) async {
-    final user = await _tryGetUserInfo();
-    return user != null
-        ? AuthenticationState.authenticatedAndUpdated(user)
-        : const AuthenticationState.unauthenticated();
   }
 
   Future<AccountModel> _tryGetUserInfo() async {

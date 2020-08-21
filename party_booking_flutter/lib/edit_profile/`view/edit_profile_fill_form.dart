@@ -23,7 +23,7 @@ class EditProfileFillForm extends StatelessWidget {
     List<FormFieldValidator> listValidators = <FormFieldValidator>[
       FormBuilderValidators.required(),
     ];
-String _countryCode = mAccountModel.countryCode ?? "+84";
+    String _countryCode = mAccountModel.countryCode ?? "+84";
 
     return FormBuilder(
       key: fbKey,
@@ -57,8 +57,8 @@ String _countryCode = mAccountModel.countryCode ?? "+84";
             mTextInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 15.0),
-          buildPhoneNumber(
-              MediaQuery.of(context).size.width - 72, listValidators, _countryCode),
+          buildPhoneNumber(MediaQuery.of(context).size.width - 72,
+              listValidators, _countryCode),
           SizedBox(height: 15.0),
           _showDatePicker(),
           SizedBox(height: 15.0),
@@ -106,8 +106,8 @@ String _countryCode = mAccountModel.countryCode ?? "+84";
     );
   }
 
-  Widget buildPhoneNumber(
-      double sizeWidth, List<FormFieldValidator> listValidators, String countryCodeString) {
+  Widget buildPhoneNumber(double sizeWidth,
+      List<FormFieldValidator> listValidators, String countryCodeString) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -121,7 +121,8 @@ String _countryCode = mAccountModel.countryCode ?? "+84";
               shape: BoxShape.rectangle,
             ),
             child: CountryCodePicker(
-              onChanged: (countryCode) => countryCodeString = countryCode.toString(),
+              onChanged: (countryCode) =>
+                  countryCodeString = countryCode.toString(),
               initialSelection: mAccountModel.countryCode,
               favorite: ['+84', 'VN'],
               showCountryOnly: false,

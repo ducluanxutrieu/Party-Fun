@@ -6,10 +6,10 @@ import 'package:party_booking/src/authentication_repository.dart';
 
 import 'edit_profile_form.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfilePage extends StatelessWidget {
   final AccountModel accountModel;
   
-  EditProfileScreen({Key key, this.accountModel}) : super(key: key);
+  EditProfilePage({Key key, this.accountModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

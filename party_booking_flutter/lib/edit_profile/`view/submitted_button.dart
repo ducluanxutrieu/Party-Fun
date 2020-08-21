@@ -27,6 +27,9 @@ class SubmitEditProfileButton extends StatelessWidget {
     return BlocBuilder<EditProfileBloc, EditProfileState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
+        if (state.status == EditPrifileStatus.profileUpdated) {
+          Navigator.of(context).pop();
+        }
         return AppButtonWidget(
           buttonText: 'Update',
           buttonHandler: () {
