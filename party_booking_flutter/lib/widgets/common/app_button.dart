@@ -48,7 +48,14 @@ class AppButtonWidget extends StatelessWidget {
         break;
 
       default:
-        return Icon(Icons.error, color: Colors.white);
+        return new Text(
+          buttonText,
+          textAlign: TextAlign.center,
+          style: kPrimaryTextStyle.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        );
     }
   }
 }

@@ -10,16 +10,11 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("ahihihihi"),
-      ),
       body: RepositoryProvider.value(
         value: UserRepository(),
         child: BlocProvider(
           create: (context) =>
              UserPasswordBloc(userRepository: RepositoryProvider.of<UserRepository>(context)),
-            //voo mesenger goi
-            //ok, chờ chú,
           child: ForgotPasswordForm(),
         ),
       ),

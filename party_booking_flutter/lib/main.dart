@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/screen/main_screen/main_screen.dart';
+import 'package:party_booking/src/simple_bloc_observer.dart';
 import 'authentication/bloc/authentication_bloc.dart';
 import 'login/view/login_page.dart';
 import 'screen/cart_detail/cart_detail_screen.dart';
@@ -22,6 +23,7 @@ void main() {
 }
 
 void setupLogging() {
+  Bloc.observer = SimpleBlocObserver();
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((rec) {
     print('${rec.level.name} : ${rec.time}: ${rec.message}');
