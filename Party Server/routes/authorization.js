@@ -27,7 +27,7 @@ module.exports = {
                 else 
                 if (dec && dec.username) {
                     MongoClient.connect(
-                        'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+                        'mongodb://localhost:27017/Android_Lab',
                         async function (err, db) {
                             var User = db.collection("User");
                             let check_exist = await User.findOne({username: dec.username});
@@ -46,7 +46,7 @@ module.exports = {
     },
     isStaff: function (req, res, next) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var User = db.collection("User");
                 User.findOne({ username: req.body.username },function (err2, decoded) {
@@ -59,7 +59,7 @@ module.exports = {
     },
     isAdmin: function (req, res, next) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var User = db.collection("User");
                 User.findOne({ username: req.body.username },function (err2, decoded) {

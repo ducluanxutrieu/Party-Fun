@@ -114,6 +114,32 @@ class DBProvider {
     return listDishes;
   }
 
+    Future<List<DishModel>> searchAllDishes(String search) async {
+    final db = await database;
+    var res = await db.rawQuery("SELECT * FROM ListDishes WHERE name = $search");
+    List<DishModel> listDishes = res.isEmpty
+        ? List<DishModel>()
+        : res.map((c) => DishModel.fromJsonDB(c)).toList();
+
+    for (int index = 0; index < listDishes.length; index++) {
+      var resCategories = await db.query("ListCategory",
+          where: "dish_id = ? ", whereArgs: [listDishes[index].id]);
+      List<CategoryDb> categories =
+          resCategories.map((c) => CategoryDb.fromJson(c)).toList();
+
+      categories.forEach((category) {
+        listDishes[index].categories.add(category.category);
+      });
+
+      List<ImageDb> images = await getListImageByDishId(listDishes[index].id, db);
+      images.forEach((imageModel) {
+        listDishes[index].image.add(imageModel.image);
+      });
+    }
+
+    return listDishes;
+  }
+
   Future<List<ImageDb>> getListImageByDishId(
     String dishID, Database db,
   ) async {

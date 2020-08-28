@@ -47,7 +47,7 @@ dependencies:
   dio: ^3.0.9
   progress_dialog: ^1.2.1
   intl: ^0.16.1
-  file_picker: ^1.13.0
+  file_picker: ^1.13.3
   cached_network_image: ^2.2.0+1
   scoped_model: ^1.0.1
   material_design_icons_flutter: ^4.0.5145

@@ -153,23 +153,28 @@ class UserPasswordBloc extends Bloc<UserPasswordEvent, UserPasswordState> {
       int type}) {
     FormzStatus status = FormzStatus.invalid;
     String message;
-    if (oldPass == null ||
-        newPass == null ||
-        retypePass == null) {
-      message = "";
-    } else{
-      switch (type) {
-        case 1: if(oldPass.length < 6) message = 'too short!';
+    switch (type) {
+      case 1:
+        if (oldPass == null || oldPass.isEmpty) {
+          message = 'not empty';
+        } else if (oldPass.length < 6) message = 'too short!';
         break;
-        case 2: if(newPass.length < 6) message = 'New password too short!';
+      case 2:
+        if (newPass == null || newPass.isEmpty)
+          message = 'New password not empty!';
+        else if (newPass.length < 6) message = 'New password too short!';
         break;
-        case 3: if(retypePass.length < 6) message = 'Retype password too short!';
-        else if(newPass != retypePass) message = 'Retype password not matched!';
+      case 3:
+        if (retypePass == null || retypePass.isEmpty)
+          message = 'Retype password not empty!';
+        else if (retypePass.length < 6)
+          message = 'Retype password too short!';
+        else if (newPass != retypePass)
+          message = 'Retype password not matched!';
         break;
-        default:
-      }
+      default:
     }
-    if(message == null){
+    if (message == null) {
       status = FormzStatus.valid;
       message = "";
     }

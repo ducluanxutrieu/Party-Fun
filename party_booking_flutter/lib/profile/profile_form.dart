@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/change_password/change_password_screen.dart';
+import 'package:party_booking/change_password/change_password_page.dart';
 import 'package:party_booking/widgets/info_card.dart';
 
 class ProfileForm extends StatelessWidget {
@@ -81,7 +81,7 @@ class ProfileForm extends StatelessWidget {
   }
 
   void _goToChangePassScreen(BuildContext context, String avatarUrl) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePasswordScreen(
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePasswordPage(
                   avatarUrl: avatarUrl,
                 )));
   }

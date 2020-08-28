@@ -11,32 +11,30 @@ import 'dish_card.dart';
 class MainListMenu extends StatelessWidget {
   final List<MenuModel> listMenu;
   final AccountModel accountModel;
-  final Function onRefresh;
 
   const MainListMenu({
     Key key,
     @required this.listMenu,
     @required this.accountModel,
-    @required this.onRefresh,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return listMenu.isNotEmpty
-        ? ListView.builder(
+    return /*(listMenu != null && listMenu.isNotEmpty)
+        ?*/ ListView.builder(
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemCount: listMenu.length,
             itemBuilder: (BuildContext context, int index) {
               return _itemMenu(listMenu[index], context);
-            })
-        : Center(
-            child: Lottie.asset(
-              Assets.animBagError,
-              repeat: true,
-            ),
-          );
+            });
+//        : Center(
+//            child: Lottie.asset(
+//              Assets.animBagError,
+//              repeat: true,
+//            ),
+//          );
   }
 
   Widget _itemMenu(MenuModel menuModel, BuildContext context) {
@@ -62,10 +60,7 @@ class MainListMenu extends StatelessWidget {
       itemCount: dishes.length,
       itemBuilder: (BuildContext context, int index) => DishCard(
           dishModel: dishes[index],
-          accountModel: accountModel,
-          getListDish: () {
-            onRefresh();
-          }),
+          accountModel: accountModel,),
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,

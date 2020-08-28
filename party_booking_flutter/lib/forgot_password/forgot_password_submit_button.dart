@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:formz/formz.dart';
 import 'package:party_booking/authentication/user_password/bloc/user_password_bloc.dart';
-import 'package:party_booking/change_password/change_password_screen.dart';
+import 'package:party_booking/change_password/change_password_page.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 
 class SubmitButton extends StatelessWidget {
@@ -26,7 +26,7 @@ class SubmitButton extends StatelessWidget {
           print(username);
           Future<void>.delayed(Duration(milliseconds: 200), () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ChangePasswordScreen(
+                builder: (context) => ChangePasswordPage(
                   username: username,
                 )));
           });

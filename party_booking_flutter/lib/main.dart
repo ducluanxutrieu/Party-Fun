@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/screen/main_screen/main_screen.dart';
+import 'package:party_booking/src/dish_repository.dart';
 import 'package:party_booking/src/simple_bloc_observer.dart';
 import 'authentication/bloc/authentication_bloc.dart';
 import 'login/view/login_page.dart';
@@ -18,6 +20,7 @@ void main() {
     model: CartModel(),
     authenticationRepository: AuthenticationRepository(),
     userRepository: UserRepository(),
+    dishRepository: DishRepository(),
   ));
   setupLogging();
 }
@@ -36,23 +39,41 @@ class MyApp extends StatelessWidget {
       {Key key,
       @required this.model,
       @required this.authenticationRepository,
-      @required this.userRepository})
+      @required this.userRepository,
+      @required this.dishRepository})
       : assert(authenticationRepository != null),
         assert(userRepository != null),
+  assert(dishRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
+  final DishRepository dishRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthenticationRepository>(
+          create: (context) => AuthenticationRepository(),
         ),
+        RepositoryProvider<UserRepository>(
+          create: (context) => UserRepository(),
+        ),
+        RepositoryProvider<DishRepository>(
+          create: (context) => DishRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(create: (context) => AuthenticationBloc(
+            authenticationRepository: authenticationRepository,
+            userRepository: userRepository,
+          ),),
+          BlocProvider<HomeBloc>(create: (context) => HomeBloc(
+            dishRepository: dishRepository,
+          ),)
+        ],
         child: AppView(model: model),
       ),
     );

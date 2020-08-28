@@ -1,4 +1,5 @@
-export const apiUrl = "http://139.180.131.30:3000";
+// export const apiUrl = "http://139.180.131.30:3000";
+export const apiUrl = "http://172.16.13.94:3000";
 export const api = {
     // user api
     signin: `${apiUrl}/user/sign_admin`,                        // Đăng nhập

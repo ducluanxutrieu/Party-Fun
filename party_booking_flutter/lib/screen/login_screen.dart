@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToMainScreen(accountModel, List<Category> categories) async {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen(accountModel: accountModel, listCategories: categories,)));
+        context, MaterialPageRoute(builder: (context) => MainScreen()));
   }
 
   void requestLogin(String username, String password) async {

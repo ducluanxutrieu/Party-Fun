@@ -12,9 +12,8 @@ import '../../dish_detail/dish_detail_screen.dart';
 class DishCard extends StatelessWidget {
   final DishModel dishModel;
   final AccountModel accountModel;
-  final Function getListDish;
 
-  const DishCard({Key key, this.dishModel, this.accountModel, this.getListDish})
+  const DishCard({Key key, this.dishModel, this.accountModel})
       : super(key: key);
 
   @override
@@ -68,16 +67,12 @@ class DishCard extends StatelessWidget {
     });
   }
 
-  _goToDishDetail(BuildContext context, DishModel dishModel) async {
-    var result = await Navigator.push(
+  _goToDishDetail(BuildContext context, DishModel dishModel) {
+    Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => DishDetailScreen(
                 dishModel: dishModel, accountModel: accountModel)));
-    if (result != null && result) {
-      print('dishCart');
-      getListDish();
-    }
   }
 
   Widget _cartDishPriceWidget(DishModel dishModel) {

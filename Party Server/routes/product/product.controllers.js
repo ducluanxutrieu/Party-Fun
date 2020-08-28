@@ -11,7 +11,7 @@ module.exports = {
 	// thêm món ăn
 	add_dish: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Menu = db.collection("Menu");
 				if (!req.body.name) res.status(400).send({ message: "Trường name không được rỗng", data: "true" });
@@ -53,7 +53,7 @@ module.exports = {
 	// cập nhật món ăn
 	update_dish: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Menu = db.collection("Menu");
 				if (!req.body._id || ObjectId.isValid(req.body._id) == false) res.status(400).send({ message: 'ID món ăn không được rỗng', data: "true" });
@@ -98,7 +98,7 @@ module.exports = {
 	// xóa món ăn
 	del_dish: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Menu = db.collection("Menu");
 				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ message: "ID món ăn không được rỗng", data: "true" });
@@ -113,7 +113,7 @@ module.exports = {
 	// hủy đơn
 	del_bill: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Bill = db.collection("Bill");
 				if (req.params.id == undefined || ObjectId.isValid(req.params.id) == false) res.status(400).send({ message: "ID Bill không hợp lệ", data: "false" });
@@ -134,7 +134,7 @@ module.exports = {
 	// xac nhan hoa đơn
 	confirm_bill: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Bill = db.collection("Bill");
 				if (req.params.id == undefined || ObjectId.isValid(req.params.id) == false) res.status(400).send({ message: "ID Bill không hợp lệ", data: "false" });
@@ -154,7 +154,7 @@ module.exports = {
 	},
 	list_bill: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Bill = db.collection("Bill");
 				if (!req.query.page || req.query.page < 1) req.query.page = 1;
@@ -175,7 +175,7 @@ module.exports = {
 	// lấy danh sách món ăn 
 	get_list_dish: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				if (err) console.log(err);
 				var collection = db.collection("Menu");
@@ -199,7 +199,7 @@ module.exports = {
 	// lấy danh sách món ăn theo chuyên mục
 	get_list_dish_by_categories: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				if (err) console.log(err);
 				var collection = db.collection("Menu");
@@ -222,7 +222,7 @@ module.exports = {
 	},
 	// lấy thông tin 1 món ăn
 	get_dish: function (req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Menu = db.collection("Menu");
 				if (req.params.id == undefined || ObjectId.isValid(req.params.id) == false) 
@@ -239,7 +239,7 @@ module.exports = {
 	},
 	// Thêm bình luận về món ăn 
 	add_rate: function (req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Menu = db.collection("Menu");
 				var Rate = db.collection("Rate_Dish");
@@ -264,7 +264,7 @@ module.exports = {
 	},
 	// Chỉnh sửa bình luận về món ăn 
 	edit_rate: function (req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Rate = db.collection("Rate_Dish");
 				if (req.body.id == undefined || ObjectId.isValid(req.body.id) == false) res.status(400).send({ message: 'ID đánh giá không được rỗng', data: "true" });
@@ -286,7 +286,7 @@ module.exports = {
 			})
 	},
 	del_rate: function (req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Rate = db.collection("Rate_Dish");
 				if (req.body.id == undefined || ObjectId.isValid(req.body.id) == false) res.status(400).send({ message: 'ID món ăn không được rỗng', data: "true" });
@@ -299,7 +299,7 @@ module.exports = {
 			})
 	},
 	get_rate: function (req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Rate = db.collection("Rate_Dish");
 				if (req.query.id == undefined || ObjectId.isValid(req.query.id) == false) res.status(400).send({ message: 'ID món ăn không được rỗng', data: "true" });
@@ -342,7 +342,7 @@ module.exports = {
 	},
 	book: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Menu = db.collection("Menu");
 				var Bill = db.collection("Bill");
@@ -395,7 +395,7 @@ module.exports = {
 
 	payment: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Bill = db.collection("Bill");
 				if (ObjectId.isValid(req.params.id) == false) res.status(400).send({ message: "Id hóa đơn không hợp lệ", data: "false" });
@@ -470,7 +470,7 @@ module.exports = {
 	},
 	add_discount_code: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Discount = db.collection("Discount");
 				if (req.body.code) {
@@ -496,7 +496,7 @@ module.exports = {
 	},
 	get_list_discount_code : function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Discount = db.collection("Discount");
 				Discount.find({}).sort({expiresIn: -1}).toArray(function(err, data) {
@@ -506,7 +506,7 @@ module.exports = {
 	},
 	get_discount_code_of_user: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Discount = db.collection("Discount");
 				Discount.find({expiresIn : {$gte: new Date()}}).sort({expiresIn: -1}).toArray(function(err, data) {
@@ -516,7 +516,7 @@ module.exports = {
 	},
 	find_bill_by_id: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Bill = db.collection("Bill");
 				if (req.params.name) {
@@ -531,7 +531,7 @@ module.exports = {
 	},
 	statistic_money: function (req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Bill = db.collection("Bill");
 				Bill.aggregate([
@@ -578,7 +578,7 @@ module.exports = {
 	},
 	// thống kê món ăn được gọi theo ngày. Ví dụ trong ngày hôm nay món A gọi mấy lần, từ bao nhiêu dĩa
 	statistic_dish: function (req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', function (err, db) {
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab', function (err, db) {
 			var Bill = db.collection("Bill");
 			var datenow = new Date().toLocaleDateString();
 			let check_date = {};
@@ -677,7 +677,7 @@ module.exports = {
 	},
 	// thong ke theo nguoi dung
 	statistic_customer: function(req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', function (err, db) {
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab', function (err, db) {
 			var Bill = db.collection("Bill");
 			var datenow = new Date().toLocaleDateString();
 			let check_date = {};
@@ -749,7 +749,7 @@ module.exports = {
 		})
 	},
 	statistic_staff: function(req, res) {
-		MongoClient.connect('mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', function (err, db) {
+		MongoClient.connect('mongodb://localhost:27017/Android_Lab', function (err, db) {
 			var Bill = db.collection("Bill");
 			var datenow = new Date().toLocaleDateString();
 			let check_date = {};
@@ -824,7 +824,7 @@ module.exports = {
 	},
 	statistic_dashboard: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var User = db.collection("User");
 				var Post = db.collection("Posts");
@@ -917,7 +917,7 @@ module.exports = {
 	},
 	add_categories: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Categories = db.collection("Categories");
 				if (req.body.name) {
@@ -942,7 +942,7 @@ module.exports = {
 	},
 	get_categories: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Categories = db.collection("Categories");
 				Categories.find({type: "menu"}).toArray(function(err, data) {
@@ -952,7 +952,7 @@ module.exports = {
 	},
 	edit_categories: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Categories = db.collection("Categories");
 				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ message: "ID món ăn không được rỗng", data: "true" });
@@ -969,7 +969,7 @@ module.exports = {
 	},
 	del_categories: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Categories = db.collection("Categories");
 				if (req.body._id == undefined || ObjectId.isValid(req.body._id) == false) res.status(400).send({ message: "ID món ăn không được rỗng", data: "true" });
@@ -983,7 +983,7 @@ module.exports = {
 	},
 	add_post: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Posts = db.collection("Posts");
 				if (req.body.title) {
@@ -1013,7 +1013,7 @@ module.exports = {
 	},
 	edit_post: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Posts = db.collection("Posts");
 				if (req.body._id) {
@@ -1041,7 +1041,7 @@ module.exports = {
 	}, 
 	get_post: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			function (err, db) {
 				var Posts = db.collection("Posts");
 				if (req.params.id) {
@@ -1064,7 +1064,7 @@ module.exports = {
 	},
 	delete_post: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Posts = db.collection("Posts");
 				if (ObjectId.isValid(req.params.id) == false) res.status(400).send({ message: "ID bài viết không hợp lệ", data: "false" });
@@ -1078,7 +1078,7 @@ module.exports = {
 	},
 	get_list_post: function(req, res) {
 		MongoClient.connect(
-			'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+			'mongodb://localhost:27017/Android_Lab',
 			async function (err, db) {
 				var Posts = db.collection("Posts");
 				if (req.query.author && req.query.author.length!=0) {

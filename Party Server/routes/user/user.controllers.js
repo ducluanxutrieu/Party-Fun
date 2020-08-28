@@ -17,7 +17,7 @@ let cron= new CronJob({
     // cronTime: '0 * * * * *',
     onTick: async function () {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var User = db.collection("User");
                 User.find({}).toArray(function(err, data) {
@@ -72,7 +72,7 @@ let cron= new CronJob({
 module.exports = {
     signin: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 if (req.headers && req.headers.authorization) {
@@ -120,7 +120,7 @@ module.exports = {
     },
     signin_admin: function(req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 if (req.headers && req.headers.authorization) {
@@ -176,7 +176,7 @@ module.exports = {
     },
     signup: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 if (err) console.log(err);
                 var collection = db.collection("User");
@@ -223,7 +223,7 @@ module.exports = {
 
     changepassword: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ username: req.body.username }, function (err2, decoded) {
@@ -248,7 +248,7 @@ module.exports = {
 
     uploadavatar: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ username: req.body.username },function (err2, decoded) {
@@ -273,7 +273,7 @@ module.exports = {
 
     resetpassword: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ username: req.query.username },function (err, data) {
@@ -313,7 +313,7 @@ module.exports = {
 
     resetconfirm: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ otp_register: Number(req.body.otp_code), username: req.body.username },function (err, data) {
@@ -331,7 +331,7 @@ module.exports = {
 
     updateuser: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ username: req.body.username} ,function (err2, data) {
@@ -359,7 +359,7 @@ module.exports = {
 
     profile: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var User = db.collection('User');
                 User.findOne({username: req.body.username}, function(err, data) {
@@ -373,7 +373,7 @@ module.exports = {
     },
     get_history_cart: function(req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             async function (err, db) {
                 var Bill = db.collection('Bill');
                 if (!req.query.page || req.query.page < 1) req.query.page = 1;
@@ -395,7 +395,7 @@ module.exports = {
     },
     get_detail_history_cart: function(req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             async function (err, db) {
                 var Bill = db.collection('Bill');
                 var ObjectID = require('mongodb').ObjectID;
@@ -412,7 +412,7 @@ module.exports = {
 
     upgraderole: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ username: req.body.username },function (err2, decoded) {
@@ -434,7 +434,7 @@ module.exports = {
 
     demotionrole: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab',
+            'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
                 var collection = db.collection("User");
                 collection.findOne({ username: req.body.username },function (err2, decoded) {
@@ -469,7 +469,7 @@ module.exports = {
     },
     findusernv: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', async function (err, db) {
+            'mongodb://localhost:27017/Android_Lab', async function (err, db) {
                 var User = db.collection('User');
                 if (!req.query.page || req.query.page < 1) req.query.page = 1;
                 let total_page = (await User.find({role: 2}).toArray()).length;
@@ -487,7 +487,7 @@ module.exports = {
     },
     finduserkh: function (req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', async function (err, db) {
+            'mongodb://localhost:27017/Android_Lab', async function (err, db) {
                 var User = db.collection('User');
                 if (!req.query.page || req.query.page < 1) req.query.page = 1;
                 let total_page = (await User.find({role: 1}).toArray()).length;
@@ -505,7 +505,7 @@ module.exports = {
     },
     search_customer: function(req, res) {
         MongoClient.connect(
-            'mongodb://partybooking:ktxkhua@localhost:27017/Android_Lab', function (err, db) {
+            'mongodb://localhost:27017/Android_Lab', function (err, db) {
                 var User = db.collection('User');
                 User.find({username: {'$regex': req.query.key}}).toArray(function (err, data) {
                     if (err) res.status(400).send({message: "Lỗi khi search", data: "false" });

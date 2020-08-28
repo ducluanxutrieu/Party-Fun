@@ -1,21 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => SplashScreen());
   }
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<HomeBloc>(context).add(GetListDishEvent());
     return Scaffold(
       backgroundColor: Colors.blueAccent,
       body: SafeArea(
@@ -49,38 +47,6 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  // Future<void> _getListDishes(String token, SharedPreferences prefs) async {
-  //   await AppApiService.create()
-  //       .getListDishes(token: token)
-  //       .catchError((onError) {
-  //     print(onError);
-  //     _getListDishesFromDB(prefs);
-  //   }).then((result) => {
-  //             if (result == null || !result.isSuccessful)
-  //               _getListDishesFromDB(prefs)
-  //             else
-  //               {
-  //                 _saveListDishesToDB(result.body.listDishes),
-  //                 _getListCategories(prefs, result.body.listDishes),
-  //               }
-  //           });
-  // }
-
-  // void _getListCategories(
-  //   SharedPreferences prefs,
-  //   List<DishModel> listDishes,
-  // ) async {
-  //   var result = await AppApiService.create().getCategories();
-  //   if (result.isSuccessful) {
-  //     prefs.setString(Constants.LIST_CATEGORIES_KEY,
-  //         listCategoriesResponseModelToJson(result.body));
-  //     _goToMainScreen(listDishes, result.body.categories, prefs);
-  //   } else {
-  //     BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-  //     UiUtiu.showToast(message: model.message, isFalse: true);
-  //   }
-  // }
-
   // void _goToMainScreen(List<DishModel> listDishes, List<Category> categories,
   //     SharedPreferences prefs) async {
   //   final String accountJson = prefs.getString(Constants.ACCOUNT_MODEL_KEY);
@@ -94,22 +60,6 @@ class _SplashScreenState extends State<SplashScreen> {
   //                 listCategories: categories,
   //                 listDishModel: listDishes,
   //               )));
-  // }
-
-  // Future<void> _getListDishesFromDB(SharedPreferences prefs) async {
-  //   List<DishModel> listDishes = await DBProvider.db.getAllDishes();
-  //   ListCategoriesResponseModel categories =
-  //       listCategoriesResponseModelFromJson(
-  //           prefs.getString(Constants.LIST_CATEGORIES_KEY));
-  //   _goToMainScreen(listDishes, categories.categories, prefs);
-  // }
-
-  // void _saveListDishesToDB(List<DishModel> listDishes) async {
-  //   await DBProvider.db.deleteAll();
-  //   listDishes.forEach((element) async {
-  //     await DBProvider.db.newDish(element);
-  //     print(element);
-  //   });
   // }
 
   // void _updateUserProfile(String token, SharedPreferences prefs) async {
