@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
               },
               child: Icon(Icons.edit),
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: Theme.of(context).primaryColor,
             body: ProfileForm(accountModel: _accountModel),
           );
         });

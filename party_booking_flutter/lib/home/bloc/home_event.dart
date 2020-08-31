@@ -28,10 +28,10 @@ class OnSearchPressedEvent extends HomeEvent {
   List<Object> get props => [showSearchField];
 }
 
-class DarkThemeEvent extends HomeEvent {
+class SetDarkThemeEvent extends HomeEvent {
   final bool darkThemeEnabled;
 
-  DarkThemeEvent({this.darkThemeEnabled});
+  SetDarkThemeEvent({this.darkThemeEnabled});
 
   @override
   List<Object> get props => [darkThemeEnabled];

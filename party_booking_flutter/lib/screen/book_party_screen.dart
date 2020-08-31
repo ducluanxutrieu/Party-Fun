@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:party_booking/data/network/model/base_response_model.dart';
+import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/data/network/model/book_party_request_model.dart';
-import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 import 'package:party_booking/widgets/common/text_field.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'book_party_success_screen.dart';
-
-class BookPartyScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _BookPartyScreenState();
-}
-
-class _BookPartyScreenState extends State<BookPartyScreen> {
+class BookPartyScreen extends StatelessWidget {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  List<FormFieldValidator> listValidators = <FormFieldValidator>[
+  final List<FormFieldValidator> listValidators = <FormFieldValidator>[
     FormBuilderValidators.required(),
   ];
-  static var now = new DateTime.now();
-  var twoDaysFromNow = now.add(new Duration(days: 2));
+
+  final twoDaysFromNow = new DateTime.now().add(new Duration(days: 2));
 
   final List<ListDishes> listDish = new List();
 
@@ -75,7 +65,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
     );
   }
 
-  void _onUpdateClicked() async {
+  void _onUpdateClicked(BuildContext context) {
     if (_fbKey.currentState.saveAndValidate()) {
       final day = _fbKey.currentState.fields['day'].currentState.value;
       final num = _fbKey.currentState.fields['num'].currentState.value;
@@ -84,7 +74,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
           _fbKey.currentState.fields['discount_code'].currentState.value;
       print(discountCode);
       if (day != null && num != null) {
-        await requestBookParty(day, num, int.parse(cus), discountCode);
+        BlocProvider.of<CartBloc>(context).add(BookEventClicked(partyDate: day, numberOfTable:  num, numberOfCustomer:  int.parse(cus), discountCode: discountCode));
       } else {
         UiUtiu.showToast(message: 'Please fill all fields', isFalse: true);
       }
@@ -134,7 +124,7 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
                   ),
                   AppButtonWidget(
                     buttonText: 'Book',
-                    buttonHandler: _onUpdateClicked,
+                    buttonHandler: () => _onUpdateClicked(context),
                     //stateButton: _stateButton,
                   ),
                 ],
@@ -144,36 +134,5 @@ class _BookPartyScreenState extends State<BookPartyScreen> {
         ),
       ),
     );
-  }
-
-  Future requestBookParty(
-      DateTime day, int num, int cus, String discountCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    listDish.clear();
-    ScopedModel.of<CartModel>(context, rebuildOnChange: true).cart.forEach(
-        (item) =>
-            {listDish.add(ListDishes(id: item.id, numberDish: item.quantity))});
-
-    var model = BookPartyRequestModel(
-        dateParty: DateFormat(Constants.DATE_TIME_FORMAT_SERVER).format(day),
-        numberTable: num,
-        numberCustomer: cus,
-        discountCode: discountCode,
-        listDishes: listDish);
-    var result = await AppApiService.create().bookParty(
-      token: prefs.getString(Constants.USER_TOKEN),
-      model: model,
-    );
-    if (result.isSuccessful) {
-      ScopedModel.of<CartModel>(context).clearCart();
-      UiUtiu.showToast(message: result.body.message);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BookPartySuccessScreen(result.body.bill)));
-    } else {
-      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      UiUtiu.showToast(message: model.message, isFalse: true);
-    }
   }
 }

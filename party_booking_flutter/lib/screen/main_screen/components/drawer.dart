@@ -34,7 +34,7 @@ class MainDrawer extends StatelessWidget {
           child: UserAccountsDrawerHeader(
             accountName: Text(
               _accountModel.fullName ??= "",
-              style: kPrimaryTextStyle,
+              style: Theme.of(context).textTheme.headline6,
             ),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(_accountModel.avatar ??= ""),
@@ -42,7 +42,7 @@ class MainDrawer extends StatelessWidget {
             ),
             accountEmail: Text(
               _accountModel.email ??= "",
-              style: kPrimaryTextStyle.copyWith(fontSize: 15),
+              style: Theme.of(context).textTheme.bodyText2,
             ),
             onDetailsPressed: () => _goToProfile(context),
           ),
@@ -210,7 +210,7 @@ class _DarkThemeWidget extends StatelessWidget {
           ),
           onChanged: (value) => context
               .bloc<HomeBloc>()
-              .add(DarkThemeEvent(darkThemeEnabled: !state.darkThemeEnabled)),
+              .add(SetDarkThemeEvent(darkThemeEnabled: value)),
           value: state.darkThemeEnabled,
         );
       },

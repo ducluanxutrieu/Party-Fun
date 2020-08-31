@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/home/bloc/home_bloc.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 import '../../../badges.dart';
 
@@ -52,21 +51,21 @@ class MainAppBar extends StatelessWidget {
   }
 
   Widget _shoppingCartBadge(BuildContext context) {
-    return Badge(
-      position: BadgePosition.topRight(top: 0, right: 3),
-      animationDuration: Duration(milliseconds: 300),
-      animationType: BadgeAnimationType.slide,
-      badgeContent: Text(
-        ScopedModel.of<CartModel>(context, rebuildOnChange: true)
-            .calculateTotalItem()
-            .toString(),
-        style: TextStyle(color: Colors.white),
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) => Badge(
+        position: BadgePosition.topRight(top: 0, right: 3),
+        animationDuration: Duration(milliseconds: 300),
+        animationType: BadgeAnimationType.slide,
+        badgeContent: Text(
+          state.totalItem.toString(),
+          style: TextStyle(color: Colors.white),
+        ),
+        child: IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.pushNamed(context, '/cart');
+            }),
       ),
-      child: IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {
-            Navigator.pushNamed(context, '/cart');
-          }),
     );
   }
 

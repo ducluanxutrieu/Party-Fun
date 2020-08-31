@@ -14,12 +14,13 @@ class HomeState extends Equatable {
       this.showSearchField = false,
       this.darkThemeEnabled = false});
 
-  HomeState getListDish(
-      {List<MenuModel> listMenu,
-      FormzStatus status,
-      String message,
-      bool showSearchField,
-      bool darkThemeEnabled}) {
+  HomeState getListDish({
+    List<MenuModel> listMenu,
+    FormzStatus status,
+    String message,
+    bool showSearchField,
+    bool darkThemeEnabled
+  }) {
     return HomeState(
       status: status ?? this.status,
       listMenu: listMenu ?? this.listMenu,
@@ -30,5 +31,6 @@ class HomeState extends Equatable {
   }
 
   @override
-  List<Object> get props => [message, status, listMenu, showSearchField, darkThemeEnabled];
+  List<Object> get props =>
+      [message, status, listMenu, showSearchField, darkThemeEnabled];
 }

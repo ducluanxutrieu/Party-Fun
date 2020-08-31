@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/screen/book_party_screen.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 import 'components/item_dish.dart';
 
@@ -17,25 +17,27 @@ class CartPage extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.clear_all),
           tooltip: 'Clear All',
-          onPressed: () => ScopedModel.of<CartModel>(context).clearCart(),
+          onPressed: () => context.bloc<CartBloc>().add(ClearCartEvent()),
         ),
       ],
     );
 
-    double listSizeHeight = MediaQuery.of(context).size.height -
+    double listSizeHeight = MediaQuery
+        .of(context)
+        .size
+        .height -
         appBar.preferredSize.height -
         150;
 
-    return Scaffold(
-      appBar: appBar,
-      body: ScopedModel.of<CartModel>(context, rebuildOnChange: true)
-                  .cart
-                  .length ==
-              0
-          ? Center(
+    return BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: appBar,
+            body: state.listCarts.length == 0
+                ? Center(
               child: Lottie.asset(Assets.animNoCartItem),
             )
-          : Padding(
+                : Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,9 +46,7 @@ class CartPage extends StatelessWidget {
                     height: listSizeHeight,
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      itemCount: ScopedModel.of<CartModel>(context,
-                              rebuildOnChange: true)
-                          .total,
+                      itemCount: state.listCarts.length,
                       itemBuilder: (context, index) {
                         return ItemDish(
                           indexItem: index,
@@ -57,7 +57,7 @@ class CartPage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      "Total: ${ScopedModel.of<CartModel>(context, rebuildOnChange: true).totalMoney}  VND",
+                      "Total: ${state.totalBillPrice}  VND",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold),
                     ),
@@ -74,6 +74,8 @@ class CartPage extends StatelessWidget {
                 ],
               ),
             ),
+          );
+        }
     );
   }
 }

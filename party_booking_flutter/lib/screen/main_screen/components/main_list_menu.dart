@@ -47,9 +47,12 @@ class MainListMenu extends StatelessWidget {
         Container(
           height: 50,
           alignment: Alignment.center,
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
           child: new Text(menuModel.menuName,
-              style: Theme.of(context).textTheme.bodyText2),
+              style: Theme.of(context).textTheme.headline5.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  )),
         ),
         _itemGridView(menuModel.listDish, context)
       ],

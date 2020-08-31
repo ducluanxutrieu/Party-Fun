@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/screen/main_screen/components/add_to_cart_dialog.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 import '../../dish_detail/dish_detail_screen.dart';
 
@@ -18,48 +19,53 @@ class DishCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<CartModel>(builder: (context, child, model) {
-      return Card(
-        color: Colors.white,
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Container(
-          child: InkWell(
-            onTap: () => _goToDishDetail(context, dishModel),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _cartDishPriceWidget(dishModel),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.cartPlus),
-                      onPressed: () {
-                        int totalItem = ScopedModel.of<CartModel>(context, rebuildOnChange: true).calculateTotalItem();
-                        AddToCartDialog.addDishToCartAnimation(context, totalItem);
-                        model.addProduct(dishModel);
-                      },
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
-                _itemCardImage(dishModel.image[0], dishModel.id),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  dishModel.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: new TextStyle(fontSize: 17.0, color: Colors.black54),
-                ),
-              ],
+    return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
+      return BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          //TODO add listenerWhen
+          AddToCartDialog.addDishToCartAnimation(context, state.totalItem);
+        },
+        child: Card(
+          color: Theme.of(context).colorScheme.surface,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Container(
+            child: InkWell(
+              onTap: () => _goToDishDetail(context, dishModel),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 10,
+                      ),
+                      _cartDishPriceWidget(dishModel, context),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.cartPlus),
+                        onPressed: () => context.bloc<CartBloc>().add(AddDishToCartEvent(dishModel)),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  ),
+                  _itemCardImage(dishModel.image[0], dishModel.id),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    dishModel.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -75,7 +81,7 @@ class DishCard extends StatelessWidget {
                 dishModel: dishModel, accountModel: accountModel)));
   }
 
-  Widget _cartDishPriceWidget(DishModel dishModel) {
+  Widget _cartDishPriceWidget(DishModel dishModel, BuildContext context) {
     final currencyFormat =
         new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
     String price = currencyFormat.format(dishModel.price);
@@ -85,10 +91,9 @@ class DishCard extends StatelessWidget {
         children: <Widget>[
           Text(
             price,
-            style: new TextStyle(
-                fontSize: 17.0,
-                color: Colors.black,
-                decoration: TextDecoration.lineThrough),
+            style: Theme.of(context).textTheme.bodyText1.copyWith(
+                decoration: TextDecoration.lineThrough
+            ),
           ),
           Text(
             priceNew,

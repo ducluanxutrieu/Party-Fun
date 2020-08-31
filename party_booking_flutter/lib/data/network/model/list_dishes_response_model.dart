@@ -1,11 +1,4 @@
-// To parse this JSON data, do
-//
-//     final listDishesResponseModel = listDishesResponseModelFromJson(jsonString);
-
 import 'dart:convert';
-
-import 'package:intl/intl.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 ListDishesResponseModel listDishesResponseModelFromJson(String str) =>
     ListDishesResponseModel.fromJson(json.decode(str));
@@ -195,14 +188,11 @@ class ImageDb {
   };
 }
 
-class CartModel extends Model {
-  List<DishModel> cart = [];
-  double totalCartValue = 0;
-  String totalMoney;
+class CartModel {
+  DishModel dishModel;
+  int numberOfDish = 0;
 
-  int get total => cart.length;
-
-  void addProduct(product) {
+  /*void addProduct(product) {
     int index = cart.indexWhere((i) => i.id == product.id);
     print(index);
     if (index != -1)
@@ -256,7 +246,7 @@ class CartModel extends Model {
     });
 
     return totalCartValue;
-  }
+  }*/
 }
 
 

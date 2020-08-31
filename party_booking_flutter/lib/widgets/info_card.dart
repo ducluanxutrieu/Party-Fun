@@ -13,7 +13,7 @@ class InfoCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Card(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
         child: ListTile(
           leading: Icon(
@@ -22,10 +22,9 @@ class InfoCard extends StatelessWidget {
           ),
           title: Text(
             text,
-            style: TextStyle(
+            style: Theme.of(context).textTheme.headline6.copyWith(
               fontFamily: 'Source Sans Pro',
-              fontSize: 20.0,
-              color: Colors.teal,
+              fontSize: 18
             ),
           ),
           trailing: isShowEdit ? Icon(Icons.edit) : null,
