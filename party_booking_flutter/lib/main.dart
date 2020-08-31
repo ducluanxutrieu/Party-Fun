@@ -6,6 +6,7 @@ import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/screen/main_screen/main_screen.dart';
 import 'package:party_booking/src/dish_repository.dart';
 import 'package:party_booking/src/simple_bloc_observer.dart';
+import 'package:party_booking/src/theme.dart';
 import 'authentication/bloc/authentication_bloc.dart';
 import 'login/view/login_page.dart';
 import 'screen/cart_detail/cart_detail_screen.dart';
@@ -100,35 +101,36 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return ScopedModel<CartModel>(
       model: widget.model,
-      child: MaterialApp(
-        navigatorKey: _navigatorKey,
-        builder: (context, child) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-              switch (state.status) {
-                case AuthenticationStatus.authenticated:
-                  _navigator.pushAndRemoveUntil<void>(
-                      MainScreen.route(state.user), (route) => false);
-                  break;
-                case AuthenticationStatus.unauthenticated:
-                  _navigator.pushAndRemoveUntil<void>(
-                    LoginPage.route(),
-                    (route) => false,
-                  );
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: child,
-          );
-        },
-        theme: ThemeData(
-          primarySwatch: Colors.green,
+      child:  BlocBuilder<HomeBloc, HomeState>(
+        buildWhen: (previous, current) => previous.darkThemeEnabled != current.darkThemeEnabled,
+        builder: (context, state) => MaterialApp(
+          navigatorKey: _navigatorKey,
+          builder: (context, child) {
+            return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                switch (state.status) {
+                  case AuthenticationStatus.authenticated:
+                    _navigator.pushAndRemoveUntil<void>(
+                        MainScreen.route(state.user), (route) => false);
+                    break;
+                  case AuthenticationStatus.unauthenticated:
+                    _navigator.pushAndRemoveUntil<void>(
+                      LoginPage.route(),
+                      (route) => false,
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              },
+              child: child,
+            );
+          },
+          theme: state.darkThemeEnabled ? darkThemeData(context) : themeData(context),
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: (_) => SplashScreen.route(),
+          routes: {'/cart': (context) => CartPage()},
         ),
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: (_) => SplashScreen.route(),
-        routes: {'/cart': (context) => CartPage()},
       ),
     );
   }

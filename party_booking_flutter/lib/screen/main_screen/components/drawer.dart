@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
+import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/login/view/login_page.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,6 +90,7 @@ class MainDrawer extends StatelessWidget {
                 ),
               );
             }),
+        _DarkThemeWidget(),
         Divider(),
         _createDrawerItem(
             icon: FontAwesomeIcons.info,
@@ -152,7 +155,7 @@ class MainDrawer extends StatelessWidget {
     }
   }
 
-  void _showDialogConfirmLogout(BuildContext context){
+  void _showDialogConfirmLogout(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext bCtx) {
@@ -179,5 +182,38 @@ class MainDrawer extends StatelessWidget {
             ],
           );
         });
+  }
+}
+
+class _DarkThemeWidget extends StatelessWidget {
+  const _DarkThemeWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (previous, current) => previous.darkThemeEnabled != current.darkThemeEnabled,
+      builder: (context, state) {
+        return SwitchListTile(
+          title: Row(
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.adjust,
+                size: 28,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0),
+                child: Text('Dark Theme'),
+              )
+            ],
+          ),
+          onChanged: (value) => context
+              .bloc<HomeBloc>()
+              .add(DarkThemeEvent(darkThemeEnabled: !state.darkThemeEnabled)),
+          value: state.darkThemeEnabled,
+        );
+      },
+    );
   }
 }

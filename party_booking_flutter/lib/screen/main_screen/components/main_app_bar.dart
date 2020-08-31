@@ -1,32 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../../badges.dart';
 
 class MainAppBar extends StatelessWidget {
-  const MainAppBar({
+  MainAppBar({
     Key key,
-    @required Widget appBarTitle,
-    @required Icon searchIcon,
-    @required Function searchPressed
-  })  : _appBarTitle = appBarTitle,
-        _searchIcon = searchIcon,
-        _searchPressed = searchPressed,
+    @required String fullName,
+    @required TextEditingController textController,
+  })  : _fullName = fullName,
+        _filter = textController,
         super(key: key);
 
-  final Widget _appBarTitle;
-  final Icon _searchIcon;
-  final Function _searchPressed;
+  final String _fullName;
+  final TextEditingController _filter;
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: _appBarTitle,
-      actions: <Widget>[
-        IconButton(icon: _searchIcon, onPressed: _searchPressed),
-        _shoppingCartBadge(context),
-      ],
+    return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (previous, current) =>
+          (previous.showSearchField != current.showSearchField),
+      builder: (context, state) {
+        bool showSearchField = state.showSearchField;
+        _setupSearchListen(showSearchField, context);
+        return AppBar(
+          title: showSearchField
+              ? TextField(
+                  controller: _filter,
+                  autofocus: true,
+                  decoration: new InputDecoration(
+                      prefixIcon: new Icon(Icons.search),
+                      hintText: 'Search...'),
+                )
+              : Text(_fullName),
+          actions: <Widget>[
+            IconButton(
+                icon: showSearchField ? Icon(Icons.close) : Icon(Icons.search),
+                onPressed: () => {
+                      BlocProvider.of<HomeBloc>(context).add(
+                          OnSearchPressedEvent(
+                              showSearchField: !showSearchField))
+                    }),
+            _shoppingCartBadge(context),
+          ],
+        );
+      },
     );
   }
 
@@ -47,5 +68,20 @@ class MainAppBar extends StatelessWidget {
             Navigator.pushNamed(context, '/cart');
           }),
     );
+  }
+
+  void _setupSearchListen(bool showSearchField, BuildContext context) {
+    if (showSearchField) {
+      _filter.addListener(() {
+        String searchText = _filter.text;
+        print("LLLLL");
+        print(searchText);
+        context
+            .bloc<HomeBloc>()
+            .add(OnSearchDishChangeEvent(searchText: searchText));
+      });
+    } else {
+      _filter.clear();
+    }
   }
 }

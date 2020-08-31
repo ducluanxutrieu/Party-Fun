@@ -12,9 +12,27 @@ class GetListDishEvent extends HomeEvent {
 }
 
 class OnSearchDishChangeEvent extends HomeEvent {
-  const OnSearchDishChangeEvent(this.searchText);
+  const OnSearchDishChangeEvent({this.searchText});
   final String searchText;
 
   @override
   List<Object> get props => [searchText];
+}
+
+class OnSearchPressedEvent extends HomeEvent {
+  final bool showSearchField;
+
+  OnSearchPressedEvent({this.showSearchField});
+
+  @override
+  List<Object> get props => [showSearchField];
+}
+
+class DarkThemeEvent extends HomeEvent {
+  final bool darkThemeEnabled;
+
+  DarkThemeEvent({this.darkThemeEnabled});
+
+  @override
+  List<Object> get props => [darkThemeEnabled];
 }

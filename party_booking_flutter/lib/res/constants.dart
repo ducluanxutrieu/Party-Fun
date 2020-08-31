@@ -20,9 +20,26 @@ const kTextLightColor = Color(0xFF959595);
 const kInfectedColor = Color(0xFFFF8748);
 const kDeathColor = Color(0xFFFF4848);
 const kRecovercolor = Color(0xFF36C12C);
-const kPrimaryColor = Color(0xFF3382CC);
+const kPrimaryColor = Color(0xff8bc34a);
 final kShadowColor = Color(0xFFB7B7B7).withOpacity(.16);
 final kActiveShadowColor = Color(0xFF4056C6).withOpacity(.15);
+
+const kSecondaryLightColor = Color(0xFF80e27e);
+const kSecondaryDarkColor = Color(0xFF404040);
+const kAccentLightColor = Color(0xffbef67a);
+const kAccentDarkColor = Color(0xFF4E4E4E);
+const kBackgroundDarkColor = Color(0xFF3A3A3A);
+const kSurfaceDarkColor = Color(0xFF222225);
+// Icon Colors
+const kAccentIconLightColor = Color(0xFF5a9216);
+const kAccentIconDarkColor = Color(0xFF303030);
+const kPrimaryIconLightColor = Color(0xFFECEFF5);
+const kPrimaryIconDarkColor = Color(0xFF232323);
+//text colors
+const kBodyTextColorLight = Color(0xFF000000);
+const kBodyTextColorDark = Color(0xFF7C7C7C);
+const kTitleTextLightColor = Color(0xFF101112);
+const kTitleTextDarkColor = Colors.white;
 
 // Text Style
 const kHeadingTextStyle = TextStyle(

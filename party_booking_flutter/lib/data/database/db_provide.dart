@@ -116,7 +116,7 @@ class DBProvider {
 
     Future<List<DishModel>> searchAllDishes(String search) async {
     final db = await database;
-    var res = await db.rawQuery("SELECT * FROM ListDishes WHERE name = $search");
+    var res = await db.rawQuery("SELECT * FROM ListDishes WHERE name LIKE '%$search%'");
     List<DishModel> listDishes = res.isEmpty
         ? List<DishModel>()
         : res.map((c) => DishModel.fromJsonDB(c)).toList();

@@ -59,6 +59,7 @@ dependencies:
   formz: ^0.3.0
   equatable: ^1.2.3
   flutter_chips_input: ^1.9.1
+  google_fonts: ^1.1.0
 
 dev_dependencies:
   flutter_test:

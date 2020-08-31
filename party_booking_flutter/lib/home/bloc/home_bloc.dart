@@ -9,6 +9,7 @@ import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/src/dish_repository.dart';
 
 part 'home_event.dart';
+
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -30,10 +31,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       case OnSearchDishChangeEvent:
         yield* _mapSearchListDishEventToState(event, state);
         break;
+      case OnSearchPressedEvent:
+        yield state.getListDish(
+            showSearchField: (event as OnSearchPressedEvent).showSearchField);
+        break;
+      case DarkThemeEvent:
+        yield state.getListDish(
+            darkThemeEnabled: (event as DarkThemeEvent).darkThemeEnabled);
+        break;
       default:
     }
   }
-
 
   // @override
   // Future<void> close() {
@@ -50,8 +58,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
       yield state.getListDish(
           status: FormzStatus.submissionSuccess, listMenu: listMenu);
-      yield state.getListDish(
-          status: FormzStatus.pure);
+//      yield state.getListDish(
+//          status: FormzStatus.pure);
     } catch (cause) {
       yield state.getListDish(
           message: cause.toString(), status: FormzStatus.submissionFailure);
@@ -76,7 +84,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield state.getListDish(
             message: cause.toString(), status: FormzStatus.submissionFailure);
       }
-    }else{
+    } else {
       try {
         List<DishModel> dishModels =
             await _dishRepository.getListDishesFromDB();
