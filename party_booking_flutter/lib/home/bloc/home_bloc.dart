@@ -37,11 +37,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield state.getListDish(
             showSearchField: (event as OnSearchPressedEvent).showSearchField);
         break;
-      case SetDarkThemeEvent:
+      /*case SetDarkThemeEvent:
         yield state.getListDish(
             darkThemeEnabled: (event as SetDarkThemeEvent).darkThemeEnabled);
         _saveDarkThemeToShared((event as SetDarkThemeEvent).darkThemeEnabled);
-        break;
+        break;*/
       default:
     }
   }
@@ -137,8 +137,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     return listMenu;
   }
 
-  Future<void> _saveDarkThemeToShared(bool darkThemeEnabled) async {
+  /*Future<void> _saveDarkThemeToShared(bool darkThemeEnabled) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(Constants.DARK_THEME_ENABLED, darkThemeEnabled);
-  }
+  }*/
 }

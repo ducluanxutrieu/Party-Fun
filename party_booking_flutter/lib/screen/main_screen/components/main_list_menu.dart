@@ -19,6 +19,9 @@ class MainListMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.listMenu != current.listMenu,
       builder: (context, state) {
         print('MainListMenu');
         print(state.status);

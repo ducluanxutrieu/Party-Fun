@@ -15,7 +15,7 @@ class ItemDish extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        final dishItem = state.listCarts[indexItem].dishModel;
+        final dishItem = state.carts[indexItem];
         return Dismissible(
           key: Key(dishItem.id),
           onDismissed: (direction) => context.bloc<CartBloc>().add(RemoveDishToCartEvent(dishItem)),

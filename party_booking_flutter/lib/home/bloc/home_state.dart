@@ -5,14 +5,14 @@ class HomeState extends Equatable {
   final FormzStatus status;
   final List<MenuModel> listMenu;
   final bool showSearchField;
-  final bool darkThemeEnabled;
+  // final bool darkThemeEnabled;
 
   HomeState(
       {this.message,
       this.status = FormzStatus.pure,
       this.listMenu = const [],
       this.showSearchField = false,
-      this.darkThemeEnabled = false});
+      /*this.darkThemeEnabled = false*/});
 
   HomeState getListDish({
     List<MenuModel> listMenu,
@@ -26,11 +26,11 @@ class HomeState extends Equatable {
       listMenu: listMenu ?? this.listMenu,
       message: message ?? this.message,
       showSearchField: showSearchField ?? this.showSearchField,
-      darkThemeEnabled: darkThemeEnabled ?? this.darkThemeEnabled,
+      // darkThemeEnabled: darkThemeEnabled ?? this.darkThemeEnabled,
     );
   }
 
   @override
   List<Object> get props =>
-      [message, status, listMenu, showSearchField, darkThemeEnabled];
+      [message, status, listMenu, showSearchField, /*darkThemeEnabled*/];
 }

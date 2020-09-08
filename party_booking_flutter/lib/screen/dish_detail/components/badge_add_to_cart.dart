@@ -19,7 +19,7 @@ class BadgeAddToCart extends StatelessWidget {
         animationDuration: Duration(milliseconds: 300),
         animationType: BadgeAnimationType.slide,
         badgeContent: Text(
-          state.listCarts.length.toString(),
+          state.carts.length.toString(),
           style: TextStyle(color: Colors.white),
         ),
         child: IconButton(

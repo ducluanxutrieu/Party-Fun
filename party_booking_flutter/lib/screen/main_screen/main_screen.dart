@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/screen/modify_disk/modify_dish_screen.dart';
 
 import 'components/drawer.dart';
 import 'components/main_app_bar.dart';
 import 'components/main_list_menu.dart';
 
+int valueMain = 0;
+
 class MainScreen extends StatelessWidget {
-  static Route route(AccountModel accountModel) {
-    return MaterialPageRoute<void>(builder: (_) => MainScreen());
-  }
 
   void _goToAddDish(BuildContext context) {
     Navigator.push(
@@ -21,11 +19,12 @@ class MainScreen extends StatelessWidget {
   final TextEditingController _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    print('Main Screen Init');
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       buildWhen: (previous, current) =>
-          previous.status != current.status ||
-          previous.status != current.status,
+          previous.status != current.status || previous.user != current.user,
       builder: (context, authState) {
+        print('Main Screen Bloc Authentication Builder');
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
@@ -37,7 +36,7 @@ class MainScreen extends StatelessWidget {
           ),
           body: RefreshIndicator(
             onRefresh: () {
-              context.bloc<HomeBloc>().add(GetListDishEvent());
+              // context.bloc<HomeBloc>().add(GetListDishEvent());
               Future.delayed(Duration(milliseconds: 300));
               return;
             },

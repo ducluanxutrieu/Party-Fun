@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/login/view/login_page.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,7 +88,7 @@ class MainDrawer extends StatelessWidget {
                 ),
               );
             }),
-        _DarkThemeWidget(),
+        // _DarkThemeWidget(),
         Divider(),
         _createDrawerItem(
             icon: FontAwesomeIcons.info,
@@ -185,6 +183,7 @@ class MainDrawer extends StatelessWidget {
   }
 }
 
+/*
 class _DarkThemeWidget extends StatelessWidget {
   const _DarkThemeWidget({
     Key key,
@@ -217,3 +216,4 @@ class _DarkThemeWidget extends StatelessWidget {
     );
   }
 }
+*/

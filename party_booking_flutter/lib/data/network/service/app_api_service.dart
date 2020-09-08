@@ -137,7 +137,7 @@ abstract class AppApiService extends ChopperService {
 
   static AppApiService create() {
     final client = ChopperClient(
-        baseUrl: 'http://172.16.13.94:3000/',
+        baseUrl: 'http://192.168.1.18:3000/',
         services: [
           _$AppApiService(),
         ],

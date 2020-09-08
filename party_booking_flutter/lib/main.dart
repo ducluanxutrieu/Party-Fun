@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
               dishRepository: dishRepository,
             ),
           ),
-          BlocProvider<CartBloc> (
+          BlocProvider<CartBloc>(
             create: (context) => CartBloc(
               cartRepository: cartRepository,
             ),
@@ -101,39 +101,40 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      buildWhen: (previous, current) =>
-          previous.darkThemeEnabled != current.darkThemeEnabled,
-      builder: (context, state) => MaterialApp(
-        navigatorKey: _navigatorKey,
-        builder: (context, child) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-              switch (state.status) {
-                case AuthenticationStatus.authenticated:
-                  _navigator.pushAndRemoveUntil<void>(
-                      MainScreen.route(state.user), (route) => false);
-                  break;
-                case AuthenticationStatus.unauthenticated:
-                  _navigator.pushAndRemoveUntil<void>(
-                    LoginPage.route(),
-                    (route) => false,
-                  );
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: child,
-          );
-        },
-        theme: state.darkThemeEnabled
-            ? darkThemeData(context)
-            : themeData(context),
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: (_) => SplashScreen.route(),
-        routes: {'/cart': (context) => CartPage()},
-      ),
+    return MaterialApp(
+      navigatorKey: _navigatorKey,
+      builder: (context, child) {
+        return BlocListener<AuthenticationBloc, AuthenticationState>(
+          listenWhen: (previous, current) =>
+              previous.status != current.status ||
+              previous.user != current.user,
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                _navigator.pushNamedAndRemoveUntil('/home', (route) => false);
+                break;
+              case AuthenticationStatus.unauthenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginPage.route(),
+                  (route) => false,
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          child: child,
+        );
+      },
+      theme: themeData(context),
+      debugShowCheckedModeBanner: false,
+      // onGenerateRoute: (_) => MainScreen.route(),
+      initialRoute: '/',
+      routes: {
+        '/cart': (context) => CartPage(),
+        '/home': (context) => MainScreen(),
+        '/': (_) => SplashScreen(),
+      },
     );
   }
 }

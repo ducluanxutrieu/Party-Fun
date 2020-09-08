@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:party_booking/cart/cart_repository.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
@@ -16,17 +17,32 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         super(CartState());
 
   final CartRepository _cartRepository;
+  final List<DishModel> cartList = [];
+  double totalCartValue = 0;
+  String totalMoney;
 
   @override
-  Stream<CartState> mapEventToState(
-    CartEvent event,
-  ) async* {
-    // TODO: implement mapEventToState
+  Stream<CartState> mapEventToState(CartEvent event,) async* {
+    switch (event.runtimeType) {
+      case AddDishToCartEvent:
+        yield _mapAddDishToCartEventToState(event, state);
+        break;
+      case RemoveDishToCartEvent:
+        yield* _mapRemoveDishToCartEventToState(event, state);
+        break;
+      case UpdateDishToCartEvent:
+        yield* _mapUpdateDishToCartEventToState(event, state);
+        break;
+      case BookEventClicked:
+        yield* _mapBookClickedEventToState(event, state);
+        break;
+      default: break;
+    }
   }
 
-/*  void calculateTotalBill() {
+  void calculateTotalBill() {
     totalCartValue = 0;
-    cart.forEach((f) {
+    cartList.forEach((f) {
       totalCartValue += f.priceNew * f.quantity;
     });
 
@@ -38,10 +54,35 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   int calculateTotalItem() {
     int totalCartValue = 0;
-    cart.forEach((f) {
+    cartList.forEach((f) {
       totalCartValue += f.quantity;
     });
 
     return totalCartValue;
-  }*/
+  }
+
+
+  CartState _mapAddDishToCartEventToState(AddDishToCartEvent event,
+      CartState state) {
+    cartList.add(event.dishModel);
+    int totalItem =  calculateTotalItem();
+    calculateTotalBill();
+    return CartState(carts: cartList, totalBillPrice: totalCartValue, totalItem: totalItem);
+  }
+
+  Stream<CartState> _mapRemoveDishToCartEventToState(AddDishToCartEvent event,
+      CartState state) async* {
+
+  }
+
+  Stream<CartState> _mapUpdateDishToCartEventToState(AddDishToCartEvent event,
+      CartState state) async* {
+
+  }
+
+  Stream<CartState> _mapBookClickedEventToState(AddDishToCartEvent event,
+      CartState state) async* {
+
+  }
+
 }

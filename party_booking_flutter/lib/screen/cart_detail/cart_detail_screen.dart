@@ -33,7 +33,7 @@ class CartPage extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: appBar,
-            body: state.listCarts.length == 0
+            body: state.carts.length == 0
                 ? Center(
               child: Lottie.asset(Assets.animNoCartItem),
             )
@@ -46,7 +46,7 @@ class CartPage extends StatelessWidget {
                     height: listSizeHeight,
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      itemCount: state.listCarts.length,
+                      itemCount: state.carts.length,
                       itemBuilder: (context, index) {
                         return ItemDish(
                           indexItem: index,

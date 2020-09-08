@@ -7,12 +7,10 @@ import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 
 class SplashScreen extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => SplashScreen());
-  }
 
   @override
   Widget build(BuildContext context) {
+    print('Splash Screen Init');
     BlocProvider.of<HomeBloc>(context).add(GetListDishEvent());
     return Scaffold(
       backgroundColor: Colors.blueAccent,
