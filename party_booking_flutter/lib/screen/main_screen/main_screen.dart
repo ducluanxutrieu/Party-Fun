@@ -8,8 +8,6 @@ import 'components/drawer.dart';
 import 'components/main_app_bar.dart';
 import 'components/main_list_menu.dart';
 
-int valueMain = 0;
-
 class MainScreen extends StatelessWidget {
 
   void _goToAddDish(BuildContext context) {

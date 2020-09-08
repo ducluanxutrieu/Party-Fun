@@ -9,16 +9,21 @@ class ClearCartEvent extends CartEvent {
   List<Object> get props => [];
 }
 
-class BookEventClicked extends CartEvent {
+class BookClickedEvent extends CartEvent {
   final DateTime partyDate;
   final int numberOfTable;
   final int numberOfCustomer;
   final String discountCode;
 
-  BookEventClicked({@required this.partyDate,@required  this.numberOfTable,@required  this.numberOfCustomer,@required  this.discountCode});
+  BookClickedEvent(
+      {@required this.partyDate,
+      @required this.numberOfTable,
+      @required this.numberOfCustomer,
+      @required this.discountCode});
 
   @override
-  List<Object> get props => [partyDate, numberOfTable, numberOfCustomer, discountCode];
+  List<Object> get props =>
+      [partyDate, numberOfTable, numberOfCustomer, discountCode];
 }
 
 class AddDishToCartEvent extends CartEvent {
@@ -41,10 +46,19 @@ class RemoveDishToCartEvent extends CartEvent {
 
 class UpdateDishToCartEvent extends CartEvent {
   final DishModel dishModel;
-  final int quantity;
+  final bool isAdd;
 
-  UpdateDishToCartEvent(this.dishModel, this.quantity);
+  UpdateDishToCartEvent(this.dishModel, this.isAdd);
 
   @override
-  List<Object> get props => [dishModel, quantity];
+  List<Object> get props => [dishModel, isAdd];
+}
+
+class GetPaymentEvent extends CartEvent {
+  final Bill bill;
+
+  GetPaymentEvent(this.bill);
+
+  @override
+  List<Object> get props => [bill];
 }

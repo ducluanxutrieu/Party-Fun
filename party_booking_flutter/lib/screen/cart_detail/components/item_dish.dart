@@ -51,11 +51,11 @@ class ItemDish extends StatelessWidget {
               trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                 IconButton(
                   icon: Icon(Icons.remove),
-                  onPressed: () => context.bloc<CartBloc>().add(UpdateDishToCartEvent(dishItem, dishItem.quantity - 1)),
+                  onPressed: () => context.bloc<CartBloc>().add(UpdateDishToCartEvent(dishItem, false)),
                 ),
                 IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => context.bloc<CartBloc>().add(UpdateDishToCartEvent(dishItem, dishItem.quantity + 1)),
+                  onPressed: () => context.bloc<CartBloc>().add(UpdateDishToCartEvent(dishItem, true)),
                 ),
               ]),
               dense: true,

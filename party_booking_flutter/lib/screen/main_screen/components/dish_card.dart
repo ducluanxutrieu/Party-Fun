@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/screen/main_screen/components/add_to_cart_dialog.dart';
 
 import '../../dish_detail/dish_detail_screen.dart';
 
@@ -20,52 +19,46 @@ class DishCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
-      return BlocListener<CartBloc, CartState>(
-        listener: (context, state) {
-          //TODO add listenerWhen
-          AddToCartDialog.addDishToCartAnimation(context, state.totalItem);
-        },
-        child: Card(
-          color: Theme.of(context).colorScheme.surface,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Container(
-            child: InkWell(
-              onTap: () => _goToDishDetail(context, dishModel),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 10,
-                      ),
-                      _cartDishPriceWidget(dishModel, context),
-                      Spacer(),
-                      IconButton(
-                        icon: Icon(FontAwesomeIcons.cartPlus),
-                        onPressed: () => context.bloc<CartBloc>().add(AddDishToCartEvent(dishModel)),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
-                  _itemCardImage(dishModel.image[0], dishModel.id),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    dishModel.name,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                ],
-              ),
+      return Card(
+        color: Theme.of(context).colorScheme.surface,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Container(
+          child: InkWell(
+            onTap: () => _goToDishDetail(context, dishModel),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                    _cartDishPriceWidget(dishModel, context),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.cartPlus),
+                      onPressed: () => context.bloc<CartBloc>().add(AddDishToCartEvent(dishModel)),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+                _itemCardImage(dishModel.image[0], dishModel.id),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  dishModel.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+              ],
             ),
           ),
         ),

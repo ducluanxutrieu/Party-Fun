@@ -19,7 +19,6 @@ class HomeState extends Equatable {
     FormzStatus status,
     String message,
     bool showSearchField,
-    bool darkThemeEnabled
   }) {
     return HomeState(
       status: status ?? this.status,

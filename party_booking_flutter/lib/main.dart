@@ -9,6 +9,7 @@ import 'package:party_booking/screen/splash_screen.dart';
 import 'package:party_booking/src/dish_repository.dart';
 import 'package:party_booking/src/simple_bloc_observer.dart';
 import 'package:party_booking/src/theme.dart';
+import 'package:party_booking/theme/theme_bloc.dart';
 
 import 'authentication/bloc/authentication_bloc.dart';
 import 'login/view/login_page.dart';
@@ -77,16 +78,15 @@ class MyApp extends StatelessWidget {
               userRepository: userRepository,
             ),
           ),
-          BlocProvider<HomeBloc>(
-            create: (context) => HomeBloc(
-              dishRepository: dishRepository,
-            ),
-          ),
           BlocProvider<CartBloc>(
             create: (context) => CartBloc(
               cartRepository: cartRepository,
             ),
-          )
+          ),
+          BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc(dishRepository: dishRepository),
+          ),
+          BlocProvider(create: (_) => ThemeBloc()),
         ],
         child: AppView(),
       ),
@@ -101,39 +101,45 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listenWhen: (previous, current) =>
-              previous.status != current.status ||
-              previous.user != current.user,
-          listener: (context, state) {
-            switch (state.status) {
-              case AuthenticationStatus.authenticated:
-                _navigator.pushNamedAndRemoveUntil('/home', (route) => false);
-                break;
-              case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
-                );
-                break;
-              default:
-                break;
-            }
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      buildWhen: (previous, current) => previous.darkThemeEnabled != current.darkThemeEnabled,
+      builder: (context, state) {
+        return MaterialApp(
+          navigatorKey: _navigatorKey,
+          builder: (context, child) {
+            return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listenWhen: (previous, current) =>
+                  previous.status != current.status ||
+                  previous.user != current.user,
+              listener: (context, state) {
+                switch (state.status) {
+                  case AuthenticationStatus.authenticated:
+                    _navigator.pushNamedAndRemoveUntil(
+                        '/home', (route) => false);
+                    break;
+                  case AuthenticationStatus.unauthenticated:
+                    _navigator.pushAndRemoveUntil<void>(
+                      LoginPage.route(),
+                      (route) => false,
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              },
+              child: child,
+            );
           },
-          child: child,
+          theme: state.darkThemeEnabled ? darkThemeData(context) : themeData(context),
+          debugShowCheckedModeBanner: false,
+          // onGenerateRoute: (_) => MainScreen.route(),
+          initialRoute: '/',
+          routes: {
+            '/cart': (context) => CartPage(),
+            '/home': (context) => MainScreen(),
+            '/': (_) => SplashScreen(),
+          },
         );
-      },
-      theme: themeData(context),
-      debugShowCheckedModeBanner: false,
-      // onGenerateRoute: (_) => MainScreen.route(),
-      initialRoute: '/',
-      routes: {
-        '/cart': (context) => CartPage(),
-        '/home': (context) => MainScreen(),
-        '/': (_) => SplashScreen(),
       },
     );
   }

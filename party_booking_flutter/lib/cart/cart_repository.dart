@@ -5,6 +5,7 @@ import 'package:party_booking/data/network/model/party_book_response_model.dart'
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CartRepository {
   Future<MapEntry<Bill, String>> requestBookParty(
@@ -25,6 +26,8 @@ class CartRepository {
         numberCustomer: cus,
         discountCode: discountCode,
         listDishes: listDish);
+
+    print(model.toJson());
     var result = await AppApiService.create().bookParty(
       token: prefs.getString(Constants.USER_TOKEN),
       model: model,
@@ -36,11 +39,32 @@ class CartRepository {
 //          context,
 //          MaterialPageRoute(
 //              builder: (context) => BookPartySuccessScreen(result.body.bill)));
-      return MapEntry(result.body.bill, null);
+      return MapEntry(result.body.bill, result.body.message);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
 //      UiUtiu.showToast(message: model.message, isFalse: true);
       return MapEntry(null, model.message);
+    }
+  }
+
+  Future<String> getPayment(Bill bill) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String token = preferences.getString(Constants.USER_TOKEN);
+
+    var result = await AppApiService.create().getPayment(token: token, id: bill.id);
+
+    if (result.isSuccessful) {
+      String urlSession = result.body.data.id;
+      String url = "http://192.168.1.6/client/payment/mobile/$urlSession";
+      if (await canLaunch(url)) {
+        await launch(url);
+        return "pay_success";
+      } else {
+        return 'Could not launch $url';
+      }
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      return model.message;
     }
   }
 }

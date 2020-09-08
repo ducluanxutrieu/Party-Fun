@@ -6,12 +6,9 @@ import 'package:formz/formz.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
-import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/src/dish_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'home_event.dart';
-
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -54,8 +51,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Stream<HomeState> _mapGetListDishEventToState(
       GetListDishEvent event, HomeState state) async* {
-    bool darkThemeEnabled = await _getDarkTheme();
-    yield state.getListDish(status: FormzStatus.submissionInProgress, darkThemeEnabled: darkThemeEnabled);
+    yield state.getListDish(status: FormzStatus.submissionInProgress);
     try {
       List<DishModel> dishModels = await _dishRepository.getListDishes();
       List<Category> categories = await _dishRepository.getListCategories();
@@ -70,13 +66,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       print("&&&&&&&&&&&&&");
       print(cause.toString());
     }
-  }
-
-  Future<bool> _getDarkTheme() async{
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool darkThemeEnabled = sharedPreferences.getBool(Constants.DARK_THEME_ENABLED);
-    if(darkThemeEnabled == null) darkThemeEnabled = false;
-    return darkThemeEnabled;
   }
 
   Stream<HomeState> _mapSearchListDishEventToState(
@@ -136,9 +125,4 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
     return listMenu;
   }
-
-  /*Future<void> _saveDarkThemeToShared(bool darkThemeEnabled) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(Constants.DARK_THEME_ENABLED, darkThemeEnabled);
-  }*/
 }

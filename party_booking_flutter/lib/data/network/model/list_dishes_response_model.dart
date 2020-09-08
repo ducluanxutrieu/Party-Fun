@@ -30,9 +30,11 @@ class ListDishesResponseModel {
       };
 }
 
-SingleDishResponseModel singleDishResponseModelFromJson(String str) => SingleDishResponseModel.fromJson(json.decode(str));
+SingleDishResponseModel singleDishResponseModelFromJson(String str) =>
+    SingleDishResponseModel.fromJson(json.decode(str));
 
-String singleDishResponseModelToJson(SingleDishResponseModel data) => json.encode(data.toJson());
+String singleDishResponseModelToJson(SingleDishResponseModel data) =>
+    json.encode(data.toJson());
 
 class SingleDishResponseModel {
   String message;
@@ -43,17 +45,19 @@ class SingleDishResponseModel {
     this.dishModel,
   });
 
-  static SingleDishResponseModel fromJsonFactory(Map<String, dynamic> json) => SingleDishResponseModel.fromJson(json);
+  static SingleDishResponseModel fromJsonFactory(Map<String, dynamic> json) =>
+      SingleDishResponseModel.fromJson(json);
 
-  factory SingleDishResponseModel.fromJson(Map<String, dynamic> json) => SingleDishResponseModel(
-    message: json["message"],
-    dishModel: DishModel.fromJson(json["data"]),
-  );
+  factory SingleDishResponseModel.fromJson(Map<String, dynamic> json) =>
+      SingleDishResponseModel(
+        message: json["message"],
+        dishModel: DishModel.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": dishModel.toJson(),
-  };
+        "message": message,
+        "data": dishModel.toJson(),
+      };
 }
 
 class DishModel {
@@ -100,27 +104,28 @@ class DishModel {
         discount: json["discount"],
         quantity: 1,
         image: List<String>.from(json["image"].map((x) => x)),
-        featureImage: json["feature_image"] ??= 'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg',
+        featureImage: json["feature_image"] ??=
+            'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg',
         currency: json["currency"],
         updateAt: json["updateAt"],
         createAt: json["createAt"],
       );
 
   factory DishModel.fromJsonDB(Map<String, dynamic> json) => DishModel(
-    id: json["id"],
-    name: json["name"],
-    description: json["description"],
-    price: json["price"],
-    priceNew: json["price_new"],
-    categories: List<String>(),
-    discount: json["discount"],
-    quantity: 1,
-    image: List<String>(),
-    featureImage: json["feature_image"],
-    currency: json["currency"],
-    updateAt: json["updateAt"],
-    createAt: json["createAt"],
-  );
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        price: json["price"],
+        priceNew: json["price_new"],
+        categories: List<String>(),
+        discount: json["discount"],
+        quantity: 1,
+        image: List<String>(),
+        featureImage: json["feature_image"],
+        currency: json["currency"],
+        updateAt: json["updateAt"],
+        createAt: json["createAt"],
+      );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -136,9 +141,11 @@ class DishModel {
       };
 }
 
-List<CategoryDb> categoryDbFromJson(String str) => List<CategoryDb>.from(json.decode(str).map((x) => CategoryDb.fromJson(x)));
+List<CategoryDb> categoryDbFromJson(String str) =>
+    List<CategoryDb>.from(json.decode(str).map((x) => CategoryDb.fromJson(x)));
 
-String categoryDbToJson(List<CategoryDb> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String categoryDbToJson(List<CategoryDb> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class CategoryDb {
   CategoryDb({
@@ -152,16 +159,16 @@ class CategoryDb {
   String category;
 
   factory CategoryDb.fromJson(Map<String, dynamic> json) => CategoryDb(
-    id: json["id"],
-    dishId: json["dish_id"],
-    category: json["category"],
-  );
+        id: json["id"],
+        dishId: json["dish_id"],
+        category: json["category"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "dish_id": dishId,
-    "category": category,
-  };
+        "id": id,
+        "dish_id": dishId,
+        "category": category,
+      };
 }
 
 class ImageDb {
@@ -176,80 +183,17 @@ class ImageDb {
   String image;
 
   factory ImageDb.fromJson(Map<String, dynamic> json) => ImageDb(
-    id: json["id"],
-    dishId: json["dish_id"],
-    image: json["image"],
-  );
+        id: json["id"],
+        dishId: json["dish_id"],
+        image: json["image"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "dish_id": dishId,
-    "image": image,
-  };
+        "id": id,
+        "dish_id": dishId,
+        "image": image,
+      };
 }
-
-class CartModel {
-  DishModel dishModel;
-  int numberOfDish = 0;
-
-  /*void addProduct(product) {
-    int index = cart.indexWhere((i) => i.id == product.id);
-    print(index);
-    if (index != -1)
-      updateProduct(product, product.quantity + 1);
-    else {
-      cart.add(product);
-      calculateTotalBill();
-      notifyListeners();
-    }
-  }
-
-  void removeProduct(product) {
-    int index = cart.indexWhere((i) => i.id == product.id);
-    cart[index].quantity = 1;
-    cart.removeWhere((item) => item.id == product.id);
-    calculateTotalBill();
-    notifyListeners();
-  }
-
-  void updateProduct(product, qty) {
-    int index = cart.indexWhere((i) => i.id == product.id);
-    cart[index].quantity = qty;
-    if (cart[index].quantity == 0) removeProduct(product);
-
-    calculateTotalBill();
-    notifyListeners();
-  }
-
-  void clearCart() {
-    cart.forEach((f) => f.quantity = 1);
-    cart = [];
-    notifyListeners();
-  }
-
-  void calculateTotalBill() {
-    totalCartValue = 0;
-    cart.forEach((f) {
-      totalCartValue += f.priceNew * f.quantity;
-    });
-
-    int i = int.parse(totalCartValue.toStringAsFixed(
-        totalCartValue.truncateToDouble() == totalCartValue ? 0 : 2));
-    final f = new NumberFormat("#,###");
-    totalMoney = f.format(i);
-  }
-
-  int calculateTotalItem() {
-    int totalCartValue = 0;
-    cart.forEach((f) {
-      totalCartValue += f.quantity;
-    });
-
-    return totalCartValue;
-  }*/
-}
-
-
 
 class EnumValues<T> {
   Map<String, T> map;
@@ -264,4 +208,3 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
-
