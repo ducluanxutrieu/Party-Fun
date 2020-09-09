@@ -3,27 +3,13 @@ import 'package:party_booking/data/network/model/list_dishes_response_model.dart
 import 'package:party_booking/screen/modify_disk/components/modify_dish_functions.dart';
 import 'package:party_booking/screen/modify_disk/components/modify_disk_body.dart';
 
-class ModifyDishScreen extends StatefulWidget {
+class ModifyDishScreen extends StatelessWidget {
   final DishModel dishModel;
 
-  ModifyDishScreen({this.dishModel});
+  ModifyDishScreen({this.dishModel, @required this.isAddNewDish, this.oldImages});
 
-  @override
-  _ModifyDishScreenState createState() => _ModifyDishScreenState();
-}
-
-class _ModifyDishScreenState extends State<ModifyDishScreen> {
-  List<String> oldImages = List();
-  bool isAddNewDish = false;
-
-  @override
-  void initState() {
-    isAddNewDish = widget.dishModel == null || widget.dishModel.id == null;
-    if (!isAddNewDish) {
-      oldImages.addAll(widget.dishModel.image);
-    }
-    super.initState();
-  }
+  final List<String> oldImages;
+  final bool isAddNewDish;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +20,7 @@ class _ModifyDishScreenState extends State<ModifyDishScreen> {
           !isAddNewDish
               ? IconButton(
                   onPressed: () =>
-                      ModifyDishFunctions.deleteDish(widget.dishModel.id).then(
+                      ModifyDishFunctions.deleteDish(dishModel.id).then(
                           (value) => {if (value) Navigator.pop(context, true)}),
                   icon: Icon(Icons.delete_forever),
                   tooltip: 'Delete this dish',
@@ -45,7 +31,7 @@ class _ModifyDishScreenState extends State<ModifyDishScreen> {
       body: ModifyDishBody(
         isAddNewDish: isAddNewDish,
         oldImages: oldImages,
-        dishModel: widget.dishModel,
+        dishModel: dishModel,
       ),
     );
   }

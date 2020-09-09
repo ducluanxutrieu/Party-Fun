@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/res/assets.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
 
@@ -11,7 +9,6 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('Splash Screen Init');
-    BlocProvider.of<HomeBloc>(context).add(GetListDishEvent());
     return Scaffold(
       backgroundColor: Colors.blueAccent,
       body: SafeArea(

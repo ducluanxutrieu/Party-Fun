@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
@@ -65,5 +68,23 @@ class DishRepository {
       await DBProvider.db.newDish(element);
       print(element);
     });
+  }
+
+  Future<MapEntry<List<File>, String>> loadAssets() async {
+    List<File> resultList;
+
+    try {
+      resultList = await FilePicker.getMultiFile(
+          type: FileType.image
+      );
+    } on Exception catch (e) {
+      print(e.toString());
+      return MapEntry(null, e.toString());
+    }
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    // if (!mounted) return;
+    return MapEntry(resultList, "");
   }
 }

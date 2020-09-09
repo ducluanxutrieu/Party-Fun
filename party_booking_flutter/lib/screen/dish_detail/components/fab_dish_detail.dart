@@ -39,7 +39,7 @@ class FabDishDetail extends StatelessWidget {
     var result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ModifyDishScreen(dishModel: dishModel)));
+            builder: (context) => ModifyDishScreen(dishModel: dishModel, isAddNewDish: false, oldImages: dishModel.image,)));
     if (result != null) {
       Navigator.maybePop(context, true);
     }

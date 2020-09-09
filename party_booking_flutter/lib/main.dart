@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/cart/cart_repository.dart';
-import 'package:party_booking/home/bloc/home_bloc.dart';
 import 'package:party_booking/screen/main_screen/main_screen.dart';
 import 'package:party_booking/screen/splash_screen.dart';
 import 'package:party_booking/src/dish_repository.dart';
@@ -21,7 +20,6 @@ void main() {
   runApp(MyApp(
     authenticationRepository: AuthenticationRepository(),
     userRepository: UserRepository(),
-    dishRepository: DishRepository(),
     cartRepository: CartRepository(),
   ));
   setupLogging();
@@ -40,17 +38,14 @@ class MyApp extends StatelessWidget {
     Key key,
     @required this.authenticationRepository,
     @required this.userRepository,
-    @required this.dishRepository,
     @required this.cartRepository,
   })  : assert(authenticationRepository != null),
         assert(userRepository != null),
-        assert(dishRepository != null),
         assert(cartRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
-  final DishRepository dishRepository;
   final CartRepository cartRepository;
 
   @override
@@ -83,9 +78,6 @@ class MyApp extends StatelessWidget {
               cartRepository: cartRepository,
             ),
           ),
-          BlocProvider<HomeBloc>(
-            create: (context) => HomeBloc(dishRepository: dishRepository),
-          ),
           BlocProvider(create: (_) => ThemeBloc()),
         ],
         child: AppView(),
@@ -112,6 +104,7 @@ class AppView extends StatelessWidget {
                   previous.status != current.status ||
                   previous.user != current.user,
               listener: (context, state) {
+
                 switch (state.status) {
                   case AuthenticationStatus.authenticated:
                     _navigator.pushNamedAndRemoveUntil(

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:party_booking/dish/dish_bloc.dart';
 import 'package:party_booking/res/constants.dart';
 
 class PickImageButton extends StatelessWidget {
-  final Function loadAssets;
-
-  const PickImageButton({Key key, this.loadAssets}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class PickImageButton extends StatelessWidget {
       color: Colors.lightGreen,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
-          onPressed: loadAssets,
+          onPressed: () => BlocProvider.of<DishBloc>(context).add(GetListImageEvent()),
           child: Text(
             'Pick Dish Image',
             textAlign: TextAlign.center,

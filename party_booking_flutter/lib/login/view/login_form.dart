@@ -32,7 +32,6 @@ class LoginForm extends StatelessWidget {
         key: _fbKey,
         autovalidate: false,
         child: Container(
-          color: Colors.white,
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: SingleChildScrollView(
             child: Column(

@@ -43,6 +43,8 @@ class AuthenticationRepository {
           Constants.ACCOUNT_MODEL_KEY, accountModelToJson(result.body.account));
       prefs.setString(Constants.USER_TOKEN, result.body.account.token);
       _controller.add(AuthenticationStatus.authenticated);
+      print('Login Successful');
+      print('____________________');
       return "Login Successful!";
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
@@ -91,5 +93,5 @@ class AuthenticationRepository {
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void dispose() => _controller.close();
+  // void dispose() => _controller.close();
 }

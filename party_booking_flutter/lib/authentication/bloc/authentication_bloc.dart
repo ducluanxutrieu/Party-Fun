@@ -21,7 +21,9 @@ class AuthenticationBloc
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => {add(AuthenticationStatusChanged(status))},
+      (status) => {
+        print('Listen Subscription'),
+        add(AuthenticationStatusChanged(status))},
     );
   }
 
@@ -30,10 +32,19 @@ class AuthenticationBloc
   StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
   @override
+  void onTransition(Transition<AuthenticationEvent, AuthenticationState> transition) {
+    print(transition);
+    print(transition.nextState);
+    print('authentication bloc');
+    super.onTransition(transition);
+  }
+
+  @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
     if (event is AuthenticationStatusChanged) {
+      print('_mapAuthenticationStatusChangedToState');
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationRepository.logOut();
@@ -43,7 +54,7 @@ class AuthenticationBloc
   @override
   Future<void> close() {
     _authenticationStatusSubscription?.cancel();
-    _authenticationRepository.dispose();
+    // _authenticationRepository.dispose();
     return super.close();
   }
 

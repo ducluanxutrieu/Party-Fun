@@ -15,7 +15,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({DishRepository dishRepository})
       : assert(dishRepository != null),
         _dishRepository = dishRepository,
-        super(HomeState());
+        super(HomeState()){
+          add(GetListDishEvent());
+        }
 
   final DishRepository _dishRepository;
 

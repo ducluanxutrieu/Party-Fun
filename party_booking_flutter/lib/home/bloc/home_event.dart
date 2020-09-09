@@ -27,3 +27,7 @@ class OnSearchPressedEvent extends HomeEvent {
   @override
   List<Object> get props => [showSearchField];
 }
+
+class GetListImageEvent extends HomeEvent {
+
+}

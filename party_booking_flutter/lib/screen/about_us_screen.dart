@@ -1,35 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:party_booking/res/constants.dart';
 
-class AboutUsScreen extends StatefulWidget {
-  @override
-  _ProfileScreenState createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<AboutUsScreen> {
-  // AccountModel _accountModel;
-  String avatarUrl;
-  final controller = ScrollController();
-  double offset = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    controller.addListener(onScroll);
-    // _updateUserProfile();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void onScroll() {
-    setState(() {
-      offset = (controller.hasClients) ? controller.offset : 0;
-    });
-  }
+class AboutUsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +12,6 @@ class _ProfileScreenState extends State<AboutUsScreen> {
 
       //backgroundColor: Colors.green,
       body: SingleChildScrollView(
-        controller: controller,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

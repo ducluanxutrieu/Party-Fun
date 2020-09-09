@@ -57,4 +57,4 @@ const kTitleTextstyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-const kPrimaryTextStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black);
+const kPrimaryTextStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
