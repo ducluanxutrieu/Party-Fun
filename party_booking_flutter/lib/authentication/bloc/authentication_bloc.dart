@@ -44,7 +44,6 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AuthenticationStatusChanged) {
-      print('_mapAuthenticationStatusChangedToState');
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationRepository.logOut();
@@ -54,14 +53,26 @@ class AuthenticationBloc
   @override
   Future<void> close() {
     _authenticationStatusSubscription?.cancel();
-    // _authenticationRepository.dispose();
+    _authenticationRepository.dispose();
     return super.close();
   }
 
   Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
     AuthenticationStatusChanged event,
   ) async {
+    print('++++++++++++++');
+    print(event.status);
     switch (event.status) {
+/*      case AuthenticationStatus.unauthenticated:
+        return const AuthenticationState.unauthenticated();
+      case AuthenticationStatus.authenticated:
+        final user = await _tryGetLocalUser();
+        return user != null
+            ? AuthenticationState.authenticated(user)
+            : const AuthenticationState.unauthenticated();
+      default:
+        return const AuthenticationState.unknown();*/
+
       case AuthenticationStatus.unauthenticated:
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:

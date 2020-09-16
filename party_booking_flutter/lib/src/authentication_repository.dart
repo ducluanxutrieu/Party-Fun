@@ -7,6 +7,7 @@ import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
+import 'package:party_booking/src/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthenticationStatus {
@@ -20,13 +21,16 @@ class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
+    // AccountModel model = await new UserRepository().getUserFromPrefs();
+    // if(model != null)
     yield AuthenticationStatus.authenticated;
+    // else yield AuthenticationStatus.unauthenticated;
     yield* _controller.stream;
   }
 
-  void changeAuthenticationStatus(AuthenticationStatus status) {
-    _controller.add(status);
-  }
+  // void changeAuthenticationStatus(AuthenticationStatus status) {
+  //   _controller.sink.add(status);
+  // }
 
   Future<String> logIn({
     @required String username,
@@ -93,5 +97,5 @@ class AuthenticationRepository {
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  // void dispose() => _controller.close();
+  void dispose() => _controller.close();
 }

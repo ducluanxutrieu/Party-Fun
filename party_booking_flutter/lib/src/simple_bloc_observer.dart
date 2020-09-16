@@ -1,13 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:party_booking/home/bloc/home_bloc.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onChange(Cubit cubit, Change change) {
     print('${cubit.runtimeType} $change');
-    if(change.currentState is HomeState) {
-      print('${cubit.runtimeType} HomeState ${(change.currentState as HomeState).listMenu.length}');
-    }
     super.onChange(cubit, change);
   }
 

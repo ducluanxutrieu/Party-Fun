@@ -103,9 +103,8 @@ class DishModel {
         categories: List<String>.from(json["categories"].map((x) => x)),
         discount: json["discount"],
         quantity: 1,
-        image: List<String>.from(json["image"].map((x) => x)),
-        featureImage: json["feature_image"] ??=
-            'https://pbs.twimg.com/profile_images/1093186805283749890/4yb0033d_400x400.jpg',
+        image: List<String>.from(json["image"].map((x) => x.replaceAll('192.168.1.8', '172.20.8.16'))),
+        featureImage: (json["feature_image"] as String).replaceAll('192.168.1.8', '172.20.8.16'),
         currency: json["currency"],
         updateAt: json["updateAt"],
         createAt: json["createAt"],

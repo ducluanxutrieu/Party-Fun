@@ -32,13 +32,15 @@ class RateResponseModelData {
 }
 
 class RateDataModel {
+  static const List<ListRate> list = [];
+
   RateDataModel({
     this.countRate = 0,
     this.avgRate = 0.0,
     this.totalPage = 1,
-    this.start,
-    this.end,
-    this.listRate,
+    this.start = 0,
+    this.end = 0,
+    this.listRate = list,
   });
 
   int countRate;
@@ -50,7 +52,7 @@ class RateDataModel {
 
   factory RateDataModel.fromJson(Map<String, dynamic> json) => RateDataModel(
     countRate: json["count_rate"],
-    avgRate:  json["avg_rate"] ??= 0.0,
+    avgRate:  json["avg_rate"],
     totalPage: json["total_page"],
     start: json["start"],
     end: json["end"],

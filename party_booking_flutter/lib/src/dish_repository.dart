@@ -5,15 +5,17 @@ import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
+import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DishRepository {
+  int currentPage = 0;
+  RateDataModel rateDataModel = RateDataModel();
+
   Future<List<DishModel>> getListDishes({String where = ""}) async {
-    print(where);
-    print('_getListDishes');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String _token = prefs.getString(Constants.USER_TOKEN);
 
@@ -32,8 +34,7 @@ class DishRepository {
     if (result != null && result.isSuccessful) {
       prefs.setString(Constants.LIST_CATEGORIES_KEY,
           listCategoriesResponseModelToJson(result.body));
-          return result.body.categories;
-      
+      return result.body.categories;
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       UiUtiu.showToast(message: model.message, isFalse: true);
@@ -42,7 +43,8 @@ class DishRepository {
   }
 
   Future<List<DishModel>> searchListDish(String searchText) async {
-    List<DishModel> listDishes = await DBProvider.db.searchAllDishes(searchText);
+    List<DishModel> listDishes =
+        await DBProvider.db.searchAllDishes(searchText);
     return listDishes;
   }
 
@@ -74,9 +76,7 @@ class DishRepository {
     List<File> resultList;
 
     try {
-      resultList = await FilePicker.getMultiFile(
-          type: FileType.image
-      );
+      resultList = await FilePicker.getMultiFile(type: FileType.image);
     } on Exception catch (e) {
       print(e.toString());
       return MapEntry(null, e.toString());
@@ -86,5 +86,23 @@ class DishRepository {
     // setState to update our non-existent appearance.
     // if (!mounted) return;
     return MapEntry(resultList, "");
+  }
+
+  Future<MapEntry<String, bool>> getListRate(String id, {bool isStart = false}) async {
+    if(isStart) currentPage = 0;
+    currentPage++;
+    var result = await AppApiService.create().getRate(id, currentPage);
+    if (result.isSuccessful) {
+      if (currentPage == 1) {
+        rateDataModel = result.body.rateData;
+      } else {
+        rateDataModel.listRate.addAll(result.body.rateData.listRate);
+        rateDataModel.end = result.body.rateData.end;
+      }
+      return MapEntry(result.body.message, true);
+    } else {
+      BaseResponseModel model = BaseResponseModel.fromJson(result.error);
+      return MapEntry(model.message, false);
+    }
   }
 }

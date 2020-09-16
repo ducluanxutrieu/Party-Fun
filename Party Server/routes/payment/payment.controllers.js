@@ -23,7 +23,7 @@ module.exports = {
                                     for (let dish of bill.dishes) {
                                         line_items.push({
                                             name: dish.name,
-                                            images: (dish.feature_image)?[dish.feature_image]: ["http://172.16.13.94:3000/open_image?image_name=default.png"],
+                                            images: (dish.feature_image)?[dish.feature_image]: ["http://172.20.8.16:3000/open_image?image_name=default.png"],
                                             amount: dish.total_money,
                                             currency: dish.currency,
                                             quantity: dish.count * bill.table,
@@ -32,8 +32,8 @@ module.exports = {
                                     if (line_items.length != 0) {
                                         let session = await stripe.checkout.sessions.create({
                                             payment_method_types: ['card'],
-                                            success_url: `http://172.16.13.94/client/payment/success`,
-                                            cancel_url: `http://172.16.13.94/client/payment/cancel`,
+                                            success_url: `http://172.20.8.16/client/payment/success`,
+                                            cancel_url: `http://172.20.8.16/client/payment/cancel`,
                                             customer_email: email,
                                             line_items: line_items,
                                             client_reference_id: req.query._id
