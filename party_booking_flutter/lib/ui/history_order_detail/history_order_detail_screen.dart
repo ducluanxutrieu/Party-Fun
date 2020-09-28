@@ -74,7 +74,7 @@ class HistoryOrderDetailScreen extends StatelessWidget {
     await AppApiService.create().getPayment(token: token, id: id).then(
             (onValue) async {
           String urlSession = onValue.body.data.id;
-          String url = "http://139.180.131.30/client/payment/mobile/$urlSession";
+          String url = "http://${Constants.BASE_URL}/client/payment/mobile/$urlSession";
           if (await canLaunch(url)) {
             await launch(url);
             /*Navigator.pushAndRemoveUntil(

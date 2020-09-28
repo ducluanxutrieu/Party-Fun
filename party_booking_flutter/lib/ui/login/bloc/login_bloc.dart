@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:formz/formz.dart';
 import 'package:party_booking/src/authentication_repository.dart';
@@ -28,12 +29,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      String result = await _authenticationRepository.logIn(
+      MapEntry result = await _authenticationRepository.logIn(
         username: event.username,
         password: event.password,
       );
-      if (result == "Login Successful!")
+      if (result.value) {
         yield state.copyWith(status: FormzStatus.submissionSuccess);
+      }
       else {
         yield state.copyWith(status: FormzStatus.submissionFailure);
         await Future<void>.delayed(const Duration(seconds: 1));

@@ -7,6 +7,7 @@ import 'package:party_booking/cart/cart_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/dish/dish_bloc.dart';
+import 'package:party_booking/widgets/common/logo_app.dart';
 import 'add_to_cart_dialog.dart';
 
 import '../../dish_detail/dish_detail_screen.dart';
@@ -113,11 +114,7 @@ class DishCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: CachedNetworkImage(
-        placeholder: (context, url) => Container(
-            width: 150,
-            height: 150,
-            padding: EdgeInsets.all(50),
-            child: CircularProgressIndicator()),
+        placeholder: (context, url) => LogoAppWidget(),
         imageUrl: image,
         fit: BoxFit.cover,
         width: double.infinity,

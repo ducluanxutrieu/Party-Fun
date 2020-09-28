@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/data/network/service/app_api_service.dart';
-import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/ui/history_order_list/history_order_screen.dart';
 import 'package:party_booking/theme/theme_bloc.dart';
-import 'package:party_booking/ui/login/view/login_page.dart';
+import 'package:party_booking/ui/history_order_list/history_order_screen.dart';
 import 'package:party_booking/ui/profile/profile_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../about_us_screen.dart';
 import '../../list_posts_screen.dart';
@@ -141,20 +138,6 @@ class MainDrawer extends StatelessWidget {
     );
   }
 
-  void _signOut(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString(Constants.USER_TOKEN);
-    var result = await AppApiService.create().requestSignOut(token: token);
-    if (result.isSuccessful) {
-      prefs.remove(Constants.ACCOUNT_MODEL_KEY);
-      prefs.remove(Constants.USER_TOKEN);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    }
-  }
-
   void _showDialogConfirmLogout(BuildContext context) {
     showDialog(
         context: context,
@@ -173,7 +156,7 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
               FlatButton(
-                onPressed: () => _signOut(context),
+                onPressed: () => BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogoutRequested()),
                 child: Text(
                   'Yes',
                   style: TextStyle(fontWeight: FontWeight.bold),

@@ -21,9 +21,7 @@ class AuthenticationBloc
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
-      (status) => {
-        print('Listen Subscription'),
-        add(AuthenticationStatusChanged(status))},
+      (status) => add(AuthenticationStatusChanged(status)),
     );
   }
 
@@ -34,7 +32,7 @@ class AuthenticationBloc
   @override
   void onTransition(Transition<AuthenticationEvent, AuthenticationState> transition) {
     print(transition);
-    print(transition.nextState);
+    print(transition.nextState.status);
     print('authentication bloc');
     super.onTransition(transition);
   }
@@ -52,6 +50,7 @@ class AuthenticationBloc
 
   @override
   Future<void> close() {
+    print('On Close Authentication Bloc');
     _authenticationStatusSubscription?.cancel();
     _authenticationRepository.dispose();
     return super.close();
@@ -63,16 +62,6 @@ class AuthenticationBloc
     print('++++++++++++++');
     print(event.status);
     switch (event.status) {
-/*      case AuthenticationStatus.unauthenticated:
-        return const AuthenticationState.unauthenticated();
-      case AuthenticationStatus.authenticated:
-        final user = await _tryGetLocalUser();
-        return user != null
-            ? AuthenticationState.authenticated(user)
-            : const AuthenticationState.unauthenticated();
-      default:
-        return const AuthenticationState.unknown();*/
-
       case AuthenticationStatus.unauthenticated:
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:

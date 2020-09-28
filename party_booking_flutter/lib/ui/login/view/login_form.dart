@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:formz/formz.dart';
+import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
+import 'package:party_booking/src/authentication_repository.dart';
 import '../bloc/login_bloc.dart';
 import 'package:party_booking/ui/register/view/register_page.dart';
 import 'package:party_booking/ui/forgot_password/forgot_password_page.dart';
@@ -26,7 +28,8 @@ class LoginForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(content: Text('Authentication Failure')),
             );
-        }
+        } else if(state.status == FormzStatus.submissionSuccess)
+          BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationStatusChanged(AuthenticationStatus.authenticated));
       },
       child: FormBuilder(
         key: _fbKey,

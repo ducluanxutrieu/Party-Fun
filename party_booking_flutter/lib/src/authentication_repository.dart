@@ -7,7 +7,6 @@ import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
 import 'package:party_booking/data/network/service/app_api_service.dart';
 import 'package:party_booking/res/constants.dart';
-import 'package:party_booking/src/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthenticationStatus {
@@ -21,18 +20,12 @@ class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
-    // AccountModel model = await new UserRepository().getUserFromPrefs();
-    // if(model != null)
+    await Future<void>.delayed(const Duration(milliseconds: 300));
     yield AuthenticationStatus.authenticated;
-    // else yield AuthenticationStatus.unauthenticated;
     yield* _controller.stream;
   }
 
-  // void changeAuthenticationStatus(AuthenticationStatus status) {
-  //   _controller.sink.add(status);
-  // }
-
-  Future<String> logIn({
+  Future<MapEntry<String, bool>> logIn({
     @required String username,
     @required String password,
   }) async {
@@ -42,18 +35,13 @@ class AuthenticationRepository {
     var result = await AppApiService.create()
         .requestSignIn(username: username, password: password);
     if (result.isSuccessful) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString(
-          Constants.ACCOUNT_MODEL_KEY, accountModelToJson(result.body.account));
-      prefs.setString(Constants.USER_TOKEN, result.body.account.token);
+      _saveAccountToSharedPre(result.body.account);
       _controller.add(AuthenticationStatus.authenticated);
-      print('Login Successful');
-      print('____________________');
-      return "Login Successful!";
+      return MapEntry("", true);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       _controller.add(AuthenticationStatus.unauthenticated);
-      return model.message;
+      return MapEntry( model.message, false);
     }
   }
 
@@ -93,9 +81,23 @@ class AuthenticationRepository {
     }
   }
 
-  void logOut() {
-    _controller.add(AuthenticationStatus.unauthenticated);
+  void logOut() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString(Constants.USER_TOKEN);
+      var result = await AppApiService.create().requestSignOut(token: token);
+      if (result.isSuccessful) {
+        prefs.remove(Constants.ACCOUNT_MODEL_KEY);
+        prefs.remove(Constants.USER_TOKEN);
+        _controller.add(AuthenticationStatus.unauthenticated);
+      }
   }
 
   void dispose() => _controller.close();
+
+  Future<void> _saveAccountToSharedPre(AccountModel accountModel)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        Constants.ACCOUNT_MODEL_KEY, accountModelToJson(accountModel));
+    prefs.setString(Constants.USER_TOKEN, accountModel.token);
+  }
 }

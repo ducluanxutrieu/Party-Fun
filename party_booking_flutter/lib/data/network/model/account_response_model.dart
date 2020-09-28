@@ -79,7 +79,7 @@ class AccountModel {
         birthday: DateTime.parse(json["birthday"]),
         gender: json["gender"],
         role: json["role"],
-        avatar: json["avatar"].replaceAll('192.168.1.8', '172.20.8.16').replaceAll('139.180.131.30', '172.20.8.16'),
+        avatar: json["avatar"].replaceAll('192.168.1.8', '172.20.10.45').replaceAll('139.180.131.30', '172.20.10.45'),
         token: json["token"],
       );
 
