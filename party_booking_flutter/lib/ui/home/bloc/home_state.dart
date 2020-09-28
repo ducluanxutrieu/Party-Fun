@@ -4,18 +4,22 @@ class HomeState extends Equatable {
   final String message;
   final FormzStatus status;
   final List<MenuModel> listMenu;
+  final List<DishModel> listDishes;
+  final List<Category> listCategories;
   final bool showSearchField;
-  // final bool darkThemeEnabled;
 
   HomeState(
       {this.message,
       this.status = FormzStatus.pure,
       this.listMenu = const [],
-      this.showSearchField = false,
-      /*this.darkThemeEnabled = false*/});
+      this.listDishes = const [],
+      this.listCategories = const [],
+      this.showSearchField = false,});
 
-  HomeState getListDish({
+  HomeState getListMenu({
     List<MenuModel> listMenu,
+    List<DishModel> listDishes,
+    List<Category> listCategories,
     FormzStatus status,
     String message,
     bool showSearchField,
@@ -23,13 +27,29 @@ class HomeState extends Equatable {
     return HomeState(
       status: status ?? this.status,
       listMenu: listMenu ?? this.listMenu,
+      listDishes: listDishes ?? this.listDishes,
+      listCategories: listCategories ?? this.listCategories,
       message: message ?? this.message,
       showSearchField: showSearchField ?? this.showSearchField,
-      // darkThemeEnabled: darkThemeEnabled ?? this.darkThemeEnabled,
+    );
+  }
+
+  HomeState getListDish({
+    List<DishModel> listDishes,
+    FormzStatus status,
+    String message,
+    bool showSearchField,
+  }) {
+    return HomeState(
+      status: status ?? this.status,
+      listMenu: this.listMenu,
+      listDishes: listDishes ?? this.listDishes,
+      message: message ?? this.message,
+      showSearchField: showSearchField ?? this.showSearchField,
     );
   }
 
   @override
   List<Object> get props =>
-      [message, status, listMenu, showSearchField, /*darkThemeEnabled*/];
+      [message, status, listMenu, listDishes, listCategories, showSearchField];
 }

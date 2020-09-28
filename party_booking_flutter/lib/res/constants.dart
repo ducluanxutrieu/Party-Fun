@@ -59,3 +59,6 @@ const kTitleTextstyle = TextStyle(
 );
 
 const kPrimaryTextStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+
+//size
+const kDefaultPadding = 20.0;

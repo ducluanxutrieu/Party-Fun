@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
+import 'package:party_booking/data/network/model/list_dish_category_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/src/dish_repository.dart';
@@ -15,9 +16,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({DishRepository dishRepository})
       : assert(dishRepository != null),
         _dishRepository = dishRepository,
-        super(HomeState()){
-          add(GetListDishEvent());
-        }
+        super(HomeState()) {
+    add(GetListMenuEvent());
+  }
 
   final DishRepository _dishRepository;
 
@@ -26,6 +27,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeEvent event,
   ) async* {
     switch (event.runtimeType) {
+      case GetListMenuEvent:
+        yield* _mapGetListMenuEventToState(event, state);
+        break;
       case GetListDishEvent:
         yield* _mapGetListDishEventToState(event, state);
         break;
@@ -33,10 +37,37 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield* _mapSearchListDishEventToState(event, state);
         break;
       case OnSearchPressedEvent:
-        yield state.getListDish(
+        yield state.getListMenu(
             showSearchField: (event as OnSearchPressedEvent).showSearchField);
         break;
       default:
+    }
+  }
+
+  Stream<HomeState> _mapGetListMenuEventToState(
+      GetListMenuEvent event, HomeState state) async* {
+    yield state.getListMenu(status: FormzStatus.submissionInProgress);
+    try {
+      List<DishModel> dishModels = await _dishRepository.getListDishes();
+      List<Category> categories = await _dishRepository.getListCategories();
+      List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
+      yield state.getListMenu(
+          status: FormzStatus.submissionSuccess, listMenu: listMenu, listDishes: dishModels, listCategories: categories);
+    } catch (cause) {
+      try {
+        List<DishModel> dishModels =
+            await _dishRepository.getListDishesFromDB();
+        List<Category> categories =
+            await _dishRepository.getListCategoriesFromDB();
+        List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
+        yield state.getListMenu(
+            status: FormzStatus.submissionSuccess, listMenu: listMenu, listDishes: dishModels, listCategories: categories);
+      } catch (ex) {
+        yield state.getListMenu(
+            message: cause.toString(), status: FormzStatus.submissionFailure);
+      }
+      print("&&&&&&&&&&&&&");
+      print(cause.toString());
     }
   }
 
@@ -45,19 +76,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     yield state.getListDish(status: FormzStatus.submissionInProgress);
     try {
       List<DishModel> dishModels = await _dishRepository.getListDishes();
-      List<Category> categories = await _dishRepository.getListCategories();
-      List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
       yield state.getListDish(
-          status: FormzStatus.submissionSuccess, listMenu: listMenu);
+          status: FormzStatus.submissionSuccess, listDishes: dishModels);
     } catch (cause) {
-      try{
-        List<DishModel> dishModels = await _dishRepository.getListDishesFromDB();
-        List<Category> categories = await _dishRepository.getListCategoriesFromDB();
-        List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
+      try {
+        List<DishModel> dishModels =
+        await _dishRepository.getListDishesFromDB();
         yield state.getListDish(
-            status: FormzStatus.submissionSuccess, listMenu: listMenu);
-      }catch (ex){
-        yield state.getListDish(
+            status: FormzStatus.submissionSuccess, listDishes: dishModels);
+      } catch (ex) {
+        yield state.getListMenu(
             message: cause.toString(), status: FormzStatus.submissionFailure);
       }
       print("&&&&&&&&&&&&&");
@@ -68,17 +96,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> _mapSearchListDishEventToState(
       OnSearchDishChangeEvent event, HomeState state) async* {
     if (event.searchText.isNotEmpty) {
-      yield state.getListDish(status: FormzStatus.submissionInProgress);
+      yield state.getListMenu(status: FormzStatus.submissionInProgress);
       try {
         List<DishModel> dishModels =
             await _dishRepository.searchListDish(event.searchText);
         List<Category> categories =
             await _dishRepository.getListCategoriesFromDB();
         List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
-        yield state.getListDish(
+        yield state.getListMenu(
             status: FormzStatus.submissionSuccess, listMenu: listMenu);
       } catch (cause) {
-        yield state.getListDish(
+        yield state.getListMenu(
             message: cause.toString(), status: FormzStatus.submissionFailure);
       }
     } else {
@@ -88,10 +116,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         List<Category> categories =
             await _dishRepository.getListCategoriesFromDB();
         List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
-        yield state.getListDish(
+        yield state.getListMenu(
             status: FormzStatus.submissionSuccess, listMenu: listMenu);
       } catch (cause) {
-        yield state.getListDish(
+        yield state.getListMenu(
             message: cause.toString(), status: FormzStatus.submissionFailure);
       }
     }

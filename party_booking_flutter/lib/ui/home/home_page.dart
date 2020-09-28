@@ -42,7 +42,7 @@ class MainScreen extends StatelessWidget {
             ),
             body: RefreshIndicator(
               onRefresh: () {
-                context.bloc<HomeBloc>().add(GetListDishEvent());
+                context.bloc<HomeBloc>().add(GetListMenuEvent());
                 Future.delayed(Duration(milliseconds: 300));
                 return;
               },

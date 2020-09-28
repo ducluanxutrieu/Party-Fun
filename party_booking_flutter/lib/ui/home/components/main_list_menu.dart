@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
-import 'package:party_booking/data/network/model/menu_model.dart';
-import '../bloc/home_bloc.dart';
+import 'package:party_booking/res/constants.dart';
 
+import '../bloc/home_bloc.dart';
+import 'category_list.dart';
 import 'dish_card.dart';
 
 class MainListMenu extends StatelessWidget {
@@ -18,6 +19,7 @@ class MainListMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PageController _controller = PageController(initialPage: 0);
     return BlocBuilder<HomeBloc, HomeState>(
       buildWhen: (previous, current) =>
           previous.status != current.status ||
@@ -26,14 +28,32 @@ class MainListMenu extends StatelessWidget {
         print('MainListMenu');
         print(state.status);
         print(state.listMenu.length);
-        return ListView.builder(
+        return Column(
+          children: [
+            CategoryList(),
+            SizedBox(
+              height: kDefaultPadding / 2,
+            ),
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                children: [
+                  _itemGridView(state.listDishes, context),
+                  ...state.listMenu.map((e) => _itemGridView(e.listDish, context)).toList()
+                ],
+              ),
+            ),
+          ],
+        );
+
+        /*ListView.builder(
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemCount: state.listMenu.length,
             itemBuilder: (BuildContext context, int index) {
               return _itemMenu(state.listMenu[index], context);
-            });
+            });*/
       },
     );
 //        : Center(
@@ -44,6 +64,7 @@ class MainListMenu extends StatelessWidget {
 //          );
   }
 
+/*
   Widget _itemMenu(MenuModel menuModel, BuildContext context) {
     return Column(
       children: <Widget>[
@@ -61,6 +82,7 @@ class MainListMenu extends StatelessWidget {
       ],
     );
   }
+*/
 
   Widget _itemGridView(List<DishModel> dishes, BuildContext context) {
     return StaggeredGridView.countBuilder(
