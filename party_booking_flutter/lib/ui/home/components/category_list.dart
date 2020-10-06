@@ -10,40 +10,58 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> {
   //by default first item will be selected
-  int selectIndex = 0;
+  // int selectIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (context, state) => Container(
-        margin: EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-        height: 30,
-        child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: state.listCategories.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () => context.bloc<HomeBloc>().add(OnPageChangeEvent(itemSelected: index)),
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(
-                    left: kDefaultPadding,
-                    right: index != state.listCategories.length - 1
-                        ? kDefaultPadding / 4
-                        : 0),
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                decoration: BoxDecoration(
-                  color: index == selectIndex
-                      ? Colors.white.withOpacity(0.4)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  state.listCategories[index].name,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )),
+    ScrollController scrollController =
+        ScrollController(initialScrollOffset: 0);
+    return BlocListener<HomeBloc, HomeState>(
+      listenWhen: (previous, current) =>
+          previous.selectedPage != current.selectedPage,
+      listener: (context, state) => scrollController.animateTo(
+          state.selectedPage.toDouble(),
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.ease),
+      child: BlocBuilder<HomeBloc, HomeState>(
+        buildWhen: (previous, current) =>
+            previous.selectedPage != current.selectedPage ||
+            previous.listMenu != current.listMenu,
+        builder: (context, state) => Container(
+          margin: EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+          height: 30,
+          width: MediaQuery.of(context).size.width,
+          child: ListView.builder(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              itemCount: state.listMenu.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => context
+                        .bloc<HomeBloc>()
+                        .add(OnPageChangeEvent(itemSelected: index)),
+                    child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                          left: kDefaultPadding,
+                          right: index != state.listMenu.length - 1
+                              ? kDefaultPadding / 4
+                              : 0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      decoration: BoxDecoration(
+                        color: index == state.selectedPage
+                            ? Colors.white.withOpacity(0.4)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        state.listMenu[index].menuName,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )),
+        ),
       ),
     );
   }

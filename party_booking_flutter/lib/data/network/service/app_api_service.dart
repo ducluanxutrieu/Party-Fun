@@ -137,7 +137,7 @@ abstract class AppApiService extends ChopperService {
 
   static AppApiService create() {
     final client = ChopperClient(
-        baseUrl: 'http://172.20.10.45:3000/',
+        baseUrl: 'https://partybooking.herokuapp.com/',
         services: [
           _$AppApiService(),
         ],

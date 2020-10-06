@@ -64,10 +64,10 @@ class DishModel {
   String id;
   String name;
   String description;
-  int price;
+  dynamic price;
   int priceNew;
   List<String> categories;
-  int discount;
+  dynamic discount;
   int quantity;
   List<String> image;
   String featureImage;
@@ -114,8 +114,8 @@ class DishModel {
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        price: json["price"],
-        priceNew: json["price_new"],
+        price: json["price"].toString(),
+        priceNew: json["price_new"] ?? 0,
         categories: List<String>(),
         discount: json["discount"],
         quantity: 1,

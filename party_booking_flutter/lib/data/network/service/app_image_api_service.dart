@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:party_booking/data/network/model/base_list_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
-import 'package:party_booking/file_extention.dart';
+import 'package:party_booking/custom_extensions.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/widgets/common/utiu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +50,7 @@ class AppImageAPIService {
       listMultiPath.add(
           MapEntry(
             'image', MultipartFile.fromFileSync(path,
-              filename: await FileExtension.getFileNameWithExtension(image),
+              filename: await image.getFileExtension(),
               contentType: MediaType('image', 'jpeg'))),
           );
     }

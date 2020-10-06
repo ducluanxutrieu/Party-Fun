@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
-import 'package:party_booking/data/network/model/list_dish_category_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/menu_model.dart';
 import 'package:party_booking/src/dish_repository.dart';
@@ -40,6 +39,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield state.getListMenu(
             showSearchField: (event as OnSearchPressedEvent).showSearchField);
         break;
+      case OnPageChangeEvent:
+        yield state.changePageSelected((event as OnPageChangeEvent).itemSelected);
+        break;
       default:
     }
   }
@@ -66,7 +68,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         yield state.getListMenu(
             message: cause.toString(), status: FormzStatus.submissionFailure);
       }
-      print("&&&&&&&&&&&&&");
+      print("%%%_mapGetListMenuEventToState");
       print(cause.toString());
     }
   }
@@ -148,6 +150,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         });
       });
     });
+    listMenu.insert(0, MenuModel(menuName: 'All', listDish: dishes));
     return listMenu;
   }
 }

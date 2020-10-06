@@ -19,42 +19,50 @@ class MainListMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController _controller = PageController(initialPage: 0);
-    return BlocBuilder<HomeBloc, HomeState>(
-      buildWhen: (previous, current) =>
-          previous.status != current.status ||
-          previous.listMenu != current.listMenu,
-      builder: (context, state) {
-        print('MainListMenu');
-        print(state.status);
-        print(state.listMenu.length);
-        return Column(
-          children: [
-            CategoryList(),
-            SizedBox(
-              height: kDefaultPadding / 2,
-            ),
-            Expanded(
-              child: PageView(
-                controller: _controller,
-                children: [
-                  _itemGridView(state.listDishes, context),
-                  ...state.listMenu.map((e) => _itemGridView(e.listDish, context)).toList()
-                ],
-              ),
-            ),
-          ],
-        );
+    PageController _controller =
+        PageController(initialPage: 0);
+    return BlocListener<HomeBloc, HomeState>(
+      listenWhen: (previous, current) => previous.selectedPage != current.selectedPage,
+      listener: (context, state) => _controller.jumpToPage(
+        state.selectedPage,
+      ),
+      child: BlocBuilder<HomeBloc, HomeState>(
+        buildWhen: (previous, current) =>
+            previous.status != current.status ||
+            previous.listMenu != current.listMenu,
+        builder: (context, state) {
+          print('MainListMenu');
+          print(state.status);
+          print(state.listMenu.length);
 
-        /*ListView.builder(
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: state.listMenu.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _itemMenu(state.listMenu[index], context);
-            });*/
-      },
+          return Column(
+            children: [
+              CategoryList(),
+              SizedBox(
+                height: kDefaultPadding / 2,
+              ),
+              Expanded(
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: state.listMenu.length,
+                  onPageChanged: (index) => context
+                      .bloc<HomeBloc>()
+                      .add(OnPageChangeEvent(itemSelected: index)),
+                  itemBuilder: (context, index) => _itemGridView(state.listMenu[index].listDish, context)),
+                ),
+            ],
+          );
+
+          /*ListView.builder(
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: state.listMenu.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _itemMenu(state.listMenu[index], context);
+              });*/
+        },
+      ),
     );
 //        : Center(
 //            child: Lottie.asset(

@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:party_booking/cart/cart_bloc.dart';
+import 'package:party_booking/custom_extensions.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/dish/dish_bloc.dart';
 import 'package:party_booking/widgets/common/logo_app.dart';
-import 'add_to_cart_dialog.dart';
 
 import '../../dish_detail/dish_detail_screen.dart';
+import 'add_to_cart_dialog.dart';
 
 class DishCard extends StatelessWidget {
   final DishModel dishModel;
@@ -83,11 +83,9 @@ class DishCard extends StatelessWidget {
   }
 
   Widget _cartDishPriceWidget(DishModel dishModel, BuildContext context) {
-    final currencyFormat =
-        new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
-    String price = currencyFormat.format(dishModel.price);
-    String priceNew = currencyFormat.format(dishModel.priceNew);
-    if (dishModel.discount != 0) {
+    String price = int.parse(dishModel.price?.toString()).toPrice();
+    String priceNew = dishModel.priceNew?.toPrice();
+    if (dishModel.discount != 0 || priceNew != null) {
       return Column(
         children: <Widget>[
           Text(
@@ -97,7 +95,7 @@ class DishCard extends StatelessWidget {
             ),
           ),
           Text(
-            priceNew,
+            priceNew ?? '0',
             style: new TextStyle(
                 fontSize: 20.0, color: Colors.red, fontWeight: FontWeight.bold),
           ),
@@ -106,7 +104,7 @@ class DishCard extends StatelessWidget {
     }
     return Text(
       price,
-      style: new TextStyle(fontSize: 20.0, color: Colors.black),
+      style: Theme.of(context).textTheme.headline6,
     );
   }
 

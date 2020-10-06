@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:intl/intl.dart';
 import 'package:party_booking/data/network/model/list_dishes_response_model.dart';
 import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
+import 'package:party_booking/custom_extensions.dart';
 import 'package:party_booking/res/constants.dart';
 
 class HeaderDishDetail extends StatelessWidget {
@@ -93,10 +93,8 @@ class HeaderDishDetail extends StatelessWidget {
   }
 
   Widget _cartDishPriceWidget(DishModel dishModel) {
-    final currencyFormat =
-        new NumberFormat.currency(locale: "vi_VI", symbol: "₫");
-    String price = currencyFormat.format(dishModel.price);
-    String priceNew = currencyFormat.format(dishModel.priceNew);
+    String price = int.parse(dishModel.price).toPrice();
+    String priceNew = dishModel.priceNew.toPrice();
     if (dishModel.discount != 0) {
       return Row(
         children: <Widget>[
