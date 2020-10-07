@@ -9,11 +9,8 @@ class ItemRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(itemModel.id);
-    print(itemModel.comment);
-    print('^^^^^^^^^^');
     return Card(
-      color: Colors.white70,
+      color: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         leading: CircleAvatar(

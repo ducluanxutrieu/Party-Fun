@@ -1,52 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:party_booking/cart/cart_bloc.dart';
-import '../bloc/home_bloc.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
+import 'package:party_booking/ui/search/home_search.dart';
 
 import '../../../badges.dart';
 
 class MainAppBar extends StatelessWidget {
   MainAppBar({
     Key key,
-    @required String fullName,
-    @required TextEditingController textController,
-  })  : _fullName = fullName,
-        _filter = textController,
-        super(key: key);
+    this.accountModel,
+  }): super(key: key);
 
-  final String _fullName;
-  final TextEditingController _filter;
+  final AccountModel accountModel;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      buildWhen: (previous, current) =>
-          (previous.showSearchField != current.showSearchField),
-      builder: (context, state) {
-        bool showSearchField = state.showSearchField;
-        _setupSearchListen(showSearchField, context);
-        return AppBar(
-          title: showSearchField
-              ? TextField(
-                  controller: _filter,
-                  autofocus: true,
-                  decoration: new InputDecoration(
-                      prefixIcon: new Icon(Icons.search),
-                      hintText: 'Search...'),
-                )
-              : Text(_fullName),
-          actions: <Widget>[
-            IconButton(
-                icon: showSearchField ? Icon(Icons.close) : Icon(Icons.search),
-                onPressed: () => {
-                      BlocProvider.of<HomeBloc>(context).add(
-                          OnSearchPressedEvent(
-                              showSearchField: !showSearchField))
-                    }),
-            _shoppingCartBadge(context),
-          ],
-        );
-      },
+    return AppBar(
+      title: Text(accountModel.fullName),
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeSearch(accountModel),
+                ))),
+        _shoppingCartBadge(context),
+      ],
     );
   }
 
@@ -60,27 +39,15 @@ class MainAppBar extends StatelessWidget {
           state.totalItem.toString(),
           style: TextStyle(color: Colors.white),
         ),
-        child: IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.pushNamed(context, '/cart');
-            }),
+        child: Hero(
+          tag: 'search_id',
+          child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.pushNamed(context, '/cart');
+              }),
+        ),
       ),
     );
-  }
-
-  void _setupSearchListen(bool showSearchField, BuildContext context) {
-    if (showSearchField) {
-      _filter.addListener(() {
-        String searchText = _filter.text;
-        print("LLLLL");
-        print(searchText);
-        context
-            .bloc<HomeBloc>()
-            .add(OnSearchDishChangeEvent(searchText: searchText));
-      });
-    } else {
-      _filter.clear();
-    }
   }
 }

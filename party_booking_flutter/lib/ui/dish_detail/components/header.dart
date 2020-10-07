@@ -93,9 +93,9 @@ class HeaderDishDetail extends StatelessWidget {
   }
 
   Widget _cartDishPriceWidget(DishModel dishModel) {
-    String price = int.parse(dishModel.price).toPrice();
-    String priceNew = dishModel.priceNew.toPrice();
-    if (dishModel.discount != 0) {
+    String price = int.parse(dishModel.price.toString()).toPrice();
+    String priceNew = dishModel.priceNew?.toPrice();
+    if (dishModel.discount != 0 && priceNew != null) {
       return Row(
         children: <Widget>[
           Text(

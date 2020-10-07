@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:party_booking/res/constants.dart';
 import 'package:party_booking/ui/home/bloc/home_bloc.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class CategoryList extends StatefulWidget {
   @override
@@ -14,13 +15,12 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController =
-        ScrollController(initialScrollOffset: 0);
+    final ItemScrollController itemScrollController = ItemScrollController();
     return BlocListener<HomeBloc, HomeState>(
       listenWhen: (previous, current) =>
           previous.selectedPage != current.selectedPage,
-      listener: (context, state) => scrollController.animateTo(
-          state.selectedPage.toDouble(),
+      listener: (context, state) => itemScrollController.scrollTo(
+          index: state.selectedPage,
           duration: const Duration(milliseconds: 200),
           curve: Curves.ease),
       child: BlocBuilder<HomeBloc, HomeState>(
@@ -31,8 +31,8 @@ class _CategoryListState extends State<CategoryList> {
           margin: EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
           height: 30,
           width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-              controller: scrollController,
+          child: ScrollablePositionedList.builder(
+              itemScrollController: itemScrollController,
               physics: BouncingScrollPhysics(),
               itemCount: state.listMenu.length,
               scrollDirection: Axis.horizontal,
@@ -51,13 +51,12 @@ class _CategoryListState extends State<CategoryList> {
                           EdgeInsets.symmetric(horizontal: kDefaultPadding),
                       decoration: BoxDecoration(
                         color: index == state.selectedPage
-                            ? Colors.white.withOpacity(0.4)
+                            ? Theme.of(context).textTheme.headline5.color.withOpacity(0.4)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         state.listMenu[index].menuName,
-                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   )),

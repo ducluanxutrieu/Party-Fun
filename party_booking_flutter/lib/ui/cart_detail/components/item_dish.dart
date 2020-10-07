@@ -33,7 +33,7 @@ class ItemDish extends StatelessWidget {
             ),
           ),
           child: Card(
-            color: Colors.white70,
+            color: Theme.of(context).colorScheme.surface,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: ListTile(

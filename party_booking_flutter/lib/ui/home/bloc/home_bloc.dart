@@ -32,13 +32,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       case GetListDishEvent:
         yield* _mapGetListDishEventToState(event, state);
         break;
-      case OnSearchDishChangeEvent:
-        yield* _mapSearchListDishEventToState(event, state);
-        break;
-      case OnSearchPressedEvent:
-        yield state.getListMenu(
-            showSearchField: (event as OnSearchPressedEvent).showSearchField);
-        break;
       case OnPageChangeEvent:
         yield state.changePageSelected((event as OnPageChangeEvent).itemSelected);
         break;
@@ -92,38 +85,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       print("&&&&&&&&&&&&&");
       print(cause.toString());
-    }
-  }
-
-  Stream<HomeState> _mapSearchListDishEventToState(
-      OnSearchDishChangeEvent event, HomeState state) async* {
-    if (event.searchText.isNotEmpty) {
-      yield state.getListMenu(status: FormzStatus.submissionInProgress);
-      try {
-        List<DishModel> dishModels =
-            await _dishRepository.searchListDish(event.searchText);
-        List<Category> categories =
-            await _dishRepository.getListCategoriesFromDB();
-        List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
-        yield state.getListMenu(
-            status: FormzStatus.submissionSuccess, listMenu: listMenu);
-      } catch (cause) {
-        yield state.getListMenu(
-            message: cause.toString(), status: FormzStatus.submissionFailure);
-      }
-    } else {
-      try {
-        List<DishModel> dishModels =
-            await _dishRepository.getListDishesFromDB();
-        List<Category> categories =
-            await _dishRepository.getListCategoriesFromDB();
-        List<MenuModel> listMenu = _menuAllocation(dishModels, categories);
-        yield state.getListMenu(
-            status: FormzStatus.submissionSuccess, listMenu: listMenu);
-      } catch (cause) {
-        yield state.getListMenu(
-            message: cause.toString(), status: FormzStatus.submissionFailure);
-      }
     }
   }
 

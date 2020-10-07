@@ -20,7 +20,7 @@ class MainScreen extends StatelessWidget {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ModifyDishScreen(isAddNewDish: true,)));
   }
-  final TextEditingController _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     print('Main Screen Init');
@@ -34,7 +34,7 @@ class MainScreen extends StatelessWidget {
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(kToolbarHeight),
-              child: MainAppBar(fullName: authState.user.fullName, textController: _textController,),
+              child: MainAppBar(accountModel: authState.user,),
             ),
             floatingActionButton: buildFABAddNewDish(context, authState.user),
             drawer: MainDrawer(
