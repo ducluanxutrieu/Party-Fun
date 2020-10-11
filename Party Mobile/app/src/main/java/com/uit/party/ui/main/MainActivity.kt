@@ -18,7 +18,6 @@ import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
-import com.uit.party.util.SetupConnectToServer
 import com.uit.party.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,8 +31,6 @@ class MainActivity : AppCompatActivity(){
 
     companion object {
         internal var TOKEN_ACCESS: String = ""
-//        const val TAG = "TAGMain"
-        val serviceRetrofit = SetupConnectToServer().setupConnect()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

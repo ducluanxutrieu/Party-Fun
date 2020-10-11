@@ -6,10 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,22 +22,21 @@ import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.util.SharedPrefs
 import com.uit.party.util.ToastUtil
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 
 class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
-    private val mViewModel = MenuViewModel()
+    private lateinit var mViewModel: MenuViewModel
     private lateinit var binding: FragmentListDishBinding
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    val mMenuAdapter = MenuAdapter()
 
     private var mDisposableAddCart: Disposable? = null
     private lateinit var mDisposableUpdateDish: Disposable
     private var mListDishesSelected = ArrayList<DishModel>()
-
-    private lateinit var mSearchView: SearchView
 
 
     override fun onCreateView(
@@ -45,11 +46,12 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     ): View? {
         setupBinding(container, inflater)
         setupRecyclerView()
+        listenLiveData()
         return binding.root
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerView.adapter = mViewModel.mMenuAdapter
+        binding.recyclerView.adapter = mMenuAdapter
         binding.recyclerView.setHasFixedSize(false)
         binding.recyclerView.isNestedScrollingEnabled = false
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -60,8 +62,17 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         })
     }
 
+    private fun listenLiveData(){
+        mViewModel.listMenu.observe(viewLifecycleOwner, Observer {
+            val listMenu = mViewModel.menuAllocation(it)
+            mMenuAdapter.submitList(listMenu)
+        })
+    }
+
     private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
+        val database = getDatabase(this.requireContext())
+        mViewModel = ViewModelProvider(this, HomeViewModelFactory(database)).get(MenuViewModel::class.java)
         binding.viewModel = mViewModel
     }
 
@@ -74,28 +85,13 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private fun setupToolbar() {
         setHasOptionsMenu(true)
-        val toolbar = activity!!.findViewById<View>(R.id.app_bar) as Toolbar
+        val toolbar = activity?.findViewById<View>(R.id.app_bar) as Toolbar
         toolbar.inflateMenu(R.menu.main_menu)
         toolbar.setOnMenuItemClickListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
-        mSearchView = menu.findItem(R.id.toolbar_search).actionView as SearchView
-        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrEmpty()) {
-                    Log.i(TAG, newText)
-                }
-                mViewModel.mMenuAdapter.getFilter().filter(newText)
-                return true
-            }
-
-        })
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -103,7 +99,8 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         mSwipeRefreshLayout = binding.swlListDish
         mSwipeRefreshLayout.setOnRefreshListener {
             mSwipeRefreshLayout.isRefreshing = true
-            mViewModel.getListDishes {
+            lifecycleScope.launch {
+                mViewModel.getListDishes()
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }
@@ -161,14 +158,14 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun logOut() {
-        mViewModel.logout {
-            if (it) {
-                SharedPrefs().getInstance().clear()
+        lifecycleScope.launch {
+            try {
+                mViewModel.logout()
                 val intent = Intent(context, SignInActivity::class.java)
                 startActivity(intent)
                 (context as MainActivity).finish()
-            } else {
-                ToastUtil.showToast(getString(R.string.cannot_logout))
+            }catch (error: Exception) {
+                ToastUtil.showToast(error.message ?: "")
             }
         }
     }
@@ -186,7 +183,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         mDisposableUpdateDish = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
             if (it.dishModel != null) {
-                mViewModel.mMenuAdapter.updateDish(it.dishModel, it.dishType, it.position)
+                mMenuAdapter.updateDish(it.dishModel, it.dishType, it.position)
             }
         }
     }
@@ -215,9 +212,5 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onDestroy() {
         super.onDestroy()
         if (mDisposableAddCart?.isDisposed == false) mDisposableAddCart?.dispose()
-    }
-
-    companion object {
-        private const val TAG = "MenuFragmentTag"
     }
 }

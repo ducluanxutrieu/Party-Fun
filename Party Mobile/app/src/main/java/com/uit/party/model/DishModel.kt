@@ -1,5 +1,7 @@
 package com.uit.party.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -15,8 +17,10 @@ class AddDishResponse : BaseResponse() {
     val dish: DishModel? = null
 }
 
+@Entity(tableName = "dish_table")
 data class DishModel(
-    @SerializedName("_id") val _id: String? = null,
+    @PrimaryKey(autoGenerate = true)
+    @SerializedName("_id") val _id: String,
     @SerializedName("name") val name: String? = null,
     @SerializedName("price") val price: String? = null,
     @SerializedName("price_new") val newPrice: String? = null,

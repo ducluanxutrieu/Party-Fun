@@ -3,39 +3,54 @@ package com.uit.party.ui.main.main_menu
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
-import com.uit.party.model.*
-import com.uit.party.model.UserRole
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
-import com.uit.party.ui.signin.login.LoginViewModel
-import com.uit.party.util.SharedPrefs
+import com.uit.party.data.CusResult
+import com.uit.party.model.DishModel
+import com.uit.party.model.MenuModel
 import com.uit.party.util.ToastUtil
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 
-class MenuViewModel : ViewModel(){
+class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
     val mShowFab = ObservableInt(View.GONE)
     val mShowLoading = ObservableBoolean(false)
     val mShowMenu = ObservableBoolean(false)
-    val mMenuAdapter = MenuAdapter()
 
-    var listMenu = ArrayList<DishModel>()
+    val listMenu:LiveData<List<DishModel>> = repository.listMenu
 
     init {
-        if (listMenu.isNullOrEmpty()) {
-            mShowMenu.set(false)
-            getListDishes {}
-        }else{
-            mMenuAdapter.setData(listMenu)
+        viewModelScope.launch {
+            getListDishes()
         }
         setIsAdmin()
     }
 
+    suspend fun getListDishes(){
+        try {
+            mShowLoading.set(true)
+            repository.getListDishes()
+            mShowLoading.set(false)
+        }catch (error: Exception) {
+            ToastUtil.showToast(error.message ?: "")
+            mShowLoading.set(false)
+        }
+    }
+
+    suspend fun logout(){
+        try {
+            mShowLoading.set(true)
+            repository.logout()
+            mShowLoading.set(false)
+        }catch (cause : Throwable){
+            CusResult.Error(Exception(cause))
+            mShowLoading.set(false)
+        }
+    }
+
     private fun setIsAdmin() {
-        if (checkAdmin()) {
+        if (repository.checkAdmin()) {
             mShowFab.set(View.VISIBLE)
         }
     }
@@ -45,62 +60,44 @@ class MenuViewModel : ViewModel(){
         view.findNavController().navigate(action)
     }
 
-    fun getListDishes(onComplete : (Boolean) -> Unit){
-        mShowLoading.set(true)
-        serviceRetrofit.getListDishes(TOKEN_ACCESS)
-            .enqueue(object : Callback<DishesResponse>{
-                override fun onFailure(call: Call<DishesResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
-                    onComplete(false)
-                    mShowLoading.set(false)
-                }
+    fun menuAllocation(dishes: List<DishModel>): ArrayList<MenuModel> {
+        val listMenu = ArrayList<MenuModel>()
+        val listHolidayOffers = ArrayList<DishModel>()
+        val listFirstDishes = ArrayList<DishModel>()
+        val listMainDishes = ArrayList<DishModel>()
+        val listSeafood = ArrayList<DishModel>()
+        val listDrink = ArrayList<DishModel>()
+        val listDessert = ArrayList<DishModel>()
+        for (row in dishes) {
+            when (row.categories?.get(0) ?: "") {
+                "Holiday Offers" -> listHolidayOffers.add(row)
+                "First Dishes" -> listFirstDishes.add(row)
+                "Main Dishes" -> listMainDishes.add(row)
+                "Seafood" -> listSeafood.add(row)
+                "Drinks" -> listDrink.add(row)
+                "Dessert" -> listDessert.add(row)
+            }
+        }
+        if (listHolidayOffers.size > 0) {
+            listMenu.add(MenuModel("Holiday Offers", listHolidayOffers))
+        }
+        if (listFirstDishes.size > 0) {
+            listMenu.add(MenuModel("First Dishes", listFirstDishes))
+        }
+        if (listMainDishes.size > 0) {
+            listMenu.add(MenuModel("Main Dishes", listMainDishes))
+        }
+        if (listSeafood.size > 0) {
+            listMenu.add(MenuModel("Seafood", listSeafood))
+        }
+        if (listDrink.size > 0) {
+            listMenu.add(MenuModel("Drinks", listDrink))
+        }
 
-                override fun onResponse(
-                    call: Call<DishesResponse>,
-                    response: Response<DishesResponse>
-                ) {
-                    mShowLoading.set(false)
-                    onComplete(true)
-                    if (response.isSuccessful){
-                        val dishes = response.body()?.listDishes
-                        if (dishes != null){
-                            listMenu = dishes
-                            mMenuAdapter.setData(listMenu)
-                            mShowMenu.set(true)
-                        }
-                    }
-                }
-            })
-    }
+        if (listDessert.size > 0) {
+            listMenu.add(MenuModel("Dessert", listDessert))
+        }
 
-    fun logout(onSuccess : (Boolean) -> Unit) {
-        mShowLoading.set(true)
-        serviceRetrofit.logout(TOKEN_ACCESS)
-            .enqueue(object : Callback<BaseResponse>{
-                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
-                    onSuccess(false)
-                    mShowLoading.set(false)
-                }
-
-                override fun onResponse(
-                    call: Call<BaseResponse>,
-                    response: Response<BaseResponse>
-                ) {
-                    mShowLoading.set(false)
-                    val repo = response.body()
-                    if (repo != null && response.code() == 200){
-                        onSuccess(true)
-                    }else{
-                        onSuccess(false)
-                    }
-                }
-            })
-    }
-
-    private fun checkAdmin(): Boolean {
-        val role =
-            SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
-        return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
+        return listMenu
     }
 }

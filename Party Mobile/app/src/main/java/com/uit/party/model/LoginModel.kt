@@ -34,7 +34,7 @@ class Account {
     val email : String ?= null
 
     @SerializedName("phone")
-    val phone : Int ?= 0
+    val phone : Long ?= 0
 
     @SerializedName("birthday")
     val birthday : String ?= null

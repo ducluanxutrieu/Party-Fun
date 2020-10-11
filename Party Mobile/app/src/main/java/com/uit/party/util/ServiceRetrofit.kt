@@ -22,9 +22,9 @@ interface ServiceRetrofit {
     ): Call<AccountResponse>
 
     @GET("user/signout")
-    fun logout(
+    suspend fun logout(
         @Header("authorization") token: String
-    ): Call<BaseResponse>
+    ): BaseResponse
 
     @POST("user/resetpassword")
     @FormUrlEncoded
@@ -32,7 +32,7 @@ interface ServiceRetrofit {
         @Field("username") username: String
     ): Call<BaseResponse>
 
-    @POST("/user/resetconfirm")
+    @POST("user/resetconfirm")
     @FormUrlEncoded
     fun verifyPassword(
         @Field("resetpassword") resetpassword: String,
@@ -47,12 +47,12 @@ interface ServiceRetrofit {
         @Field("newpassword") passwordchange: String
     ): Call<BaseResponse>
 
-    @GET("/user/profile")
+    @GET("user/profile")
     fun getProfile(
         @Header("authorization") token: String
     ): Call<AccountResponse>
 
-    @GET("/user/get_history_cart")
+    @GET("user/get_history_cart")
     fun getHistoryBooking(
         @Header("authorization") token: String
     ): Call<GetHistoryCartResponse>
@@ -84,71 +84,71 @@ interface ServiceRetrofit {
         @Part("image") requestBody: RequestBody
     ): Call<AddDishResponse>
 
-    @POST("/product/updatedish")
+    @POST("product/updatedish")
     fun updateDish(
         @Header("authorization") token: String,
         @Body body: UpdateDishRequestModel
-        ): Call<UpdateDishResponse>
+    ): Call<UpdateDishResponse>
 
     @GET("product/dishs")
-    fun getListDishes(
+    suspend fun getListDishes(
         @Header("authorization") token: String
-    ): Call<DishesResponse>
+    ): DishesResponse
 
     @HTTP(method = "POST", path = "product/getItemDish", hasBody = true)
     fun getItemDish(
-        @Body body : HashMap<String, String?>
+        @Body body: HashMap<String, String?>
     ): Call<DishItemResponse>
 
-    @POST("/product/ratedish")
+    @POST("product/ratedish")
     fun ratingDish(
         @Header("authorization") token: String,
         @Body body: RequestRatingModel
     ): Call<BaseResponse>
 
-    @HTTP(method = "DELETE", path = "/product/deletedish", hasBody = true)
+    @HTTP(method = "DELETE", path = "product/deletedish", hasBody = true)
     fun deleteDish(
         @Header("authorization") token: String,
         @Body body: HashMap<String, String>
     ): Call<BaseResponse>
 
-    @POST("/product/book")
+    @POST("product/book")
     fun bookParty(
         @Header("authorization") token: String,
         @Body body: RequestOrderPartyModel
     ): Call<BillModel>
 }
 
-class SetupConnectToServer {
-    fun setupConnect(): ServiceRetrofit {
+private val service: ServiceRetrofit by lazy {
 
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+    val logging = HttpLoggingInterceptor()
+    logging.level = HttpLoggingInterceptor.Level.BODY
 
-        val okHttpClient = OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(interceptor)
-            .addInterceptor(logging)
-            .build()
+    val okHttpClient = OkHttpClient.Builder()
+        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .addInterceptor(interceptor)
+        .addInterceptor(logging)
+        .build()
 
 
-        val builder = Retrofit.Builder()
-            .baseUrl("http://139.180.131.30:3000/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-        val retrofit = builder.build()
+    val builder = Retrofit.Builder()
+        .baseUrl("https://partybooking.herokuapp.com/")
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+    val retrofit = builder.build()
 
-        return retrofit.create(ServiceRetrofit::class.java)
-    }
+    retrofit.create(ServiceRetrofit::class.java)
+}
 
-    private var interceptor: Interceptor = Interceptor { chain ->
-        val newRequest: Request = chain.request().newBuilder()
+fun getNetworkService() = service
 
-            .addHeader("Content-Type", "application/x-www-form-urlencoded")
-            .method(chain.request().method, chain.request().body)
-            .build()
+private var interceptor: Interceptor = Interceptor { chain ->
+    val newRequest: Request = chain.request().newBuilder()
 
-        chain.proceed(newRequest)
-    }
+        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+        .method(chain.request().method, chain.request().body)
+        .build()
+
+    chain.proceed(newRequest)
 }
