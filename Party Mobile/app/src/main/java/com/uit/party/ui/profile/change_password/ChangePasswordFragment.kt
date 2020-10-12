@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.uit.party.R
 import com.uit.party.databinding.FragmentChangePasswordBinding
-import com.uit.party.util.StringUtil
 
 class ChangePasswordFragment : Fragment(){
     private lateinit var binding: FragmentChangePasswordBinding

@@ -7,7 +7,7 @@ import com.uit.party.model.HistoryCartModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.login.LoginViewModel
 import com.uit.party.util.SharedPrefs
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,7 +18,7 @@ object GetData {
         getNetworkService().getProfile(MainActivity.TOKEN_ACCESS)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+                    t.message?.let { UiUtil.showToast(it) }
                 }
 
                 override fun onResponse(
@@ -38,7 +38,7 @@ object GetData {
         getNetworkService().getHistoryBooking(MainActivity.TOKEN_ACCESS)
             .enqueue(object : Callback<GetHistoryCartResponse> {
                 override fun onFailure(call: Call<GetHistoryCartResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+                    t.message?.let { UiUtil.showToast(it) }
                 }
 
                 override fun onResponse(

@@ -10,8 +10,7 @@ import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.BaseResponse
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,8 +22,8 @@ class ChangePasswordViewModel : ViewModel() {
     var errorCurrentPassword = ObservableField("")
     var errorNewPassword = ObservableField("")
     var errorConfirmPassword = ObservableField("")
-    val mTitleActionPassword = ObservableField(StringUtil.getString(R.string.change_password))
-    val mHintCodeOrPassword = ObservableField(StringUtil.getString(R.string.action_current_password))
+    val mTitleActionPassword = ObservableField(UiUtil.getString(R.string.change_password))
+    val mHintCodeOrPassword = ObservableField(UiUtil.getString(R.string.action_current_password))
 
     private var currentPasswordValid = false
     private var newPasswordValid = false
@@ -39,11 +38,11 @@ class ChangePasswordViewModel : ViewModel() {
     fun init(orderCode: String) {
         mOrderCode = orderCode
         if (orderCode == "CHANGE"){
-            mTitleActionPassword.set(StringUtil.getString(R.string.change_password))
-            mHintCodeOrPassword.set(StringUtil.getString(R.string.action_current_password))
+            mTitleActionPassword.set(UiUtil.getString(R.string.change_password))
+            mHintCodeOrPassword.set(UiUtil.getString(R.string.action_current_password))
         }else{
-            mTitleActionPassword.set(StringUtil.getString(R.string.reset_password))
-            mHintCodeOrPassword.set(StringUtil.getString(R.string.code_from_your_email))
+            mTitleActionPassword.set(UiUtil.getString(R.string.reset_password))
+            mHintCodeOrPassword.set(UiUtil.getString(R.string.code_from_your_email))
         }
     }
 
@@ -57,7 +56,7 @@ class ChangePasswordViewModel : ViewModel() {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     onComplete(false)
                     if (t.message != null) {
-                        ToastUtil.showToast(t.message!!)
+                        UiUtil.showToast(t.message!!)
                     }
                 }
 
@@ -67,14 +66,14 @@ class ChangePasswordViewModel : ViewModel() {
                 ) {
                     if (model.code() == 200) {
                         onComplete(true)
-                        model.body()?.message?.let { ToastUtil.showToast(it) }
+                        model.body()?.message?.let { UiUtil.showToast(it) }
                     } else {
                         onComplete(false)
                         val repos = model.body()
                         if (repos != null) {
-                            ToastUtil.showToast(repos.message!!)
+                            UiUtil.showToast(repos.message!!)
                             if (repos.message.equals("Wrong Password")){
-                                errorCurrentPassword.set(StringUtil.getString(R.string.wrong_password))
+                                errorCurrentPassword.set(UiUtil.getString(R.string.wrong_password))
                             }
                         }
                     }
@@ -97,7 +96,7 @@ class ChangePasswordViewModel : ViewModel() {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     onComplete(false)
                     if (t.message != null) {
-                        ToastUtil.showToast(t.message!!)
+                        UiUtil.showToast(t.message!!)
                     }
                 }
 
@@ -107,12 +106,12 @@ class ChangePasswordViewModel : ViewModel() {
                 ) {
                     if (model.code() == 200) {
                         onComplete(true)
-                        model.body()?.message?.let { ToastUtil.showToast(it) }
+                        model.body()?.message?.let { UiUtil.showToast(it) }
                     } else {
                         onComplete(false)
                         val repos = model.body()
                         if (repos != null) {
-                            ToastUtil.showToast(repos.message!!)
+                            UiUtil.showToast(repos.message!!)
                         }
                     }
                 }
@@ -157,12 +156,12 @@ class ChangePasswordViewModel : ViewModel() {
     fun checkCurrentPasswordValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorCurrentPassword.set(StringUtil.getString(R.string.this_field_required))
+                errorCurrentPassword.set(UiUtil.getString(R.string.this_field_required))
                 currentPasswordValid = false
                 checkShowSendButton()
             }
             editable.contains(" ") -> {
-                errorCurrentPassword.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorCurrentPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 currentPasswordValid = false
                 checkShowSendButton()
             }
@@ -199,17 +198,17 @@ class ChangePasswordViewModel : ViewModel() {
     private fun checkNewPasswordValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorNewPassword.set(StringUtil.getString(R.string.this_field_required))
+                errorNewPassword.set(UiUtil.getString(R.string.this_field_required))
                 newPasswordValid = false
                 checkShowSendButton()
             }
             editable.contains(" ") -> {
-                errorNewPassword.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorNewPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 newPasswordValid = false
                 checkShowSendButton()
             }
             editable.length < 6 -> {
-                errorNewPassword.set(StringUtil.getString(R.string.password_too_short))
+                errorNewPassword.set(UiUtil.getString(R.string.password_too_short))
                 newPasswordValid = false
                 checkShowSendButton()
             }
@@ -242,12 +241,12 @@ class ChangePasswordViewModel : ViewModel() {
     private fun checkConfirmPasswordValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorConfirmPassword.set(StringUtil.getString(R.string.this_field_required))
+                errorConfirmPassword.set(UiUtil.getString(R.string.this_field_required))
                 confirmPasswordValid = false
                 checkShowSendButton()
             }
             newPasswordText != editable.toString() -> {
-                errorConfirmPassword.set(StringUtil.getString(R.string.not_matched_with_password))
+                errorConfirmPassword.set(UiUtil.getString(R.string.not_matched_with_password))
                 confirmPasswordValid = false
                 checkShowSendButton()
             }

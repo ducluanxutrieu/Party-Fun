@@ -32,6 +32,7 @@ data class DishModel(
 
     @TypeConverters(ImageConverter::class)
     @SerializedName("image") val image: List<String>,
+    @SerializedName("feature_image") val featureImage: String? = null,
     @SerializedName("updateAt") val updateAt: String? = null,
     @SerializedName("createAt") val createAt: String? = null
 ) : Serializable

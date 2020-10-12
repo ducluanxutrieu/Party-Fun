@@ -3,8 +3,7 @@ package com.uit.party.ui.main.main_menu.menu_item
 import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableField
 import com.uit.party.model.DishModel
-import java.text.NumberFormat
-import java.util.*
+import com.uit.party.util.UiUtil.toVNCurrency
 
 class ItemDishViewModel : BaseObservable(){
     var imageDish = ObservableField<String>()
@@ -13,11 +12,8 @@ class ItemDishViewModel : BaseObservable(){
     private lateinit var mDishModel: DishModel
 
     fun init(dishModel: DishModel){
-        val formatter = NumberFormat.getNumberInstance(Locale("vi"))
-//        formatter.maximumFractionDigits = 0
-//        formatter.currency = Currency.getInstance("VND")
-        imageDish.set(dishModel.image?.get(0))
-        priceDish.set(formatter.format(dishModel.price?.toDouble()) + " Đ")
+        imageDish.set(dishModel.featureImage)
+        priceDish.set(dishModel.price?.toVNCurrency())
         nameDish.set(dishModel.name)
         mDishModel = dishModel
     }

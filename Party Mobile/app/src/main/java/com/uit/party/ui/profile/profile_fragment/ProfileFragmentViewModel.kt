@@ -15,7 +15,7 @@ import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.TimeFormatUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
@@ -86,7 +86,7 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     if (t.message != null) {
-                        ToastUtil.showToast(t.message!!)
+                        UiUtil.showToast(t.message!!)
                         Log.e("uploadAvatar", t.message!!)
                     }
                 }
@@ -98,7 +98,7 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
                     if (response.isSuccessful) {
                         onComplete(response.body()?.message)
                     } else {
-                        ToastUtil.showToast(response.message())
+                        UiUtil.showToast(response.message())
                     }
                 }
             })

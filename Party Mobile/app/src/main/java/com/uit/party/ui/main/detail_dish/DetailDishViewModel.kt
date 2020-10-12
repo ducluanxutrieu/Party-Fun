@@ -2,25 +2,24 @@ package com.uit.party.ui.main.detail_dish
 
 import android.content.DialogInterface
 import android.view.View
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableFloat
-import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
-import com.uit.party.R
+import com.uit.party.data.CusResult
+import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
+import com.uit.party.util.UiUtil.toVNCurrency
 import com.uit.party.util.getNetworkService
-import com.uit.party.util.rxbus.RxBus
-import com.uit.party.util.rxbus.RxEvent
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailDishViewModel : BaseObservable() {
+class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() {
     var imageDish = ObservableField<String>()
     var priceDish = ObservableField<String>()
     var nameDish = ObservableField<String>()
@@ -37,12 +36,7 @@ class DetailDishViewModel : BaseObservable() {
 
     private var listImages = ArrayList<String>()
 
-    @get: Bindable
     var mListRates = ArrayList<ListRate>()
-        private set(value) {
-            field = value
-            notifyPropertyChanged(BR.mListRates)
-        }
 
     fun init() {
         imageDish.set(mDishModel?.image?.get(0))
@@ -54,7 +48,7 @@ class DetailDishViewModel : BaseObservable() {
             listImages.addAll(mDishModel?.image!!)
         }
         mAdapter.setData(listImages)
-        mPrice.set("Price: ${mDishModel?.price} VND")
+        mPrice.set(mDishModel?.price.toVNCurrency())
         //TODO change rating
 //        setRatingContent()
     }
@@ -78,7 +72,7 @@ class DetailDishViewModel : BaseObservable() {
         getNetworkService().ratingDish(TOKEN_ACCESS, requestModel)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+                    t.message?.let { UiUtil.showToast(it) }
                 }
 
                 override fun onResponse(
@@ -86,70 +80,64 @@ class DetailDishViewModel : BaseObservable() {
                     response: Response<BaseResponse>
                 ) {
                     if (response.code() == 200) {
-                        response.body()?.message?.let { ToastUtil.showToast(it) }
+                        response.body()?.message?.let { UiUtil.showToast(it) }
                         getItemDish()
                     } else {
-                        ToastUtil.showToast(response.message())
+                        UiUtil.showToast(response.message())
                     }
                 }
             })
     }
 
     fun getItemDish() {
-        val hashMap = HashMap<String, String?>()
-        hashMap["_id"] = mDishModel?.id
-        getNetworkService().getItemDish(hashMap)
-            .enqueue(object : Callback<DishItemResponse> {
-                override fun onFailure(call: Call<DishItemResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+        val id = mDishModel?.id ?: ""
+        if (id.isNotEmpty())
+        viewModelScope.launch {
+            try {
+                val result = repository.getItemDish(id)
+                if (result is CusResult.Success){
+                    mDishModel = result.data
+                }else {
+                    UiUtil.showToast((result as? CusResult.Error).toString())
                 }
-
-                override fun onResponse(
-                    call: Call<DishItemResponse>,
-                    response: Response<DishItemResponse>
-                ) {
-                    if (response.code() == 200) {
-                        val repo = response.body()
-                        if (repo != null) {
-                            mDishModel = repo.dish
-                            //TODO change rating
-//                            setRatingContent()
-                            RxBus.publish(
-                                RxEvent.AddDish(
-                                    repo.dish,
-                                    dishType = mDishType,
-                                    position = mPosition
-                                )
-                            )
-                        }
-                    }
-                }
-            })
+            }catch (ex: Exception){
+                ex.message?.let { UiUtil.showToast(it) }
+            }
+        }
     }
 
     fun deleteDish(view: View, dialog: DialogInterface) {
-        val map = HashMap<String, String>()
-        map["_id"] = mDishModel?.id.toString()
-        getNetworkService().deleteDish(TOKEN_ACCESS, map)
-            .enqueue(object : Callback<BaseResponse> {
-                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
-                    dialog.dismiss()
-                }
+       val id = mDishModel?.id ?: ""
+        if (id.isNotEmpty())
+        viewModelScope.launch {
+             try {
+                 val result = repository.deleteDish(id)
+                 if (result is CusResult.Success){
+                     result.data.message?.let { UiUtil.showToast(it) }
+                     view.findNavController().popBackStack()
+                     dialog.dismiss()
+                 }
+             }catch (ex: Exception){
+                 ex.message?.let { UiUtil.showToast(it) }
+                 dialog.dismiss()
+             }
+        }
+    }
 
-                override fun onResponse(
-                    call: Call<BaseResponse>,
-                    response: Response<BaseResponse>
-                ) {
-                    if (response.code() == 200) {
-                        response.body()?.message?.let { ToastUtil.showToast(it) }
-                        view.findNavController().popBackStack()
-                        dialog.dismiss()
-                    } else {
-                        ToastUtil.showToast(StringUtil.getString(R.string.delete_dish))
-                        dialog.dismiss()
-                    }
-                }
-            })
+    fun addToCart() {
+        val dishModel = mDishModel
+        if (dishModel != null)
+            viewModelScope.launch {
+                repository.insertCart(
+                    CartModel(
+                        id = dishModel.id,
+                        name = dishModel.name,
+                        featureImage = dishModel.featureImage,
+                        quantity = 1,
+                        newPrice = dishModel.newPrice,
+                        price = dishModel.price
+                    )
+                )
+            }
     }
 }

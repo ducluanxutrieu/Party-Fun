@@ -96,9 +96,9 @@ interface ServiceRetrofit {
     ): DishesResponse
 
     @HTTP(method = "POST", path = "product/getItemDish", hasBody = true)
-    fun getItemDish(
+    suspend fun getItemDish(
         @Body body: HashMap<String, String?>
-    ): Call<DishItemResponse>
+    ): DishItemResponse
 
     @POST("product/ratedish")
     fun ratingDish(
@@ -107,10 +107,10 @@ interface ServiceRetrofit {
     ): Call<BaseResponse>
 
     @HTTP(method = "DELETE", path = "product/deletedish", hasBody = true)
-    fun deleteDish(
+    suspend fun deleteDish(
         @Header("authorization") token: String,
         @Body body: HashMap<String, String>
-    ): Call<BaseResponse>
+    ): BaseResponse
 
     @POST("product/book")
     fun bookParty(

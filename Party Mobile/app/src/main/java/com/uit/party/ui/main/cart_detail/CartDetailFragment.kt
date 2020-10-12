@@ -21,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.uit.party.R
 import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentCartDetailBinding
-import com.uit.party.model.DishModel
+import com.uit.party.model.CartModel
 
 
 class CartDetailFragment : Fragment(), OnCartDetailListener {
@@ -48,7 +48,9 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
     private fun listenLiveData() {
         mViewModel.listCart.observe(viewLifecycleOwner, Observer {
             mCartAdapter.submitList(it)
-            mViewModel.calculateTotalPrice()
+            mCartAdapter.notifyDataSetChanged()
+            mViewModel.listCartStorage = it
+            mViewModel.setTotalPrice()
             mViewModel.mShowCart.set(it.isNotEmpty())
         })
     }
@@ -82,7 +84,7 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val cardModel = mCartAdapter.getSingleItem(position)
-                mViewModel.onDeleteDish(cardModel)
+                mViewModel.onDeleteItemCart(cardModel)
                 val snackBar = Snackbar.make(view!!, "Removed a dish.", Snackbar.LENGTH_LONG)
                 snackBar.setAction("UNDO") { mViewModel.insertCart(cardModel) }
                 snackBar.setActionTextColor(Color.YELLOW)
@@ -147,13 +149,13 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
         }
     }
 
-    override fun onChangeNumberDish(dishModel: DishModel, isIncrease: Boolean) {
+    override fun onChangeNumberDish(cartModel: CartModel, isIncrease: Boolean) {
         if (isIncrease) {
-            mViewModel.changeNumberDish(dishModel.apply { quantity++ })
+            mViewModel.changeQuantityCart(cartModel.apply { ++quantity })
         } else {
-            if (dishModel.quantity > 0) {
-                mViewModel.changeNumberDish(dishModel.apply { quantity-- })
-            } else mViewModel.changeNumberDish(dishModel.apply { quantity = 0 })
+            if (cartModel.quantity > 0) {
+                mViewModel.changeQuantityCart(cartModel.apply { --quantity})
+            } else mViewModel.changeQuantityCart(cartModel.apply { quantity = 0 })
         }
     }
 }

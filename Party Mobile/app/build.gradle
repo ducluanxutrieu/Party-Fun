@@ -10,8 +10,14 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.2"
-    dataBinding.enabled = true
+    buildToolsVersion "29.0.3"
+    buildFeatures {
+
+        dataBinding true
+
+        // for view binding:
+        // viewBinding true
+    }
     defaultConfig {
         applicationId "com.uit.party"
         minSdkVersion 21

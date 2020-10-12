@@ -1,7 +1,7 @@
 package com.uit.party.model
 
 import com.uit.party.R
-import com.uit.party.util.StringUtil.getString
+import com.uit.party.util.UiUtil.getString
 
 enum class Thumbnail(val dishName: String, val image: Int) {
     Thumbnail1(getString(R.string.holiday_offers), R.drawable.holiday_offers),

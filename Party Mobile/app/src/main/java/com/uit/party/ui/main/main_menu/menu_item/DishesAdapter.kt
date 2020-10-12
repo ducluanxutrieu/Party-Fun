@@ -60,7 +60,7 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(),
                 it.findNavController().navigate(action)
             }
             binding.btnAddToCard.setOnClickListener {
-                RxBus.publish(RxEvent.AddToCart(dishModel, binding.root))
+                RxBus.publish(RxEvent.AddToCart(dishModel))
             }
         }
     }

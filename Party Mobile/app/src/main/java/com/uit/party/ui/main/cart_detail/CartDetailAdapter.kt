@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.BR
 import com.uit.party.R
 import com.uit.party.databinding.ItemCartDetailBinding
-import com.uit.party.model.DishModel
+import com.uit.party.model.CartModel
 
 interface OnCartDetailListener {
-    fun onChangeNumberDish(dishModel: DishModel, isIncrease: Boolean)
+    fun onChangeNumberDish(cartModel: CartModel, isIncrease: Boolean)
 }
 
 class CartDetailAdapter(private val mListener: OnCartDetailListener) :
-    ListAdapter<DishModel, CartDetailAdapter.CartDetailViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<CartModel, CartDetailAdapter.CartDetailViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartDetailViewHolder {
         val binder = DataBindingUtil.inflate<ItemCartDetailBinding>(
@@ -32,8 +32,8 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
         holder.bindData(getItem(position))
     }
 
-    fun getSingleItem(position: Int): DishModel{
-        return  getItem(position)
+    fun getSingleItem(position: Int): CartModel {
+        return getItem(position)
     }
 
     class CartDetailViewHolder(
@@ -42,41 +42,27 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
     ) : RecyclerView.ViewHolder(mBinder.root) {
         private val mItemViewModel = CartDetailItemViewModel()
 
-        fun bindData(dishModel: DishModel) {
+        fun bindData(cartModel: CartModel) {
             mBinder.setVariable(BR.itemViewModel, mItemViewModel)
             mBinder.executePendingBindings()
-            mItemViewModel.initItemData(dishModel)
+            mItemViewModel.initItemData(cartModel)
             mBinder.btnReduction.setOnClickListener {
-                var numberDish = mItemViewModel.mNumberDishInType.get()?.toInt()
-                if (numberDish != null && numberDish > 1 && dishModel.price != null) {
-                    --numberDish
-                    mItemViewModel.mDishPrice.set("${numberDish * dishModel.price.toInt()} Đ")
-                    mItemViewModel.mNumberDishInType.set(numberDish.toString())
-                    dishModel.quantity = numberDish
-                    mListener.onChangeNumberDish(dishModel, false)
-                }
+                mListener.onChangeNumberDish(cartModel, false)
             }
 
             mBinder.btnIncrease.setOnClickListener {
-                var numberDish = mItemViewModel.mNumberDishInType.get()?.toInt()
-                if (numberDish != null && dishModel.price!= null) {
-                    ++numberDish
-                    mItemViewModel.mDishPrice.set("${numberDish * dishModel.price.toInt()} Đ")
-                    mItemViewModel.mNumberDishInType.set(numberDish.toString())
-                    dishModel.quantity = numberDish
-                    mListener.onChangeNumberDish(dishModel, true)
-                }
+                mListener.onChangeNumberDish(cartModel, true)
             }
         }
     }
 
-    companion object{
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DishModel>(){
-            override fun areItemsTheSame(oldItem: DishModel, newItem: DishModel): Boolean {
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CartModel>() {
+            override fun areItemsTheSame(oldItem: CartModel, newItem: CartModel): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: DishModel, newItem: DishModel): Boolean {
+            override fun areContentsTheSame(oldItem: CartModel, newItem: CartModel): Boolean {
                 return (oldItem.quantity == newItem.quantity &&
                         oldItem.name == newItem.name)
             }

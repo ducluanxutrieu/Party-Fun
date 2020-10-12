@@ -18,9 +18,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.uit.party.R
 import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentListDishBinding
+import com.uit.party.model.CartModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
@@ -59,7 +60,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         })
     }
 
-    private fun listenLiveData(){
+    private fun listenLiveData() {
         mViewModel.listMenu.observe(viewLifecycleOwner, Observer {
             val listMenu = mViewModel.menuAllocation(it)
             mMenuAdapter.submitList(listMenu)
@@ -70,7 +71,8 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
         val database = getDatabase(this.requireContext())
-        mViewModel = ViewModelProvider(this, HomeViewModelFactory(database)).get(MenuViewModel::class.java)
+        mViewModel =
+            ViewModelProvider(this, HomeViewModelFactory(database)).get(MenuViewModel::class.java)
         binding.viewModel = mViewModel
     }
 
@@ -139,8 +141,8 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
                 val intent = Intent(context, SignInActivity::class.java)
                 startActivity(intent)
                 (context as MainActivity).finish()
-            }catch (error: Exception) {
-                ToastUtil.showToast(error.message ?: "")
+            } catch (error: Exception) {
+                UiUtil.showToast(error.message ?: "")
             }
         }
     }
@@ -148,17 +150,14 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun rxBusListen() {
         if (mDisposableAddCart == null) {
             mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe {
-                mViewModel.updateDish(it.dishModel.apply { quantity++ })
-
-                if (it.cardDish != null) {
-                    startAnimationAddToCard()
-                }
+                mViewModel.addDishToCart(CartModel(it.dishModel.id, name = it.dishModel.name, price = it.dishModel.price, newPrice = it.dishModel.newPrice, quantity = 1, featureImage = it.dishModel.featureImage))
+                startAnimationAddToCard()
             }
         }
 
         mDisposableUpdateDish = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
             if (it.dishModel != null) {
-                mViewModel.updateDish(it.dishModel)
+                mViewModel.addNewDish(it.dishModel)
             }
         }
     }

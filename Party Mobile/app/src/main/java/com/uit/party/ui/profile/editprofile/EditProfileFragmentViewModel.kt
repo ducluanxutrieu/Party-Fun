@@ -52,7 +52,7 @@ class EditProfileFragmentViewModel : ViewModel() {
             calBirthdayPicker.set(Calendar.MONTH, monthOfYear)
             calBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             if (calBirthdayPicker >= calDateNow) {
-                ToastUtil.showToast(StringUtil.getString(R.string.birthday_greater_than_now_day))
+                UiUtil.showToast(UiUtil.getString(R.string.birthday_greater_than_now_day))
             } else {
                 updateBirthdayInView()
             }
@@ -112,12 +112,12 @@ class EditProfileFragmentViewModel : ViewModel() {
     private fun checkEmailValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorEmailText.set(StringUtil.getString(R.string.this_field_required))
+                errorEmailText.set(UiUtil.getString(R.string.this_field_required))
                 emailValid = false
                 checkEnableButtonUpdate()
             }
             !android.util.Patterns.EMAIL_ADDRESS.matcher(editable).matches() -> {
-                errorEmailText.set(StringUtil.getString(R.string.email_not_valid))
+                errorEmailText.set(UiUtil.getString(R.string.email_not_valid))
                 emailValid = false
                 checkEnableButtonUpdate()
             }
@@ -146,7 +146,7 @@ class EditProfileFragmentViewModel : ViewModel() {
     private fun checkFullNameValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorFullName.set(StringUtil.getString(R.string.this_field_required))
+                errorFullName.set(UiUtil.getString(R.string.this_field_required))
                 fullNameValid = false
                 checkEnableButtonUpdate()
             }
@@ -176,17 +176,17 @@ class EditProfileFragmentViewModel : ViewModel() {
     private fun checkPhoneNumberValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorPhoneNumber.set(StringUtil.getString(R.string.this_field_required))
+                errorPhoneNumber.set(UiUtil.getString(R.string.this_field_required))
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
             }
             !android.util.Patterns.PHONE.matcher(editable).matches() -> {
-                errorPhoneNumber.set(StringUtil.getString(R.string.phone_not_valid))
+                errorPhoneNumber.set(UiUtil.getString(R.string.phone_not_valid))
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
             }
             editable.trim().length < 9 -> {
-                errorPhoneNumber.set(StringUtil.getString(R.string.phone_number_too_short))
+                errorPhoneNumber.set(UiUtil.getString(R.string.phone_number_too_short))
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
             }
@@ -220,7 +220,7 @@ class EditProfileFragmentViewModel : ViewModel() {
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     if (!t.message.isNullOrEmpty()) {
-                        ToastUtil.showToast(t.message!!)
+                        UiUtil.showToast(t.message!!)
                     }
                 }
 
@@ -231,7 +231,7 @@ class EditProfileFragmentViewModel : ViewModel() {
                     val repo = response.body()
                     if (repo != null) {
                         saveToMemory(repo)
-                        ToastUtil.showToast(StringUtil.getString(R.string.update_profile_success))
+                        UiUtil.showToast(UiUtil.getString(R.string.update_profile_success))
                         view.findNavController().popBackStack()
                     }
                 }

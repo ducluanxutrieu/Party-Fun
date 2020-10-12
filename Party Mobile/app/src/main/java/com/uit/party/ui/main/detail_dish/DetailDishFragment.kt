@@ -4,14 +4,17 @@ import android.animation.Animator
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import com.uit.party.R
+import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
 import com.uit.party.model.UserRole
@@ -22,7 +25,7 @@ import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
 
 class DetailDishFragment : Fragment() {
-    private var viewModel = DetailDishViewModel()
+    private lateinit var viewModel: DetailDishViewModel
     private lateinit var binding: FragmentDetailDishBinding
     private val mArgs: DetailDishFragmentArgs by navArgs()
     private lateinit var mDisposable: Disposable
@@ -43,6 +46,9 @@ class DetailDishFragment : Fragment() {
             container,
             false
         )
+
+        val database = getDatabase(requireContext())
+        viewModel = ViewModelProvider(this, DishDetailViewModelFactory(database)).get(DetailDishViewModel::class.java)
         binding.viewModel = viewModel
 
         setupToolbar()
@@ -79,7 +85,7 @@ class DetailDishFragment : Fragment() {
                 }
 
                 R.id.toolbar_add_to_cart -> {
-                    addToCart()
+                    viewModel.addToCart()
                     startAnimationAddToCard()
                     true
                 }
@@ -88,13 +94,9 @@ class DetailDishFragment : Fragment() {
         }
     }
 
-    private fun addToCart() {
-        RxBus.publish(RxEvent.AddToCart(viewModel.mDishModel!!, null))
-    }
-
     private fun deleteDish() {
         MaterialAlertDialogBuilder(requireContext())
-            .setIcon(resources.getDrawable(R.drawable.ic_alert, context?.theme))
+            .setIcon(context?.resources?.let { ResourcesCompat.getDrawable(it, R.drawable.ic_alert, context?.theme) })
             .setTitle(getString(R.string.delete_dish))
             .setMessage(getString(R.string.alert_delete_dish))
             .setPositiveButton(getString(R.string.delete)) { dialog, _ ->
@@ -124,16 +126,6 @@ class DetailDishFragment : Fragment() {
             viewModel.init()
         }
         setupRecyclerView()
-        listenDataChange()
-    }
-
-    private fun listenDataChange() {
-        mDisposable = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
-            if (it.dishModel != null) {
-                viewModel.mDishModel = it.dishModel
-                viewModel.init()
-            }
-        }
     }
 
     private fun startAnimationAddToCard() {

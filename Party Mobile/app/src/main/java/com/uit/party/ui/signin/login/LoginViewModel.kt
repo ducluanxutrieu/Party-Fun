@@ -14,8 +14,7 @@ import com.uit.party.model.LoginModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.SharedPrefs
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import org.json.JSONObject
 import retrofit2.Call
@@ -45,14 +44,14 @@ class LoginViewModel : ViewModel() {
             if (success != null) {
                 when (success) {
                     "Success" -> {
-                        ToastUtil.showToast(StringUtil.getString(R.string.login_successful))
+                        UiUtil.showToast(UiUtil.getString(R.string.login_successful))
                         startMainActivity(view)
 
                     }
-                    else -> ToastUtil.showToast(success)
+                    else -> UiUtil.showToast(success)
                 }
             } else {
-                ToastUtil.showToast(StringUtil.getString(R.string.login_error))
+                UiUtil.showToast(UiUtil.getString(R.string.login_error))
             }
         }
     }
@@ -117,12 +116,12 @@ class LoginViewModel : ViewModel() {
     fun checkUsernameValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorUsername.set(StringUtil.getString(R.string.this_field_required))
+                errorUsername.set(UiUtil.getString(R.string.this_field_required))
                 usernameValid = false
                 checkShowButtonLogin()
             }
             editable.contains(" ") -> {
-                errorUsername.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 usernameValid = false
                 checkShowButtonLogin()
             }
@@ -158,17 +157,17 @@ class LoginViewModel : ViewModel() {
     private fun checkPasswordValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorPassword.set(StringUtil.getString(R.string.this_field_required))
+                errorPassword.set(UiUtil.getString(R.string.this_field_required))
                 passwordValid = false
                 checkShowButtonLogin()
             }
             editable.contains(" ") -> {
-                errorPassword.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 passwordValid = false
                 checkShowButtonLogin()
             }
             editable.length < 6 -> {
-                errorPassword.set(StringUtil.getString(R.string.password_too_short))
+                errorPassword.set(UiUtil.getString(R.string.password_too_short))
                 passwordValid = false
                 checkShowButtonLogin()
             }

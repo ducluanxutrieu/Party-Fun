@@ -9,9 +9,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.data.CusResult
 import com.uit.party.data.home.HomeRepository
+import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
 
 class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
@@ -32,7 +33,7 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
         try {
             repository.getListDishes()
         }catch (error: Exception) {
-            ToastUtil.showToast(error.message ?: "")
+            UiUtil.showToast(error.message ?: "")
         }
     }
 
@@ -99,9 +100,19 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
         return listMenu
     }
 
-    fun updateDish(dishModel: DishModel) {
+    fun addDishToCart(cartModel: CartModel) {
         viewModelScope.launch {
-            repository.updateDish(dishModel)
+            repository.insertCart(cartModel)
+        }
+    }
+
+    fun addNewDish(dishModel: DishModel) {
+        viewModelScope.launch {
+            try {
+                repository.insertDish(dishModel)
+            }catch (ex: Exception){
+                ex.message?.let { UiUtil.showToast(it) }
+            }
         }
     }
 }

@@ -9,8 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.BaseResponse
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,11 +40,11 @@ class ResetPasswordViewModel :ViewModel(){
     fun checkUsernameValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorUsername.set(StringUtil.getString(R.string.this_field_required))
+                errorUsername.set(UiUtil.getString(R.string.this_field_required))
                 mNextButtonEnabled.set(false)
             }
             editable.contains(" ") -> {
-                errorUsername.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 mNextButtonEnabled.set(false)
             }
             else -> {
@@ -71,7 +70,7 @@ class ResetPasswordViewModel :ViewModel(){
         getNetworkService().resetPassword(s)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+                    t.message?.let { UiUtil.showToast(it) }
                     onComplete(false)
                 }
 
@@ -80,7 +79,7 @@ class ResetPasswordViewModel :ViewModel(){
                     response: Response<BaseResponse>
                 ) {
                     if (response.code() == 200){
-                        response.body()?.message?.let { ToastUtil.showToast(it) }
+                        response.body()?.message?.let { UiUtil.showToast(it) }
                         onComplete(true)
                     }else{
                         onComplete(false)

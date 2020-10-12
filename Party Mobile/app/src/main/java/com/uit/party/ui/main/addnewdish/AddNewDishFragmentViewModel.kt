@@ -36,7 +36,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
-    val mButtonField = ObservableField(StringUtil.getString(R.string.add_dish))
+    val mButtonField = ObservableField(UiUtil.getString(R.string.add_dish))
     val mShowUploadImageDish = ObservableInt(View.VISIBLE)
 
     val mErrorTitle = ObservableField("")
@@ -77,7 +77,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
 
         mShowUploadImageDish.set(View.GONE)
         mEnableSendButton.set(true)
-        mButtonField.set(StringUtil.getString(R.string.update_dish))
+        mButtonField.set(UiUtil.getString(R.string.update_dish))
     }
 
     fun onAddImageDescription(view: View) {
@@ -104,7 +104,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
         getNetworkService().updateDish(TOKEN_ACCESS, mUpdateModel)
             .enqueue(object : Callback<UpdateDishResponse>{
                 override fun onFailure(call: Call<UpdateDishResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+                    t.message?.let { UiUtil.showToast(it) }
                 }
 
                 override fun onResponse(
@@ -113,13 +113,13 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                 ) {
                     if (response.code() == 200){
                         val repo = response.body()
-                        repo?.message?.let { ToastUtil.showToast(it) }
+                        repo?.message?.let { UiUtil.showToast(it) }
                         RxBus.publish(RxEvent.AddDish(repo?.dish, dishType = mDishType, position = mPositon))
                         view.findNavController().popBackStack()
 
 
                     }else{
-                        ToastUtil.showToast(StringUtil.getString(R.string.update_dish_false))
+                        UiUtil.showToast(UiUtil.getString(R.string.update_dish_false))
                     }
                 }
             })
@@ -142,7 +142,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     private fun checkTitleValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                mErrorTitle.set(StringUtil.getString(R.string.this_field_required))
+                mErrorTitle.set(UiUtil.getString(R.string.this_field_required))
                 mTitleValid = false
                 checkEnableButtonSend()
             }
@@ -172,7 +172,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     private fun checkDescriptionValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                mErrorDescription.set(StringUtil.getString(R.string.this_field_required))
+                mErrorDescription.set(UiUtil.getString(R.string.this_field_required))
                 mDescriptionValid = false
                 checkEnableButtonSend()
             }
@@ -202,7 +202,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     private fun checkPriceValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                mErrorTitle.set(StringUtil.getString(R.string.this_field_required))
+                mErrorTitle.set(UiUtil.getString(R.string.this_field_required))
                 mPriceValid = false
                 checkEnableButtonSend()
             }
@@ -253,7 +253,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
         )
             .enqueue(object : Callback<AddDishResponse> {
                 override fun onFailure(call: Call<AddDishResponse>, t: Throwable) {
-                    t.message?.let { ToastUtil.showToast(it) }
+                    t.message?.let { UiUtil.showToast(it) }
                 }
 
                 override fun onResponse(
@@ -261,7 +261,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                     response: Response<AddDishResponse>
                 ) {
                     if (response.isSuccessful) {
-                        response.body()?.message?.let { ToastUtil.showToast(it) }
+                        response.body()?.message?.let { UiUtil.showToast(it) }
                         view.findNavController().popBackStack()
                     }
                 }

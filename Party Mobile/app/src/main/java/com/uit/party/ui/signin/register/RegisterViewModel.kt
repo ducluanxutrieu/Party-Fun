@@ -12,8 +12,7 @@ import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.RegisterModel
 import com.uit.party.util.GlobalApplication
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import org.json.JSONObject
 import retrofit2.Call
@@ -82,12 +81,12 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     private fun checkFullNameValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorFullName.set(StringUtil.getString(R.string.this_field_required))
+                errorFullName.set(UiUtil.getString(R.string.this_field_required))
                 fullNameValid = false
                 checkShowButtonRegister()
             }
             editable.trim().length < 6 -> {
-                errorFullName.set(StringUtil.getString(R.string.full_name_too_short))
+                errorFullName.set(UiUtil.getString(R.string.full_name_too_short))
                 fullNameValid = false
                 checkShowButtonRegister()
 
@@ -119,17 +118,17 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     fun checkUsernameValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorUserName.set(StringUtil.getString(R.string.this_field_required))
+                errorUserName.set(UiUtil.getString(R.string.this_field_required))
                 usernameValid = false
                 checkShowButtonRegister()
             }
             editable.contains(" ") -> {
-                errorUserName.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorUserName.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 usernameValid = false
                 checkShowButtonRegister()
             }
             editable.trim().length < 6 -> {
-                errorUserName.set(StringUtil.getString(R.string.user_name_too_short))
+                errorUserName.set(UiUtil.getString(R.string.user_name_too_short))
                 usernameValid = false
                 checkShowButtonRegister()
             }
@@ -160,18 +159,18 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     private fun checkPhoneNumberValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorPhoneNumber.set(StringUtil.getString(R.string.this_field_required))
+                errorPhoneNumber.set(UiUtil.getString(R.string.this_field_required))
                 phoneNumberValid = false
                 checkShowButtonRegister()
             }
             !android.util.Patterns.PHONE.matcher(editable).matches() -> {
-                errorPhoneNumber.set(StringUtil.getString(R.string.phone_not_valid))
+                errorPhoneNumber.set(UiUtil.getString(R.string.phone_not_valid))
                 phoneNumberValid = false
                 checkShowButtonRegister()
             }
 
             editable.trim().length < 9 -> {
-                errorPhoneNumber.set(StringUtil.getString(R.string.phone_number_too_short))
+                errorPhoneNumber.set(UiUtil.getString(R.string.phone_number_too_short))
                 phoneNumberValid = false
                 checkShowButtonRegister()
             }
@@ -202,12 +201,12 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     private fun checkEmailValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorEmail.set(StringUtil.getString(R.string.this_field_required))
+                errorEmail.set(UiUtil.getString(R.string.this_field_required))
                 emailValid = false
                 checkShowButtonRegister()
             }
             !android.util.Patterns.EMAIL_ADDRESS.matcher(editable).matches() -> {
-                errorEmail.set(StringUtil.getString(R.string.email_not_valid))
+                errorEmail.set(UiUtil.getString(R.string.email_not_valid))
                 emailValid = false
                 checkShowButtonRegister()
             }
@@ -238,17 +237,17 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     private fun checkPasswordValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorPassword.set(StringUtil.getString(R.string.this_field_required))
+                errorPassword.set(UiUtil.getString(R.string.this_field_required))
                 passwordValid = false
                 checkShowButtonRegister()
             }
             editable.contains(" ") -> {
-                errorPassword.set(StringUtil.getString(R.string.this_field_cannot_contain_space))
+                errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 passwordValid = false
                 checkShowButtonRegister()
             }
             editable.length < 6 -> {
-                errorPassword.set(StringUtil.getString(R.string.password_too_short))
+                errorPassword.set(UiUtil.getString(R.string.password_too_short))
                 passwordValid = false
                 checkShowButtonRegister()
             }
@@ -278,12 +277,12 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     private fun checkConfirmPasswordValid(editable: Editable?) {
         when {
             editable.isNullOrEmpty() -> {
-                errorConfirmPassword.set(StringUtil.getString(R.string.this_field_required))
+                errorConfirmPassword.set(UiUtil.getString(R.string.this_field_required))
                 confirmPasswordValid = false
                 checkShowButtonRegister()
             }
             passwordText != editable.toString() -> {
-                errorConfirmPassword.set(StringUtil.getString(R.string.not_matched_with_password))
+                errorConfirmPassword.set(UiUtil.getString(R.string.not_matched_with_password))
                 confirmPasswordValid = false
                 checkShowButtonRegister()
             }
@@ -300,7 +299,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             RegisterModel(fullNameText, usernameText, emailText, phoneNumberText, passwordText)
         register(model) { isSuccess ->
             if (isSuccess) {
-                ToastUtil.showToast(StringUtil.getString(R.string.register_successful))
+                UiUtil.showToast(UiUtil.getString(R.string.register_successful))
                 view.findNavController().popBackStack()
             }
         }
