@@ -11,9 +11,9 @@ import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.getNetworkService
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import retrofit2.Call
@@ -74,8 +74,8 @@ class DetailDishViewModel : BaseObservable() {
 
     fun onSubmitClicked() {
         val requestModel =
-            RequestRatingModel(mDishModel?._id, mRating.get().toDouble(), mCommentRating.get())
-        serviceRetrofit.ratingDish(TOKEN_ACCESS, requestModel)
+            RequestRatingModel(mDishModel?.id, mRating.get().toDouble(), mCommentRating.get())
+        getNetworkService().ratingDish(TOKEN_ACCESS, requestModel)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
@@ -97,8 +97,8 @@ class DetailDishViewModel : BaseObservable() {
 
     fun getItemDish() {
         val hashMap = HashMap<String, String?>()
-        hashMap["_id"] = mDishModel?._id
-        serviceRetrofit.getItemDish(hashMap)
+        hashMap["_id"] = mDishModel?.id
+        getNetworkService().getItemDish(hashMap)
             .enqueue(object : Callback<DishItemResponse> {
                 override fun onFailure(call: Call<DishItemResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
@@ -129,8 +129,8 @@ class DetailDishViewModel : BaseObservable() {
 
     fun deleteDish(view: View, dialog: DialogInterface) {
         val map = HashMap<String, String>()
-        map["_id"] = mDishModel?._id.toString()
-        serviceRetrofit.deleteDish(TOKEN_ACCESS, map)
+        map["_id"] = mDishModel?.id.toString()
+        getNetworkService().deleteDish(TOKEN_ACCESS, map)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }

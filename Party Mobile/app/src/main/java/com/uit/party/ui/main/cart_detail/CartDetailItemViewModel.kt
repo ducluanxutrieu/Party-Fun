@@ -2,7 +2,7 @@ package com.uit.party.ui.main.cart_detail
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import com.uit.party.model.CartModel
+import com.uit.party.model.DishModel
 
 class CartDetailItemViewModel : ViewModel(){
     val mAvatarDish = ObservableField("")
@@ -10,10 +10,10 @@ class CartDetailItemViewModel : ViewModel(){
     val mNumberDishInType = ObservableField("1")
     val mDishPrice = ObservableField("0 Đ")
 
-    fun initItemData(cartModel: CartModel) {
-        mNumberDishInType.set(cartModel.numberDish.toString())
-        mNameDish.set(cartModel.dishModel.name)
-        mAvatarDish.set(cartModel.dishModel.image?.get(0))
-        mDishPrice.set(cartModel.dishModel.price + " Đ")
+    fun initItemData(dishModel: DishModel) {
+        mNumberDishInType.set(dishModel.quantity.toString())
+        mNameDish.set(dishModel.name)
+        mAvatarDish.set(dishModel.image[0])
+        mDishPrice.set(dishModel.price + " Đ")
     }
 }

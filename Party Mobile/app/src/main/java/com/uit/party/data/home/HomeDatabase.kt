@@ -1,10 +1,11 @@
-package com.uit.party.ui.main.main_menu
+package com.uit.party.data.home
 
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.uit.party.model.DishModel
+import com.uit.party.model.ImageConverter
 
 
 /***
@@ -21,14 +22,27 @@ interface HomeDao {
     @Query("DELETE FROM dish_table")
     suspend fun deleteMenu()
 
+    @Update(entity = DishModel::class)
+    suspend fun updateDish(dishModel: DishModel)
+
     @get:Query("SELECT * FROM dish_table")
     val allDish: LiveData<List<DishModel>>
+
+    @Query("UPDATE dish_table SET quantity=:quantity WHERE id = :id")
+    suspend fun updateCart(quantity: Int, id: String)
+
+    @Query("UPDATE dish_table SET quantity=0 WHERE id = :id")
+    suspend fun deleteCart(id: String)
+
+    @get:Query("SELECT * FROM dish_table WHERE quantity > 0")
+    val getCart: LiveData<List<DishModel>>
 }
 
 /**
  * TitleDatabase provides a reference to the dao to repositories
  */
-@Database(entities = [DishModel::class], version = 1, exportSchema = false)
+@TypeConverters(ImageConverter::class)
+@Database(entities = [DishModel::class], version = 2, exportSchema = false)
 abstract class PartyBookingDatabase : RoomDatabase() {
     abstract val homeDao: HomeDao
 }
@@ -45,7 +59,7 @@ fun getDatabase(context: Context): PartyBookingDatabase {
                 .databaseBuilder(
                     context.applicationContext,
                     PartyBookingDatabase::class.java,
-                    "tiki_demo_db"
+                    "party_booking_db"
                 )
                 .fallbackToDestructiveMigration()
                 .build()

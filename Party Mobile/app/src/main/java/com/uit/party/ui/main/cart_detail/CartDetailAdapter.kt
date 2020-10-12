@@ -3,24 +3,20 @@ package com.uit.party.ui.main.cart_detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.BR
 import com.uit.party.R
 import com.uit.party.databinding.ItemCartDetailBinding
-import com.uit.party.model.CartModel
-import com.uit.party.util.BindableAdapter
+import com.uit.party.model.DishModel
 
 interface OnCartDetailListener {
-    fun onChangeNumberDish(position: Int, cartModel: CartModel, isIncrease: Boolean)
+    fun onChangeNumberDish(dishModel: DishModel, isIncrease: Boolean)
 }
 
 class CartDetailAdapter(private val mListener: OnCartDetailListener) :
-    RecyclerView.Adapter<CartDetailAdapter.CartDetailViewHolder>(), BindableAdapter<CartModel> {
-    private var mListCart = ArrayList<CartModel>()
-
-    override fun setData(items: ArrayList<CartModel>) {
-        mListCart = items
-    }
+    ListAdapter<DishModel, CartDetailAdapter.CartDetailViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartDetailViewHolder {
         val binder = DataBindingUtil.inflate<ItemCartDetailBinding>(
@@ -32,23 +28,13 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
         return CartDetailViewHolder(mListener, binder)
     }
 
-    override fun getItemCount(): Int {
-        return mListCart.size
-    }
-
     override fun onBindViewHolder(holder: CartDetailViewHolder, position: Int) {
-        holder.bindData(mListCart[position])
+        holder.bindData(getItem(position))
     }
 
-    fun getItem(position: Int): CartModel {
-        return mListCart[position]
+    fun getSingleItem(position: Int): DishModel{
+        return  getItem(position)
     }
-
-    fun restoreItem(cardModel: CartModel, position: Int) {
-        mListCart.add(position, cardModel)
-        notifyItemInserted(position)
-    }
-
 
     class CartDetailViewHolder(
         private val mListener: OnCartDetailListener,
@@ -56,31 +42,45 @@ class CartDetailAdapter(private val mListener: OnCartDetailListener) :
     ) : RecyclerView.ViewHolder(mBinder.root) {
         private val mItemViewModel = CartDetailItemViewModel()
 
-        fun bindData(cartModel: CartModel) {
+        fun bindData(dishModel: DishModel) {
             mBinder.setVariable(BR.itemViewModel, mItemViewModel)
             mBinder.executePendingBindings()
-            mItemViewModel.initItemData(cartModel)
+            mItemViewModel.initItemData(dishModel)
             mBinder.btnReduction.setOnClickListener {
                 var numberDish = mItemViewModel.mNumberDishInType.get()?.toInt()
-                if (numberDish != null && numberDish > 1 && cartModel.dishModel.price != null) {
+                if (numberDish != null && numberDish > 1 && dishModel.price != null) {
                     --numberDish
-                    mItemViewModel.mDishPrice.set("${numberDish * cartModel.dishModel.price!!.toInt()} Đ")
+                    mItemViewModel.mDishPrice.set("${numberDish * dishModel.price.toInt()} Đ")
                     mItemViewModel.mNumberDishInType.set(numberDish.toString())
-                    cartModel.numberDish = numberDish
-                    mListener.onChangeNumberDish(adapterPosition, cartModel, false)
+                    dishModel.quantity = numberDish
+                    mListener.onChangeNumberDish(dishModel, false)
                 }
             }
 
             mBinder.btnIncrease.setOnClickListener {
                 var numberDish = mItemViewModel.mNumberDishInType.get()?.toInt()
-                if (numberDish != null && cartModel.dishModel.price!= null) {
+                if (numberDish != null && dishModel.price!= null) {
                     ++numberDish
-                    mItemViewModel.mDishPrice.set("${numberDish * cartModel.dishModel.price!!.toInt()} Đ")
+                    mItemViewModel.mDishPrice.set("${numberDish * dishModel.price.toInt()} Đ")
                     mItemViewModel.mNumberDishInType.set(numberDish.toString())
-                    cartModel.numberDish = numberDish
-                    mListener.onChangeNumberDish(adapterPosition, cartModel, true)
+                    dishModel.quantity = numberDish
+                    mListener.onChangeNumberDish(dishModel, true)
                 }
             }
+        }
+    }
+
+    companion object{
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DishModel>(){
+            override fun areItemsTheSame(oldItem: DishModel, newItem: DishModel): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: DishModel, newItem: DishModel): Boolean {
+                return (oldItem.quantity == newItem.quantity &&
+                        oldItem.name == newItem.name)
+            }
+
         }
     }
 }

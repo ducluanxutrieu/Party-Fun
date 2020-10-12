@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.BaseResponse
-import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.getNetworkService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -68,7 +68,7 @@ class ResetPasswordViewModel :ViewModel(){
     }
 
     private fun resetPassword(s: String, onComplete: (Boolean) -> Unit) {
-        MainActivity.serviceRetrofit.resetPassword(s)
+        getNetworkService().resetPassword(s)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }

@@ -11,10 +11,10 @@ import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.RegisterModel
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.getNetworkService
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -311,7 +311,7 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         onComplete: (Boolean) -> Unit
     ) {
         mShowLoading.set(true)
-        serviceRetrofit.register(model)
+        getNetworkService().register(model)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     Toast.makeText(context, "Register false: ${t.message}", Toast.LENGTH_LONG)

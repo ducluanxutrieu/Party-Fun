@@ -6,29 +6,33 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.model.*
+import com.uit.party.data.home.HomeRepository
+import com.uit.party.model.BillModel
+import com.uit.party.model.DishModel
+import com.uit.party.model.ListDishes
+import com.uit.party.model.RequestOrderPartyModel
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.util.StringUtil
 import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.getNetworkService
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
+class CartDetailViewModel(private val repository: HomeRepository) : ViewModel(){
     val mShowCart = ObservableBoolean(false)
     val mShowLoading = ObservableBoolean(false)
-    val mCartAdapter = CartDetailAdapter(this)
     val mTotalPrice = ObservableField("")
     val mNumberTableField = ObservableField("1")
     val mDatePartyField = ObservableField("")
@@ -37,19 +41,14 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
     private var calDatePartyPicker = Calendar.getInstance()
     private val calDateNow = Calendar.getInstance()
 
+    val listCart = repository.listCart
+
     private val datePartySetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             setTimePicker(view.context)
             calDatePartyPicker.set(Calendar.YEAR, year)
             calDatePartyPicker.set(Calendar.MONTH, monthOfYear)
             calDatePartyPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        }
-
-    @get: Bindable
-    var mListCart = ArrayList<CartModel>()
-        private set(value) {
-            field = value
-            notifyPropertyChanged(BR.mListCart)
         }
 
     init {
@@ -78,21 +77,10 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         ).show()
     }
 
-    override fun onChangeNumberDish(position: Int, cartModel: CartModel, isIncrease: Boolean) {
-        mListCart[position] = cartModel
-        mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
-    }
-
-    fun onDeleteDish(position: Int) {
-        mListCart.removeAt(position)
-        mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
-        mCartAdapter.notifyItemRemoved(position)
-    }
-
-    private fun calculateTotalPrice(): Int {
+    fun calculateTotalPrice(): Int {
         var totalPrice = 0
-        for (row in mListCart) {
-            totalPrice += (row.numberDish * (row.dishModel.price?.toInt() ?: 0))
+        for (row in listCart.value ?: emptyList()) {
+            totalPrice += (row.quantity * (row.newPrice?.toInt() ?: 0))
         }
         return totalPrice * mNumberTable
     }
@@ -115,7 +103,7 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
     fun getNumberTableTextChanged(): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
-                checkPasswordValid(editable)
+                checkNumberTableValid(editable)
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -126,7 +114,7 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         }
     }
 
-    private fun checkPasswordValid(editable: Editable?) {
+    private fun checkNumberTableValid(editable: Editable?) {
         mNumberTable = when {
             editable.isNullOrEmpty() -> {
                 mNumberTableField.set("1")
@@ -144,27 +132,17 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
         mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
     }
 
-    fun initData(listCartModel: ArrayList<CartModel>) {
-        if (listCartModel.isNullOrEmpty()){
-            mShowCart.set(false)
-        }else {
-            mShowCart.set(true)
-            mListCart = listCartModel
-            mTotalPrice.set(calculateTotalPrice().toString() + "Đ")
-        }
-    }
-
     fun onOrderNowClicked(view: View){
         mShowLoading.set(true)
         val mListDishes = ArrayList<ListDishes>()
-        for (row in mListCart){
-            if (!row.dishModel._id.isNullOrEmpty())
-                mListDishes.add(ListDishes(row.numberDish.toString(), row.dishModel._id!!
+        for (row in listCart.value ?: emptyList()){
+            if (row.id.isNotEmpty())
+                mListDishes.add(ListDishes(row.quantity.toString(), row.id
             ))
         }
 
         val bookModel = RequestOrderPartyModel(TimeFormatUtil.formatTimeToServer(calDatePartyPicker), mNumberTable.toString(), mListDishes)
-        serviceRetrofit.bookParty(TOKEN_ACCESS, bookModel)
+        getNetworkService().bookParty(TOKEN_ACCESS, bookModel)
             .enqueue(object : Callback<BillModel>{
                 override fun onFailure(call: Call<BillModel>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
@@ -181,5 +159,35 @@ class CartDetailViewModel : BaseObservable(), OnCartDetailListener {
                     }
                 }
             })
+    }
+
+    fun changeNumberDish(dishModel: DishModel) {
+        viewModelScope.launch {
+            try {
+                repository.updateCart(dishModel)
+            }catch (e: Exception){
+                e.message?.let { ToastUtil.showToast(it) }
+            }
+        }
+    }
+
+    fun onDeleteDish(dishModel: DishModel) {
+        viewModelScope.launch {
+            try {
+                repository.deleteCart(dishModel)
+            }catch (e: Exception){
+                e.message?.let { ToastUtil.showToast(it) }
+            }
+        }
+    }
+
+    fun insertCart(dishModel: DishModel) {
+        viewModelScope.launch {
+            try {
+                repository.insertCart(dishModel)
+            }catch (e: Exception){
+                e.message?.let { ToastUtil.showToast(it) }
+            }
+        }
     }
 }

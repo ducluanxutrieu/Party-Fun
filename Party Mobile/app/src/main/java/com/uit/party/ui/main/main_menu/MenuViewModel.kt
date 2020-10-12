@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.data.CusResult
+import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
 import com.uit.party.util.ToastUtil
@@ -29,12 +30,9 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
 
     suspend fun getListDishes(){
         try {
-            mShowLoading.set(true)
             repository.getListDishes()
-            mShowLoading.set(false)
         }catch (error: Exception) {
             ToastUtil.showToast(error.message ?: "")
-            mShowLoading.set(false)
         }
     }
 
@@ -69,7 +67,7 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
         val listDrink = ArrayList<DishModel>()
         val listDessert = ArrayList<DishModel>()
         for (row in dishes) {
-            when (row.categories?.get(0) ?: "") {
+            when (row.categories[0]) {
                 "Holiday Offers" -> listHolidayOffers.add(row)
                 "First Dishes" -> listFirstDishes.add(row)
                 "Main Dishes" -> listMainDishes.add(row)
@@ -99,5 +97,11 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
         }
 
         return listMenu
+    }
+
+    fun updateDish(dishModel: DishModel) {
+        viewModelScope.launch {
+            repository.updateDish(dishModel)
+        }
     }
 }

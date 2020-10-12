@@ -29,7 +29,6 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/ll_date_party"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:linearRecyclerData="@{viewModel.mListCart}"
                 tools:listitem="@layout/item_cart_detail"/>
 
             <LinearLayout

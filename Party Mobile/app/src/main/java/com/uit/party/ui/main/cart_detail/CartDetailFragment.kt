@@ -8,26 +8,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.uit.party.R
+import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentCartDetailBinding
-import com.uit.party.model.CartModel
+import com.uit.party.model.DishModel
 
 
-class CartDetailFragment : Fragment(){
-    private var mListDishes = ArrayList<CartModel>()
+class CartDetailFragment : Fragment(), OnCartDetailListener {
     private lateinit var mBinding: FragmentCartDetailBinding
-    private val mViewModel = CartDetailViewModel()
-    private val mArgs : CartDetailFragmentArgs by navArgs()
+    private lateinit var mViewModel: CartDetailViewModel
+    val mCartAdapter = CartDetailAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,19 +36,28 @@ class CartDetailFragment : Fragment(){
     ): View? {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_cart_detail, container, false)
+        val database = getDatabase(requireContext())
+        mViewModel = ViewModelProvider(
+            this,
+            CartDetailViewModelFactory(database)
+        ).get(CartDetailViewModel::class.java)
+        listenLiveData()
         return mBinding.root
+    }
+
+    private fun listenLiveData() {
+        mViewModel.listCart.observe(viewLifecycleOwner, Observer {
+            mCartAdapter.submitList(it)
+            mViewModel.calculateTotalPrice()
+            mViewModel.mShowCart.set(it.isNotEmpty())
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mBinding.viewModel = mViewModel
 
-        val typeToken = object : TypeToken<ArrayList<CartModel>>() {}.type
-        mListDishes = Gson().fromJson<ArrayList<CartModel>>(mArgs.StringListDishSelectedKey, typeToken)
-
-        mViewModel.initData(mListDishes)
-
-        mBinding.rvCartDetail.adapter = mViewModel.mCartAdapter
+        mBinding.rvCartDetail.adapter = mCartAdapter
         val itemTouchHelper = ItemTouchHelper(enableSwipe())
         itemTouchHelper.attachToRecyclerView(mBinding.rvCartDetail)
         val itemDecoder = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
@@ -56,21 +65,26 @@ class CartDetailFragment : Fragment(){
     }
 
     private fun enableSwipe(): ItemTouchHelper.SimpleCallback {
-        val icon: Drawable = context?.getDrawable(R.drawable.ic_delete_forever)!!
+        val icon: Drawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete_forever)!!
         val background = ColorDrawable(Color.RED)
 
-        return object : ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT) {
+        return object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
                 return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val cardModel = mViewModel.mCartAdapter.getItem(position)
-                mViewModel.onDeleteDish(position)
+                val cardModel = mCartAdapter.getSingleItem(position)
+                mViewModel.onDeleteDish(cardModel)
                 val snackBar = Snackbar.make(view!!, "Removed a dish.", Snackbar.LENGTH_LONG)
-                snackBar.setAction("UNDO") { mViewModel.mCartAdapter.restoreItem(cardModel, position) }
+                snackBar.setAction("UNDO") { mViewModel.insertCart(cardModel) }
                 snackBar.setActionTextColor(Color.YELLOW)
                 snackBar.show()
             }
@@ -130,6 +144,16 @@ class CartDetailFragment : Fragment(){
                 background.draw(c)
                 icon.draw(c)
             }
+        }
+    }
+
+    override fun onChangeNumberDish(dishModel: DishModel, isIncrease: Boolean) {
+        if (isIncrease) {
+            mViewModel.changeNumberDish(dishModel.apply { quantity++ })
+        } else {
+            if (dishModel.quantity > 0) {
+                mViewModel.changeNumberDish(dishModel.apply { quantity-- })
+            } else mViewModel.changeNumberDish(dishModel.apply { quantity = 0 })
         }
     }
 }

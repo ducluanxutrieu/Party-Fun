@@ -15,11 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.gson.Gson
 import com.uit.party.R
+import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentListDishBinding
-import com.uit.party.model.CartModel
-import com.uit.party.model.DishModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.ToastUtil
@@ -32,11 +30,10 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private lateinit var mViewModel: MenuViewModel
     private lateinit var binding: FragmentListDishBinding
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-    val mMenuAdapter = MenuAdapter()
+    private val mMenuAdapter = MenuAdapter()
 
     private var mDisposableAddCart: Disposable? = null
     private lateinit var mDisposableUpdateDish: Disposable
-    private var mListDishesSelected = ArrayList<DishModel>()
 
 
     override fun onCreateView(
@@ -66,6 +63,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         mViewModel.listMenu.observe(viewLifecycleOwner, Observer {
             val listMenu = mViewModel.menuAllocation(it)
             mMenuAdapter.submitList(listMenu)
+            mViewModel.mShowMenu.set(listMenu.isNotEmpty())
         })
     }
 
@@ -122,10 +120,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
 
             R.id.toolbar_cart -> {
-                val mListCart = getListCart(mListDishesSelected)
-                val action = MenuFragmentDirections.actionListDishFragmentToCartDetailFragment(
-                    Gson().toJson(mListCart)
-                )
+                val action = MenuFragmentDirections.actionListDishFragmentToCartDetailFragment()
                 this.findNavController().navigate(action)
                 return true
             }
@@ -135,26 +130,6 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
         }
         return false
-    }
-
-    private fun getListCart(mListDishesSelected: java.util.ArrayList<DishModel>): ArrayList<CartModel> {
-        val mListCart = ArrayList<CartModel>()
-        for (dish in mListDishesSelected) {
-            var doubleCart = false
-            for (cart in mListCart) {
-                if (cart.dishModel._id == dish._id) {
-                    cart.numberDish++
-                    doubleCart = true
-                    break
-                }
-            }
-
-            if (!doubleCart) {
-                mListCart.add(CartModel(1, dish))
-            }
-        }
-
-        return mListCart
     }
 
     private fun logOut() {
@@ -173,7 +148,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun rxBusListen() {
         if (mDisposableAddCart == null) {
             mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe {
-                mListDishesSelected.add(it.dishModel)
+                mViewModel.updateDish(it.dishModel.apply { quantity++ })
 
                 if (it.cardDish != null) {
                     startAnimationAddToCard()
@@ -183,7 +158,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         mDisposableUpdateDish = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
             if (it.dishModel != null) {
-                mMenuAdapter.updateDish(it.dishModel, it.dishType, it.position)
+                mViewModel.updateDish(it.dishModel)
             }
         }
     }

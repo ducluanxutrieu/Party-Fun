@@ -2,15 +2,12 @@ package com.uit.party.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 import java.io.Serializable
-
-class AddDishRequest(
-    val name: String? = null,
-    val description: String? = null,
-    val price: Float? = 0f,
-    val type: String? = null
-)
 
 class AddDishResponse : BaseResponse() {
     @SerializedName("dish")
@@ -19,24 +16,38 @@ class AddDishResponse : BaseResponse() {
 
 @Entity(tableName = "dish_table")
 data class DishModel(
-    @PrimaryKey(autoGenerate = true)
-    @SerializedName("_id") val _id: String,
+    @PrimaryKey()
+    @SerializedName("_id") val id: String,
     @SerializedName("name") val name: String? = null,
     @SerializedName("price") val price: String? = null,
     @SerializedName("price_new") val newPrice: String? = null,
     @SerializedName("discount") val discount: Int? = 0,
     @SerializedName("description") val description: String? = null,
-    @SerializedName("categories") val categories: ArrayList<String>? = null,
-    @SerializedName("image") val image: ArrayList<String>? = null,
+
+    var quantity: Int = 0,
+
+    @TypeConverters(ImageConverter::class)
+    @SerializedName("categories")
+    val categories: List<String>,
+
+    @TypeConverters(ImageConverter::class)
+    @SerializedName("image") val image: List<String>,
     @SerializedName("updateAt") val updateAt: String? = null,
     @SerializedName("createAt") val createAt: String? = null
 ) : Serializable
 
-data class RateModel(
-    @SerializedName("average") val average: Float? = 5f,
-    @SerializedName("lishRate") val listRates: ArrayList<ListRate>,
-    @SerializedName("totalpeople") val totalPeople: Int? = 0
-) : Serializable
+class ImageConverter {
+    @TypeConverter
+    fun fromString(value: String?): List<String?>? {
+        val listType = object : TypeToken<List<String?>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromList(list: List<String?>?): String? {
+        return  Gson().toJson(list)
+    }
+}
 
 data class ListRate(
     @SerializedName("username") val username: String? = null,

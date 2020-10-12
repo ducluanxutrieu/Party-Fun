@@ -16,12 +16,8 @@ import com.uit.party.R
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
-import com.uit.party.util.GlobalApplication
-import com.uit.party.util.SharedPrefs
-import com.uit.party.util.StringUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.*
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import com.vansuita.pickimage.bundle.PickSetup
@@ -104,8 +100,8 @@ class AddNewDishFragmentViewModel : BaseObservable() {
     }
 
     private fun updateDish(view: View) {
-        val mUpdateModel = UpdateDishRequestModel(mDishModel?._id.toString(), mTitleText, mDescriptionText, mPriceText, mTypeText)
-        serviceRetrofit.updateDish(TOKEN_ACCESS, mUpdateModel)
+        val mUpdateModel = UpdateDishRequestModel(mDishModel?.id.toString(), mTitleText, mDescriptionText, mPriceText, mTypeText)
+        getNetworkService().updateDish(TOKEN_ACCESS, mUpdateModel)
             .enqueue(object : Callback<UpdateDishResponse>{
                 override fun onFailure(call: Call<UpdateDishResponse>, t: Throwable) {
                     t.message?.let { ToastUtil.showToast(it) }
@@ -245,7 +241,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
 
         //Create request body with text description and text media type
         val token = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.token
-        serviceRetrofit.addDish(
+        getNetworkService().addDish(
             token!!,
             mTitleText.toRequestBody(MultipartBody.FORM),
             mDescriptionText.toRequestBody(MultipartBody.FORM),

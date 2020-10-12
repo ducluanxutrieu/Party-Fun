@@ -12,12 +12,8 @@ import com.uit.party.R
 import com.uit.party.model.Account
 import com.uit.party.model.AccountResponse
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
-import com.uit.party.util.SharedPrefs
-import com.uit.party.util.StringUtil
-import com.uit.party.util.TimeFormatUtil
-import com.uit.party.util.ToastUtil
+import com.uit.party.util.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,9 +51,9 @@ class EditProfileFragmentViewModel : ViewModel() {
             calBirthdayPicker.set(Calendar.YEAR, year)
             calBirthdayPicker.set(Calendar.MONTH, monthOfYear)
             calBirthdayPicker.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            if (calBirthdayPicker >= calDateNow){
+            if (calBirthdayPicker >= calDateNow) {
                 ToastUtil.showToast(StringUtil.getString(R.string.birthday_greater_than_now_day))
-            }else{
+            } else {
                 updateBirthdayInView()
             }
         }
@@ -217,10 +213,10 @@ class EditProfileFragmentViewModel : ViewModel() {
             mEmail.get(),
             mFullName.get(),
             mPhoneNumber.get(),
-            TimeFormatUtil.formatDateToServer( mBirthday.get()),
+            TimeFormatUtil.formatDateToServer(mBirthday.get()),
             mSex
         )
-        serviceRetrofit.updateUser(TOKEN_ACCESS, requestModel)
+        getNetworkService().updateUser(TOKEN_ACCESS, requestModel)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     if (!t.message.isNullOrEmpty()) {

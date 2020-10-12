@@ -12,11 +12,11 @@ import com.uit.party.model.BaseResponse
 import com.uit.party.model.UserGender
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.getNetworkService
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -82,7 +82,7 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
 
         //Create request body with text description and text media type
         val description = "image-type".toRequestBody("text/plain".toMediaTypeOrNull())
-        serviceRetrofit.updateAvatar(TOKEN_ACCESS, part, description)
+        getNetworkService().updateAvatar(TOKEN_ACCESS, part, description)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     if (t.message != null) {

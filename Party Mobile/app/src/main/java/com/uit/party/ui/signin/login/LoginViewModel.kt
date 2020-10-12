@@ -12,11 +12,11 @@ import com.uit.party.R
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.MainActivity.Companion.serviceRetrofit
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.StringUtil
 import com.uit.party.util.ToastUtil
+import com.uit.party.util.getNetworkService
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,7 +65,7 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun login(loginModel: LoginModel, onComplete: (String?) -> Unit) {
-        serviceRetrofit.login(loginModel)
+        getNetworkService().login(loginModel)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     onComplete(t.message)

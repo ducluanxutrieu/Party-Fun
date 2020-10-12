@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemMainMenuBinding
-import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
 
 class MenuAdapter: ListAdapter<MenuModel, MenuAdapter.MenuViewHolder>(DIFF_CALLBACK){
-    private var mListMenuFiltered = ArrayList<MenuModel>()
     private lateinit var binding: ItemMainMenuBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
@@ -26,20 +24,20 @@ class MenuAdapter: ListAdapter<MenuModel, MenuAdapter.MenuViewHolder>(DIFF_CALLB
     }
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
-        holder.bind(mListMenuFiltered[position])
+        holder.bind(getItem(position))
     }
 
-    fun updateDish(dishModel: DishModel, dishType: String, position: Int) {
-        try {
-            for (row in mListMenuFiltered) {
-                if (row.menuName == dishType) {
-                    row.listDish[position] = dishModel
-                }
-            }
-        }catch (e : Exception){
-            e.printStackTrace()
-        }
-    }
+//    fun updateDish(dishModel: DishModel, dishType: String, position: Int) {
+//        try {
+//            for (row in mListMenuFiltered) {
+//                if (row.menuName == dishType) {
+//                    row.listDish[position] = dishModel
+//                }
+//            }
+//        }catch (e : Exception){
+//            e.printStackTrace()
+//        }
+//    }
 
     class MenuViewHolder(val binding: ItemMainMenuBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(menuModel: MenuModel) {
@@ -53,9 +51,9 @@ class MenuAdapter: ListAdapter<MenuModel, MenuAdapter.MenuViewHolder>(DIFF_CALLB
         }
     }
 
-    interface OnItemClickListener{
+/*    interface OnItemClickListener{
         fun onItemClickListen(dishModel: DishModel)
-    }
+    }*/
 
     companion object{
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MenuModel>(){

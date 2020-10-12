@@ -70,10 +70,6 @@
         android:label="@string/your_cart"
         tools:layout="@layout/fragment_cart_detail">
 
-        <argument
-            android:name="@string/list_dish_selected_key"
-            app:argType="string" />
-
         <action
             android:id="@+id/action_CartDetailFragment_to_BookingSuccessFragment"
             app:destination="@id/fragment_book_success"/>

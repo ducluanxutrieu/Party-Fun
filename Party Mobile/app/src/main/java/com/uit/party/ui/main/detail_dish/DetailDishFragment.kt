@@ -93,7 +93,7 @@ class DetailDishFragment : Fragment() {
     }
 
     private fun deleteDish() {
-        MaterialAlertDialogBuilder(context)
+        MaterialAlertDialogBuilder(requireContext())
             .setIcon(resources.getDrawable(R.drawable.ic_alert, context?.theme))
             .setTitle(getString(R.string.delete_dish))
             .setMessage(getString(R.string.alert_delete_dish))

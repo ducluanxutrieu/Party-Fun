@@ -1,4 +1,4 @@
-package com.uit.party.ui.main.main_menu
+package com.uit.party.ui.main.cart_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,12 +10,12 @@ import com.uit.party.util.getNetworkService
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
-class HomeViewModelFactory(private val database: PartyBookingDatabase) : ViewModelProvider.Factory {
+class CartDetailViewModelFactory(private val database: PartyBookingDatabase) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MenuViewModel::class.java)) {
-            return MenuViewModel(
+        if (modelClass.isAssignableFrom(CartDetailViewModel::class.java)) {
+            return CartDetailViewModel(
                     HomeRepository(getNetworkService(), database.homeDao)
             ) as T
         }
