@@ -9,15 +9,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.data.CusResult
 import com.uit.party.data.home.HomeRepository
-import com.uit.party.model.*
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
+import com.uit.party.model.CartModel
+import com.uit.party.model.DishModel
+import com.uit.party.model.RequestRatingModel
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
-import com.uit.party.util.getNetworkService
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() {
     var imageDish = ObservableField<String>()
@@ -29,14 +26,13 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
     val mRatingShow = ObservableFloat(5f)
     val mPrice = ObservableField("")
     val mAdapter = DishDetailAdapter()
-    val mRatingAdapter = DishRatingAdapter()
     var mDishModel: DishModel? = null
     var mPosition: Int = 0
     lateinit var mDishType: String
 
     private var listImages = ArrayList<String>()
+    val mListRates = repository.listRates
 
-    var mListRates = ArrayList<ListRate>()
 
     fun init() {
         imageDish.set(mDishModel?.image?.get(0))
@@ -49,6 +45,7 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
         }
         mAdapter.setData(listImages)
         mPrice.set(mDishModel?.price.toVNCurrency())
+
         //TODO change rating
 //        setRatingContent()
     }
@@ -69,27 +66,33 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
     fun onSubmitClicked() {
         val requestModel =
             RequestRatingModel(mDishModel?.id, mRating.get().toDouble(), mCommentRating.get())
-        getNetworkService().ratingDish(TOKEN_ACCESS, requestModel)
-            .enqueue(object : Callback<BaseResponse> {
-                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { UiUtil.showToast(it) }
-                }
-
-                override fun onResponse(
-                    call: Call<BaseResponse>,
-                    response: Response<BaseResponse>
-                ) {
-                    if (response.code() == 200) {
-                        response.body()?.message?.let { UiUtil.showToast(it) }
-                        getItemDish()
-                    } else {
-                        UiUtil.showToast(response.message())
-                    }
-                }
-            })
+        viewModelScope.launch {
+            try {
+                repository.requestRatingDish(requestModel)
+            }catch (ex: Exception){
+                ex.message?.let { UiUtil.showToast(it) }
+            }
+        }
     }
 
-    fun getItemDish() {
+    fun getListRating(){
+        viewModelScope.launch {
+            val id = mDishModel?.id ?: ""
+            if (id.isNotEmpty())
+                viewModelScope.launch {
+                    try {
+                        val result = repository.getDishRating(id)
+                        if (result is CusResult.Error){
+                            UiUtil.showToast((result as? CusResult.Error).toString())
+                        }
+                    }catch (ex: Exception){
+                        ex.message?.let { UiUtil.showToast(it) }
+                    }
+                }
+        }
+    }
+
+/*    fun getItemDish() {
         val id = mDishModel?.id ?: ""
         if (id.isNotEmpty())
         viewModelScope.launch {
@@ -104,7 +107,7 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
                 ex.message?.let { UiUtil.showToast(it) }
             }
         }
-    }
+    }*/
 
     fun deleteDish(view: View, dialog: DialogInterface) {
        val id = mDishModel?.id ?: ""

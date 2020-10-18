@@ -13,11 +13,12 @@ import androidx.navigation.ui.navigateUp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
+import com.uit.party.data.getToken
 import com.uit.party.databinding.ActivityMainBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
 import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -28,10 +29,6 @@ class MainActivity : AppCompatActivity(){
 
     private val mViewModel = MainViewModel()
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    companion object {
-        internal var TOKEN_ACCESS: String = ""
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,11 +88,8 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun checkLogin() {
-        val temp = SharedPrefs().getInstance().get("ACCESS_TOKEN_KEY", String::class.java)
-        if (temp.isNullOrEmpty()) {
+        if (getToken().isEmpty()) {
             goToSignIn()
-        } else {
-            TOKEN_ACCESS = temp
         }
     }
 

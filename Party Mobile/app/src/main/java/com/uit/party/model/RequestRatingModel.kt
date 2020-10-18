@@ -3,12 +3,12 @@ package com.uit.party.model
 import com.google.gson.annotations.SerializedName
 
 class RequestRatingModel(
-    @SerializedName("_id")
-    val _id: String? = null,
+    @SerializedName("id")
+    val id: String? = null,
 
-    @SerializedName("scorerate")
-    val scorerate: Double? = 0.0,
+    @SerializedName("score")
+    val score: Double? = 0.0,
 
-    @SerializedName("content")
-    val content: String? = null
+    @SerializedName("comment")
+    val comment: String? = null
 )

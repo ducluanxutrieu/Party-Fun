@@ -44,7 +44,6 @@ android {
 dependencies {
     def lifecycle_version = "2.2.0"
     def arch_version = "2.1.0"
-    def nav_version = "2.3.0"
     def room_version = "2.2.5"
     def retrofit_version = "2.9.0"
     def okhttp3_version = "4.8.0"

@@ -2,13 +2,12 @@ package com.uit.party.data.home
 
 import androidx.lifecycle.LiveData
 import com.uit.party.data.CusResult
+import com.uit.party.data.getToken
 import com.uit.party.model.*
-import com.uit.party.model.UserRole
-import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.signin.login.LoginViewModel
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.SharedPrefs
-import java.util.HashMap
+import java.util.*
 
 class HomeRepository(
     private val networkService: ServiceRetrofit,
@@ -17,10 +16,11 @@ class HomeRepository(
 
     val listMenu: LiveData<List<DishModel>> = homeDao.allDish
     val listCart: LiveData<List<CartModel>> = homeDao.getCart
+    val listRates: LiveData<List<ItemDishRateWithListRates>> = homeDao.getDishRating()
 
     suspend fun getListDishes() {
         try {
-            val result = networkService.getListDishes(MainActivity.TOKEN_ACCESS)
+            val result = networkService.getListDishes(getToken())
             val dishes = result.listDishes
             if (dishes != null) {
                 homeDao.deleteMenu()
@@ -33,7 +33,7 @@ class HomeRepository(
 
     suspend fun logout() {
         try {
-            networkService.logout(MainActivity.TOKEN_ACCESS)
+            networkService.logout(getToken())
             SharedPrefs().getInstance().clear()
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
@@ -42,27 +42,27 @@ class HomeRepository(
 
     fun checkAdmin(): Boolean {
         val role =
-            SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
+            SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.role
         return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
     }
 
-    suspend fun updateDish(dishModel: DishModel) {
+/*    suspend fun updateDish(dishModel: DishModel) {
         homeDao.updateDish(dishModel)
-    }
+    }*/
 
     suspend fun insertCart(cartModel: CartModel) {
         try {
             val list: List<CartModel> = homeDao.getCartItem(cartModel.id)
             var existed = false
             list.forEach {
-                if(it.id == cartModel.id){
+                if (it.id == cartModel.id) {
                     homeDao.updateQuantityCart(++it.quantity, it.id)
                     existed = true
                     return@forEach
                 }
             }
 
-            if (!existed){
+            if (!existed) {
                 homeDao.insertCart(cartModel)
             }
         } catch (cause: Throwable) {
@@ -94,14 +94,46 @@ class HomeRepository(
         }
     }
 
+    //Rating
+
+    private suspend fun insertDishRating(dishRating: ItemDishRateModelResponse, dishId: String) {
+        try {
+            dishRating.dishId = dishId
+            val temp = ItemDishRateModel(
+                dishId = dishRating.dishId,
+                count_rate = dishRating.count_rate,
+                avg_rate = dishRating.avg_rate,
+                total_page = dishRating.total_page,
+                start = dishRating.start,
+                end = dishRating.end
+            )
+            homeDao.insertDishRating(temp)
+            homeDao.insertListRating(dishRating.listRatings)
+        } catch (cause: Throwable) {
+            CusResult.Error(Exception(cause))
+        }
+    }
+
+    suspend fun requestRatingDish(requestModel: RequestRatingModel): CusResult<SingleRateResponseModel> {
+        return try {
+            val result = networkService.ratingDish(getToken(), requestModel)
+            if (result.rateModel != null) {
+                homeDao.insertItemRating(result.rateModel)
+            }
+            CusResult.Success(result)
+        } catch (cause: Throwable) {
+            CusResult.Error(Exception(cause))
+        }
+    }
+
     suspend fun deleteDish(id: String): CusResult<BaseResponse> {
         return try {
             val map = HashMap<String, String>()
             map["_id"] = id
-            val result: BaseResponse = networkService.deleteDish(MainActivity.TOKEN_ACCESS, map)
+            val result: BaseResponse = networkService.deleteDish(getToken(), map)
             homeDao.deleteDish(id)
             CusResult.Success(result)
-        }catch (cause: Throwable) {
+        } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }
     }
@@ -114,10 +146,22 @@ class HomeRepository(
             if (result.dish != null) {
                 insertDish(result.dish)
                 CusResult.Success(result.dish)
-            }else{
+            } else {
                 CusResult.Error(Exception())
             }
-        }catch (cause: Throwable) {
+        } catch (cause: Throwable) {
+            CusResult.Error(Exception(cause))
+        }
+    }
+
+    suspend fun getDishRating(dishId: String): CusResult<BaseResponse> {
+        return try {
+            val result = networkService.getDishRates(dishId, 0)
+
+            if (result.itemDishRateModel != null)
+                insertDishRating(result.itemDishRateModel, dishId)
+            CusResult.Success(result)
+        } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }
     }

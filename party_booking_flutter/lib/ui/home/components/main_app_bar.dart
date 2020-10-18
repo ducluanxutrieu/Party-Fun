@@ -17,7 +17,7 @@ class MainAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(accountModel.fullName),
+      title: Text(accountModel?.fullName ?? ""),
       actions: <Widget>[
         IconButton(
             icon: Icon(Icons.search),

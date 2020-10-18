@@ -24,8 +24,6 @@ data class DishModel(
     @SerializedName("discount") val discount: Int? = 0,
     @SerializedName("description") val description: String? = null,
 
-    var quantity: Int = 0,
-
     @TypeConverters(ImageConverter::class)
     @SerializedName("categories")
     val categories: List<String>,
@@ -49,11 +47,3 @@ class ImageConverter {
         return  Gson().toJson(list)
     }
 }
-
-data class ListRate(
-    @SerializedName("username") val username: String? = null,
-    @SerializedName("_iddish") val _iddish: String? = null,
-    @SerializedName("scorerate") val scorerate: Float? = 5f,
-    @SerializedName("content") val content: String? = null,
-    @SerializedName("updateAt") val createAt: String? = null
-) : Serializable

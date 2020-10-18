@@ -17,18 +17,16 @@ import com.uit.party.R
 import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
+import com.uit.party.model.ItemDishRateWithListRates
 import com.uit.party.model.UserRole
-import com.uit.party.ui.signin.login.LoginViewModel
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
-import com.uit.party.util.rxbus.RxBus
-import com.uit.party.util.rxbus.RxEvent
-import io.reactivex.disposables.Disposable
 
 class DetailDishFragment : Fragment() {
     private lateinit var viewModel: DetailDishViewModel
     private lateinit var binding: FragmentDetailDishBinding
     private val mArgs: DetailDishFragmentArgs by navArgs()
-    private lateinit var mDisposable: Disposable
+    private val mRatingAdapter = DishRatingAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +54,7 @@ class DetailDishFragment : Fragment() {
 
     private fun checkIsStaff(): Boolean {
         val role =
-            SharedPrefs().getInstance()[LoginViewModel.USER_INFO_KEY, Account::class.java]?.role
+            SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.role
         return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
     }
 
@@ -122,6 +120,7 @@ class DetailDishFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initData()
+        listenLiveData()
         if (viewModel.mDishModel != null) {
             viewModel.init()
         }
@@ -149,23 +148,30 @@ class DetailDishFragment : Fragment() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!mDisposable.isDisposed) mDisposable.dispose()
-    }
-
     private fun setupRecyclerView() {
         binding.imageSlider.sliderAdapter = viewModel.mAdapter
         binding.imageSlider.startAutoCycle()
         binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM)
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
 
-        binding.rvRating.adapter = viewModel.mRatingAdapter
+        binding.rvRating.adapter = mRatingAdapter
     }
 
     private fun initData() {
         viewModel.mPosition = mArgs.position
         viewModel.mDishType = mArgs.dishType
         viewModel.mDishModel = mArgs.StringDishModel
+        viewModel.getListRating()
+    }
+
+    private fun listenLiveData(){
+        viewModel.mListRates.observe(viewLifecycleOwner, { list ->
+            val item: ItemDishRateWithListRates? = list.find {
+                it.itemDishRateModel.dishId == viewModel.mDishModel?.id
+            }
+            if (item != null){
+                mRatingAdapter.submitList(item.listRatings)
+            }
+        })
     }
 }

@@ -100,11 +100,24 @@ interface ServiceRetrofit {
         @Body body: HashMap<String, String?>
     ): DishItemResponse
 
-    @POST("product/ratedish")
-    fun ratingDish(
+    //Rating
+    @GET("product/rate")
+    suspend fun getDishRates(
+        @Query("id") id: String,
+        @Query("page") page: Int
+    ): RateResponseModel
+
+    @POST("product/rate")
+    suspend fun ratingDish(
         @Header("authorization") token: String,
         @Body body: RequestRatingModel
-    ): Call<BaseResponse>
+    ): SingleRateResponseModel
+
+    @PUT("product/rate")
+    suspend fun updateRatingDish(
+        @Header("authorization") token: String,
+        @Body body: RequestRatingModel
+    ): SingleRateResponseModel
 
     @HTTP(method = "DELETE", path = "product/deletedish", hasBody = true)
     suspend fun deleteDish(

@@ -7,12 +7,12 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
+import com.uit.party.data.getToken
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
 import com.uit.party.model.UserGender
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.UiUtil
@@ -82,7 +82,7 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
 
         //Create request body with text description and text media type
         val description = "image-type".toRequestBody("text/plain".toMediaTypeOrNull())
-        getNetworkService().updateAvatar(TOKEN_ACCESS, part, description)
+        getNetworkService().updateAvatar(getToken(), part, description)
             .enqueue(object : Callback<BaseResponse> {
                 override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                     if (t.message != null) {

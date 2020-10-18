@@ -4,9 +4,7 @@ package com.uit.party.data.home
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.uit.party.model.CartModel
-import com.uit.party.model.DishModel
-import com.uit.party.model.ImageConverter
+import com.uit.party.model.*
 
 
 /***
@@ -48,13 +46,27 @@ interface HomeDao {
 
     @get:Query("SELECT * FROM cart_table WHERE quantity > 0")
     val getCart: LiveData<List<CartModel>>
+
+    //Rating
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDishRating(itemDishRateModel: ItemDishRateModel)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertListRating(rateModel: List<RateModel>)
+
+    @Transaction
+    @Query("SELECT * FROM ItemDishRateModel")
+    fun getDishRating(): LiveData<List<ItemDishRateWithListRates>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertItemRating(rateModel: RateModel)
 }
 
 /**
  * TitleDatabase provides a reference to the dao to repositories
  */
 @TypeConverters(ImageConverter::class)
-@Database(entities = [DishModel::class, CartModel::class], version = 1, exportSchema = false)
+@Database(entities = [DishModel::class, CartModel::class, RateModel::class, ItemDishRateModel::class], version = 3, exportSchema = false)
 abstract class PartyBookingDatabase : RoomDatabase() {
     abstract val homeDao: HomeDao
 }

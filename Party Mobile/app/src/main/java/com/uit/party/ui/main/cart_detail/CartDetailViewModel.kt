@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
+import com.uit.party.data.getToken
 import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.BillModel
 import com.uit.party.model.CartModel
 import com.uit.party.model.ListDishes
 import com.uit.party.model.RequestOrderPartyModel
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
@@ -154,7 +154,7 @@ class CartDetailViewModel(private val repository: HomeRepository) : ViewModel(){
             mNumberTable.toString(),
             mListDishes
         )
-        getNetworkService().bookParty(TOKEN_ACCESS, bookModel)
+        getNetworkService().bookParty(getToken(), bookModel)
             .enqueue(object : Callback<BillModel> {
                 override fun onFailure(call: Call<BillModel>, t: Throwable) {
                     t.message?.let { UiUtil.showToast(it) }

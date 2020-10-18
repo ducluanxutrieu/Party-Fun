@@ -13,6 +13,8 @@ import com.uit.party.model.AccountResponse
 import com.uit.party.model.LoginModel
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.util.Constants
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
@@ -186,11 +188,6 @@ class LoginViewModel : ViewModel() {
 
     private fun saveToMemory(model: AccountResponse) {
         SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
-        SharedPrefs().getInstance().put(ACCESS_TOKEN_KEY, model.account?.token)
-    }
-
-    companion object {
-        internal const val USER_INFO_KEY = "USER_INFO_KEY"
-        internal const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
+        SharedPrefs().getInstance().put(Constants.TOKEN_ACCESS_KEY, model.account?.token)
     }
 }

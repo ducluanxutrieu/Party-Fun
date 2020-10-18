@@ -8,8 +8,8 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
+import com.uit.party.data.getToken
 import com.uit.party.model.BaseResponse
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
 import com.uit.party.util.UiUtil
 import com.uit.party.util.getNetworkService
 import retrofit2.Call
@@ -48,7 +48,7 @@ class ChangePasswordViewModel : ViewModel() {
 
     private fun sendChangePassword(onComplete: (Boolean) -> Unit) {
         getNetworkService().changePassword(
-            TOKEN_ACCESS,
+            getToken(),
             currentPasswordText,
             newPasswordText
         )

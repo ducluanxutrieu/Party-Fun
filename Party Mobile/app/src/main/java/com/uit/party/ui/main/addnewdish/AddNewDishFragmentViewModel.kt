@@ -13,11 +13,11 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
+import com.uit.party.data.getToken
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.*
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import com.vansuita.pickimage.bundle.PickSetup
@@ -101,7 +101,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
 
     private fun updateDish(view: View) {
         val mUpdateModel = UpdateDishRequestModel(mDishModel?.id.toString(), mTitleText, mDescriptionText, mPriceText, mTypeText)
-        getNetworkService().updateDish(TOKEN_ACCESS, mUpdateModel)
+        getNetworkService().updateDish(getToken(), mUpdateModel)
             .enqueue(object : Callback<UpdateDishResponse>{
                 override fun onFailure(call: Call<UpdateDishResponse>, t: Throwable) {
                     t.message?.let { UiUtil.showToast(it) }

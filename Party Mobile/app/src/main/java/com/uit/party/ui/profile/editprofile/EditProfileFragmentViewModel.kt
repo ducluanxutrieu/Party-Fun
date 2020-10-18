@@ -9,11 +9,11 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.uit.party.R
+import com.uit.party.data.getToken
 import com.uit.party.model.Account
 import com.uit.party.model.AccountResponse
-import com.uit.party.ui.main.MainActivity.Companion.TOKEN_ACCESS
-import com.uit.party.ui.signin.login.LoginViewModel.Companion.USER_INFO_KEY
 import com.uit.party.util.*
+import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -216,7 +216,7 @@ class EditProfileFragmentViewModel : ViewModel() {
             TimeFormatUtil.formatDateToServer(mBirthday.get()),
             mSex
         )
-        getNetworkService().updateUser(TOKEN_ACCESS, requestModel)
+        getNetworkService().updateUser(getToken(), requestModel)
             .enqueue(object : Callback<AccountResponse> {
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     if (!t.message.isNullOrEmpty()) {
