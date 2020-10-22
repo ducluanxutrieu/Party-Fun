@@ -129,4 +129,6 @@
     <string name="full_name_too_short">Full name too short</string>
     <string name="phone_number_too_short">Phone number too short</string>
     <string name="title_activity_maps">Map</string>
+    <string name="review">Review</string>
+    <string name="review_this_dish">Review this dish</string>
 </resources>

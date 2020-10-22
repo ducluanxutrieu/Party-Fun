@@ -50,6 +50,21 @@ class DetailDishFragment : Fragment() {
         binding.viewModel = viewModel
 
         setupToolbar()
+        ratingClicked()
+    }
+
+    private fun ratingClicked(){
+        binding.floatingActionButton.setOnClickListener {
+            val onRatingDialogListener = object : OnRatingDialogListener {
+                override fun onSubmitted(content: String, score: Float) {
+                    viewModel.onSubmitClicked(content, score)
+                }
+            }
+            val dialog = RatingDialog(onRatingDialogListener)
+            dialog.showsDialog = true
+            val frameManager = childFragmentManager
+            dialog.show(frameManager, "Dialog Review")
+        }
     }
 
     private fun checkIsStaff(): Boolean {

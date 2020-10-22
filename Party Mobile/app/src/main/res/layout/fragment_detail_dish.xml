@@ -18,8 +18,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/ll_rating">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,15 +69,15 @@
                         android:text="@{viewModel.nameDish}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                         android:textSize="@dimen/item_product_title_size"
-                        tools:text="Nem cua bể"/>
+                        tools:text="Nem cua bể" />
 
                     <androidx.appcompat.widget.AppCompatRatingBar
+                        style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:numStars="5"
-                        android:rating="@{viewModel.mRatingShow}"
-                        android:layout_marginStart="@dimen/_5sdp"/>
+                        android:rating="@{viewModel.mRatingShow}" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
@@ -96,15 +95,15 @@
                         android:layout_marginTop="@dimen/standard_spacing"
                         android:lineSpacingMultiplier="1.5"
                         android:text="@{viewModel.descriptionDish}"
-                        tools:text="@string/description_sample"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        tools:text="@string/description_sample" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/list_rated"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:textStyle="italic"/>
+                        android:text="@string/list_rated"
+                        android:textStyle="italic" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_rating"
@@ -112,91 +111,32 @@
                         android:layout_height="wrap_content"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:itemCount="5"
-                        tools:listitem="@layout/item_rating"/>
+                        tools:listitem="@layout/item_rating" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/FloatingActionButton"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/ll_rating"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/_20sdp"
             android:backgroundTint="@color/colorAccentSecondary"
-            android:onClick="@{() -> viewModel.addToCartClicked()}"
-            android:src="@drawable/ic_add_dish_cart_24dp" />-->
+            android:contentDescription="@string/review"
+            android:src="@drawable/ic_customer_review" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lav_add_to_cart"
             android:layout_width="@dimen/_300sdp"
             android:layout_height="@dimen/_300sdp"
-            app:lottie_rawRes="@raw/add_to_cart"
-            android:visibility="gone"
-            tools:visibility="visible"
+            android:layout_centerInParent="true"
             android:elevation="@dimen/_2sdp"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:layout_centerInParent="true"/>
-
-        <LinearLayout
-            android:id="@+id/ll_rating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true"
-            >
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_15sdp"
-                android:text="@string/rating"
-                android:textColor="@color/colorAccent"
-                android:textStyle="italic|bold"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_10sdp"/>
-
-            <androidx.appcompat.widget.AppCompatRatingBar
-                android:id="@+id/rating_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layerType="hardware"
-                android:numStars="5"
-                android:rating="@={viewModel.mRating}"
-                android:layout_gravity="center_horizontal"
-                tools:rating="5" />
-
-            <LinearLayout
-                android:id="@+id/ll_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/write_your_review_here"
-                        android:text="@={viewModel.mCommentRating}" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/MaterialButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:onClick="@{() -> viewModel.onSubmitClicked()}"
-                    android:text="@string/submit" />
-            </LinearLayout>
-        </LinearLayout>
+            android:visibility="gone"
+            app:lottie_rawRes="@raw/add_to_cart"
+            tools:visibility="visible" />
     </RelativeLayout>
 </layout>

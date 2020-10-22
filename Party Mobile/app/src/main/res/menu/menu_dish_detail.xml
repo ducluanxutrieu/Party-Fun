@@ -6,14 +6,14 @@
         android:id="@+id/toolbar_edit_dish"
         android:icon="@drawable/ic_edit_black_24dp"
         android:title="@string/edit_dish"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         tools:ignore="PrivateResource" />
 
     <item
         android:id="@+id/toolbar_delete_dish"
         android:icon="@drawable/ic_delete_forever"
         android:title="@string/delete_dish"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/toolbar_add_to_cart"

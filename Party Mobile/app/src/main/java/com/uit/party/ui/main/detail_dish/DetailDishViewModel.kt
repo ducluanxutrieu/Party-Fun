@@ -21,8 +21,6 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
     var priceDish = ObservableField<String>()
     var nameDish = ObservableField<String>()
     var descriptionDish = ObservableField<String>()
-    val mCommentRating = ObservableField("")
-    val mRating = ObservableFloat(5f)
     val mRatingShow = ObservableFloat(5f)
     val mPrice = ObservableField("")
     val mAdapter = DishDetailAdapter()
@@ -63,12 +61,17 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
         }
     }*/
 
-    fun onSubmitClicked() {
+    fun onSubmitClicked(content: String, score: Float) {
         val requestModel =
-            RequestRatingModel(mDishModel?.id, mRating.get().toDouble(), mCommentRating.get())
+            RequestRatingModel(mDishModel?.id, score.toDouble(), content)
         viewModelScope.launch {
             try {
-                repository.requestRatingDish(requestModel)
+                val result = repository.requestRatingDish(requestModel)
+                if (result is CusResult.Success){
+                    result.data.message?.let { UiUtil.showToast(it) }
+                }else {
+                    UiUtil.showToast ((result as CusResult.Error).exception.toString())
+                }
             }catch (ex: Exception){
                 ex.message?.let { UiUtil.showToast(it) }
             }
