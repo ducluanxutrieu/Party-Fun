@@ -5,13 +5,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import com.google.gson.Gson
 import android.util.Log
 import android.view.View
 
 
 class GlobalApplication : Application(){
-    private val mGSon = Gson()
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
@@ -20,10 +18,6 @@ class GlobalApplication : Application(){
     companion object{
         var appContext: Context? = null
             private set
-    }
-
-    fun getGSon(): Gson {
-        return mGSon
     }
 
     fun loadBitmapFromView(view: View, width: Int, height: Int): Bitmap {

@@ -18,7 +18,7 @@ class RatingDialog(private val onListener: OnRatingDialogListener) : DialogFragm
         dialogView.findViewById<MaterialButton>(R.id.btn_cancel).setOnClickListener {
             this.dismiss()
         }
-        dialogView.setBackgroundResource(android.R.color.transparent);
+        dialogView.setBackgroundResource(android.R.color.transparent)
         dialogView.findViewById<MaterialButton>(R.id.btn_submit).setOnClickListener {
             val reviewString =  dialogView.findViewById<TextInputEditText>(R.id.et_content_review).text
             val reviewScore =  dialogView.findViewById<RatingBar>(R.id.rating_bar).rating

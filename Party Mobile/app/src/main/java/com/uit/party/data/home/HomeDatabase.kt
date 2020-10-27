@@ -3,6 +3,7 @@ package com.uit.party.data.home
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.uit.party.model.*
 
@@ -57,6 +58,9 @@ interface HomeDao {
     @Transaction
     @Query("SELECT * FROM ItemDishRateModel")
     fun getDishRating(): LiveData<List<ItemDishRateWithListRates>>
+
+/*    @Query("SELECT * FROM RateModel WHERE id_dish = :dishID ORDER BY update_at DESC")
+    fun getSingleDishRating(dishID: String): PagingSource<Int, RateModel>*/
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItemRating(rateModel: RateModel)

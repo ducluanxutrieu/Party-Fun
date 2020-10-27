@@ -1,12 +1,17 @@
 package com.uit.party.data.home
 
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.uit.party.data.CusResult
+import com.uit.party.data.DishRateDataSource
 import com.uit.party.data.getToken
 import com.uit.party.model.*
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.SharedPrefs
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class HomeRepository(
@@ -154,8 +159,14 @@ class HomeRepository(
         }
     }
 
-    suspend fun getDishRating(dishId: String): CusResult<BaseResponse> {
-        return try {
+    fun getDishRating(dishId: String): Flow<PagingData<RateModel>> {
+//        val pagingSourceFactory =  { homeDao.getSingleDishRating(dishId)}
+        return Pager(
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+            pagingSourceFactory = { DishRateDataSource(dishId = dishId, service = networkService) },
+        ).flow
+
+        /*return try {
             val result = networkService.getDishRates(dishId, 0)
 
             if (result.itemDishRateModel != null)
@@ -163,6 +174,10 @@ class HomeRepository(
             CusResult.Success(result)
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
-        }
+        }*/
+    }
+
+    companion object {
+        private const val NETWORK_PAGE_SIZE = 10
     }
 }

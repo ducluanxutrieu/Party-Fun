@@ -3,8 +3,8 @@ package com.uit.party.ui.main.detail_dish
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemRatingBinding
@@ -12,7 +12,7 @@ import com.uit.party.model.RateModel
 import com.uit.party.util.TimeFormatUtil
 
 class DishRatingAdapter :
-    ListAdapter<RateModel, DishRatingAdapter.DishRatingViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<RateModel, DishRatingAdapter.DishRatingViewHolder>(DIFF_CALLBACK) {
 
 
     override fun onCreateViewHolder(
@@ -29,7 +29,7 @@ class DishRatingAdapter :
     }
 
     override fun onBindViewHolder(holder: DishRatingViewHolder, position: Int) {
-        holder.bindData(getItem(position))
+        getItem(position)?.let { holder.bindData(it) }
     }
 
     class DishRatingViewHolder(private val binding: ItemRatingBinding) :

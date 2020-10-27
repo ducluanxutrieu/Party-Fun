@@ -3,13 +3,17 @@ package com.uit.party.ui.main.detail_dish
 import android.animation.Animator
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
@@ -17,10 +21,11 @@ import com.uit.party.R
 import com.uit.party.data.home.getDatabase
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
-import com.uit.party.model.ItemDishRateWithListRates
 import com.uit.party.model.UserRole
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class DetailDishFragment : Fragment() {
     private lateinit var viewModel: DetailDishViewModel
@@ -169,24 +174,55 @@ class DetailDishFragment : Fragment() {
         binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM)
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
 
-        binding.rvRating.adapter = mRatingAdapter
+        binding.rvRating.adapter = mRatingAdapter.withLoadStateHeaderAndFooter(
+            header = ReposLoadStateAdapter { mRatingAdapter.retry() },
+            footer = ReposLoadStateAdapter { mRatingAdapter.retry() }
+        )
+
+        mRatingAdapter.addLoadStateListener { loadState ->
+            // Only show the list if refresh succeeds.
+            binding.rvRating.isVisible = loadState.source.refresh is LoadState.NotLoading
+            // Show loading spinner during initial load or refresh.
+            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            // Show the retry state if initial load or refresh fails.
+            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+
+            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+            val errorState = loadState.source.append as? LoadState.Error
+                ?: loadState.source.prepend as? LoadState.Error
+                ?: loadState.append as? LoadState.Error
+                ?: loadState.prepend as? LoadState.Error
+            errorState?.let {
+                Toast.makeText(
+                    requireContext(),
+                    "\uD83D\uDE28 Wooops ${it.error}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     private fun initData() {
         viewModel.mPosition = mArgs.position
         viewModel.mDishType = mArgs.dishType
         viewModel.mDishModel = mArgs.StringDishModel
-        viewModel.getListRating()
+//        viewModel.getListRating()
     }
 
     private fun listenLiveData(){
-        viewModel.mListRates.observe(viewLifecycleOwner, { list ->
+        lifecycleScope.launch {
+            viewModel.getListRating(viewModel.mDishModel?.id ?: "").collectLatest {
+                mRatingAdapter.submitData(it)
+            }
+        }
+
+        /*viewModel.mListRates.observe(viewLifecycleOwner, { list ->
             val item: ItemDishRateWithListRates? = list.find {
                 it.itemDishRateModel.dishId == viewModel.mDishModel?.id
             }
             if (item != null){
                 mRatingAdapter.submitList(item.listRatings)
             }
-        })
+        })*/
     }
 }

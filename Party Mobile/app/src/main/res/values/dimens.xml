@@ -17,4 +17,5 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">@dimen/_150sdp</dimen>
     <dimen name="add_more_image_size">@dimen/_60sdp</dimen>
+    <dimen name="error_text_size">24sp</dimen>
 </resources>

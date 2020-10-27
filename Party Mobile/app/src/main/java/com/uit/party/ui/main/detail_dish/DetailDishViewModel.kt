@@ -7,13 +7,17 @@ import androidx.databinding.ObservableFloat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.uit.party.data.CusResult
 import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
+import com.uit.party.model.RateModel
 import com.uit.party.model.RequestRatingModel
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() {
@@ -30,6 +34,7 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
 
     private var listImages = ArrayList<String>()
     val mListRates = repository.listRates
+    private var currentListDishRateResult: Flow<PagingData<RateModel>>? = null
 
 
     fun init() {
@@ -78,21 +83,11 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
         }
     }
 
-    fun getListRating(){
-        viewModelScope.launch {
-            val id = mDishModel?.id ?: ""
-            if (id.isNotEmpty())
-                viewModelScope.launch {
-                    try {
-                        val result = repository.getDishRating(id)
-                        if (result is CusResult.Error){
-                            UiUtil.showToast((result as? CusResult.Error).toString())
-                        }
-                    }catch (ex: Exception){
-                        ex.message?.let { UiUtil.showToast(it) }
-                    }
-                }
-        }
+    fun getListRating(dishId: String): Flow<PagingData<RateModel>>{
+        val newResult: Flow<PagingData<RateModel>> = repository.getDishRating(dishId)
+            .cachedIn(viewModelScope)
+        currentListDishRateResult = newResult
+        return newResult
     }
 
 /*    fun getItemDish() {
