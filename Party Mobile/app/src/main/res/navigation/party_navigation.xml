@@ -73,6 +73,7 @@
         <action
             android:id="@+id/action_CartDetailFragment_to_BookingSuccessFragment"
             app:destination="@id/fragment_book_success"/>
+
     </fragment>
 
     <fragment

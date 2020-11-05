@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -46,7 +45,7 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
     }
 
     private fun listenLiveData() {
-        mViewModel.listCart.observe(viewLifecycleOwner, Observer {
+        mViewModel.listCart.observe(viewLifecycleOwner, {
             mCartAdapter.submitList(it)
             mCartAdapter.notifyDataSetChanged()
             mViewModel.listCartStorage = it
@@ -82,7 +81,7 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.bindingAdapterPosition
                 val cardModel = mCartAdapter.getSingleItem(position)
                 mViewModel.onDeleteItemCart(cardModel)
                 val snackBar = Snackbar.make(view!!, "Removed a dish.", Snackbar.LENGTH_LONG)
