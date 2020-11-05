@@ -16,7 +16,7 @@ class DishDetailViewModelFactory(private val database: PartyBookingDatabase) : V
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailDishViewModel::class.java)) {
             return DetailDishViewModel(
-                    HomeRepository(getNetworkService(), database.homeDao)
+                    HomeRepository(getNetworkService(), database)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

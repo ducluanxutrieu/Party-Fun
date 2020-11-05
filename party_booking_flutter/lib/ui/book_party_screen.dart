@@ -41,7 +41,7 @@ class BookPartyScreen extends StatelessWidget {
     return FormBuilderDropdown(
       attribute: "num",
       style: TextStyle(
-          fontFamily: 'Montserrat', fontSize: 20.0, color: Colors.black),
+          fontFamily: 'Montserrat', fontSize: 20.0),
       decoration: InputDecoration(
           labelText: "Number of Table",
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -73,7 +73,6 @@ class BookPartyScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Book Party'),
       ),
-      backgroundColor: Colors.white,
       body: BlocListener<CartBloc, CartState>(
         listenWhen: (previous, current) => (previous.status != current.status ||
             previous.message != current.message),
@@ -102,8 +101,7 @@ class BookPartyScreen extends StatelessWidget {
               'cus': '50',
               'discount_code': "",
             },
-            child: Container(
-              color: Colors.white,
+            child: Padding(
               padding: const EdgeInsets.only(left: 36, right: 36),
               child: SingleChildScrollView(
                 child: Column(

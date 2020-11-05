@@ -19,10 +19,10 @@ class SingleRateResponseModel: BaseResponse() {
 	@SerializedName("data") val rateModel: RateModel ?= null
 }
 
-@Entity
+@Entity(tableName = "rate_model")
 data class RateModel(
 	@PrimaryKey
-	@SerializedName("_id") val _id: String,
+	@SerializedName("_id") val id: String,
 	@SerializedName("id_dish") val id_dish: String,
 	@SerializedName("user_rate") val user_rate: String,
 	@SerializedName("score") val score: Float ?= 5f,

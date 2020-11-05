@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.uit.party.data.CusResult
-import com.uit.party.data.DishRateDataSource
+import com.uit.party.data.RateRemoteMediator
 import com.uit.party.data.getToken
 import com.uit.party.model.*
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
@@ -16,12 +16,12 @@ import java.util.*
 
 class HomeRepository(
     private val networkService: ServiceRetrofit,
-    private val homeDao: HomeDao
+    private val database: PartyBookingDatabase
 ) {
 
+    private val homeDao = database.homeDao
     val listMenu: LiveData<List<DishModel>> = homeDao.allDish
     val listCart: LiveData<List<CartModel>> = homeDao.getCart
-    val listRates: LiveData<List<ItemDishRateWithListRates>> = homeDao.getDishRating()
 
     suspend fun getListDishes() {
         try {
@@ -101,7 +101,7 @@ class HomeRepository(
 
     //Rating
 
-    private suspend fun insertDishRating(dishRating: ItemDishRateModelResponse, dishId: String) {
+    /*private suspend fun insertDishRating(dishRating: ItemDishRateModelResponse, dishId: String) {
         try {
             dishRating.dishId = dishId
             val temp = ItemDishRateModel(
@@ -112,18 +112,18 @@ class HomeRepository(
                 start = dishRating.start,
                 end = dishRating.end
             )
-            homeDao.insertDishRating(temp)
-            homeDao.insertListRating(dishRating.listRatings)
+            database.rateDao.insertDishRating(temp)
+            database.rateDao.insertListRating(dishRating.listRatings)
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }
-    }
+    }*/
 
     suspend fun requestRatingDish(requestModel: RequestRatingModel): CusResult<SingleRateResponseModel> {
         return try {
             val result = networkService.ratingDish(getToken(), requestModel)
             if (result.rateModel != null) {
-                homeDao.insertItemRating(result.rateModel)
+                database.rateDao.insertItemRating(result.rateModel)
             }
             CusResult.Success(result)
         } catch (cause: Throwable) {
@@ -143,7 +143,7 @@ class HomeRepository(
         }
     }
 
-    suspend fun getItemDish(id: String): CusResult<DishModel> {
+    /*suspend fun getItemDish(id: String): CusResult<DishModel> {
         val hashMap = HashMap<String, String?>()
         hashMap["_id"] = id
         return try {
@@ -157,13 +157,18 @@ class HomeRepository(
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }
-    }
+    }*/
 
     fun getDishRating(dishId: String): Flow<PagingData<RateModel>> {
-//        val pagingSourceFactory =  { homeDao.getSingleDishRating(dishId)}
+        val pagingSourceFactory = { database.rateDao.getSingleDishRating(dishId) }
         return Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
-            pagingSourceFactory = { DishRateDataSource(dishId = dishId, service = networkService) },
+            pagingSourceFactory = pagingSourceFactory,
+            remoteMediator = RateRemoteMediator(
+                dishId,
+                networkService,
+                database
+            )
         ).flow
 
         /*return try {

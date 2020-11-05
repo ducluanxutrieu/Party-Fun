@@ -16,7 +16,7 @@ class HomeViewModelFactory(private val database: PartyBookingDatabase) : ViewMod
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MenuViewModel::class.java)) {
             return MenuViewModel(
-                    HomeRepository(getNetworkService(), database.homeDao)
+                    HomeRepository(getNetworkService(), database)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

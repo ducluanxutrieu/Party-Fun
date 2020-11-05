@@ -3,8 +3,8 @@ package com.uit.party.data.home
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.paging.PagingSource
 import androidx.room.*
+import com.uit.party.data.RateDishDao
 import com.uit.party.model.*
 
 
@@ -47,23 +47,6 @@ interface HomeDao {
 
     @get:Query("SELECT * FROM cart_table WHERE quantity > 0")
     val getCart: LiveData<List<CartModel>>
-
-    //Rating
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDishRating(itemDishRateModel: ItemDishRateModel)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertListRating(rateModel: List<RateModel>)
-
-    @Transaction
-    @Query("SELECT * FROM ItemDishRateModel")
-    fun getDishRating(): LiveData<List<ItemDishRateWithListRates>>
-
-/*    @Query("SELECT * FROM RateModel WHERE id_dish = :dishID ORDER BY update_at DESC")
-    fun getSingleDishRating(dishID: String): PagingSource<Int, RateModel>*/
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItemRating(rateModel: RateModel)
 }
 
 /**
@@ -73,6 +56,7 @@ interface HomeDao {
 @Database(entities = [DishModel::class, CartModel::class, RateModel::class, ItemDishRateModel::class], version = 3, exportSchema = false)
 abstract class PartyBookingDatabase : RoomDatabase() {
     abstract val homeDao: HomeDao
+    abstract val rateDao: RateDishDao
 }
 
 private lateinit var INSTANCE: PartyBookingDatabase

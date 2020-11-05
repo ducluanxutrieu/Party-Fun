@@ -45,7 +45,7 @@ class DishRatingAdapter :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RateModel>() {
             override fun areItemsTheSame(oldItem: RateModel, newItem: RateModel): Boolean {
-                return oldItem._id == newItem._id
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: RateModel, newItem: RateModel): Boolean {

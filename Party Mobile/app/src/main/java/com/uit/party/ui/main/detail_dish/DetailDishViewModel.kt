@@ -33,7 +33,6 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
     lateinit var mDishType: String
 
     private var listImages = ArrayList<String>()
-    val mListRates = repository.listRates
     private var currentListDishRateResult: Flow<PagingData<RateModel>>? = null
 
 

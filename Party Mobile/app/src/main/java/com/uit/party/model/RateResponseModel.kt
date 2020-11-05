@@ -9,7 +9,7 @@ class RateResponseModel : BaseResponse() {
     val itemDishRateModel: ItemDishRateModelResponse? = null
 }
 
-data class ItemDishRateWithListRates(
+/*data class ItemDishRateWithListRates(
     @Embedded
     @SerializedName("data")
     val itemDishRateModel: ItemDishRateModel,
@@ -19,7 +19,7 @@ data class ItemDishRateWithListRates(
     )
     @SerializedName("list_rate")
     val listRatings: List<RateModel>
-)
+)*/
 
 @Entity
 data class ItemDishRateModel(
@@ -30,6 +30,8 @@ data class ItemDishRateModel(
     @SerializedName("total_page") val total_page: Int,
     @SerializedName("start") val start: Int,
     @SerializedName("end") val end: Int,
+    val prevKey: Int?,
+    val nextKey: Int?
 )
 
 
