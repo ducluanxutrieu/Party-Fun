@@ -132,4 +132,7 @@
     <string name="review">Review</string>
     <string name="review_this_dish">Review this dish</string>
     <string name="retry">Retry</string>
+    <string name="number_customer">Number Customer</string>
+    <string name="_50">50</string>
+    <string name="_5">5</string>
 </resources>

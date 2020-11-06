@@ -49,7 +49,6 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
             mCartAdapter.submitList(it)
             mCartAdapter.notifyDataSetChanged()
             mViewModel.listCartStorage = it
-            mViewModel.setTotalPrice()
             mViewModel.mShowCart.set(it.isNotEmpty())
         })
     }

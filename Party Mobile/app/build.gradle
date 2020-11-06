@@ -134,4 +134,6 @@ dependencies {
 
     //Animation
     implementation 'com.airbnb.android:lottie:3.3.1'
+
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
 }

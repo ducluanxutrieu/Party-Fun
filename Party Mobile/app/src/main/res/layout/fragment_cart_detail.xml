@@ -53,15 +53,5 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/empty_cart" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="@dimen/_150sdp"
-            android:layout_height="@dimen/_150sdp"
-            android:layout_centerInParent="true"
-            android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}"
-            android:elevation="@dimen/_2sdp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/loading" />
     </RelativeLayout>
 </layout>

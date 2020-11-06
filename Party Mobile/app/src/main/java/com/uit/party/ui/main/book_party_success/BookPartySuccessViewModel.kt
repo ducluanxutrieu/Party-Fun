@@ -3,8 +3,6 @@ package com.uit.party.ui.main.book_party_success
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -27,18 +25,15 @@ import java.util.*
 
 class BookPartySuccessViewModel :ViewModel(){
     val mTotalPrice = ObservableField("")
-    val mNumberTableField = ObservableField("1")
     val mDatePartyField = ObservableField("")
     val mShowLoading = ObservableBoolean(false)
-    private var mNumberTable = 1
+    var mNumberTable = 5
+    var mNumberCustomer = 50
     private var calDatePartyPicker = Calendar.getInstance()
     private val calDateNow = Calendar.getInstance()
     var listCartStorage = emptyList<CartModel>()
-    private val listCart: List<CartModel>
 
-    init {
-        listCart = emptyList()
-    }
+
 
     fun onBackMenuClicked(view: View){
         view.findNavController().navigate(R.id.action_BookingSuccessFragment_to_MenuFragment)
@@ -101,38 +96,6 @@ class BookPartySuccessViewModel :ViewModel(){
         ).show()
     }
 
-    fun getNumberTableTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkNumberTableValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkNumberTableValid(editable: Editable?) {
-        mNumberTable = when {
-            editable.isNullOrEmpty() -> {
-                mNumberTableField.set("1")
-                1
-            }
-            editable.toString().toInt() < 1 -> {
-                mNumberTableField.set("1")
-                1
-            }
-            else -> {
-                editable.toString().toInt()
-            }
-        }
-
-        setTotalPrice()
-    }
-
     fun setTotalPrice(){
         val totalPrice = calculateTotalPrice()
         mTotalPrice.set(totalPrice.toString().toVNCurrency())
@@ -141,7 +104,7 @@ class BookPartySuccessViewModel :ViewModel(){
     fun onOrderNowClicked(view: View){
         mShowLoading.set(true)
         val mListDishes = ArrayList<ListDishes>()
-        for (row in listCart.value ?: emptyList()){
+        for (row in listCartStorage){
             if (row.id.isNotEmpty())
                 mListDishes.add(
                     ListDishes(
