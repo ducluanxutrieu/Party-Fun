@@ -135,4 +135,6 @@
     <string name="number_customer">Number Customer</string>
     <string name="_50">50</string>
     <string name="_5">5</string>
+    <string name="discount_code">Discount Code</string>
+    <string name="payment">Payment</string>
 </resources>

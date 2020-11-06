@@ -128,7 +128,7 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
         val dishModel = mDishModel
         if (dishModel != null)
             viewModelScope.launch {
-                repository.insertCart(
+                repository.database.cartDao.insertCart(
                     CartModel(
                         id = dishModel.id,
                         name = dishModel.name,

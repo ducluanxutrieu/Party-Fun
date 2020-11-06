@@ -21,7 +21,6 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.uit.party.data.home.PartyBookingDatabase
 import com.uit.party.model.ItemDishRateModel
 import com.uit.party.model.RateModel
 import com.uit.party.util.ServiceRetrofit

@@ -126,10 +126,10 @@ interface ServiceRetrofit {
     ): BaseResponse
 
     @POST("product/book")
-    fun bookParty(
+    suspend fun orderParty(
         @Header("authorization") token: String,
         @Body body: RequestOrderPartyModel
-    ): Call<BillModel>
+    ): BillResponseModel
 }
 
 private val service: ServiceRetrofit by lazy {

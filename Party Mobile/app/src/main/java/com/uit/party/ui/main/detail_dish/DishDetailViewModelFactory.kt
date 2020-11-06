@@ -3,7 +3,7 @@ package com.uit.party.ui.main.detail_dish
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.uit.party.data.home.HomeRepository
-import com.uit.party.data.home.PartyBookingDatabase
+import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.util.getNetworkService
 
 /**

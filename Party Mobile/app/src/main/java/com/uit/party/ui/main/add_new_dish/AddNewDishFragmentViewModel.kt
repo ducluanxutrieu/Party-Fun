@@ -1,4 +1,4 @@
-package com.uit.party.ui.main.addnewdish
+package com.uit.party.ui.main.add_new_dish
 
 import android.graphics.Bitmap
 import android.text.Editable

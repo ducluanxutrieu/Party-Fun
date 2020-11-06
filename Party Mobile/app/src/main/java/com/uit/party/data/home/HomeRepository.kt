@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.uit.party.data.CusResult
+import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.data.RateRemoteMediator
 import com.uit.party.data.getToken
 import com.uit.party.model.*
@@ -16,12 +17,11 @@ import java.util.*
 
 class HomeRepository(
     private val networkService: ServiceRetrofit,
-    private val database: PartyBookingDatabase
+    val database: PartyBookingDatabase
 ) {
 
     private val homeDao = database.homeDao
     val listMenu: LiveData<List<DishModel>> = homeDao.allDish
-    val listCart: LiveData<List<CartModel>> = homeDao.getCart
 
     suspend fun getListDishes() {
         try {
@@ -55,41 +55,6 @@ class HomeRepository(
         homeDao.updateDish(dishModel)
     }*/
 
-    suspend fun insertCart(cartModel: CartModel) {
-        try {
-            val list: List<CartModel> = homeDao.getCartItem(cartModel.id)
-            var existed = false
-            list.forEach {
-                if (it.id == cartModel.id) {
-                    homeDao.updateQuantityCart(++it.quantity, it.id)
-                    existed = true
-                    return@forEach
-                }
-            }
-
-            if (!existed) {
-                homeDao.insertCart(cartModel)
-            }
-        } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
-        }
-    }
-
-    suspend fun updateCart(cartModel: CartModel) {
-        try {
-            homeDao.updateQuantityCart(cartModel.quantity, cartModel.id)
-        } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
-        }
-    }
-
-    suspend fun deleteCart(cartModel: CartModel) {
-        try {
-            homeDao.deleteCart(cartModel)
-        } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
-        }
-    }
 
     suspend fun insertDish(dishModel: DishModel) {
         try {

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.uit.party.R
-import com.uit.party.data.home.getDatabase
+import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentCartDetailBinding
 import com.uit.party.model.CartModel
 
@@ -45,7 +46,7 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
     }
 
     private fun listenLiveData() {
-        mViewModel.listCart.observe(viewLifecycleOwner, {
+        mViewModel.listCart.observe(viewLifecycleOwner, Observer {
             mCartAdapter.submitList(it)
             mCartAdapter.notifyDataSetChanged()
             mViewModel.listCartStorage = it

@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/fragment_add_new_dish"
-        android:name="com.uit.party.ui.main.addnewdish.AddNewDishFragment"
+        android:name="com.uit.party.ui.main.add_new_dish.AddNewDishFragment"
         android:label="@string/add_dish"
         tools:layout="@layout/fragment_add_new_dish">
 
@@ -77,12 +77,12 @@
 
     <fragment
         android:id="@+id/fragment_book_success"
-        android:name="com.uit.party.ui.main.book_party_success.BookPartySuccessFragment"
+        android:name="com.uit.party.ui.main.book_party.BookPartyFragment"
         android:label="@string/reservation_success"
-        tools:layout="@layout/fragment_book_party_success">
+        tools:layout="@layout/fragment_book_party">
 
         <action
-            android:id="@+id/action_BookingSuccessFragment_to_MenuFragment"
+            android:id="@+id/action_BookingFragment_to_MenuFragment"
             app:destination="@id/nav_user_home"
             app:launchSingleTop="true"
             app:popUpTo="@+id/nav_user_home"
@@ -92,6 +92,30 @@
             android:name="listCart"
             app:argType="string"
             app:nullable="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_book_party"
+        android:name="com.uit.party.ui.main.book_party.BookPartyFragment"
+        android:label="@string/reservation_success"
+        tools:layout="@layout/fragment_book_party">
+
+        <action
+            android:id="@+id/action_BookingPartyFragment_to_PaymentFragment"
+            app:destination="@id/fragment_payment_party" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_payment_party"
+        android:name="com.uit.party.ui.main.payment_party.PaymentPartyFragment"
+        android:label="@string/payment"
+        tools:layout="@layout/payment_party_fragment">
+
+        <argument
+            android:name="billModel"
+            app:argType="com.uit.party.model.BillModel"
+            app:nullable="false"
             />
     </fragment>
 

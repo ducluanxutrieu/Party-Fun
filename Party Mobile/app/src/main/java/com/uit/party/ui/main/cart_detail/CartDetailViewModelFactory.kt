@@ -2,8 +2,8 @@ package com.uit.party.ui.main.cart_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.uit.party.data.home.HomeRepository
-import com.uit.party.data.home.PartyBookingDatabase
+import com.uit.party.data.PartyBookingDatabase
+import com.uit.party.data.cart.CartRepository
 import com.uit.party.util.getNetworkService
 
 /**
@@ -16,7 +16,7 @@ class CartDetailViewModelFactory(private val database: PartyBookingDatabase) : V
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CartDetailViewModel::class.java)) {
             return CartDetailViewModel(
-                    HomeRepository(getNetworkService(), database)
+                    CartRepository(getNetworkService(), database.cartDao)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

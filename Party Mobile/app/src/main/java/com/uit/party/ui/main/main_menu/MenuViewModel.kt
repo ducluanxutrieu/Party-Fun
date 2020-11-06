@@ -102,7 +102,7 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
 
     fun addDishToCart(cartModel: CartModel) {
         viewModelScope.launch {
-            repository.insertCart(cartModel)
+            repository.database.cartDao.insertCart(cartModel)
         }
     }
 

@@ -3,20 +3,26 @@ package com.uit.party.model
 import com.google.gson.annotations.SerializedName
 
 class RequestOrderPartyModel (
-    @SerializedName("dateParty")
+    @SerializedName("date_party")
     val dateParty: String,
 
-    @SerializedName("numbertable")
-    val numbertable: String,
+    @SerializedName("table")
+    val numberTable: Int,
 
-    @SerializedName("lishDishs")
-    val lishDishs: ArrayList<ListDishes>
+    @SerializedName("count_customer")
+    val numberCustomer: Int,
+
+    @SerializedName("discount_code")
+    val discountCode: String?,
+
+    @SerializedName("dishes")
+    val listDishes: ArrayList<ListDishes>
 )
 
 class ListDishes(
-    @SerializedName("numberDish")
-    val numberDish: String,
+    @SerializedName("count")
+    val numberDish: Int,
 
     @SerializedName("_id")
-    val _id: String
+    val id: String
 )

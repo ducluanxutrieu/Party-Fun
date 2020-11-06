@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.google.gson.Gson
-import com.uit.party.data.home.HomeRepository
+import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.CartModel
 import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
 
-class CartDetailViewModel(private val repository: HomeRepository) : ViewModel(){
+class CartDetailViewModel(private val repository: CartRepository) : ViewModel(){
     val mShowCart = ObservableBoolean(false)
 
     val listCart = repository.listCart

@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.uit.party.R
-import com.uit.party.data.home.getDatabase
+import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.model.CartModel
 import com.uit.party.ui.main.MainActivity

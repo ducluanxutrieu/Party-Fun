@@ -1,4 +1,4 @@
-package com.uit.party.ui.main.addnewdish
+package com.uit.party.ui.main.add_new_dish
 
 import android.annotation.SuppressLint
 import android.content.Context

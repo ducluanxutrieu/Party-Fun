@@ -1,14 +1,15 @@
 package com.uit.party.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class BillModel : BaseResponse() {
+class BillResponseModel : BaseResponse() {
     @SerializedName("bill")
-    val bill: Bill? = null
+    val billModel: BillModel? = null
 }
 
 
-data class Bill(
+data class BillModel(
     @SerializedName("_id")
     val _id: String? = null,
 
@@ -38,4 +39,4 @@ data class Bill(
 
     @SerializedName("paymentAt")
     val paymentAt: String? = null
-)
+): Serializable

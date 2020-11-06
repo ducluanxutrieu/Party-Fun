@@ -1,4 +1,4 @@
-package com.uit.party.ui.main.book_party_success
+package com.uit.party.ui.main.book_party
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -7,25 +7,23 @@ import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.data.getToken
-import com.uit.party.model.BillModel
+import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.ListDishes
 import com.uit.party.model.RequestOrderPartyModel
 import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
-import com.uit.party.util.getNetworkService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 import java.util.*
 
-class BookPartySuccessViewModel :ViewModel(){
+class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
     val mTotalPrice = ObservableField("")
     val mDatePartyField = ObservableField("")
+    val mDishCountCodeField = ObservableField("")
     val mShowLoading = ObservableBoolean(false)
     var mNumberTable = 5
     var mNumberCustomer = 50
@@ -33,11 +31,6 @@ class BookPartySuccessViewModel :ViewModel(){
     private val calDateNow = Calendar.getInstance()
     var listCartStorage = emptyList<CartModel>()
 
-
-
-    fun onBackMenuClicked(view: View){
-        view.findNavController().navigate(R.id.action_BookingSuccessFragment_to_MenuFragment)
-    }
 
     private val datePartySetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -54,13 +47,13 @@ class BookPartySuccessViewModel :ViewModel(){
         mDatePartyField.set(timeStart)
     }
 
-    private fun setTimePicker(context: Context){
+    private fun setTimePicker(context: Context) {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
             calDatePartyPicker.set(Calendar.HOUR_OF_DAY, hour)
             calDatePartyPicker.set(Calendar.MINUTE, minute)
-            if (calDatePartyPicker <= calDateNow){
+            if (calDatePartyPicker <= calDateNow) {
                 UiUtil.showToast(UiUtil.getString(R.string.date_booking_must_greater_than_day_now))
-            }else{
+            } else {
                 updateDatePartyInView()
             }
         }
@@ -96,45 +89,45 @@ class BookPartySuccessViewModel :ViewModel(){
         ).show()
     }
 
-    fun setTotalPrice(){
+    fun setTotalPrice() {
         val totalPrice = calculateTotalPrice()
         mTotalPrice.set(totalPrice.toString().toVNCurrency())
     }
 
-    fun onOrderNowClicked(view: View){
+    fun onOrderNowClicked(view: View) {
         mShowLoading.set(true)
+        val bookModel = prepareDataForOrder()
+        try {
+            viewModelScope.launch {
+                val result = repository.orderParty(bookModel)
+                val action = BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(result)
+                view.findNavController().navigate(action)
+            }
+        } catch (cause: Throwable) {
+            UiUtil.showToast(cause.toString())
+        }
+    }
+
+    private fun prepareDataForOrder(): RequestOrderPartyModel {
         val mListDishes = ArrayList<ListDishes>()
-        for (row in listCartStorage){
+        for (row in listCartStorage) {
             if (row.id.isNotEmpty())
                 mListDishes.add(
                     ListDishes(
-                        row.quantity.toString(), row.id
+                        row.quantity, row.id
                     )
                 )
         }
 
-        val bookModel = RequestOrderPartyModel(
-            TimeFormatUtil.formatTimeToServer(calDatePartyPicker),
-            mNumberTable.toString(),
+        val dateParty = TimeFormatUtil.formatTimeToServer(calDatePartyPicker)
+        val discountCode = mDishCountCodeField.get()
+
+        return RequestOrderPartyModel(
+            dateParty,
+            mNumberTable,
+            mNumberCustomer,
+            discountCode,
             mListDishes
         )
-        getNetworkService().bookParty(getToken(), bookModel)
-            .enqueue(object : Callback<BillModel> {
-                override fun onFailure(call: Call<BillModel>, t: Throwable) {
-                    t.message?.let { UiUtil.showToast(it) }
-                    mShowLoading.set(false)
-                }
-
-                override fun onResponse(call: Call<BillModel>, response: Response<BillModel>) {
-                    mShowLoading.set(false)
-                    if (response.isSuccessful) {
-                        response.body()?.message?.let { UiUtil.showToast(it) }
-                        view.findNavController()
-                            .navigate(R.id.action_CartDetailFragment_to_BookingSuccessFragment)
-                    } else {
-                        UiUtil.showToast(response.message())
-                    }
-                }
-            })
     }
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.uit.party.ui.main.addnewdish.AddNewDishFragmentViewModel" />
+            type="com.uit.party.ui.main.add_new_dish.AddNewDishFragmentViewModel" />
     </data>
 
     <ScrollView

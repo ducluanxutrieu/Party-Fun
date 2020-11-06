@@ -1,4 +1,4 @@
-package com.uit.party.ui.main.addnewdish
+package com.uit.party.ui.main.add_new_dish
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(){
             R.id.nav_about_us,
             R.id.naw_user_order
         )
-            .setDrawerLayout(binding.drawerLayout)
+            .setOpenableLayout(binding.drawerLayout)
             .build()
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
         NavigationUI.setupWithNavController(navigationView, navController)
