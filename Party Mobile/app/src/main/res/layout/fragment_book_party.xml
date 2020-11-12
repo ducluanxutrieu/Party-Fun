@@ -190,6 +190,7 @@
                         android:fontFamily="@font/museo_sans_cyrl"
                         android:gravity="center"
                         android:padding="@dimen/_5sdp"
+                        android:text="@={viewModel.mDishCountCodeField}"
                         android:textColor="@color/colorBlue_78"
                         android:textSize="@dimen/_15sdp"
                         android:textStyle="bold"
@@ -208,7 +209,7 @@
                     app:cornerRadius="@dimen/corner_radius" />
             </LinearLayout>
 
-            <!--<com.airbnb.lottie.LottieAnimationView
+            <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_150sdp"
                 android:layout_centerInParent="true"
@@ -216,7 +217,7 @@
                 android:visibility="@{viewModel.mShowLoading ? View.VISIBLE : View.GONE}"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/loading" />-->
+                app:lottie_rawRes="@raw/loading" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

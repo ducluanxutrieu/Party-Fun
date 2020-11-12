@@ -1,6 +1,7 @@
 package com.uit.party.ui.main.book_party
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.uit.party.model.CartModel
 import com.uit.party.util.UiUtil.afterTextChanged
 import com.uit.party.util.UiUtil.getNumber
 
+
 class BookPartyFragment : Fragment(){
     private val myArgs : BookPartyFragmentArgs by navArgs()
     private lateinit var mViewModel: BookPartyViewModel
@@ -29,7 +31,10 @@ class BookPartyFragment : Fragment(){
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_book_party, container, false)
         val database = getDatabase(requireContext())
-        mViewModel = ViewModelProvider(this, BookPartyViewModelFactory(database.cartDao)).get(BookPartyViewModel::class.java)
+        mViewModel = ViewModelProvider(this, BookPartyViewModelFactory(database.cartDao)).get(
+            BookPartyViewModel::class.java
+        )
+        binding.viewModel = mViewModel
         return binding.root
     }
 
@@ -46,13 +51,17 @@ class BookPartyFragment : Fragment(){
 
         binding.etCustomer.afterTextChanged {
             val num = it.getNumber()
-            binding.etCustomer.setText(num.toString())
+            if (it != num.toString()) {
+                binding.etCustomer.setText(num.toString())
+            }
             mViewModel.mNumberCustomer = num
         }
 
         binding.etTable.afterTextChanged {
             val num = it.getNumber()
-            binding.etTable.setText(num.toString())
+            if (it != num.toString()) {
+                binding.etTable.text = SpannableStringBuilder(num.toString())
+            }
             mViewModel.mNumberTable = num
             mViewModel.setTotalPrice()
         }

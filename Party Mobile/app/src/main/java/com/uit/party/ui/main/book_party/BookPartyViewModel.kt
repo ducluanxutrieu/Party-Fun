@@ -100,10 +100,12 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
         try {
             viewModelScope.launch {
                 val result = repository.orderParty(bookModel)
+                mShowLoading.set(false)
                 val action = BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(result)
                 view.findNavController().navigate(action)
             }
         } catch (cause: Throwable) {
+            mShowLoading.set(false)
             UiUtil.showToast(cause.toString())
         }
     }
