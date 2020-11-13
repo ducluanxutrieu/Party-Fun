@@ -194,6 +194,7 @@
                         android:textColor="@color/colorBlue_78"
                         android:textSize="@dimen/_15sdp"
                         android:textStyle="bold"
+                        android:singleLine="true"
                         tools:text="ABC_XYZ" />
                 </LinearLayout>
 

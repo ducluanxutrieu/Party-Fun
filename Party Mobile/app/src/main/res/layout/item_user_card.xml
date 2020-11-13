@@ -94,7 +94,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/list_dished"
+                android:text="@string/list_dishes"
                 android:textSize="@dimen/_14sdp"
                 android:fontFamily="@font/museo_sans_cyrl"/>
 

@@ -10,7 +10,7 @@ import com.uit.party.R
 import com.uit.party.databinding.ItemUserCardBinding
 import com.uit.party.model.CartItem
 import com.uit.party.util.BindableAdapter
-import com.uit.party.util.TimeFormatUtil
+import com.uit.party.util.TimeFormatUtil.formatTime12hToClient
 
 class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>(), BindableAdapter<CartItem>{
     private val mListUserCart =  ArrayList<CartItem>()
@@ -21,7 +21,7 @@ class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>
 
         @SuppressLint("SetTextI18n")
         fun bindData(userCart: CartItem) {
-            binding.tvTimeBooking.text = TimeFormatUtil.formatTime12hToClient(userCart.dateParty)
+            binding.tvTimeBooking.text = userCart.dateParty.formatTime12hToClient()
             binding.tvNumberTableBooking.text = userCart.table.toString()
             binding.tvTotalPrice.text = "${userCart.total} VND"
             itemDishAdapter.setData(userCart.dishes)

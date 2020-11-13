@@ -38,9 +38,9 @@ object TimeFormatUtil {
         return sdf.format(calPicker.time)
     }
 
-    fun formatTime12hToClient(date : String?): String? {
-        if (date != null) {
-            val dateOrigin = sdfServer.parse(date)
+    fun String?.formatTime12hToClient(): String? {
+        if (this != null) {
+            val dateOrigin = sdfServer.parse(this)
             return sdfTimeClient12h.format(dateOrigin!!)
         }
         return null

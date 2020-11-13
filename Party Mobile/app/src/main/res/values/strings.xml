@@ -121,7 +121,7 @@
     <string name="rating">Rating</string>
     <string name="history_booking">History Booking</string>
     <string name="time_party">Time Party</string>
-    <string name="list_dished">List Dished</string>
+    <string name="list_dishes">List Dishes</string>
     <string name="number_of_dishes">Number of Dishes</string>
     <string name="amount">Amount</string>
     <string name="add_to_cart">Add to Cart</string>
@@ -137,4 +137,7 @@
     <string name="_5">5</string>
     <string name="discount_code">Discount Code</string>
     <string name="payment">Payment</string>
+    <string name="customer">Customer:</string>
+    <string name="total_bill">Total Bill</string>
+    <string name="zero_dollar">$0</string>
 </resources>

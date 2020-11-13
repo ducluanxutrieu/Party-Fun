@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
@@ -15,6 +16,7 @@ import com.uit.party.R
 import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentBookPartyBinding
 import com.uit.party.model.CartModel
+import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.afterTextChanged
 import com.uit.party.util.UiUtil.getNumber
 
@@ -65,5 +67,14 @@ class BookPartyFragment : Fragment(){
             mViewModel.mNumberTable = num
             mViewModel.setTotalPrice()
         }
+
+        listenLiveData()
+    }
+
+    private fun listenLiveData(){
+        mViewModel.toastMessage.observe(viewLifecycleOwner, Observer {
+            if (it.isNotEmpty())
+                UiUtil.showToast(it)
+        })
     }
 }
