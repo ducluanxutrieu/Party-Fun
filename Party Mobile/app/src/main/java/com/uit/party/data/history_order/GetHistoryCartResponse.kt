@@ -1,12 +1,16 @@
-package com.uit.party.model
+package com.uit.party.data.history_order
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
+import com.uit.party.model.BaseResponse
 
 class GetHistoryCartResponse(
     @SerializedName("data")
     val historyCartModel: HistoryCartModel
 ) : BaseResponse()
 
+
+@Entity(tableName = "history_order_table")
 class HistoryCartModel {
     @SerializedName("total_page")
     val totalPage: Int? = 0

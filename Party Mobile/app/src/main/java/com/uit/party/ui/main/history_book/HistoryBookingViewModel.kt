@@ -5,7 +5,7 @@ import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.library.baseAdapters.BR
 import com.uit.party.data.GetData.getHistoryBooking
-import com.uit.party.model.CartItem
+import com.uit.party.data.history_order.CartItem
 
 class HistoryBookingViewModel : BaseObservable(){
     val mShowLoading = ObservableBoolean(false)

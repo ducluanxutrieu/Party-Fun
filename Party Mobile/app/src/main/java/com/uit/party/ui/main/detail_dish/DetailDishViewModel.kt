@@ -10,7 +10,9 @@ import androidx.navigation.findNavController
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.uit.party.data.CusResult
+import com.uit.party.data.cart.CartRepository
 import com.uit.party.data.home.HomeRepository
+import com.uit.party.data.rate.RateRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
 import com.uit.party.model.RateModel
@@ -20,7 +22,11 @@ import com.uit.party.util.UiUtil.toVNCurrency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() {
+class DetailDishViewModel(
+    private val homeRepo: HomeRepository,
+    private val rateRepo: RateRepository,
+    private val cartRepo: CartRepository
+) : ViewModel() {
     var imageDish = ObservableField<String>()
     var priceDish = ObservableField<String>()
     var nameDish = ObservableField<String>()
@@ -47,43 +53,27 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
         }
         mAdapter.setData(listImages)
         mPrice.set(mDishModel?.price.toVNCurrency())
-
-        //TODO change rating
-//        setRatingContent()
     }
-
-    /*private fun setRatingContent() {
-        mDishModel?.rate?.average?.let { mRatingShow.set(it) }
-        mListRates = mDishModel?.rate?.listRates ?: ArrayList()
-        val account = SharedPrefs()[USER_INFO_KEY, Account::class.java]
-        for (row in mListRates) {
-            if (row.username == account?.username) {
-                row.scorerate?.let { mRating.set(it) }
-                mCommentRating.set(row.content)
-                break
-            }
-        }
-    }*/
 
     fun onSubmitClicked(content: String, score: Float) {
         val requestModel =
             RequestRatingModel(mDishModel?.id, score.toDouble(), content)
         viewModelScope.launch {
             try {
-                val result = repository.requestRatingDish(requestModel)
-                if (result is CusResult.Success){
+                val result = rateRepo.requestRatingDish(requestModel)
+                if (result is CusResult.Success) {
                     result.data.message?.let { UiUtil.showToast(it) }
-                }else {
-                    UiUtil.showToast ((result as CusResult.Error).exception.toString())
+                } else {
+                    UiUtil.showToast((result as CusResult.Error).exception.toString())
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.message?.let { UiUtil.showToast(it) }
             }
         }
     }
 
-    fun getListRating(dishId: String): Flow<PagingData<RateModel>>{
-        val newResult: Flow<PagingData<RateModel>> = repository.getDishRating(dishId)
+    fun getListRating(dishId: String): Flow<PagingData<RateModel>> {
+        val newResult: Flow<PagingData<RateModel>> = rateRepo.getDishRating(dishId)
             .cachedIn(viewModelScope)
         currentListDishRateResult = newResult
         return newResult
@@ -107,28 +97,28 @@ class DetailDishViewModel(private val repository: HomeRepository) : ViewModel() 
     }*/
 
     fun deleteDish(view: View, dialog: DialogInterface) {
-       val id = mDishModel?.id ?: ""
+        val id = mDishModel?.id ?: ""
         if (id.isNotEmpty())
-        viewModelScope.launch {
-             try {
-                 val result = repository.deleteDish(id)
-                 if (result is CusResult.Success){
-                     result.data.message?.let { UiUtil.showToast(it) }
-                     view.findNavController().popBackStack()
-                     dialog.dismiss()
-                 }
-             }catch (ex: Exception){
-                 ex.message?.let { UiUtil.showToast(it) }
-                 dialog.dismiss()
-             }
-        }
+            viewModelScope.launch {
+                try {
+                    val result = homeRepo.deleteDish(id)
+                    if (result is CusResult.Success) {
+                        result.data.message?.let { UiUtil.showToast(it) }
+                        view.findNavController().popBackStack()
+                        dialog.dismiss()
+                    }
+                } catch (ex: Exception) {
+                    ex.message?.let { UiUtil.showToast(it) }
+                    dialog.dismiss()
+                }
+            }
     }
 
     fun addToCart() {
         val dishModel = mDishModel
         if (dishModel != null)
             viewModelScope.launch {
-                repository.database.cartDao.insertCart(
+                cartRepo.insertCart(
                     CartModel(
                         id = dishModel.id,
                         name = dishModel.name,

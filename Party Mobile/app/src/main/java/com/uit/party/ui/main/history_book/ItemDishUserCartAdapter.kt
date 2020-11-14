@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemDishUserCartBinding
-import com.uit.party.model.DishCart
+import com.uit.party.data.history_order.DishCart
 
 class ItemDishUserCartAdapter : RecyclerView.Adapter<ItemDishUserCartAdapter.UserCardViewHolder>(){
     private val mListDishes =  ArrayList<DishCart>()

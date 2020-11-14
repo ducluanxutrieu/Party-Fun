@@ -1,7 +1,7 @@
 package com.uit.party.data
 
-import com.uit.party.model.GetHistoryCartResponse
-import com.uit.party.model.HistoryCartModel
+import com.uit.party.data.history_order.GetHistoryCartResponse
+import com.uit.party.data.history_order.HistoryCartModel
 import com.uit.party.util.Constants
 import com.uit.party.util.SharedPrefs
 import com.uit.party.util.UiUtil

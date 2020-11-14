@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.uit.party.data.home.HomeRepository
 import com.uit.party.data.PartyBookingDatabase
+import com.uit.party.data.cart.CartRepository
+import com.uit.party.data.rate.RateRepository
 import com.uit.party.util.getNetworkService
 
 /**
@@ -15,8 +17,9 @@ class DishDetailViewModelFactory(private val database: PartyBookingDatabase) : V
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailDishViewModel::class.java)) {
+            val network = getNetworkService()
             return DetailDishViewModel(
-                    HomeRepository(getNetworkService(), database)
+                    HomeRepository(network, database.homeDao), RateRepository(network, database), CartRepository(network, database.cartDao)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -1,4 +1,4 @@
-package com.uit.party.data
+package com.uit.party.data.rate
 
 import androidx.paging.PagingSource
 import androidx.room.Dao

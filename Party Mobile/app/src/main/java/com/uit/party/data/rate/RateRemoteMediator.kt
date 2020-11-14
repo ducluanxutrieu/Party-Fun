@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.uit.party.data
+package com.uit.party.data.rate
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.model.ItemDishRateModel
 import com.uit.party.model.RateModel
 import com.uit.party.util.ServiceRetrofit

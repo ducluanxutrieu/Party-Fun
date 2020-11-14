@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemUserCardBinding
-import com.uit.party.model.CartItem
+import com.uit.party.data.history_order.CartItem
 import com.uit.party.util.BindableAdapter
 import com.uit.party.util.TimeFormatUtil.formatTime12hToClient
 

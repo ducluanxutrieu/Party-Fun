@@ -7,7 +7,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.uit.party.data.cart.CartDao
+import com.uit.party.data.history_order.HistoryOrderDao
 import com.uit.party.data.home.HomeDao
+import com.uit.party.data.rate.RateDishDao
 import com.uit.party.model.*
 
 
@@ -20,6 +22,7 @@ abstract class PartyBookingDatabase : RoomDatabase() {
     abstract val homeDao: HomeDao
     abstract val rateDao: RateDishDao
     abstract val cartDao: CartDao
+    abstract val historyOrderDao: HistoryOrderDao
 }
 
 private lateinit var INSTANCE: PartyBookingDatabase
