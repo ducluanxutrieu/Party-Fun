@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.uit.party.data.home.HomeRepository
 import com.uit.party.data.PartyBookingDatabase
+import com.uit.party.data.cart.CartRepository
 import com.uit.party.util.getNetworkService
 
 /**
@@ -16,7 +17,7 @@ class HomeViewModelFactory(private val database: PartyBookingDatabase) : ViewMod
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MenuViewModel::class.java)) {
             return MenuViewModel(
-                    HomeRepository(getNetworkService(), database)
+                    HomeRepository(getNetworkService(), database), CartRepository(getNetworkService(), database.cartDao)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

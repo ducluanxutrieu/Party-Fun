@@ -1,4 +1,4 @@
-package com.uit.party.ui.profile.editprofile
+package com.uit.party.ui.profile.edit_profile
 
 import android.os.Bundle
 import android.view.LayoutInflater

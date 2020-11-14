@@ -122,6 +122,7 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
                         BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(
                             result.data.billModel
                         )
+                    repository.deleteAllCart()
                     view.findNavController().navigate(action)
                 } else {
                     toastMessageLive.postValue(result.toStrings())

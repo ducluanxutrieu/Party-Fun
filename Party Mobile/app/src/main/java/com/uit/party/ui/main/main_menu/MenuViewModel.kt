@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.data.CusResult
+import com.uit.party.data.cart.CartRepository
 import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
@@ -15,7 +16,7 @@ import com.uit.party.model.MenuModel
 import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
 
-class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
+class MenuViewModel(private val repository: HomeRepository, private val cartRepository: CartRepository) : ViewModel(){
     val mShowFab = ObservableInt(View.GONE)
     val mShowLoading = ObservableBoolean(false)
     val mShowMenu = ObservableBoolean(false)
@@ -102,7 +103,7 @@ class MenuViewModel(private val repository: HomeRepository) : ViewModel(){
 
     fun addDishToCart(cartModel: CartModel) {
         viewModelScope.launch {
-            repository.database.cartDao.insertCart(cartModel)
+            cartRepository.insertCart(cartModel)
         }
     }
 

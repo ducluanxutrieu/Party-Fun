@@ -1,4 +1,4 @@
-package com.uit.party.ui.profile.editprofile
+package com.uit.party.ui.profile.edit_profile
 
 import com.google.gson.annotations.SerializedName
 

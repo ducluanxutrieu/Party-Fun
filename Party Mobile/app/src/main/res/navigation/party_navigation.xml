@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/party_navigation"
-    app:startDestination="@id/fragment_payment_party">
+    app:startDestination="@id/nav_user_home">
 
     <fragment
         android:id="@+id/nav_user_home"
@@ -81,16 +81,9 @@
         android:label="@string/complete_order"
         tools:layout="@layout/fragment_book_party">
 
-        <!--<action
-            android:id="@+id/action_BookingFragment_to_MenuFragment"
-            app:destination="@id/nav_user_home"
-            app:launchSingleTop="true"
-            app:popUpTo="@+id/nav_user_home"
-            app:popUpToInclusive="true" />-->
-
         <action
             android:id="@+id/action_BookingPartyFragment_to_PaymentFragment"
-            app:destination="@id/fragment_payment_party" />
+            app:destination="@id/nav_payment_party" />
 
         <argument
             android:name="listCart"
@@ -98,19 +91,8 @@
             app:nullable="true" />
     </fragment>
 
-    <!--<fragment
-        android:id="@+id/fragment_book_party"
-        android:name="com.uit.party.ui.main.book_party.BookPartyFragment"
-        android:label="@string/reservation_success"
-        tools:layout="@layout/fragment_book_party">
-
-        <action
-            android:id="@+id/action_BookingPartyFragment_to_PaymentFragment"
-            app:destination="@id/fragment_payment_party" />
-    </fragment>-->
-
     <fragment
-        android:id="@+id/fragment_payment_party"
+        android:id="@+id/nav_payment_party"
         android:name="com.uit.party.ui.main.payment_party.PaymentPartyFragment"
         android:label="@string/payment"
         tools:layout="@layout/payment_party_fragment">
@@ -148,7 +130,7 @@
 
     <fragment
         android:id="@+id/fragment_edit_profile"
-        android:name="com.uit.party.ui.profile.editprofile.EditProfileFragment"
+        android:name="com.uit.party.ui.profile.edit_profile.EditProfileFragment"
         android:label="@string/toolbar_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
 

@@ -15,17 +15,21 @@ class CartRepository(
 ) {
     val listCart: LiveData<List<CartModel>> = cartDao.getCart
 
+    suspend fun deleteAllCart() {
+        cartDao.deleteAllCart()
+    }
+
     suspend fun orderParty(bookModel: RequestOrderPartyModel): CusResult<BillResponseModel> {
         try {
             return handleRequest {
-        networkService.orderParty(getToken(), bookModel)
-    }
-        }catch (error: Throwable){
+                networkService.orderParty(getToken(), bookModel)
+            }
+        } catch (error: Throwable) {
             throw Throwable(error)
         }
     }
 
-    suspend fun getPayment(id: String): CusResult<GetPaymentResponse>{
+    suspend fun getPayment(id: String): CusResult<GetPaymentResponse> {
         return handleRequest {
             networkService.getPayment(getToken(), id)
         }
@@ -33,19 +37,13 @@ class CartRepository(
 
     suspend fun insertCart(cartModel: CartModel) {
         try {
-            val list: List<CartModel> = cartDao.getCartItem(cartModel.id)
-            var existed = false
-            list.forEach {
-                if (it.id == cartModel.id) {
-                    cartDao.updateQuantityCart(++it.quantity, it.id)
-                    existed = true
-                    return@forEach
-                }
-            }
+            val item: CartModel? = cartDao.getCartItem(cartModel.id)
 
-            if (!existed) {
+            if (item != null) {
+                val quantity = item.quantity + 1
+                cartDao.updateQuantityCart(quantity, item.id)
+            } else
                 cartDao.insertCart(cartModel)
-            }
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }

@@ -1,7 +1,7 @@
 package com.uit.party.util
 
 import com.uit.party.model.*
-import com.uit.party.ui.profile.editprofile.RequestUpdateProfile
+import com.uit.party.ui.profile.edit_profile.RequestUpdateProfile
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
