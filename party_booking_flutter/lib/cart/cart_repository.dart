@@ -55,7 +55,7 @@ class CartRepository {
 
     if (result.isSuccessful) {
       String urlSession = result.body.data.id;
-      String url = "http://192.168.1.6/client/payment/mobile/$urlSession";
+      String url = "https://partybooking.herokuapp.com/client/payment/mobile/$urlSession";
       if (await canLaunch(url)) {
         await launch(url);
         return "pay_success";

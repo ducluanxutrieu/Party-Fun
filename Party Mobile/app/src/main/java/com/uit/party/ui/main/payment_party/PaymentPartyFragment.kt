@@ -1,18 +1,22 @@
 package com.uit.party.ui.main.payment_party
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.uit.party.R
+import com.uit.party.data.getDatabase
 import com.uit.party.databinding.PaymentPartyFragmentBinding
 import com.uit.party.model.BillResponseModel
+import com.uit.party.model.Dishes
 import com.uit.party.util.TimeFormatUtil.formatTime12hToClient
 import com.uit.party.util.UiUtil.toVNCurrency
 
@@ -26,13 +30,15 @@ class PaymentPartyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.payment_party_fragment, container, false)
+        mBinding =
+            DataBindingUtil.inflate(inflater, R.layout.payment_party_fragment, container, false)
         return mBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PaymentPartyViewModel::class.java)
+        val database = getDatabase(requireContext())
+        viewModel = ViewModelProvider(this, PaymentPartyViewModelFactory(database.cartDao)).get(PaymentPartyViewModel::class.java)
         mBinding.viewModel = viewModel
 
 /*        val model = myArgs.billModel
@@ -48,10 +54,40 @@ class PaymentPartyFragment : Fragment() {
         if (temp != null) {
             viewModel.mBillModel = temp
 
+            mBinding.tvCustomerName.text = temp.customer
             mBinding.tvTotalBill.text = temp.total.toString().toVNCurrency()
             mBinding.tvNumberTable.text = temp.table.toString()
             mBinding.tvTimeBooking.text = temp.date_party.formatTime12hToClient()
+            setupRecyclerView(temp.dishes)
+            setupListener()
         }
     }
 
+    private fun setupListener() {
+        mBinding.btPayment.setOnClickListener {
+            viewModel.getPayment()
+        }
+
+        viewModel.mURLPayment.observe(viewLifecycleOwner, Observer {
+            if (it.isNotEmpty()) {
+                val url = "https://partybooking.herokuapp.com/client/payment/mobile/$it"
+                openNewTabWindow(url, requireContext())
+            }
+        })
+    }
+
+    private fun setupRecyclerView(dishes: List<Dishes>) {
+        val adapter = ListDishesAdapter()
+        adapter.list.addAll(dishes)
+        mBinding.rvListDishes.adapter = adapter
+    }
+
+    private fun openNewTabWindow(urls: String, context: Context) {
+        val uris = Uri.parse(urls)
+        val intents = Intent(Intent.ACTION_VIEW, uris)
+        val b = Bundle()
+        b.putBoolean("new_window", true)
+        intents.putExtras(b)
+        context.startActivity(intents)
+    }
 }

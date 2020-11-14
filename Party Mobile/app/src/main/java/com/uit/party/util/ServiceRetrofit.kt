@@ -130,6 +130,12 @@ interface ServiceRetrofit {
         @Header("authorization") token: String,
         @Body body: RequestOrderPartyModel
     ): BillResponseModel
+
+    @GET("payment/get_payment")
+    suspend fun getPayment(
+        @Header("authorization") token: String,
+        @Query("_id") id: String
+    ): GetPaymentResponse
 }
 
 private val service: ServiceRetrofit by lazy {

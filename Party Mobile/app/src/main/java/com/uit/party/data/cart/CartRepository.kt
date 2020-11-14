@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import com.google.gson.Gson
 import com.uit.party.data.CusResult
 import com.uit.party.data.getToken
-import com.uit.party.model.BaseResponse
-import com.uit.party.model.BillResponseModel
-import com.uit.party.model.CartModel
-import com.uit.party.model.RequestOrderPartyModel
+import com.uit.party.model.*
 import com.uit.party.util.ServiceRetrofit
 import retrofit2.HttpException
 import java.io.IOException
@@ -28,6 +25,11 @@ class CartRepository(
         }
     }
 
+    suspend fun getPayment(id: String): CusResult<GetPaymentResponse>{
+        return handleRequest {
+            networkService.getPayment(getToken(), id)
+        }
+    }
 
     suspend fun insertCart(cartModel: CartModel) {
         try {

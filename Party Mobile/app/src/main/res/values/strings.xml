@@ -140,4 +140,6 @@
     <string name="customer">Customer:</string>
     <string name="total_bill">Total Bill</string>
     <string name="zero_dollar">$0</string>
+    <string name="complete_order">Complete Order</string>
+    <string name="complete_payment">Complete Payment</string>
 </resources>

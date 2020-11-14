@@ -7,7 +7,10 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_5sdp">
+        android:layout_margin="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardBackgroundColor="#e8eaf6"
+        app:cardElevation="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -15,9 +18,10 @@
 
             <com.google.android.material.circularreveal.cardview.CircularRevealCardView
                 android:id="@+id/cv_avatar"
-                android:layout_width="@dimen/_50sdp"
+                android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_margin="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/_15sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -26,6 +30,7 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
                     tools:src="@tools:sample/avatars" />
             </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
@@ -64,6 +69,7 @@
                 android:id="@+id/tv_quantity_dish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:textSize="@dimen/_14ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
