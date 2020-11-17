@@ -9,6 +9,7 @@ import com.uit.party.data.getToken
 import com.uit.party.model.RateModel
 import com.uit.party.model.RequestRatingModel
 import com.uit.party.model.SingleRateResponseModel
+import com.uit.party.util.Constants.Companion.NETWORK_PAGE_SIZE
 import com.uit.party.util.ServiceRetrofit
 import kotlinx.coroutines.flow.Flow
 
@@ -59,8 +60,4 @@ class RateRepository (private val networkService: ServiceRetrofit,
             CusResult.Error(Exception(cause))
         }
     }*/
-
-    companion object {
-        private const val NETWORK_PAGE_SIZE = 10
-    }
 }

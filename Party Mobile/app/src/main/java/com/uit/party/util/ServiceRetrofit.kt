@@ -54,9 +54,10 @@ interface ServiceRetrofit {
     ): Call<AccountResponse>
 
     @GET("user/get_history_cart")
-    fun getHistoryBooking(
-        @Header("authorization") token: String
-    ): Call<GetHistoryCartResponse>
+    suspend fun getHistoryBooking(
+        @Header("authorization") token: String,
+        @Query("page") page: Int
+    ): GetHistoryCartResponse?
 
     @POST("user/updateuser")
     fun updateUser(

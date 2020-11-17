@@ -24,13 +24,13 @@ import androidx.room.withTransaction
 import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.model.ItemDishRateModel
 import com.uit.party.model.RateModel
+import com.uit.party.util.Constants.Companion.STARTING_PAGE_INDEX
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.UiUtil
 import retrofit2.HttpException
 import java.io.IOException
 
 // GitHub page API is 1 based: https://developer.github.com/v3/#pagination
-private const val GITHUB_STARTING_PAGE_INDEX = 1
 
 @OptIn(ExperimentalPagingApi::class)
 class RateRemoteMediator(
@@ -47,7 +47,7 @@ class RateRemoteMediator(
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                remoteKeys?.nextKey?.minus(1) ?: GITHUB_STARTING_PAGE_INDEX
+                remoteKeys?.nextKey?.minus(1) ?: STARTING_PAGE_INDEX
             }
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
@@ -81,7 +81,7 @@ class RateRemoteMediator(
                     repoDatabase.rateDao.clearRateDish(dishID)
                     repoDatabase.rateDao.clearRateDishList(dishID)
                 }
-                val prevKey = if (page == GITHUB_STARTING_PAGE_INDEX) null else page - 1
+                val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val dishRateModel = ItemDishRateModel(
                     dishID,

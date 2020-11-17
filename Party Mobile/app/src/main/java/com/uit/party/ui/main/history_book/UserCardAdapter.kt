@@ -1,30 +1,29 @@
 package com.uit.party.ui.main.history_book
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
-import com.uit.party.databinding.ItemUserCardBinding
 import com.uit.party.data.history_order.CartItem
-import com.uit.party.util.BindableAdapter
+import com.uit.party.databinding.ItemUserCardBinding
 import com.uit.party.util.TimeFormatUtil.formatTime12hToClient
+import com.uit.party.util.UiUtil.toVNCurrency
 
-class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>(), BindableAdapter<CartItem>{
-    private val mListUserCart =  ArrayList<CartItem>()
+class UserCardAdapter : PagingDataAdapter<CartItem, UserCardAdapter.UserCardViewHolder>(DIFF_CALLBACK){
 
     class UserCardViewHolder(private val binding: ItemUserCardBinding): RecyclerView.ViewHolder(binding.root){
         private val itemDishAdapter = ItemDishUserCartAdapter()
         private var isExpand = false
 
-        @SuppressLint("SetTextI18n")
         fun bindData(userCart: CartItem) {
             binding.tvTimeBooking.text = userCart.dateParty.formatTime12hToClient()
             binding.tvNumberTableBooking.text = userCart.table.toString()
-            binding.tvTotalPrice.text = "${userCart.total} VND"
-            itemDishAdapter.setData(userCart.dishes)
+            binding.tvTotalPrice.text = userCart.total.toString().toVNCurrency()
+//            itemDishAdapter.setData(userCart.dishes)
             binding.rvListDishes.adapter = itemDishAdapter
             binding.rvListDishes.hasFixedSize()
 
@@ -45,17 +44,23 @@ class UserCardAdapter : RecyclerView.Adapter<UserCardAdapter.UserCardViewHolder>
         return UserCardViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return mListUserCart.size
-    }
 
     override fun onBindViewHolder(holder: UserCardViewHolder, position: Int) {
-        holder.bindData(mListUserCart[position])
+         getItem(position)?.let { holder.bindData(it) }
     }
 
-    override fun setData(items: ArrayList<CartItem>) {
-        mListUserCart.clear()
-        mListUserCart.addAll(items)
-        notifyDataSetChanged()
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CartItem>() {
+            override fun areItemsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
+                return (oldItem.dateParty == newItem.dateParty &&
+                        oldItem.customer == newItem.customer &&
+                        oldItem.total == newItem.total)
+            }
+
+        }
     }
 }
