@@ -14,10 +14,10 @@ class HistoryOrderRepository(
 ) {
 
     fun getListOrdered(): Flow<PagingData<CartItem>>{
-        val pagingSourceFactory = {database.historyOrderDao.getSingleOrdered()}
+        val pagingSourceFactory = {database.historyOrderDao.pagingSource()}
 
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+            config = PagingConfig(pageSize = 10, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = HistoryOrderRemoteMediator(
                 networkService, database

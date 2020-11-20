@@ -3,6 +3,8 @@ package com.uit.party.ui.main.book_party
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableBoolean
@@ -25,6 +27,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
     val mTotalPrice = ObservableField("")
@@ -107,7 +110,7 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
         mShowLoading.set(true)
         val bookModel = prepareDataForOrder()
 
-        val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+        val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
             throwable.printStackTrace()
             Log.e("BookPartyViewModel: ", throwable.message ?: "")
 //            toastLiveData.value = showToastValueWhatever()
@@ -118,12 +121,18 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
                 val result = repository.orderParty(bookModel)
                 mShowLoading.set(false)
                 if (result is CusResult.Success) {
-                    val action =
-                        BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(
-                            result.data.billModel
-                        )
                     repository.deleteAllCart()
-                    view.findNavController().navigate(action)
+
+                    Handler(Looper.getMainLooper()).post {
+                        Log.d("UI thread", "I am the UI thread")
+                        val action =
+                            BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(
+                                result.data.billModel
+                            )
+                        view.findNavController().navigate(action)
+                    }
+
+
                 } else {
                     toastMessageLive.postValue(result.toStrings())
                 }

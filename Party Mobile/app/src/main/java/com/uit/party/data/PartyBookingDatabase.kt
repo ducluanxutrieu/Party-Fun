@@ -8,7 +8,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.uit.party.data.cart.CartDao
 import com.uit.party.data.history_order.CartItem
-import com.uit.party.data.history_order.HistoryCartModel
 import com.uit.party.data.history_order.HistoryOrderDao
 import com.uit.party.data.home.HomeDao
 import com.uit.party.data.rate.RateDishDao
@@ -19,7 +18,7 @@ import com.uit.party.model.*
  * TitleDatabase provides a reference to the dao to repositories
  */
 @TypeConverters(ImageConverter::class)
-@Database(entities = [DishModel::class, CartModel::class, RateModel::class, ItemDishRateModel::class, CartItem::class, HistoryCartModel::class], version = 3, exportSchema = false)
+@Database(entities = [DishModel::class, CartModel::class, RateModel::class, ItemDishRateModel::class, CartItem::class], version = 4, exportSchema = false)
 abstract class PartyBookingDatabase : RoomDatabase() {
     abstract val homeDao: HomeDao
     abstract val rateDao: RateDishDao

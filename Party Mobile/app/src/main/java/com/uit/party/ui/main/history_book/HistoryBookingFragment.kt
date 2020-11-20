@@ -48,6 +48,8 @@ class HistoryBookingFragment : Fragment(){
             mAdapter.refresh()
         }
 
+        mBinding.rvListOrdered.setHasFixedSize(true)
+
         mBinding.rvListOrdered.adapter = mAdapter.withLoadStateHeaderAndFooter(
             header = ReposLoadStateAdapter { mAdapter.retry() },
             footer = ReposLoadStateAdapter { mAdapter.retry() }
@@ -67,9 +69,14 @@ class HistoryBookingFragment : Fragment(){
                 ?: loadState.append as? LoadState.Error
                 ?: loadState.prepend as? LoadState.Error
             errorState?.let {
+                var errorMessage = it.error.toString()
+                if (errorMessage.contains("Unable to resolve host")){
+                    errorMessage = "Unable to connect to server"
+                }
+
                 Toast.makeText(
                     requireContext(),
-                    "\uD83D\uDE28 Wooops ${it.error}",
+                    "\uD83D\uDE28 Wooops $errorMessage",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -79,6 +86,7 @@ class HistoryBookingFragment : Fragment(){
     private fun listenLiveData(){
         lifecycleScope.launch {
             mViewModel.getHistoryOrdered().collectLatest {
+                mBinding.srlListHistory.isRefreshing = false
                 mAdapter.submitData(it)
             }
         }

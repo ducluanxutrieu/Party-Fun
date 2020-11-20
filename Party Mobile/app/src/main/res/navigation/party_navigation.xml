@@ -97,6 +97,13 @@
         android:label="@string/payment"
         tools:layout="@layout/payment_party_fragment">
 
+        <action
+            android:id="@+id/action_PaymentPartyFragment_to_MenuFragment"
+            app:destination="@id/nav_user_home"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/nav_user_home"
+            app:popUpToInclusive="true" />
+
         <argument
             android:name="billModel"
             app:argType="com.uit.party.model.BillModel"

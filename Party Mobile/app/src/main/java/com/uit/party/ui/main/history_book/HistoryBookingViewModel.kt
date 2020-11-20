@@ -11,12 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 class HistoryBookingViewModel(private val repository: HistoryOrderRepository) : ViewModel(){
     val mShowLoading = ObservableBoolean(false)
-    private var currentListOrderedResult: Flow<PagingData<CartItem>>? = null
 
     fun getHistoryOrdered(): Flow<PagingData<CartItem>> {
-        val newResult: Flow<PagingData<CartItem>> = repository.getListOrdered()
+        return repository.getListOrdered()
             .cachedIn(viewModelScope)
-        currentListOrderedResult = newResult
-        return newResult
     }
 }

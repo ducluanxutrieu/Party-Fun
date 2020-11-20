@@ -25,6 +25,7 @@ class PaymentPartyFragment : Fragment() {
     private lateinit var mBinding: PaymentPartyFragmentBinding
     private lateinit var viewModel: PaymentPartyViewModel
     private val myArgs: PaymentPartyFragmentArgs by navArgs()
+    private val mAdapter = ListDishesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,6 @@ class PaymentPartyFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mBinding.root.setBackgroundColor(Color.BLACK)
         initData()
         setupListener()
     }
@@ -71,15 +71,16 @@ class PaymentPartyFragment : Fragment() {
         viewModel.mURLPayment.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 val url = "https://partybooking.herokuapp.com/client/payment/mobile/$it"
+                mBinding.root.findNavController().navigate(PaymentPartyFragmentDirections.actionPaymentPartyFragmentToMenuFragment())
                 openNewTabWindow(url, requireContext())
             }
         })
     }
 
     private fun setupRecyclerView(dishes: List<Dishes>) {
-        val adapter = ListDishesAdapter()
-        adapter.list.addAll(dishes)
-//        mBinding.rvListDishes.adapter = adapter
+        mAdapter.list.addAll(dishes)
+        mBinding.rvListDishes.adapter = mAdapter
+        mBinding.rvListDishes.setHasFixedSize(true)
     }
 
     private fun openNewTabWindow(urls: String, context: Context) {

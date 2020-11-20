@@ -24,24 +24,6 @@ data class HistoryCartModelResponse (
     val cartItems: ArrayList<CartItem> = ArrayList(),
 )
 
-@Entity(tableName = "history_order_table")
-data class HistoryCartModel (
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
-
-    @SerializedName("total_page")
-    var totalPage: Int,
-
-    @SerializedName("start")
-    var start: Int,
-
-    @SerializedName("end")
-    var end: Int,
-
-    var prevKey: Int,
-    var nextKey: Int
-)
-
 @Entity(tableName = "item_ordered_table")
 data class CartItem (
     @PrimaryKey
