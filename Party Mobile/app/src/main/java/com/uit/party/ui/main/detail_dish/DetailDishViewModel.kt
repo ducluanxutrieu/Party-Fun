@@ -39,7 +39,6 @@ class DetailDishViewModel(
     lateinit var mDishType: String
 
     private var listImages = ArrayList<String>()
-    private var currentListDishRateResult: Flow<PagingData<RateModel>>? = null
 
 
     fun init() {
@@ -73,10 +72,8 @@ class DetailDishViewModel(
     }
 
     fun getListRating(dishId: String): Flow<PagingData<RateModel>> {
-        val newResult: Flow<PagingData<RateModel>> = rateRepo.getDishRating(dishId)
+        return rateRepo.getDishRating(dishId)
             .cachedIn(viewModelScope)
-        currentListDishRateResult = newResult
-        return newResult
     }
 
 /*    fun getItemDish() {

@@ -25,19 +25,22 @@ import com.uit.party.model.UserRole
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
 class DetailDishFragment : Fragment() {
     private lateinit var viewModel: DetailDishViewModel
     private lateinit var binding: FragmentDetailDishBinding
     private val mArgs: DetailDishFragmentArgs by navArgs()
-    private val mRatingAdapter = DishRatingAdapter()
+    private val adapter = DishRatingAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupBinding(container)
         return binding.root
     }
@@ -174,12 +177,12 @@ class DetailDishFragment : Fragment() {
         binding.imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM)
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
 
-        binding.rvRating.adapter = mRatingAdapter.withLoadStateHeaderAndFooter(
-            header = ReposLoadStateAdapter { mRatingAdapter.retry() },
-            footer = ReposLoadStateAdapter { mRatingAdapter.retry() }
+        binding.rvRating.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = ReposLoadStateAdapter { adapter.retry() },
+            footer = ReposLoadStateAdapter { adapter.retry() }
         )
 
-        mRatingAdapter.addLoadStateListener { loadState ->
+        adapter.addLoadStateListener { loadState ->
             // Only show the list if refresh succeeds.
             binding.rvRating.isVisible = loadState.source.refresh is LoadState.NotLoading
             // Show loading spinner during initial load or refresh.
@@ -210,19 +213,23 @@ class DetailDishFragment : Fragment() {
     }
 
     private fun listenLiveData(){
+        // Make sure we cancel the previous job before creating a new one
         lifecycleScope.launch {
-            viewModel.getListRating(viewModel.mDishModel?.id ?: "").collectLatest {
-                mRatingAdapter.submitData(it)
+            viewModel.getListRating(dishId = viewModel.mDishModel?.id ?: "").collectLatest {
+                adapter.submitData(it)
             }
         }
 
-        /*viewModel.mListRates.observe(viewLifecycleOwner, { list ->
-            val item: ItemDishRateWithListRates? = list.find {
-                it.itemDishRateModel.dishId == viewModel.mDishModel?.id
-            }
-            if (item != null){
-                mRatingAdapter.submitList(item.listRatings)
-            }
-        })*/
+        // Scroll to top when the list is refreshed from network.
+        lifecycleScope.launch {
+            adapter.loadStateFlow
+                // Only emit when REFRESH LoadState for RemoteMediator changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.rvRating.scrollToPosition(0) }
+        }
+
+        binding.retryButton.setOnClickListener { adapter.retry() }
     }
 }

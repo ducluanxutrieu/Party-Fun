@@ -17,9 +17,9 @@ class RateRepository (private val networkService: ServiceRetrofit,
                       private val database: PartyBookingDatabase
 ){
     fun getDishRating(dishId: String): Flow<PagingData<RateModel>> {
-        val pagingSourceFactory = { database.rateDao.getSingleDishRating(dishId) }
+        val pagingSourceFactory = { database.rateDao.getRateByDishId(dishId) }
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = RateRemoteMediator(
                 dishId,

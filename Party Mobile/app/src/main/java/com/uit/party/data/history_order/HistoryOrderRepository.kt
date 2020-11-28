@@ -17,7 +17,7 @@ class HistoryOrderRepository(
         val pagingSourceFactory = {database.historyOrderDao.pagingSource()}
 
         return Pager(
-            config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = HistoryOrderRemoteMediator(
                 networkService, database
