@@ -10,5 +10,5 @@ class RequestRatingModel(
     val score: Double? = 0.0,
 
     @SerializedName("comment")
-    val comment: String? = null
+    var comment: String? = null
 )

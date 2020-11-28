@@ -10,14 +10,14 @@ import androidx.room.Query
 @Dao
 interface HistoryOrderDao {
 
-    /*@Query("SELECT * FROM history_order_table")
+    @Query("SELECT * FROM history_order_table")
     suspend fun getHistoryOrder() :HistoryCartModel
 
     @Query("DELETE FROM history_order_table")
     suspend fun clearAllHistoryOrder()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHistoryCart(cartModel: HistoryCartModel)*/
+    suspend fun insertHistoryCart(cartModel: HistoryCartModel)
 
     @Query("DELETE FROM item_ordered_table")
     suspend fun clearAllOrdered()

@@ -9,27 +9,10 @@ class RateResponseModel : BaseResponse() {
     val itemDishRateModel: ItemDishRateModelResponse? = null
 }
 
-/*data class ItemDishRateWithListRates(
-    @Embedded
-    @SerializedName("data")
-    val itemDishRateModel: ItemDishRateModel,
-    @Relation(
-        parentColumn = "dishId",
-        entityColumn = "id_dish"
-    )
-    @SerializedName("list_rate")
-    val listRatings: List<RateModel>
-)*/
-
 @Entity
-data class ItemDishRateModel(
+data class DishRateRemoteKeys(
     @PrimaryKey
-    @SerializedName("dishId") var dishId: String = "",
-    @SerializedName("count_rate") val count_rate: Int,
-    @SerializedName("avg_rate") val avg_rate: Double,
-    @SerializedName("total_page") val total_page: Int,
-    @SerializedName("start") val start: Int,
-    @SerializedName("end") val end: Int,
+    val commentID: String = "",
     val prevKey: Int?,
     val nextKey: Int?
 )

@@ -24,7 +24,10 @@ import com.uit.party.model.Account
 import com.uit.party.model.UserRole
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.SharedPrefs
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class DetailDishFragment : Fragment() {
@@ -37,7 +40,7 @@ class DetailDishFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupBinding(container)
         return binding.root
     }
@@ -179,6 +182,8 @@ class DetailDishFragment : Fragment() {
             footer = ReposLoadStateAdapter { mRatingAdapter.retry() }
         )
 
+        binding.retryButton.setOnClickListener { mRatingAdapter.retry() }
+
         mRatingAdapter.addLoadStateListener { loadState ->
             // Only show the list if refresh succeeds.
             binding.rvRating.isVisible = loadState.source.refresh is LoadState.NotLoading
@@ -214,6 +219,16 @@ class DetailDishFragment : Fragment() {
             viewModel.getListRating(viewModel.mDishModel?.id ?: "").collectLatest {
                 mRatingAdapter.submitData(it)
             }
+        }
+
+        // Scroll to top when the list is refreshed from network.
+        lifecycleScope.launch {
+            mRatingAdapter.loadStateFlow
+                // Only emit when REFRESH LoadState for RemoteMediator changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.rvRating.scrollToPosition(0) }
         }
 
         /*viewModel.mListRates.observe(viewLifecycleOwner, { list ->

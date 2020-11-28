@@ -15,7 +15,10 @@ import com.uit.party.R
 import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentHistoryBookingBinding
 import com.uit.party.ui.main.detail_dish.ReposLoadStateAdapter
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class HistoryBookingFragment : Fragment(){
@@ -84,11 +87,23 @@ class HistoryBookingFragment : Fragment(){
     }
 
     private fun listenLiveData(){
+
         lifecycleScope.launch {
             mViewModel.getHistoryOrdered().collectLatest {
                 mBinding.srlListHistory.isRefreshing = false
                 mAdapter.submitData(it)
             }
+        }
+
+        lifecycleScope.launch {
+            mAdapter.loadStateFlow
+                // Only emit when REFRESH LoadState for RemoteMediator changes.
+                .distinctUntilChangedBy { it.refresh }
+                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect {
+                    mBinding.rvListOrdered.scrollToPosition(0)
+                    mBinding.srlListHistory.isRefreshing = false}
         }
     }
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.data.history_order.CartItem
 import com.uit.party.databinding.ItemUserCardBinding
+import com.uit.party.util.Change
 import com.uit.party.util.TimeFormatUtil.formatTime12hToClient
 import com.uit.party.util.UiUtil.toVNCurrency
 
@@ -44,6 +45,10 @@ class UserCardAdapter : PagingDataAdapter<CartItem, UserCardAdapter.UserCardView
         return UserCardViewHolder(binding)
     }
 
+    fun setItems(newItems: List<CartItem>){
+        
+    }
+
 
     override fun onBindViewHolder(holder: UserCardViewHolder, position: Int) {
          getItem(position)?.let { holder.bindData(it) }
@@ -61,6 +66,11 @@ class UserCardAdapter : PagingDataAdapter<CartItem, UserCardAdapter.UserCardView
                         oldItem.total == newItem.total)
             }
 
+            override fun getChangePayload(oldItem: CartItem, newItem: CartItem): Any {
+                return Change(
+                    oldItem,
+                    newItem)
+            }
         }
     }
 }

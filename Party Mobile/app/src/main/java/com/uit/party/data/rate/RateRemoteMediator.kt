@@ -22,7 +22,7 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.uit.party.data.PartyBookingDatabase
-import com.uit.party.model.ItemDishRateModel
+import com.uit.party.model.DishRateRemoteKeys
 import com.uit.party.model.RateModel
 import com.uit.party.util.Constants.Companion.STARTING_PAGE_INDEX
 import com.uit.party.util.ServiceRetrofit
@@ -52,8 +52,8 @@ class RateRemoteMediator(
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
 //                    ?: // The LoadType is PREPEND so some data was loaded before,
-                    // so we should have been able to get remote keys
-                    // If the remoteKeys are null, then we're an invalid state and we have a bug
+                // so we should have been able to get remote keys
+                // If the remoteKeys are null, then we're an invalid state and we have a bug
 //                    throw InvalidObjectException("Remote key and the prevKey should not be null")
                 // If the previous key is null, then we can't request more data
                 if (remoteKeys == null) UiUtil.showToast("Remote key and the prevKey should not be null")
@@ -72,29 +72,28 @@ class RateRemoteMediator(
         try {
             val apiResponse = service.getDishRates(dishID, page)
 
-            val repos = apiResponse.itemDishRateModel
-            val endOfPaginationReached: Boolean = repos?.listRatings.isNullOrEmpty() || (page == repos?.total_page)
+            val repos = apiResponse.itemDishRateModel?.listRatings
+            val endOfPaginationReached: Boolean =
+                repos == null || (page == apiResponse.itemDishRateModel.total_page)
 
             repoDatabase.withTransaction {
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
-                    repoDatabase.rateDao.clearRateDish(dishID)
+                    repoDatabase.rateDao.clearRateDishRemoteKeys()
                     repoDatabase.rateDao.clearRateDishList(dishID)
                 }
                 val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
-                val dishRateModel = ItemDishRateModel(
-                    dishID,
-                    count_rate = repos?.count_rate ?: 0,
-                    total_page = repos?.total_page ?: 0,
-                    avg_rate = repos?.avg_rate ?: 0.0,
-                    start = repos?.start ?: 0,
-                    end = repos?.end ?: 0,
-                    prevKey = prevKey,
-                    nextKey = nextKey
-                )
-                repoDatabase.rateDao.insertListRating(rateModel = repos?.listRatings ?: emptyList())
-                repoDatabase.rateDao.insertDishRating(dishRateModel)
+
+                val keys = repos?.map {
+                    DishRateRemoteKeys(
+                        commentID = it.id, prevKey = prevKey,
+                        nextKey = nextKey
+                    )
+                }
+
+                repoDatabase.rateDao.insertListRating(rateModel = repos?: emptyList())
+                keys?.let { repoDatabase.rateDao.insertAllDishRatingRemoteKeys(it) }
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
@@ -104,34 +103,34 @@ class RateRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, RateModel>): ItemDishRateModel? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, RateModel>): DishRateRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { repo ->
                 // Get the remote keys of the last item retrieved
-                repoDatabase.rateDao.getDishRating(repo.id_dish)
+                repoDatabase.rateDao.remoteKeysCommentId(repo.id)
             }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, RateModel>): ItemDishRateModel? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, RateModel>): DishRateRemoteKeys? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { repo ->
                 // Get the remote keys of the first items retrieved
-                repoDatabase.rateDao.getDishRating(repo.id_dish)
+                repoDatabase.rateDao.remoteKeysCommentId(repo.id)
             }
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
         state: PagingState<Int, RateModel>
-    ): ItemDishRateModel? {
+    ): DishRateRemoteKeys? {
         // The paging library is trying to load data after the anchor position
         // Get the item closest to the anchor position
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { repoId ->
-                repoDatabase.rateDao.getDishRating(repoId)
+                repoDatabase.rateDao.remoteKeysCommentId(repoId)
             }
         }
     }

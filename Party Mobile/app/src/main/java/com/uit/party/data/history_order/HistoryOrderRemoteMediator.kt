@@ -1,6 +1,5 @@
 package com.uit.party.data.history_order
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -13,7 +12,6 @@ import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.UiUtil
 import retrofit2.HttpException
 import java.io.IOException
-import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class HistoryOrderRemoteMediator(
@@ -23,61 +21,53 @@ class HistoryOrderRemoteMediator(
     RemoteMediator<Int, CartItem>() {
 
     private val historyDao: HistoryOrderDao = database.historyOrderDao
-    private var prevKey: Int? = 0
-    private var nextKey: Int? = 2
 
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, CartItem>
     ): MediatorResult {
-        val page: Int? = when (loadType) {
+        val page = when (loadType) {
             LoadType.REFRESH -> {
-                Log.i("HistoryOrderRemote", "REFRESH")
-                STARTING_PAGE_INDEX
+                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                remoteKeys?.nextKey?.minus(1) ?: STARTING_PAGE_INDEX
             }
 
             LoadType.PREPEND -> {
-                Log.i("HistoryOrderRemote", "PREPEND")
-                return MediatorResult.Success(endOfPaginationReached = true)
+                val remoteKeys = getRemoteKeyForFirstItem(state)
+                if (remoteKeys == null) UiUtil.showToast("Remote key and the prevKey should not be null")
+                remoteKeys?.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
 
             LoadType.APPEND -> {
-                Log.i("HistoryOrderRemote", "APPEND")
-//                getRemoteKeyForLastItem(state)
-//                    ?: throw InvalidObjectException("Remote key should not be null for $loadType")
-                state.lastItemOrNull()
-                    ?: return MediatorResult.Success(
-                        endOfPaginationReached = true
-                    )
-
-                // You must explicitly check if the last item is null when
-                // appending, since passing null to networkService is only
-                // valid for initial load. If lastItem is null it means no
-                // items were loaded after the initial REFRESH and there are
-                // no more items to load.
-
-                nextKey ?: return MediatorResult.Success(
-                    endOfPaginationReached = true
-                )
+                val remoteKeys = getRemoteKeyForLastItem(state)
+                if (remoteKeys?.nextKey == null) {
+                    UiUtil.showToast("Remote key should not be null for $loadType")
+                }
+                remoteKeys?.nextKey ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
 
-        Log.i("HistoryOrderRemote", page.toString())
-
         try {
-            val apiResponse = service.getHistoryBooking(getToken(), page ?: 1)
+            val token = getToken()
+            val apiResponse = service.getHistoryBooking(token, page)
 
             val repos = apiResponse?.historyCartModel
-            val endOfPaginationReached: Boolean =
-                repos?.cartItems.isNullOrEmpty() || (page == repos?.totalPage)
+            val endOfPaginationReached: Boolean = repos?.cartItems.isNullOrEmpty() || (page == repos?.totalPage)
+
             database.withTransaction {
                 // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
+                    historyDao.clearAllHistoryOrder()
                     historyDao.clearAllOrdered()
                 }
-                prevKey = if (page == STARTING_PAGE_INDEX) null else page?.minus(1)
-                nextKey = if (endOfPaginationReached) null else page?.plus(1)
-
+                val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val cartModel = HistoryCartModel(
+                    userToken = token,
+                    prevKey = prevKey,
+                    nextKey = nextKey
+                )
+                historyDao.insertHistoryCart(cartModel)
                 historyDao.insertListHistoryOrder(repos?.cartItems ?: emptyList())
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
@@ -88,23 +78,31 @@ class HistoryOrderRemoteMediator(
         }
     }
 
-    private fun getRemoteKeyForFirstItem(state: PagingState<Int, CartItem>): Int? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, CartItem>): HistoryCartModel? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.id?.let {
+                historyDao.getHistoryOrder()
+            }
+        }
+    }
+
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, CartItem>): HistoryCartModel? {
+        // Get the last page that was retrieved, that contained items.
+        // From that last page, get the last item
+        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+            ?.let {
+                // Get the remote keys of the last item retrieved
+                historyDao.getHistoryOrder()
+            }
+    }
+
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, CartItem>): HistoryCartModel? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let {
                 // Get the remote keys of the first items retrieved
-                prevKey
-            }
-    }
-
-    private fun getRemoteKeyForLastItem(state: PagingState<Int, CartItem>): Int? {
-        // Get the last page that was retrieved, that contained items.
-        // From that last page, get the last item
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let {
-                // Get the remote keys of the last item retrieved
-                nextKey
+                historyDao.getHistoryOrder()
             }
     }
 }

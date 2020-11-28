@@ -19,7 +19,7 @@ class RateRepository (private val networkService: ServiceRetrofit,
     fun getDishRating(dishId: String): Flow<PagingData<RateModel>> {
         val pagingSourceFactory = { database.rateDao.getSingleDishRating(dishId) }
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = RateRemoteMediator(
                 dishId,
@@ -32,6 +32,12 @@ class RateRepository (private val networkService: ServiceRetrofit,
     suspend fun requestRatingDish(requestModel: RequestRatingModel): CusResult<SingleRateResponseModel> {
         return try {
             val result = networkService.ratingDish(getToken(), requestModel)
+
+            for (i in 0..30) {
+                networkService.ratingDish(
+                    getToken(),
+                    requestModel.apply { comment = "${requestModel.comment} $i" })
+            }
             if (result.rateModel != null) {
                 database.rateDao.insertItemRating(result.rateModel)
             }
