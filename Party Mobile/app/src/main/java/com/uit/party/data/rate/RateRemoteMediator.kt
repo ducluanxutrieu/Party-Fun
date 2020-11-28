@@ -56,8 +56,7 @@ class RateRemoteMediator(
                     remoteKeys?.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
                 // If the previous key is null, then we can't request more data
-                val prevKey = remoteKeys.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
-                remoteKeys.prevKey
+                remoteKeys.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
