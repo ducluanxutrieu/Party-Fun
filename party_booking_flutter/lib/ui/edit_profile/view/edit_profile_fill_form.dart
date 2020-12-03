@@ -21,13 +21,13 @@ class EditProfileFillForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<FormFieldValidator> listValidators = <FormFieldValidator>[
-      FormBuilderValidators.required(),
+      FormBuilderValidators.required(context),
     ];
     String _countryCode = mAccountModel.countryCode ?? "+84";
 
     return FormBuilder(
       key: fbKey,
-      autovalidate: false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: {
         'fullname': mAccountModel.fullName,
         'email': mAccountModel.email,
@@ -42,27 +42,27 @@ class EditProfileFillForm extends StatelessWidget {
         children: <Widget>[
           SizedBox(height: 50.0),
           TextFieldWidget(
-            mAttribute: 'fullname',
+            name: 'fullname',
             mHindText: 'Full Name',
             mValidators: [
               ...listValidators,
-              FormBuilderValidators.minLength(6)
+              FormBuilderValidators.minLength(context, 6)
             ],
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
-            mAttribute: 'email',
+            name: 'email',
             mHindText: 'Email',
-            mValidators: [...listValidators, FormBuilderValidators.email()],
+            mValidators: [...listValidators, FormBuilderValidators.email(context)],
             mTextInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 15.0),
-          buildPhoneNumber(MediaQuery.of(context).size.width - 72,
+          buildPhoneNumber(context, MediaQuery.of(context).size.width - 72,
               listValidators, _countryCode),
           SizedBox(height: 15.0),
           _showDatePicker(),
           SizedBox(height: 15.0),
-          _selectGender(),
+          _selectGender(context),
           SizedBox(
             height: 35.0,
           ),
@@ -72,9 +72,9 @@ class EditProfileFillForm extends StatelessWidget {
     );
   }
 
-  Widget _selectGender() {
+  Widget _selectGender(BuildContext context) {
     return FormBuilderDropdown(
-      attribute: "gender",
+      name: "gender",
       style: kPrimaryTextStyle,
       decoration: InputDecoration(
           labelText: "Gender",
@@ -86,7 +86,7 @@ class EditProfileFillForm extends StatelessWidget {
         'Select Gender',
         style: kPrimaryTextStyle,
       ),
-      validators: [FormBuilderValidators.required()],
+      validator: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
       items: ['Male', 'Female', 'Other']
           .map((gender) => DropdownMenuItem(value: gender, child: Text(gender)))
           .toList(),
@@ -95,7 +95,7 @@ class EditProfileFillForm extends StatelessWidget {
 
   Widget _showDatePicker() {
     return FormBuilderDateTimePicker(
-      attribute: "birthday",
+      name: "birthday",
       inputType: InputType.date,
       format: DateFormat("MM/dd/yyyy"),
       style: kPrimaryTextStyle,
@@ -106,7 +106,7 @@ class EditProfileFillForm extends StatelessWidget {
     );
   }
 
-  Widget buildPhoneNumber(double sizeWidth,
+  Widget buildPhoneNumber(BuildContext context, double sizeWidth,
       List<FormFieldValidator> listValidators, String countryCodeString) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,12 +132,12 @@ class EditProfileFillForm extends StatelessWidget {
         Container(
           width: sizeWidth * 0.63,
           child: TextFieldWidget(
-            mAttribute: 'phonenumber',
+            name: 'phonenumber',
             mHindText: 'Phone Number',
             mTextInputType: TextInputType.phone,
             mValidators: [
               ...listValidators,
-              FormBuilderValidators.numeric(errorText: "Phone number invalid")
+              FormBuilderValidators.numeric(context, errorText: "Phone number invalid")
             ],
           ),
         ),

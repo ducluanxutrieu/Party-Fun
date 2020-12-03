@@ -14,9 +14,9 @@ class FormModifyDish extends StatelessWidget {
           height: 15,
         ),
         TextFieldWidget(
-          mAttribute: 'name',
+          name: 'name',
           mHindText: 'Dish name',
-          mValidators: [FormBuilderValidators.required()],
+          mValidators: [FormBuilderValidators.required(context)],
         ),
         SizedBox(
           height: 15,
@@ -27,7 +27,7 @@ class FormModifyDish extends StatelessWidget {
             maxWidth: double.infinity,
           ),
           child: FormBuilderTextField(
-              attribute: 'description',
+              name: 'description',
               style: kPrimaryTextStyle,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.next,
@@ -36,12 +36,12 @@ class FormModifyDish extends StatelessWidget {
                   contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(32))),
-              validators: [FormBuilderValidators.required()]),
+              validator: FormBuilderValidators.compose([FormBuilderValidators.required(context),]),),
         ),
         SizedBox(
           height: 15,
         ),
-        _selectDishType(),
+        _selectDishType(context),
         SizedBox(
           height: 15,
         ),
@@ -51,18 +51,18 @@ class FormModifyDish extends StatelessWidget {
             Container(
               width: sizeWidth * 0.5,
               child: TextFieldWidget(
-                mAttribute: 'price',
+                name: 'price',
                 mHindText: 'Price',
-                mValidators: [FormBuilderValidators.required()],
+                mValidators: [FormBuilderValidators.required(context)],
                 mTextInputType: TextInputType.number,
               ),
             ),
             Container(
               width: sizeWidth * 0.45,
               child: TextFieldWidget(
-                mAttribute: 'discount',
+                name: 'discount',
                 mHindText: 'Discount(%)',
-                mValidators: [FormBuilderValidators.required(), FormBuilderValidators.max(100)],
+                mValidators: [FormBuilderValidators.required(context), FormBuilderValidators.max(context, 100)],
                 mTextInputType: TextInputType.number,
               ),
             ),
@@ -75,14 +75,13 @@ class FormModifyDish extends StatelessWidget {
     );
   }
 
-    Widget _selectDishType() {
-    return FormBuilderCheckboxList(
-      attribute: "type",
+    Widget _selectDishType(BuildContext context) {
+    return FormBuilderFilterChip(
+      name: "type",
       decoration: InputDecoration(
           labelText: "Dish Type",
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
-      validators: [FormBuilderValidators.required()],
       options: [
         FormBuilderFieldOption(value: "Holiday Offers"),
         FormBuilderFieldOption(value: "First Dishes"),

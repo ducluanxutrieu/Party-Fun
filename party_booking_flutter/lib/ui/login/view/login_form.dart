@@ -14,10 +14,6 @@ import 'package:party_booking/widgets/common/text_field.dart';
 class LoginForm extends StatelessWidget {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
-  final List<FormFieldValidator> listValidators = <FormFieldValidator>[
-    FormBuilderValidators.required(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -33,7 +29,7 @@ class LoginForm extends StatelessWidget {
       },
       child: FormBuilder(
         key: _fbKey,
-        autovalidate: false,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Container(
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: SingleChildScrollView(
@@ -51,16 +47,16 @@ class LoginForm extends StatelessWidget {
                 SizedBox(height: 75.0),
                 TextFieldWidget(
                   mHindText: 'Username',
-                  mAttribute: 'username',
+                  name: 'username',
                   mTextInputType: TextInputType.emailAddress,
-                  mValidators: listValidators,
+                  mValidators: [FormBuilderValidators.required(context)],
                 ),
                 SizedBox(height: 25.0),
                 TextFieldWidget(
                   mHindText: 'Password',
-                  mAttribute: 'password',
+                  name: 'password',
                   mShowObscureText: true,
-                  mValidators: listValidators,
+                  mValidators: [FormBuilderValidators.required(context)],
                 ),
                 SizedBox(
                   height: 35.0,
@@ -123,9 +119,9 @@ class _LoginButton extends StatelessWidget {
             buttonHandler: () {
               if(_fbKey.currentState.saveAndValidate()) {
                 String username = _fbKey
-                    .currentState.fields['username'].currentState.value;
+                    .currentState.fields['username'].value;
                 String password = _fbKey
-                    .currentState.fields['password'].currentState.value;
+                    .currentState.fields['password'].value;
                 context
                     .bloc<LoginBloc>()
                     .add(LoginSubmitted(username, password));

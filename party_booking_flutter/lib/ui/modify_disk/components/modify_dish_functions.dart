@@ -20,13 +20,13 @@ class ModifyDishFunctions{
     String token = await _getToken();
     _context = context;
     if (_fbKey.currentState.saveAndValidate()) {
-      String name = _fbKey.currentState.fields['name'].currentState.value;
-      String price = _fbKey.currentState.fields['price'].currentState.value;
-      String discount = _fbKey.currentState.fields['discount'].currentState.value;
+      String name = _fbKey.currentState.fields['name'].value;
+      String price = _fbKey.currentState.fields['price'].value;
+      String discount = _fbKey.currentState.fields['discount'].value;
       List<dynamic> categories =
-          _fbKey.currentState.fields['type'].currentState.value;
+          _fbKey.currentState.fields['type'].value;
       String description =
-          _fbKey.currentState.fields['description'].currentState.value;
+          _fbKey.currentState.fields['description'].value;
 
       List imageList = await _uploadImage(newImages);
       DishModel dishModel = DishModel(

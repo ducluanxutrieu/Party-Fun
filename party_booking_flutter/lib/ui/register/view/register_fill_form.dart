@@ -12,13 +12,13 @@ class RegisterFillForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<FormFieldValidator> listValidators = <FormFieldValidator>[
-      FormBuilderValidators.required(),
+      FormBuilderValidators.required(context),
     ];
 
     double sizeWidth = MediaQuery.of(context).size.width - 72;
 
     var validatorRePassword = (dynamic value) {
-      if (value != fbKey.currentState.fields['password'].currentState.value) {
+      if (value != fbKey.currentState.fields['password'].value) {
         return 'Password is not matching';
       } else
         return null;
@@ -26,7 +26,7 @@ class RegisterFillForm extends StatelessWidget {
 
     return FormBuilder(
       key: fbKey,
-      autovalidate: false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: {'country_code': '+84'},
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,16 +41,16 @@ class RegisterFillForm extends StatelessWidget {
           ),
           SizedBox(height: 50.0),
           TextFieldWidget(
-            mAttribute: 'fullname',
+            name: 'fullname',
             mHindText: 'Full Name',
             mValidators: [
               ...listValidators,
-              FormBuilderValidators.minLength(6)
+              FormBuilderValidators.minLength(context, 6)
             ],
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
-            mAttribute: 'username',
+            name: 'username',
             mHindText: 'Username',
             mValidators: [
               ...listValidators,
@@ -64,27 +64,27 @@ class RegisterFillForm extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
-            mAttribute: 'email',
+            name: 'email',
             mHindText: 'Email',
-            mValidators: [...listValidators, FormBuilderValidators.email()],
+            mValidators: [...listValidators, FormBuilderValidators.email(context)],
             mTextInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 15.0),
           //
-          buildPhoneNumber(sizeWidth, listValidators),
+          buildPhoneNumber(context, sizeWidth, listValidators),
           SizedBox(height: 15.0),
           TextFieldWidget(
-            mAttribute: 'password',
+            name: 'password',
             mHindText: 'Password',
             mValidators: [
               ...listValidators,
-              FormBuilderValidators.minLength(6)
+              FormBuilderValidators.minLength(context, 6)
             ],
             mShowObscureText: true,
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
-            mAttribute: 'retypepassword',
+            name: 'retypepassword',
             mHindText: 'Retype Password',
             mValidators: [...listValidators, validatorRePassword],
             mShowObscureText: true,
@@ -97,7 +97,7 @@ class RegisterFillForm extends StatelessWidget {
     );
   }
 
-  Row buildPhoneNumber(double sizeWidth, List<FormFieldValidator> listValidators) {
+  Row buildPhoneNumber(BuildContext context, double sizeWidth, List<FormFieldValidator> listValidators) {
     return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -123,12 +123,12 @@ class RegisterFillForm extends StatelessWidget {
             Container(
               width: sizeWidth * 0.63,
               child: TextFieldWidget(
-                mAttribute: 'phonenumber',
+                name: 'phonenumber',
                 mHindText: 'Phone Number',
                 mTextInputType: TextInputType.phone,
                 mValidators: [
                   ...listValidators,
-                  FormBuilderValidators.numeric(
+                  FormBuilderValidators.numeric(context,
                       errorText: "Phone number invalid")
                 ],
               ),

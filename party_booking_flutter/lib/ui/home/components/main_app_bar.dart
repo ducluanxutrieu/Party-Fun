@@ -31,22 +31,24 @@ class MainAppBar extends StatelessWidget {
 
   Widget _shoppingCartBadge(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
-      builder: (context, state) => Badge(
-        position: BadgePosition.topRight(top: 0, right: 3),
-        animationDuration: Duration(milliseconds: 300),
-        animationType: BadgeAnimationType.slide,
-        badgeContent: Text(
-          state.totalItem.toString(),
-          style: TextStyle(color: Colors.white),
-        ),
-        child: Hero(
-          tag: 'search_id',
-          child: IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                Navigator.pushNamed(context, '/cart');
-              }),
-        ),
+      builder: (context, state) => Flexible(
+              child: Badge(
+            position: BadgePosition.topRight(top: 0, right: 3),
+            animationDuration: Duration(milliseconds: 300),
+            animationType: BadgeAnimationType.slide,
+            badgeContent: Text(
+              state.totalItem.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+            child: Hero(
+              tag: 'search_id',
+              child: IconButton(
+          icon: Icon(Icons.shopping_cart),
+          onPressed: () {
+            Navigator.pushNamed(context, '/cart');
+          }),
+            ),
+          ),
       ),
     );
   }

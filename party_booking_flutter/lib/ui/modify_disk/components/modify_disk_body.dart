@@ -25,7 +25,7 @@ class ModifyDishBody extends StatelessWidget {
       builder: (context, state) => Center(
         child: FormBuilder(
           key: _fbKey,
-          autovalidate: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           initialValue: _initValue(),
           child: Stack(
             children: <Widget>[

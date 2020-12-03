@@ -13,9 +13,6 @@ import 'package:party_booking/widgets/common/utiu.dart';
 
 class BookPartyScreen extends StatelessWidget {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  final List<FormFieldValidator> listValidators = <FormFieldValidator>[
-    FormBuilderValidators.required(),
-  ];
 
   final twoDaysFromNow = new DateTime.now().add(new Duration(days: 2));
 
@@ -23,7 +20,7 @@ class BookPartyScreen extends StatelessWidget {
 
   Widget _showDatePicker() {
     return FormBuilderDateTimePicker(
-      attribute: "day",
+      name: "day",
       inputType: InputType.both,
       initialDate: DateTime.now().add(Duration(seconds: 1)),
       firstDate: DateTime.now(),
@@ -37,9 +34,9 @@ class BookPartyScreen extends StatelessWidget {
     );
   }
 
-  Widget _selectNumberTable() {
+  Widget _selectNumberTable(BuildContext context) {
     return FormBuilderDropdown(
-      attribute: "num",
+      name: "num",
       style: TextStyle(
           fontFamily: 'Montserrat', fontSize: 20.0),
       decoration: InputDecoration(
@@ -51,19 +48,19 @@ class BookPartyScreen extends StatelessWidget {
         'Number Tables',
         style: kPrimaryTextStyle,
       ),
-      validators: [FormBuilderValidators.required()],
+      validator: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
       items: List.generate(15, (generator) => generator + 1)
           .map((item) => DropdownMenuItem(value: item, child: Text("$item")))
           .toList(),
     );
   }
 
-  Widget _selectNumberCustomer() {
+  Widget _selectNumberCustomer(BuildContext context) {
     return TextFieldWidget(
-      mAttribute: "cus",
+      name: "cus",
       mTextInputType: TextInputType.phone,
       mHindText: 'Number of Customer',
-      mValidators: listValidators,
+      mValidators: [FormBuilderValidators.required(context)],
     );
   }
 
@@ -94,7 +91,7 @@ class BookPartyScreen extends StatelessWidget {
         child: Center(
           child: FormBuilder(
             key: _fbKey,
-            autovalidate: false,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             initialValue: {
               'day': twoDaysFromNow,
               'num': 5,
@@ -110,15 +107,15 @@ class BookPartyScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SizedBox(height: 15.0),
-                    _selectNumberTable(),
+                    _selectNumberTable(context),
                     SizedBox(height: 15.0),
                     _showDatePicker(),
                     SizedBox(height: 15.0),
-                    _selectNumberCustomer(),
+                    _selectNumberCustomer(context),
                     SizedBox(height: 15.0),
                     TextFieldWidget(
                       mHindText: 'Discount Code',
-                      mAttribute: 'discount_code',
+                      name: 'discount_code',
                       mValidators: List(),
                     ),
                     SizedBox(
@@ -162,11 +159,11 @@ class BookButton extends StatelessWidget {
 
   void _onUpdateClicked(BuildContext context) {
     if (_fbKey.currentState.saveAndValidate()) {
-      final day = _fbKey.currentState.fields['day'].currentState.value;
-      final num = _fbKey.currentState.fields['num'].currentState.value;
-      final cus = _fbKey.currentState.fields['cus'].currentState.value;
+      final day = _fbKey.currentState.fields['day'].value;
+      final num = _fbKey.currentState.fields['num'].value;
+      final cus = _fbKey.currentState.fields['cus'].value;
       final discountCode =
-          _fbKey.currentState.fields['discount_code'].currentState.value;
+          _fbKey.currentState.fields['discount_code'].value;
       print(discountCode);
       if (day != null && num != null) {
         print(day);

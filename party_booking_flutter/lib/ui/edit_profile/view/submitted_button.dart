@@ -48,12 +48,12 @@ class SubmitEditProfileButton extends StatelessWidget {
   }
 
   UpdateProfileRequestModel _getInputValue() {
-    final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
-    final email = _fbKey.currentState.fields['email'].currentState.value;
-    final birthday = _fbKey.currentState.fields['birthday'].currentState.value;
-    final gender = _fbKey.currentState.fields['gender'].currentState.value;
+    final fullName = _fbKey.currentState.fields['fullname'].value;
+    final email = _fbKey.currentState.fields['email'].value;
+    final birthday = _fbKey.currentState.fields['birthday'].value;
+    final gender = _fbKey.currentState.fields['gender'].value;
     final phoneNumber =
-        _fbKey.currentState.fields['phonenumber'].currentState.value;
+        _fbKey.currentState.fields['phonenumber'].value;
 
     int genderId = UserGender.values
         .indexWhere((e) => e.toString() == "UserGender.$gender");

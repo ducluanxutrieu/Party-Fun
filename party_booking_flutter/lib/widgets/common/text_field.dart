@@ -4,7 +4,7 @@ import 'package:party_booking/res/constants.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String mHindText;
-  final String mAttribute;
+  final String name;
   final bool mShowObscureText;
   final TextInputType mTextInputType;
   final List<FormFieldValidator> mValidators;
@@ -13,7 +13,7 @@ class TextFieldWidget extends StatelessWidget {
   TextFieldWidget( // ignore: avoid_init_to_null
       {
     @required this.mHindText,
-    @required this.mAttribute,
+    @required this.name,
     this.mShowObscureText = false,
     this.mTextInputType = TextInputType.text,
     this.mValidators,
@@ -23,7 +23,7 @@ class TextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
-        attribute: mAttribute,
+        name: name,
         obscureText: mShowObscureText,
         readOnly: readOnly,
         maxLines: 1,
@@ -35,6 +35,6 @@ class TextFieldWidget extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
-        validators: mValidators);
+        validator: FormBuilderValidators.compose(mValidators));
   }
 }

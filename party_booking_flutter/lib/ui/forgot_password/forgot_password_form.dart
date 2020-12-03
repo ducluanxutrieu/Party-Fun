@@ -11,7 +11,7 @@ class ForgotPasswordForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilder(
       key: _fbKey,
-      autovalidate: true,
+      autovalidateMode: AutovalidateMode.always,
       child: Container(
         color: Colors.white,
         child: Padding(
@@ -31,8 +31,8 @@ class ForgotPasswordForm extends StatelessWidget {
                 SizedBox(height: 120.0),
                 TextFieldWidget(
                   mHindText: "Username",
-                  mAttribute: "username",
-                  mValidators: [FormBuilderValidators.required()],
+                  name: "username",
+                  mValidators: [FormBuilderValidators.required(context)],
                 ),
                 SizedBox(
                   height: 35.0,

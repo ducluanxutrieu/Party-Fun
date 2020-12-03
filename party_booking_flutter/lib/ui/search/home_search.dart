@@ -11,8 +11,6 @@ import 'package:party_booking/ui/search/bloc/search_bloc.dart';
 import 'package:party_booking/widgets/search_box.dart';
 
 class HomeSearch extends StatelessWidget {
-  final TextEditingController _textController = TextEditingController();
-
   HomeSearch(this.accountModel);
 
   final AccountModel accountModel;

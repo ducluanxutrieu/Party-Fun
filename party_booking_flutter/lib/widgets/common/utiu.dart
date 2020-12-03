@@ -7,7 +7,7 @@ class UiUtiu{
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: isFalse ? Colors.red : Colors.green,
         textColor: Colors.white,
         fontSize: 16.0);

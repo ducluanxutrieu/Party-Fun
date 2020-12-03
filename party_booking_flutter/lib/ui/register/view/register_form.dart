@@ -10,10 +10,6 @@ import 'package:party_booking/widgets/common/app_button.dart';
 class RegisterForm extends StatelessWidget {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
-  final List<FormFieldValidator> listValidators = <FormFieldValidator>[
-    FormBuilderValidators.required(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     String _countryCode = '+84';
@@ -100,12 +96,12 @@ class _RegisterButton extends StatelessWidget {
   }
 
   RegisterRequestModel _getRegisterModel() {
-    final fullName = _fbKey.currentState.fields['fullname'].currentState.value;
-    final username = _fbKey.currentState.fields['username'].currentState.value;
-    final email = _fbKey.currentState.fields['email'].currentState.value;
+    final fullName = _fbKey.currentState.fields['fullname'].value;
+    final username = _fbKey.currentState.fields['username'].value;
+    final email = _fbKey.currentState.fields['email'].value;
     final String phoneNumber =
-        _fbKey.currentState.fields['phonenumber'].currentState.value;
-    final password = _fbKey.currentState.fields['password'].currentState.value;
+        _fbKey.currentState.fields['phonenumber'].value;
+    final password = _fbKey.currentState.fields['password'].value;
     String fullPhoneNumber = phoneNumber;
     if (phoneNumber.startsWith('0')) {
       fullPhoneNumber = phoneNumber.substring(1);

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:party_booking/data/database/db_provide.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/list_categories_response_model.dart';
@@ -73,10 +74,16 @@ class DishRepository {
   }
 
   Future<MapEntry<List<File>, String>> loadAssets() async {
-    List<File> resultList;
+    FilePickerResult resultList;
+    List<File> files = new List();
 
     try {
-      resultList = await FilePicker.getMultiFile(type: FileType.image);
+      resultList = await FilePicker.platform.pickFiles(type: FileType.image, allowMultiple: true);
+      if(resultList != null) {
+        files = resultList.paths.map((path) => File(path)).toList();
+      } else {
+        Fluttertoast.showToast(msg: "Cancelled", toastLength: Toast.LENGTH_SHORT);
+      }
     } on Exception catch (e) {
       print(e.toString());
       return MapEntry(null, e.toString());
@@ -85,7 +92,7 @@ class DishRepository {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     // if (!mounted) return;
-    return MapEntry(resultList, "");
+    return MapEntry(files, "");
   }
 
   Future<MapEntry<String, bool>> getListRate(String id, {bool isStart = false}) async {

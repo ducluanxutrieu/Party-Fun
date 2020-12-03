@@ -45,7 +45,7 @@ class HeaderDishDetail extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              RatingBar(
+              RatingBar.builder(
                 itemCount: 5,
                 initialRating: (rateDataModel?.avgRate ?? 1)?.toDouble(),
                 minRating: 1.0,

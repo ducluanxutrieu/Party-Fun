@@ -107,7 +107,7 @@ class DialogUTiu {
 
   static Widget ratingBar(
       double coreRating, double itemSize, void onRating(value)) {
-    return RatingBar(
+    return RatingBar.builder(
       initialRating: coreRating,
       itemCount: 5,
       minRating: 1,
