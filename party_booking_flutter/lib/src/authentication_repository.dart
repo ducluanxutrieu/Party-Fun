@@ -74,7 +74,7 @@ class AuthenticationRepository {
         .requestUpdateUser(token: userToken, model: updateProfileModel);
     if (result.isSuccessful) {
       _controller.add(AuthenticationStatus.authenticatedOnlyServerUpdate);
-      return MapEntry(result.body.account, "Update Profile Successful!");
+      return MapEntry(result.body.account, result.body.message);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       return MapEntry(null, model.message);

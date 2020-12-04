@@ -1,19 +1,16 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/base_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
-import 'package:party_booking/data/network/service/app_image_api_service.dart';
 import 'package:party_booking/src/authentication_repository.dart';
-import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/src/user_repository.dart';
 
 part 'edit_profile_event.dart';
-
 part 'edit_profile_state.dart';
 
 class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
@@ -49,7 +46,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       if (result.key != null) {
         _userRepository.logout();
         _authenticationRepository.saveAccountToSharedPre(result.key, false);
-        yield EditProfileState.profileUpdated();
+        yield EditProfileState.profileUpdated(result.value);
       } else {
         yield EditProfileState.profileUpdateFailed();
         await Future<void>.delayed(const Duration(seconds: 1));

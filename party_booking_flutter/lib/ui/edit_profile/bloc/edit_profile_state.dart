@@ -14,11 +14,11 @@ class EditProfileState extends Equatable {
   const EditProfileState._(
       {this.status = EditProfileStatus.unknown,
       this.avatarResponse,
-      this.updateProfileModel});
+      this.updateProfileResMes});
 
   final EditProfileStatus status;
   final BaseResponseModel avatarResponse;
-  final UpdateProfileRequestModel updateProfileModel;
+  final String updateProfileResMes;
 
   const EditProfileState.unknown() : this._();
 
@@ -34,12 +34,12 @@ class EditProfileState extends Equatable {
   const EditProfileState.profileUpdating()
       : this._(status: EditProfileStatus.profileUpdating);
 
-  const EditProfileState.profileUpdated()
-      : this._(status: EditProfileStatus.profileUpdated);
+  const EditProfileState.profileUpdated(String updateProfileResMes)
+      : this._(status: EditProfileStatus.profileUpdated, updateProfileResMes: updateProfileResMes);
 
   const EditProfileState.profileUpdateFailed()
       : this._(status: EditProfileStatus.profileUpdateFailed);
 
   @override
-  List<Object> get props => [status, avatarResponse, updateProfileModel];
+  List<Object> get props => [status, avatarResponse, updateProfileResMes];
 }

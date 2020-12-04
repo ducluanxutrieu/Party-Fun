@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
+import 'package:party_booking/src/authentication_repository.dart';
 import '../bloc/edit_profile_bloc.dart';
 import 'package:party_booking/widgets/common/app_button.dart';
 
@@ -24,13 +26,27 @@ class SubmitEditProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EditProfileBloc, EditProfileState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        if (state.status == EditProfileStatus.profileUpdated) {
-          Navigator.of(context).pop();
+    return BlocListener<EditProfileBloc, EditProfileState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == EditProfileStatus.profileUpdated ||
+            state.status == EditProfileStatus.profileUpdateFailed) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(state.updateProfileResMes)),
+            );
+
+          if (state.status == EditProfileStatus.profileUpdated) {
+            context.read<AuthenticationBloc>().add(AuthenticationStatusChanged(
+                AuthenticationStatus.authenticatedOnlyServerUpdate));
+            Navigator.of(context).pop();
+          }
         }
-        return AppButtonWidget(
+      },
+      child: BlocBuilder<EditProfileBloc, EditProfileState>(
+        buildWhen: (previous, current) => previous.status != current.status,
+        builder: (context, state) => AppButtonWidget(
           buttonText: 'Update',
           buttonHandler: () {
             if (_fbKey.currentState.saveAndValidate()) {
@@ -42,8 +58,8 @@ class SubmitEditProfileButton extends StatelessWidget {
           },
           stateButton: getStateButton(state.status),
           // stateButton: _stateButton,
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -52,8 +68,7 @@ class SubmitEditProfileButton extends StatelessWidget {
     final email = _fbKey.currentState.fields['email'].value;
     final birthday = _fbKey.currentState.fields['birthday'].value;
     final gender = _fbKey.currentState.fields['gender'].value;
-    final phoneNumber =
-        _fbKey.currentState.fields['phone'].value;
+    final phoneNumber = _fbKey.currentState.fields['phone'].value;
 
     int genderId = UserGender.values
         .indexWhere((e) => e.toString() == "UserGender.$gender");
