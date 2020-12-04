@@ -1,6 +1,6 @@
 part of 'edit_profile_bloc.dart';
 
-enum EditPrifileStatus {
+enum EditProfileStatus {
   unknown,
   avatarChanging,
   avatarChanged,
@@ -12,34 +12,34 @@ enum EditPrifileStatus {
 
 class EditProfileState extends Equatable {
   const EditProfileState._(
-      {this.status = EditPrifileStatus.unknown,
-      this.avatarUrl,
+      {this.status = EditProfileStatus.unknown,
+      this.avatarResponse,
       this.updateProfileModel});
 
-  final EditPrifileStatus status;
-  final String avatarUrl;
+  final EditProfileStatus status;
+  final BaseResponseModel avatarResponse;
   final UpdateProfileRequestModel updateProfileModel;
 
   const EditProfileState.unknown() : this._();
 
   const EditProfileState.avatarChanging()
-      : this._(status: EditPrifileStatus.avatarChanging);
+      : this._(status: EditProfileStatus.avatarChanging);
 
-  const EditProfileState.avatarChanged(String avatarUrl)
-      : this._(status: EditPrifileStatus.avatarChanged, avatarUrl: avatarUrl);
+  const EditProfileState.avatarChanged(BaseResponseModel avatarUrl)
+      : this._(status: EditProfileStatus.avatarChanged, avatarResponse: avatarUrl);
 
   const EditProfileState.avatarChangeFailed()
-      : this._(status: EditPrifileStatus.avatarChangeFailed);
+      : this._(status: EditProfileStatus.avatarChangeFailed);
 
   const EditProfileState.profileUpdating()
-      : this._(status: EditPrifileStatus.profileUpdating);
+      : this._(status: EditProfileStatus.profileUpdating);
 
   const EditProfileState.profileUpdated()
-      : this._(status: EditPrifileStatus.profileUpdated);
+      : this._(status: EditProfileStatus.profileUpdated);
 
   const EditProfileState.profileUpdateFailed()
-      : this._(status: EditPrifileStatus.profileUpdateFailed);
+      : this._(status: EditProfileStatus.profileUpdateFailed);
 
   @override
-  List<Object> get props => [status, avatarUrl, updateProfileModel];
+  List<Object> get props => [status, avatarResponse, updateProfileModel];
 }

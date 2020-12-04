@@ -18,6 +18,7 @@ import 'package:party_booking/data/network/model/rate_dish_response_model.dart';
 import 'package:party_booking/data/network/model/register_request_model.dart';
 import 'package:party_booking/data/network/model/update_dish_response_model.dart';
 import 'package:party_booking/data/network/model/update_profile_request_model.dart';
+import '../../../res/constants.dart';
 
 import 'json_serializable_converter.dart';
 
@@ -137,7 +138,7 @@ abstract class AppApiService extends ChopperService {
 
   static AppApiService create() {
     final client = ChopperClient(
-        baseUrl: 'https://partybooking.herokuapp.com/',
+        baseUrl: Constants.BASE_URL,
         services: [
           _$AppApiService(),
         ],

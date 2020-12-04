@@ -18,7 +18,7 @@ class ItemDish extends StatelessWidget {
         final dishItem = state.carts[indexItem];
         return Dismissible(
           key: Key(dishItem.id),
-          onDismissed: (direction) => context.bloc<CartBloc>().add(RemoveDishToCartEvent(dishItem)),
+          onDismissed: (direction) => context.read<CartBloc>().add(RemoveDishToCartEvent(dishItem)),
           direction: DismissDirection.endToStart,
           background: Card(
             shape:
@@ -51,11 +51,11 @@ class ItemDish extends StatelessWidget {
               trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                 IconButton(
                   icon: Icon(Icons.remove),
-                  onPressed: () => context.bloc<CartBloc>().add(UpdateDishToCartEvent(dishItem, false)),
+                  onPressed: () => context.read<CartBloc>().add(UpdateDishToCartEvent(dishItem, false)),
                 ),
                 IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => context.bloc<CartBloc>().add(UpdateDishToCartEvent(dishItem, true)),
+                  onPressed: () => context.read<CartBloc>().add(UpdateDishToCartEvent(dishItem, true)),
                 ),
               ]),
               dense: true,

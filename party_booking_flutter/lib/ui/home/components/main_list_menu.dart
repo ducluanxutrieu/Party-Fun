@@ -46,7 +46,7 @@ class MainListMenu extends StatelessWidget {
                   controller: _controller,
                   itemCount: state.listMenu.length,
                   onPageChanged: (index) => context
-                      .bloc<HomeBloc>()
+                      .read<HomeBloc>()
                       .add(OnPageChangeEvent(itemSelected: index)),
                   itemBuilder: (context, index) => _itemGridView(state.listMenu[index].listDish, context)),
                 ),

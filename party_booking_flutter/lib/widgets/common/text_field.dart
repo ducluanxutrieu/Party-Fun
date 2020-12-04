@@ -5,9 +5,10 @@ import 'package:party_booking/res/constants.dart';
 class TextFieldWidget extends StatelessWidget {
   final String mHindText;
   final String name;
+  final String initialValue;
   final bool mShowObscureText;
   final TextInputType mTextInputType;
-  final List<FormFieldValidator> mValidators;
+  final String Function(String) mValidators;
   final bool readOnly;
 
   TextFieldWidget( // ignore: avoid_init_to_null
@@ -18,12 +19,14 @@ class TextFieldWidget extends StatelessWidget {
     this.mTextInputType = TextInputType.text,
     this.mValidators,
     this.readOnly = false,
+    this.initialValue,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
         name: name,
+        initialValue: initialValue,
         obscureText: mShowObscureText,
         readOnly: readOnly,
         maxLines: 1,
@@ -35,6 +38,6 @@ class TextFieldWidget extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
-        validator: FormBuilderValidators.compose(mValidators));
+        validator: mValidators);
   }
 }

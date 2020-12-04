@@ -27,7 +27,7 @@ class SubmitEditProfileButton extends StatelessWidget {
     return BlocBuilder<EditProfileBloc, EditProfileState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status == EditPrifileStatus.profileUpdated) {
+        if (state.status == EditProfileStatus.profileUpdated) {
           Navigator.of(context).pop();
         }
         return AppButtonWidget(
@@ -36,7 +36,7 @@ class SubmitEditProfileButton extends StatelessWidget {
             if (_fbKey.currentState.saveAndValidate()) {
               UpdateProfileRequestModel updateProfileModel = _getInputValue();
               context
-                  .bloc<EditProfileBloc>()
+                  .read<EditProfileBloc>()
                   .add(EditProfileSubmitted(updateProfileModel));
             }
           },
@@ -48,12 +48,12 @@ class SubmitEditProfileButton extends StatelessWidget {
   }
 
   UpdateProfileRequestModel _getInputValue() {
-    final fullName = _fbKey.currentState.fields['fullname'].value;
+    final fullName = _fbKey.currentState.fields['full_name'].value;
     final email = _fbKey.currentState.fields['email'].value;
     final birthday = _fbKey.currentState.fields['birthday'].value;
     final gender = _fbKey.currentState.fields['gender'].value;
     final phoneNumber =
-        _fbKey.currentState.fields['phonenumber'].value;
+        _fbKey.currentState.fields['phone'].value;
 
     int genderId = UserGender.values
         .indexWhere((e) => e.toString() == "UserGender.$gender");
@@ -67,15 +67,15 @@ class SubmitEditProfileButton extends StatelessWidget {
     return model;
   }
 
-  FormzStatus getStateButton(EditPrifileStatus status) {
+  FormzStatus getStateButton(EditProfileStatus status) {
     switch (status) {
-      case EditPrifileStatus.unknown:
+      case EditProfileStatus.unknown:
         return FormzStatus.pure;
-      case EditPrifileStatus.profileUpdating:
+      case EditProfileStatus.profileUpdating:
         return FormzStatus.submissionInProgress;
-      case EditPrifileStatus.profileUpdated:
+      case EditProfileStatus.profileUpdated:
         return FormzStatus.submissionSuccess;
-      case EditPrifileStatus.profileUpdateFailed:
+      case EditProfileStatus.profileUpdateFailed:
         return FormzStatus.submissionFailure;
       default:
         return FormzStatus.pure;

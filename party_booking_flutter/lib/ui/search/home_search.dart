@@ -27,7 +27,7 @@ class HomeSearch extends StatelessWidget {
               children: [
                 SearchBox(
                   onChanged: (searchText) => context
-                      .bloc<SearchBloc>()
+                      .read<SearchBloc>()
                       .add(OnSearchDishChangeEvent(searchText: searchText)),
                 ),
                 state.listDishes.isNotEmpty

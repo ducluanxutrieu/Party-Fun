@@ -11,7 +11,7 @@ class Constants {
 
   static const String DATE_TIME_FORMAT_SERVER = 'MM/dd/yyyy hh:mm';
 
-  static const String BASE_URL = '172.20.10.45';
+  static const String BASE_URL = 'https://partybooking.herokuapp.com/';
 }
 
 // Colors

@@ -49,14 +49,14 @@ class LoginForm extends StatelessWidget {
                   mHindText: 'Username',
                   name: 'username',
                   mTextInputType: TextInputType.emailAddress,
-                  mValidators: [FormBuilderValidators.required(context)],
+                  mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
                 ),
                 SizedBox(height: 25.0),
                 TextFieldWidget(
                   mHindText: 'Password',
                   name: 'password',
                   mShowObscureText: true,
-                  mValidators: [FormBuilderValidators.required(context)],
+                  mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
                 ),
                 SizedBox(
                   height: 35.0,
@@ -123,7 +123,7 @@ class _LoginButton extends StatelessWidget {
                 String password = _fbKey
                     .currentState.fields['password'].value;
                 context
-                    .bloc<LoginBloc>()
+                    .read<LoginBloc>()
                     .add(LoginSubmitted(username, password));
               }
             },

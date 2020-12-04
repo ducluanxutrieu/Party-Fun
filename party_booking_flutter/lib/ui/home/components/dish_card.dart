@@ -43,7 +43,7 @@ class DishCard extends StatelessWidget {
                     IconButton(
                       icon: Icon(FontAwesomeIcons.cartPlus),
                       onPressed: () {
-                        context.bloc<CartBloc>().add(AddDishToCartEvent(dishModel));
+                        context.read<CartBloc>().add(AddDishToCartEvent(dishModel));
                         AddToCartDialog.addDishToCartAnimation(context, state.totalItem);
                       }
                     ),

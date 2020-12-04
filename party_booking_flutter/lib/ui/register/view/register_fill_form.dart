@@ -7,14 +7,13 @@ import 'package:party_booking/widgets/common/text_field.dart';
 class RegisterFillForm extends StatelessWidget {
   final GlobalKey<FormBuilderState> fbKey;
   final Function countryCodeChange;
-  const RegisterFillForm({Key key, @required this.fbKey, this.countryCodeChange}) : super(key: key);
+
+  const RegisterFillForm(
+      {Key key, @required this.fbKey, this.countryCodeChange})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<FormFieldValidator> listValidators = <FormFieldValidator>[
-      FormBuilderValidators.required(context),
-    ];
-
     double sizeWidth = MediaQuery.of(context).size.width - 72;
 
     var validatorRePassword = (dynamic value) {
@@ -43,50 +42,54 @@ class RegisterFillForm extends StatelessWidget {
           TextFieldWidget(
             name: 'fullname',
             mHindText: 'Full Name',
-            mValidators: [
-              ...listValidators,
+            mValidators: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
               FormBuilderValidators.minLength(context, 6)
-            ],
+            ]),
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
             name: 'username',
             mHindText: 'Username',
-            mValidators: [
-              ...listValidators,
+            mValidators: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
               (dynamic value) {
                 if ((value as String).contains(" ")) {
                   return 'Username invalid';
                 } else
                   return null;
               }
-            ],
+            ]),
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
             name: 'email',
             mHindText: 'Email',
-            mValidators: [...listValidators, FormBuilderValidators.email(context)],
+            mValidators: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
+              FormBuilderValidators.email(context)
+            ]),
             mTextInputType: TextInputType.emailAddress,
           ),
           SizedBox(height: 15.0),
           //
-          buildPhoneNumber(context, sizeWidth, listValidators),
+          buildPhoneNumber(context, sizeWidth),
           SizedBox(height: 15.0),
           TextFieldWidget(
             name: 'password',
             mHindText: 'Password',
-            mValidators: [
-              ...listValidators,
+            mValidators: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
               FormBuilderValidators.minLength(context, 6)
-            ],
+            ]),
             mShowObscureText: true,
           ),
           SizedBox(height: 15.0),
           TextFieldWidget(
             name: 'retypepassword',
             mHindText: 'Retype Password',
-            mValidators: [...listValidators, validatorRePassword],
+            mValidators: FormBuilderValidators.compose(
+                [FormBuilderValidators.required(context), validatorRePassword]),
             mShowObscureText: true,
           ),
           SizedBox(
@@ -97,43 +100,44 @@ class RegisterFillForm extends StatelessWidget {
     );
   }
 
-  Row buildPhoneNumber(BuildContext context, double sizeWidth, List<FormFieldValidator> listValidators) {
+  Row buildPhoneNumber(BuildContext context, double sizeWidth) {
     return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-                width: sizeWidth * 0.35,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(32),
-                  border: Border.all(color: Colors.grey),
-                  shape: BoxShape.rectangle,
-                ),
-                child: CountryCodePicker(
-                  onChanged: (countryCode) => countryCodeChange(countryCode.toString()),
-                  // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                  initialSelection: 'VN',
-                  favorite: ['+84', 'VN'],
-                  // optional. Shows only country name and flag
-                  showCountryOnly: false,
-                  // optional. Shows only country name and flag when popup is closed.
-                  showOnlyCountryWhenClosed: false,
-                  // optional. aligns the flag and the Text left
-                  alignLeft: false,
-                )),
-            Container(
-              width: sizeWidth * 0.63,
-              child: TextFieldWidget(
-                name: 'phonenumber',
-                mHindText: 'Phone Number',
-                mTextInputType: TextInputType.phone,
-                mValidators: [
-                  ...listValidators,
-                  FormBuilderValidators.numeric(context,
-                      errorText: "Phone number invalid")
-                ],
-              ),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+            width: sizeWidth * 0.35,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(color: Colors.grey),
+              shape: BoxShape.rectangle,
             ),
-          ],
-        );
+            child: CountryCodePicker(
+              onChanged: (countryCode) =>
+                  countryCodeChange(countryCode.toString()),
+              // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+              initialSelection: 'VN',
+              favorite: ['+84', 'VN'],
+              // optional. Shows only country name and flag
+              showCountryOnly: false,
+              // optional. Shows only country name and flag when popup is closed.
+              showOnlyCountryWhenClosed: false,
+              // optional. aligns the flag and the Text left
+              alignLeft: false,
+            )),
+        Container(
+          width: sizeWidth * 0.63,
+          child: TextFieldWidget(
+            name: 'phonenumber',
+            mHindText: 'Phone Number',
+            mTextInputType: TextInputType.phone,
+            mValidators: FormBuilderValidators.compose([
+              FormBuilderValidators.required(context),
+              FormBuilderValidators.numeric(context,
+                  errorText: "Phone number invalid")
+            ]),
+          ),
+        ),
+      ],
+    );
   }
 }

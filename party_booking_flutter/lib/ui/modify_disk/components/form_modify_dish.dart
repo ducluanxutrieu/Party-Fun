@@ -16,7 +16,7 @@ class FormModifyDish extends StatelessWidget {
         TextFieldWidget(
           name: 'name',
           mHindText: 'Dish name',
-          mValidators: [FormBuilderValidators.required(context)],
+          mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
         ),
         SizedBox(
           height: 15,
@@ -53,7 +53,7 @@ class FormModifyDish extends StatelessWidget {
               child: TextFieldWidget(
                 name: 'price',
                 mHindText: 'Price',
-                mValidators: [FormBuilderValidators.required(context)],
+                mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
                 mTextInputType: TextInputType.number,
               ),
             ),
@@ -62,7 +62,7 @@ class FormModifyDish extends StatelessWidget {
               child: TextFieldWidget(
                 name: 'discount',
                 mHindText: 'Discount(%)',
-                mValidators: [FormBuilderValidators.required(context), FormBuilderValidators.max(context, 100)],
+                mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context), FormBuilderValidators.max(context, 100)]),
                 mTextInputType: TextInputType.number,
               ),
             ),

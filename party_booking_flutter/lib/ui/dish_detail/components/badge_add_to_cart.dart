@@ -24,7 +24,7 @@ class BadgeAddToCart extends StatelessWidget {
         ),
         child: IconButton(
             icon: Icon(FontAwesomeIcons.cartPlus),
-            onPressed: () => context.bloc<CartBloc>().add(AddDishToCartEvent(dishModel))),
+            onPressed: () => context.read<CartBloc>().add(AddDishToCartEvent(dishModel))),
       ),
     );
   }

@@ -35,13 +35,13 @@ class AuthenticationRepository {
     var result = await AppApiService.create()
         .requestSignIn(username: username, password: password);
     if (result.isSuccessful) {
-      _saveAccountToSharedPre(result.body.account);
+      saveAccountToSharedPre(result.body.account);
       _controller.add(AuthenticationStatus.authenticated);
       return MapEntry("", true);
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
       _controller.add(AuthenticationStatus.unauthenticated);
-      return MapEntry( model.message, false);
+      return MapEntry(model.message, false);
     }
   }
 
@@ -64,7 +64,7 @@ class AuthenticationRepository {
     }
   }
 
-  Future<String> updateUserProfile(
+  Future<MapEntry<AccountModel, String>> updateUserProfile(
       {@required UpdateProfileRequestModel updateProfileModel}) async {
     assert(updateProfileModel != null);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -74,30 +74,32 @@ class AuthenticationRepository {
         .requestUpdateUser(token: userToken, model: updateProfileModel);
     if (result.isSuccessful) {
       _controller.add(AuthenticationStatus.authenticatedOnlyServerUpdate);
-      return "Update Profile Successful!";
+      return MapEntry(result.body.account, "Update Profile Successful!");
     } else {
       BaseResponseModel model = BaseResponseModel.fromJson(result.error);
-      return model.message;
+      return MapEntry(null, model.message);
     }
   }
 
   void logOut() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString(Constants.USER_TOKEN);
-      var result = await AppApiService.create().requestSignOut(token: token);
-      if (result.isSuccessful) {
-        prefs.remove(Constants.ACCOUNT_MODEL_KEY);
-        prefs.remove(Constants.USER_TOKEN);
-        _controller.add(AuthenticationStatus.unauthenticated);
-      }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(Constants.USER_TOKEN);
+    var result = await AppApiService.create().requestSignOut(token: token);
+    if (result.isSuccessful) {
+      prefs.remove(Constants.ACCOUNT_MODEL_KEY);
+      prefs.remove(Constants.USER_TOKEN);
+      _controller.add(AuthenticationStatus.unauthenticated);
+    }
   }
 
   void dispose() => _controller.close();
 
-  Future<void> _saveAccountToSharedPre(AccountModel accountModel)async {
+  Future<void> saveAccountToSharedPre(AccountModel accountModel,
+      [bool isChangeToken = true]) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(
         Constants.ACCOUNT_MODEL_KEY, accountModelToJson(accountModel));
-    prefs.setString(Constants.USER_TOKEN, accountModel.token);
+    if (isChangeToken)
+      prefs.setString(Constants.USER_TOKEN, accountModel.token);
   }
 }

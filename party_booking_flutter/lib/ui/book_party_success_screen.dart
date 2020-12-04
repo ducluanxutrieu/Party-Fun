@@ -42,7 +42,7 @@ class BookPartySuccessScreen extends StatelessWidget {
             icon: Icon(FontAwesomeIcons.creditCard),
             onPressed: () {
               // requestSource(widget.mBill);
-              context.bloc<CartBloc>().add(GetPaymentEvent(mBill));
+              context.read<CartBloc>().add(GetPaymentEvent(mBill));
             }),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

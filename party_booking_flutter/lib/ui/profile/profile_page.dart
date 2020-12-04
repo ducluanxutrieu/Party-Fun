@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/src/authentication_repository.dart';
 import 'package:party_booking/ui/edit_profile/view/edit_profile_page.dart';
 
 import 'profile_form.dart';
@@ -29,8 +28,7 @@ class ProfilePage extends StatelessWidget {
                 previous.status != current.status),
         builder: (context, state) {
           AccountModel _accountModel = state.user;
-          context.bloc<AuthenticationBloc>().add(AuthenticationStatusChanged(
-              AuthenticationStatus.authenticatedOnlyServerUpdate));
+
           return Scaffold(
             appBar: AppBar(
               title: Text('Profile'),

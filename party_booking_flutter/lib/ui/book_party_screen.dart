@@ -60,7 +60,7 @@ class BookPartyScreen extends StatelessWidget {
       name: "cus",
       mTextInputType: TextInputType.phone,
       mHindText: 'Number of Customer',
-      mValidators: [FormBuilderValidators.required(context)],
+      mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
     );
   }
 
@@ -116,7 +116,6 @@ class BookPartyScreen extends StatelessWidget {
                     TextFieldWidget(
                       mHindText: 'Discount Code',
                       name: 'discount_code',
-                      mValidators: List(),
                     ),
                     SizedBox(
                       height: 15.0,

@@ -56,7 +56,7 @@ class DishDetailScreen extends StatelessWidget {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
           child: InkWell(
               onTap: () => context
-                  .bloc<DishBloc>()
+                  .read<DishBloc>()
                   .add(GetListRatesEvent(dishModel.id, false)),
               child: Icon(
                 CustomIcons.ic_more,

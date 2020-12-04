@@ -99,7 +99,7 @@ class AppImageAPIService {
     String boundary = 'dio-boundary-' +
         random.nextInt(4294967296).toString().padLeft(10, '0');
     BaseOptions options = new BaseOptions(
-        baseUrl: "http://${Constants.BASE_URL}:3000/",
+        baseUrl: Constants.BASE_URL,
         connectTimeout: 100000,
         receiveTimeout: 3000,
         method: 'POST'

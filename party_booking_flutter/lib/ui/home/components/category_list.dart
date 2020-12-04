@@ -38,7 +38,7 @@ class _CategoryListState extends State<CategoryList> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => GestureDetector(
                     onTap: () => context
-                        .bloc<HomeBloc>()
+                        .read<HomeBloc>()
                         .add(OnPageChangeEvent(itemSelected: index)),
                     child: Container(
                       alignment: Alignment.center,

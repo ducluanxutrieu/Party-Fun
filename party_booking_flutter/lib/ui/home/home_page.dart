@@ -42,7 +42,7 @@ class MainScreen extends StatelessWidget {
             ),
             body: RefreshIndicator(
               onRefresh: () {
-                context.bloc<HomeBloc>().add(GetListMenuEvent());
+                context.read<HomeBloc>().add(GetListMenuEvent());
                 Future.delayed(Duration(milliseconds: 300));
                 return;
               },
@@ -58,8 +58,9 @@ class MainScreen extends StatelessWidget {
 
   Visibility buildFABAddNewDish(
       BuildContext context, AccountModel accountModel) {
+    final int role = accountModel.role;
     bool isVisible =
-        (accountModel != null && accountModel.role == Role.Staff.index);
+        (accountModel != null && role != null && (role == Role.Staff.index) || role == Role.Admin.index);
     return Visibility(
       visible: isVisible,
       child: FloatingActionButton(

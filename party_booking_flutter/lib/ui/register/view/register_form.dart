@@ -88,7 +88,7 @@ class _RegisterButton extends StatelessWidget {
             buttonText: 'Register',
             buttonHandler: () {
               RegisterRequestModel model = _getRegisterModel();
-              context.bloc<RegisterBloc>().add(RegisterSubmitted(model));
+              context.read<RegisterBloc>().add(RegisterSubmitted(model));
             },
             stateButton: state.status,
           );

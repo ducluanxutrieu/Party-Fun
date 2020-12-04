@@ -32,7 +32,7 @@ class ForgotPasswordForm extends StatelessWidget {
                 TextFieldWidget(
                   mHindText: "Username",
                   name: "username",
-                  mValidators: [FormBuilderValidators.required(context)],
+                  mValidators: FormBuilderValidators.compose([FormBuilderValidators.required(context)]),
                 ),
                 SizedBox(
                   height: 35.0,

@@ -35,7 +35,7 @@ class SubmitButton extends StatelessWidget {
               username =
                   _fbKey.currentState.fields['username'].value;
               context
-                  .bloc<UserPasswordBloc>()
+                  .read<UserPasswordBloc>()
                   .add(ForgotPasswordSubmitted(username));
             }
           },

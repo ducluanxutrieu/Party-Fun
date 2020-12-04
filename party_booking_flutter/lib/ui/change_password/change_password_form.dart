@@ -104,7 +104,7 @@ class _SubmitButton extends StatelessWidget {
             if (state.status == FormzStatus.valid) {
               print("**************8");
               print(username);
-              context.bloc<UserPasswordBloc>().add(ChangePasswordSubmitted(
+              context.read<UserPasswordBloc>().add(ChangePasswordSubmitted(
                   isChangePassword: isChangePass, username: username));
             }
           },
@@ -146,7 +146,7 @@ class _PasswordInput extends StatelessWidget {
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(32))),
           onChanged: (password) => context
-              .bloc<UserPasswordBloc>()
+              .read<UserPasswordBloc>()
               .add(UserPasswordChanged(password)),
         );
       },
@@ -184,10 +184,10 @@ class _NewPasswordInput extends StatelessWidget {
             onChanged: (password) {
               _isNewPass
                   ? context
-                      .bloc<UserPasswordBloc>()
+                      .read<UserPasswordBloc>()
                       .add(UserNewPasswordChanged(password))
                   : context
-                      .bloc<UserPasswordBloc>()
+                      .read<UserPasswordBloc>()
                       .add(UserRetypePasswordChanged(password));
             });
       },

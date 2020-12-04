@@ -17,7 +17,7 @@ class CartPage extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.clear_all),
           tooltip: 'Clear All',
-          onPressed: () => context.bloc<CartBloc>().add(ClearCartEvent()),
+          onPressed: () => context.read<CartBloc>().add(ClearCartEvent()),
         ),
       ],
     );

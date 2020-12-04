@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:party_booking/authentication/bloc/authentication_bloc.dart';
 import 'package:party_booking/data/network/model/account_response_model.dart';
-import 'package:party_booking/theme/theme_bloc.dart';
+import 'dark_theme_item_drawer.dart';
 import 'package:party_booking/ui/history_order_list/history_order_screen.dart';
 import 'package:party_booking/ui/profile/profile_page.dart';
 
 import '../../about_us_screen.dart';
 import '../../list_posts_screen.dart';
 import '../../map_screen.dart';
+import '../../../cart/cart_bloc.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({
@@ -87,7 +88,7 @@ class MainDrawer extends StatelessWidget {
                 ),
               );
             }),
-        _DarkThemeWidget(),
+        DarkThemeWidget(),
         Divider(),
         _createDrawerItem(
             icon: FontAwesomeIcons.info,
@@ -156,7 +157,11 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
               FlatButton(
-                onPressed: () => BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogoutRequested()),
+                onPressed: () => {
+                  BlocProvider.of<AuthenticationBloc>(context)
+                      .add(AuthenticationLogoutRequested()),
+                  BlocProvider.of<CartBloc>(context).add(ClearCartEvent())
+                },
                 child: Text(
                   'Yes',
                   style: TextStyle(fontWeight: FontWeight.bold),
@@ -165,39 +170,5 @@ class MainDrawer extends StatelessWidget {
             ],
           );
         });
-  }
-}
-
-
-class _DarkThemeWidget extends StatelessWidget {
-  const _DarkThemeWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      buildWhen: (previous, current) => previous.darkThemeEnabled != current.darkThemeEnabled,
-      builder: (context, state) {
-        return SwitchListTile(
-          title: Row(
-            children: <Widget>[
-              Icon(
-                FontAwesomeIcons.adjust,
-                size: 28,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Text('Dark Theme'),
-              )
-            ],
-          ),
-          onChanged: (value) => context
-              .bloc<ThemeBloc>()
-              .add(ChangeThemeEvent(value)),
-          value: state.darkThemeEnabled,
-        );
-      },
-    );
   }
 }

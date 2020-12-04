@@ -24,7 +24,7 @@ class HistoryOrderScreen extends StatelessWidget {
               historyOrderRepository: new HistoryOrderRepository()),
           child: RefreshIndicator(
             onRefresh: () {
-              context.bloc<HistoryOrderBloc>().add(GetListOrderEvent(true));
+              context.read<HistoryOrderBloc>().add(GetListOrderEvent(true));
               Future.delayed(Duration(milliseconds: 300));
               return;
             },
@@ -98,7 +98,7 @@ class HistoryOrderScreen extends StatelessWidget {
         child: InkWell(
             onTap: () {
               print(currentPage);
-              context.bloc<HistoryOrderBloc>().add(GetListOrderEvent(false));
+              context.read<HistoryOrderBloc>().add(GetListOrderEvent(false));
             },
             child: Icon(
               CustomIcons.ic_more,
