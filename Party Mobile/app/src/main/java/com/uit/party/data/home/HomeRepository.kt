@@ -3,13 +3,9 @@ package com.uit.party.data.home
 import androidx.lifecycle.LiveData
 import com.uit.party.data.CusResult
 import com.uit.party.data.getToken
-import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
 import com.uit.party.model.DishModel
-import com.uit.party.model.UserRole
-import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.ServiceRetrofit
-import com.uit.party.util.SharedPrefs
 import java.util.*
 
 class HomeRepository(
@@ -35,17 +31,17 @@ class HomeRepository(
     suspend fun logout() {
         try {
             networkService.logout(getToken())
-            SharedPrefs().getInstance().clear()
+//            SharedPrefs().getInstance().clear()
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }
     }
 
-    fun checkAdmin(): Boolean {
-        val role =
-            SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.role
-        return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
-    }
+//    fun checkAdmin(): Boolean {
+//        val role =
+//            SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.role
+//        return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
+//    }
 
     suspend fun insertDish(dishModel: DishModel) {
         try {

@@ -40,8 +40,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_account_circle_24dp"
-                    android:onClick="@{() -> viewModel.avatarClicked()}"
-                    app:imageUrl="@{viewModel.mAvatar}" />
+                    android:onClick="@{() -> viewModel.avatarClicked()}" />
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout

@@ -10,12 +10,10 @@ import com.uit.party.R
 import com.uit.party.databinding.ItemDishBinding
 import com.uit.party.model.DishModel
 import com.uit.party.ui.main.main_menu.MenuFragmentDirections
-import com.uit.party.util.BindableAdapter
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 
-class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(),
-    BindableAdapter<DishModel> {
+class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(){
     private var dishList = ArrayList<DishModel>()
     private lateinit var binding: ItemDishBinding
     private lateinit var mDishType: String
@@ -42,7 +40,7 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(),
         holder.bind(dishList[position])
     }
 
-    override fun setData(items: ArrayList<DishModel>) {
+    fun setData(items: ArrayList<DishModel>) {
         dishList.clear()
         dishList = items
         notifyDataSetChanged()
@@ -56,7 +54,7 @@ class DishesAdapter : RecyclerView.Adapter<DishesAdapter.DishViewHolder>(),
             binding.executePendingBindings()
             itemViewModel.init(dishModel)
             binding.root.setOnClickListener {
-                val action = MenuFragmentDirections.actionListDishFragmentToDishDetailFragment(adapterPosition, dishType, dishModel)
+                val action = MenuFragmentDirections.actionListDishFragmentToDishDetailFragment(absoluteAdapterPosition, dishType, dishModel)
                 it.findNavController().navigate(action)
             }
             binding.btnAddToCard.setOnClickListener {

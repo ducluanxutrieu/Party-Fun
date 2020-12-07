@@ -2,34 +2,46 @@ package com.uit.party.ui.signin.register
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.uit.party.R
 import com.uit.party.databinding.FragmentRegisterBinding
 import com.uit.party.ui.signin.SignInActivity
+import javax.inject.Inject
 
 
-class RegisterFragment : Fragment(), RegisterCallback {
+class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
-    private lateinit var viewModel: RegisterViewModel
+
+    @Inject
+    lateinit var viewModel: RegisterViewModel
     private var cX = 0
     private var cY = 0
     private val myArgs : RegisterFragmentArgs by navArgs()
 
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity() as SignInActivity).signInComponent.inject(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupBinding(container)
+        setupListener()
         return binding.root
     }
 
@@ -47,13 +59,8 @@ class RegisterFragment : Fragment(), RegisterCallback {
             container,
             false
         )
-        viewModel = RegisterViewModel(this)
         binding.viewModel = viewModel
         viewModel.init(this)
-    }
-
-    override fun onBackLogin() {
-        animateRevealClose()
     }
 
     private fun animateRevealShow() {
@@ -86,5 +93,15 @@ class RegisterFragment : Fragment(), RegisterCallback {
             }
         })
         mAnimator.start()
+    }
+
+    private fun setupListener(){
+        binding.rlContainer.setOnClickListener { animateRevealClose() }
+        binding.etEmail.doOnTextChanged { text, _, _, _ -> viewModel.checkEmailValid(text) }
+        binding.etFullName.doOnTextChanged { text, _, _, _ -> viewModel.checkFullNameValid(text) }
+        binding.etPhoneNumber.doOnTextChanged { text, _, _, _ -> viewModel.checkPhoneNumberValid(text) }
+        binding.etUsername.doOnTextChanged { text, _, _, _ -> viewModel.checkUsernameValid(text) }
+        binding.etPassword.doOnTextChanged { text, _, _, _ -> viewModel.checkPasswordValid(text) }
+        binding.etRepeatPassword.doOnTextChanged { text, _, _, _ -> viewModel.checkConfirmPasswordValid(text) }
     }
 }

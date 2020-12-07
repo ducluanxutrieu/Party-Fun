@@ -1,26 +1,21 @@
 package com.uit.party.ui.signin.register
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.model.AccountResponse
+import com.uit.party.data.CusResult
 import com.uit.party.model.RegisterModel
-import com.uit.party.util.GlobalApplication
+import com.uit.party.user.UserManager
 import com.uit.party.util.UiUtil
-import com.uit.party.util.getNetworkService
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewModel() {
+class RegisterViewModel @Inject constructor (private val userManager: UserManager ) : ViewModel() {
     private var fullNameValid = false
     private var usernameValid = false
     private var emailValid = false
@@ -45,18 +40,12 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     var password: ObservableField<String> = ObservableField()
     var confirmPassword: ObservableField<String> = ObservableField()
 
-    private val context = GlobalApplication.appContext
 
     private var fullNameText: String = ""
     private var usernameText: String = ""
     private var emailText: String = ""
     private var phoneNumberText: String = ""
     private var passwordText: String = ""
-    private lateinit var activity: RegisterFragment
-
-    fun init(activity: RegisterFragment) {
-        this.activity = activity
-    }
 
     private fun checkShowButtonRegister() {
         if (fullNameValid && usernameValid && emailValid && phoneNumberValid && passwordValid && confirmPasswordValid) {
@@ -64,28 +53,14 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
         } else btnRegisterEnabled.set(false)
     }
 
-    fun getFullNameTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkFullNameValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkFullNameValid(editable: Editable?) {
+    fun checkFullNameValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorFullName.set(UiUtil.getString(R.string.this_field_required))
                 fullNameValid = false
                 checkShowButtonRegister()
             }
-            editable.trim().length < 6 -> {
+            text.trim().length < 6 -> {
                 errorFullName.set(UiUtil.getString(R.string.full_name_too_short))
                 fullNameValid = false
                 checkShowButtonRegister()
@@ -94,40 +69,25 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             else -> {
                 fullNameValid = true
                 errorFullName.set("")
-                fullNameText = editable.toString()
+                fullNameText = text.toString()
                 checkShowButtonRegister()
             }
         }
     }
 
-    fun getUsernameTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkUsernameValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
-
-    fun checkUsernameValid(editable: Editable?) {
+    fun checkUsernameValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorUserName.set(UiUtil.getString(R.string.this_field_required))
                 usernameValid = false
                 checkShowButtonRegister()
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorUserName.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 usernameValid = false
                 checkShowButtonRegister()
             }
-            editable.trim().length < 6 -> {
+            text.trim().length < 6 -> {
                 errorUserName.set(UiUtil.getString(R.string.user_name_too_short))
                 usernameValid = false
                 checkShowButtonRegister()
@@ -135,41 +95,26 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             else -> {
                 usernameValid = true
                 errorUserName.set("")
-                usernameText = editable.toString()
+                usernameText = text.toString()
                 checkShowButtonRegister()
             }
         }
     }
 
-
-    fun getPhoneNumberTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkPhoneNumberValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkPhoneNumberValid(editable: Editable?) {
+    fun checkPhoneNumberValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.this_field_required))
                 phoneNumberValid = false
                 checkShowButtonRegister()
             }
-            !android.util.Patterns.PHONE.matcher(editable).matches() -> {
+            !android.util.Patterns.PHONE.matcher(text).matches() -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.phone_not_valid))
                 phoneNumberValid = false
                 checkShowButtonRegister()
             }
 
-            editable.trim().length < 9 -> {
+            text.trim().length < 9 -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.phone_number_too_short))
                 phoneNumberValid = false
                 checkShowButtonRegister()
@@ -178,34 +123,20 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             else -> {
                 phoneNumberValid = true
                 errorPhoneNumber.set("")
-                phoneNumberText = editable.toString()
+                phoneNumberText = text.toString()
                 checkShowButtonRegister()
             }
         }
     }
 
-    fun getEmailTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkEmailValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkEmailValid(editable: Editable?) {
+    fun checkEmailValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorEmail.set(UiUtil.getString(R.string.this_field_required))
                 emailValid = false
                 checkShowButtonRegister()
             }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(editable).matches() -> {
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches() -> {
                 errorEmail.set(UiUtil.getString(R.string.email_not_valid))
                 emailValid = false
                 checkShowButtonRegister()
@@ -213,40 +144,25 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             else -> {
                 emailValid = true
                 errorEmail.set("")
-                emailText = editable.toString()
+                emailText = text.toString()
                 checkShowButtonRegister()
             }
         }
     }
 
-    fun getPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkPasswordValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
-
-    private fun checkPasswordValid(editable: Editable?) {
+    fun checkPasswordValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorPassword.set(UiUtil.getString(R.string.this_field_required))
                 passwordValid = false
                 checkShowButtonRegister()
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 passwordValid = false
                 checkShowButtonRegister()
             }
-            editable.length < 6 -> {
+            text.length < 6 -> {
                 errorPassword.set(UiUtil.getString(R.string.password_too_short))
                 passwordValid = false
                 checkShowButtonRegister()
@@ -254,34 +170,20 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
             else -> {
                 passwordValid = true
                 errorPassword.set("")
-                passwordText = editable.toString()
+                passwordText = text.toString()
                 checkShowButtonRegister()
             }
         }
     }
 
-    fun getConfirmPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkConfirmPasswordValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkConfirmPasswordValid(editable: Editable?) {
+    fun checkConfirmPasswordValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorConfirmPassword.set(UiUtil.getString(R.string.this_field_required))
                 confirmPasswordValid = false
                 checkShowButtonRegister()
             }
-            passwordText != editable.toString() -> {
+            passwordText != text.toString() -> {
                 errorConfirmPassword.set(UiUtil.getString(R.string.not_matched_with_password))
                 confirmPasswordValid = false
                 checkShowButtonRegister()
@@ -297,55 +199,20 @@ class RegisterViewModel(private val registerCallback: RegisterCallback) : ViewMo
     fun onRegisterClicked(view: View) {
         val model =
             RegisterModel(fullNameText, usernameText, emailText, phoneNumberText, passwordText)
-        register(model) { isSuccess ->
-            if (isSuccess) {
-                UiUtil.showToast(UiUtil.getString(R.string.register_successful))
-                view.findNavController().popBackStack()
+        mShowLoading.set(true)
+        viewModelScope.launch {
+            try {
+                val result = userManager.registerUser(model)
+                if (result is CusResult.Success){
+                    result.data.message?.let { UiUtil.showToast(it) }
+                    view.findNavController().popBackStack()
+                }
+            }catch (ex: Exception){
+                ex.message?.let { UiUtil.showToast(it) }
+            }finally {
+                mShowLoading.set(false)
             }
         }
-    }
-
-    private fun register(
-        model: RegisterModel,
-        onComplete: (Boolean) -> Unit
-    ) {
-        mShowLoading.set(true)
-        getNetworkService().register(model)
-            .enqueue(object : Callback<AccountResponse> {
-                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                    Toast.makeText(context, "Register false: ${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                    mShowLoading.set(false)
-                }
-
-                override fun onResponse(
-                    call: Call<AccountResponse>,
-                    response: Response<AccountResponse>
-                ) {
-                    mShowLoading.set(false)
-                    val repo = response.body()
-                    if (repo != null) {
-                        onComplete(true)
-                    } else {
-                        try {
-                            val jObjError = JSONObject(response.errorBody()!!.string())
-                            Toast.makeText(
-                                context,
-                                jObjError.getString("errorMessage"),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
-                        }
-                        onComplete(false)
-                    }
-                }
-            })
-    }
-
-
-    fun onBackLogin() {
-        registerCallback.onBackLogin()
     }
 
     fun onCardClicked() {

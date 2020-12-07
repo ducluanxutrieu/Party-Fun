@@ -68,7 +68,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    app:dishUrl="@{itemViewModel.imageDish}"
                     tools:src="@tools:sample/backgrounds/scenic"
                     />
             </androidx.cardview.widget.CardView>

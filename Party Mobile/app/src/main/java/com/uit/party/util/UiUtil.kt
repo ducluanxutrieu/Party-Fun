@@ -8,9 +8,9 @@ import java.text.NumberFormat
 import java.util.*
 
 object UiUtil {
-    fun showToast(toast: String){
+    fun showToast(toast: String?){
         val context =  GlobalApplication.appContext
-        Toast.makeText(context, toast, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, toast ?: "", Toast.LENGTH_SHORT).show()
     }
 
     fun getString(stringId: Int): String {

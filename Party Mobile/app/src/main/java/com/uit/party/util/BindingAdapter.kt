@@ -1,18 +1,10 @@
 package com.uit.party.util
 
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputLayout
-import com.uit.party.R
-import java.util.*
 
 
-@Suppress("UNCHECKED_CAST")
+/*@Suppress("UNCHECKED_CAST")
 @BindingAdapter("app:gridRecyclerData")
 fun <T> setupGridRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
     recyclerView.setHasFixedSize(false)
@@ -23,9 +15,9 @@ fun <T> setupGridRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
     if (recyclerView.adapter is BindableAdapter<*>) {
         (recyclerView.adapter as BindableAdapter<T>).setData(items)
     }
-}
+}*/
 
-@Suppress("UNCHECKED_CAST")
+/*@Suppress("UNCHECKED_CAST")
 @BindingAdapter("app:linearRecyclerData")
 fun <T> setupLinearRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>) {
     recyclerView.setHasFixedSize(false)
@@ -35,9 +27,9 @@ fun <T> setupLinearRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>)
     if (recyclerView.adapter is BindableAdapter<*>) {
         (recyclerView.adapter as BindableAdapter<T>).setData(items)
     }
-}
+}*/
 
-@BindingAdapter("app:imageUrl")
+/*@BindingAdapter("app:imageUrl")
 fun setImageIcon(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
         val requestOptions = RequestOptions
@@ -46,8 +38,9 @@ fun setImageIcon(imageView: AppCompatImageView, url: String?) {
             .placeholder(R.drawable.ic_account_circle_24dp)
         Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
     }
-}
+}*/
 
+/*
 @BindingAdapter("app:dishUrl")
 fun setDishImage(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
@@ -57,9 +50,9 @@ fun setDishImage(imageView: AppCompatImageView, url: String?) {
             .placeholder(R.drawable.dish_sample)
         Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
     }
-}
+}*/
 
-@BindingAdapter("bind:textError")
+/*@BindingAdapter("bind:textError")
 fun setTextError(textInput: TextInputLayout, error: String?) {
     if (!error.isNullOrEmpty()) {
         textInput.error = error
@@ -68,4 +61,4 @@ fun setTextError(textInput: TextInputLayout, error: String?) {
         textInput.error = ""
         textInput.isErrorEnabled = false
     }
-}
+}*/

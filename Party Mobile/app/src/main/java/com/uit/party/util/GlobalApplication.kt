@@ -2,14 +2,11 @@ package com.uit.party.util
 
 import android.app.Application
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.util.Log
-import android.view.View
+import com.uit.party.di.AppComponent
+import com.uit.party.di.DaggerAppComponent
 
+open class GlobalApplication : Application() {
 
-class GlobalApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
@@ -20,18 +17,13 @@ class GlobalApplication : Application(){
             private set
     }
 
-    fun loadBitmapFromView(view: View, width: Int, height: Int): Bitmap {
-        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(returnedBitmap)
-        val bgDrawable = view.background
-        if (bgDrawable != null)
-            bgDrawable.draw(canvas)
-        else
-            canvas.drawColor(Color.WHITE)
-        view.draw(canvas)
+    val appComponent: AppComponent by lazy {
+        // Creates an instance of AppComponent using its Factory constructor
+        // We pass the applicationContext that will be used as Context in the graph
+        DaggerAppComponent.factory().create(applicationContext)
+    }
 
-        Log.e("width", "=$width")
-        Log.e("height", "=$height")
-        return returnedBitmap
+    open fun initializeComponent(): AppComponent{
+        return DaggerAppComponent.factory().create(applicationContext)
     }
 }

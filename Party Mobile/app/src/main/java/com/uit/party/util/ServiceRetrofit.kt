@@ -13,14 +13,14 @@ import java.util.concurrent.TimeUnit
 
 interface ServiceRetrofit {
     @HTTP(method = "POST", path = "user/signin", hasBody = true)
-    fun login(
+    suspend fun login(
         @Body body: LoginModel
-    ): Call<AccountResponse>
+    ): AccountResponse
 
     @POST("user/signup")
-    fun register(
+    suspend fun register(
         @Body body: RegisterModel
-    ): Call<AccountResponse>
+    ): AccountResponse
 
     @GET("user/signout")
     suspend fun logout(
@@ -29,9 +29,9 @@ interface ServiceRetrofit {
 
     @POST("user/resetpassword")
     @FormUrlEncoded
-    fun resetPassword(
+    suspend fun resetPassword(
         @Field("username") username: String
-    ): Call<BaseResponse>
+    ): BaseResponse
 
     @POST("user/resetconfirm")
     @FormUrlEncoded

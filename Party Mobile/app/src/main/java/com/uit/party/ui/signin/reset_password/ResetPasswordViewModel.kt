@@ -1,90 +1,62 @@
 package com.uit.party.ui.signin.reset_password
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
+import androidx.lifecycle.viewModelScope
 import com.uit.party.R
-import com.uit.party.model.BaseResponse
+import com.uit.party.data.CusResult
+import com.uit.party.user.UserManager
 import com.uit.party.util.UiUtil
-import com.uit.party.util.getNetworkService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ResetPasswordViewModel :ViewModel(){
+class ResetPasswordViewModel @Inject constructor(private val userManager: UserManager) :ViewModel(){
     var errorUsername: ObservableField<String> = ObservableField()
     private var usernameText = ""
     val mShowLoading = ObservableBoolean(false)
     val mNextButtonEnabled: ObservableBoolean = ObservableBoolean()
 
+    private val _resetState = MutableLiveData<Boolean>()
+    val resetPassState: LiveData<Boolean>
+        get() = _resetState
 
-    fun getUsernameTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkUsernameValid(editable)
-            }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
-
-    fun checkUsernameValid(editable: Editable?) {
+    fun checkUsernameValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorUsername.set(UiUtil.getString(R.string.this_field_required))
                 mNextButtonEnabled.set(false)
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 mNextButtonEnabled.set(false)
             }
             else -> {
                 errorUsername.set("")
-                usernameText = editable.toString()
+                usernameText = text.toString()
                 mNextButtonEnabled.set(true)
             }
         }
     }
 
-    fun onSendClicked(view: View){
+    fun onSendClicked(){
         mShowLoading.set(true)
-        resetPassword(usernameText){
-            mShowLoading.set(false)
-            if (it) {
-                val action = ResetPasswordFragmentDirections.actionResetPasswordFragmentToChangePasswordFragment("RESET")
-                view.findNavController().navigate(action)
+
+        viewModelScope.launch {
+            try {
+                val result = userManager.resetPassword(usernameText)
+                if (result is CusResult.Success){
+                    UiUtil.showToast(result.data.message)
+                    _resetState.postValue(true)
+                }
+            }catch (ex: Exception){
+                ex.message?.let { UiUtil.showToast(it) }
+            }finally {
+                mShowLoading.set(false)
             }
         }
-    }
-
-    private fun resetPassword(s: String, onComplete: (Boolean) -> Unit) {
-        getNetworkService().resetPassword(s)
-            .enqueue(object : Callback<BaseResponse> {
-                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
-                    t.message?.let { UiUtil.showToast(it) }
-                    onComplete(false)
-                }
-
-                override fun onResponse(
-                    call: Call<BaseResponse>,
-                    response: Response<BaseResponse>
-                ) {
-                    if (response.code() == 200){
-                        response.body()?.message?.let { UiUtil.showToast(it) }
-                        onComplete(true)
-                    }else{
-                        onComplete(false)
-                    }
-                }
-            })
     }
 }

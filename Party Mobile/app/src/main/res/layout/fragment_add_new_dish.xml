@@ -24,8 +24,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_item_form"
-                bind:textError="@{viewModel.MErrorTitle}">
+                android:layout_margin="@dimen/margin_item_form">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_title_dish"
@@ -40,8 +39,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_item_form"
-                bind:textError="@{viewModel.MErrorDescription}">
+                android:layout_margin="@dimen/margin_item_form">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_description_dish"
@@ -180,8 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_4sdp"
-                    app:hintEnabled="false"
-                    bind:textError="@{viewModel.mErrorPrice}">
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="@dimen/_120sdp"

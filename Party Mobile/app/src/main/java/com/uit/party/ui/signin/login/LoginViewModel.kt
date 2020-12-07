@@ -1,30 +1,30 @@
 package com.uit.party.ui.signin.login
 
-import android.content.Intent
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.model.AccountResponse
+import com.uit.party.data.CusResult
 import com.uit.party.model.LoginModel
-import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.signin.SignInActivity
-import com.uit.party.util.Constants
-import com.uit.party.util.Constants.Companion.USER_INFO_KEY
-import com.uit.party.util.SharedPrefs
+import com.uit.party.ui.signin.LoginError
+import com.uit.party.ui.signin.LoginSuccess
+import com.uit.party.ui.signin.LoginViewState
+import com.uit.party.user.UserManager
 import com.uit.party.util.UiUtil
-import com.uit.party.util.getNetworkService
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel @Inject constructor(private val userManager: UserManager) : ViewModel() {
+    private val _loginState = MutableLiveData<LoginViewState>()
+    val loginState: LiveData<LoginViewState>
+        get() = _loginState
+
     val loginEnabled: ObservableBoolean = ObservableBoolean()
 
     var errorUsername: ObservableField<String> = ObservableField()
@@ -38,58 +38,23 @@ class LoginViewModel : ViewModel() {
 
     val mShowLoading = ObservableBoolean(false)
 
-    fun onLoginClicked(view: View) {
+    fun onLoginClicked() {
         mShowLoading.set(true)
         val loginModel = LoginModel(usernameText, passwordText)
-        login(loginModel) { success ->
-            mShowLoading.set(false)
-            if (success != null) {
-                when (success) {
-                    "Success" -> {
-                        UiUtil.showToast(UiUtil.getString(R.string.login_successful))
-                        startMainActivity(view)
 
-                    }
-                    else -> UiUtil.showToast(success)
-                }
-            } else {
-                UiUtil.showToast(UiUtil.getString(R.string.login_error))
+        viewModelScope.launch {
+            try {
+                val result = userManager.loginUser(loginModel)
+                if (result is CusResult.Success) {
+                    _loginState.postValue(LoginSuccess)
+                } else
+                    _loginState.postValue(LoginError)
+            } catch (ex: Exception) {
+                ex.message?.let { UiUtil.showToast(it) }
+            } finally {
+                mShowLoading.set(false)
             }
         }
-    }
-
-    private fun startMainActivity(view: View) {
-        val context = view.context as SignInActivity
-        val intent = Intent(context, MainActivity::class.java)
-        context.startActivity(intent)
-        context.finish()
-    }
-
-    private fun login(loginModel: LoginModel, onComplete: (String?) -> Unit) {
-        getNetworkService().login(loginModel)
-            .enqueue(object : Callback<AccountResponse> {
-                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                    onComplete(t.message)
-                }
-
-                override fun onResponse(
-                    call: Call<AccountResponse>,
-                    model: Response<AccountResponse>
-                ) {
-                    val repos = model.body()
-                    if (repos != null && model.isSuccessful) {
-                        saveToMemory(repos)
-                        onComplete("Success")
-                    } else {
-                        try {
-                            val jObjError = JSONObject(model.errorBody()!!.string())
-                            onComplete(jObjError.getString("message"))
-                        } catch (e: Exception) {
-                            onComplete(e.message)
-                        }
-                    }
-                }
-            })
     }
 
     fun onRegisterClicked(view: View) {
@@ -100,29 +65,14 @@ class LoginViewModel : ViewModel() {
         view.findNavController().navigate(action)
     }
 
-    fun getUsernameTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkUsernameValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
-
-    fun checkUsernameValid(editable: Editable?) {
+    fun checkUsernameValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorUsername.set(UiUtil.getString(R.string.this_field_required))
                 usernameValid = false
                 checkShowButtonLogin()
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 usernameValid = false
                 checkShowButtonLogin()
@@ -130,7 +80,7 @@ class LoginViewModel : ViewModel() {
             else -> {
                 usernameValid = true
                 errorUsername.set("")
-                usernameText = editable.toString()
+                usernameText = text.toString()
                 checkShowButtonLogin()
             }
         }
@@ -142,33 +92,19 @@ class LoginViewModel : ViewModel() {
         } else loginEnabled.set(false)
     }
 
-    fun getPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkPasswordValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkPasswordValid(editable: Editable?) {
+    fun checkPasswordValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorPassword.set(UiUtil.getString(R.string.this_field_required))
                 passwordValid = false
                 checkShowButtonLogin()
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 passwordValid = false
                 checkShowButtonLogin()
             }
-            editable.length < 6 -> {
+            text.length < 6 -> {
                 errorPassword.set(UiUtil.getString(R.string.password_too_short))
                 passwordValid = false
                 checkShowButtonLogin()
@@ -176,7 +112,7 @@ class LoginViewModel : ViewModel() {
             else -> {
                 passwordValid = true
                 errorPassword.set("")
-                passwordText = editable.toString()
+                passwordText = text.toString()
                 checkShowButtonLogin()
             }
         }
@@ -184,10 +120,5 @@ class LoginViewModel : ViewModel() {
 
     fun onForgotPasswordClicked(view: View) {
         view.findNavController().navigate(R.id.action_LoginFragment_to_ResetPasswordFragment)
-    }
-
-    private fun saveToMemory(model: AccountResponse) {
-        SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
-        SharedPrefs().getInstance().put(Constants.TOKEN_ACCESS_KEY, model.account?.token)
     }
 }
