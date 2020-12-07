@@ -1,8 +1,6 @@
 package com.uit.party.ui.main.add_new_dish
 
 import android.graphics.Bitmap
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BaseObservable
@@ -125,23 +123,9 @@ class AddNewDishFragmentViewModel : BaseObservable() {
             })
     }
 
-    fun getTitleTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkTitleValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkTitleValid(editable: Editable?) {
+    fun checkTitleValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 mErrorTitle.set(UiUtil.getString(R.string.this_field_required))
                 mTitleValid = false
                 checkEnableButtonSend()
@@ -150,28 +134,14 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                 mTitleValid = true
                 mErrorTitle.set("")
                 checkEnableButtonSend()
-                mTitleText = editable.toString()
+                mTitleText = text.toString()
             }
         }
     }
 
-    fun getDescriptionTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkDescriptionValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkDescriptionValid(editable: Editable?) {
+    fun checkDescriptionValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 mErrorDescription.set(UiUtil.getString(R.string.this_field_required))
                 mDescriptionValid = false
                 checkEnableButtonSend()
@@ -180,28 +150,14 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                 mDescriptionValid = true
                 mErrorDescription.set("")
                 checkEnableButtonSend()
-                mDescriptionText = editable.toString()
+                mDescriptionText = text.toString()
             }
         }
     }
 
-    fun getPriceTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkPriceValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkPriceValid(editable: Editable?) {
+    fun checkPriceValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 mErrorTitle.set(UiUtil.getString(R.string.this_field_required))
                 mPriceValid = false
                 checkEnableButtonSend()
@@ -210,7 +166,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
                 mPriceValid = true
                 mErrorTitle.set("")
                 checkEnableButtonSend()
-                mPriceText = editable.toString()
+                mPriceText = text.toString()
             }
         }
     }
@@ -240,7 +196,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
         }
 
         //Create request body with text description and text media type
-        val token = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.token
+        val token = SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)?.token
         getNetworkService().addDish(
             token!!,
             mTitleText.toRequestBody(MultipartBody.FORM),

@@ -46,7 +46,7 @@ class CartDetailFragment : Fragment(), OnCartDetailListener {
     }
 
     private fun listenLiveData() {
-        mViewModel.listCart.observe(viewLifecycleOwner, Observer {
+        mViewModel.listCart.observe(viewLifecycleOwner, {
             mCartAdapter.submitList(it)
             mCartAdapter.notifyDataSetChanged()
             mViewModel.listCartStorage = it

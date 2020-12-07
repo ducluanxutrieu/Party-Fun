@@ -52,7 +52,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupListener() {
-        binding.etPassword.doOnTextChanged { text, _, _, _ ->
+        binding.etUsername.doOnTextChanged { text, _, _, _ ->
             viewModel.checkUsernameValid(text)
         }
 

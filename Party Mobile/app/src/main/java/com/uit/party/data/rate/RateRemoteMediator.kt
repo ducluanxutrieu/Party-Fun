@@ -99,7 +99,7 @@ class RateRemoteMediator(
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, RateModel>): RateRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { repo ->
                 // Get the remote keys of the last item retrieved
                 repoDatabase.rateRemoteDao.rateRemoteKeysRateId(repo.id)

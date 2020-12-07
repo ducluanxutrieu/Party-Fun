@@ -1,7 +1,5 @@
 package com.uit.party.ui.profile.change_password
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -137,30 +135,15 @@ class ChangePasswordViewModel : ViewModel() {
         }
     }
 
-    fun getCurrentPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkCurrentPasswordValid(editable)
-            }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        }
-    }
-
-    fun checkCurrentPasswordValid(editable: Editable?) {
+    fun checkCurrentPasswordValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorCurrentPassword.set(UiUtil.getString(R.string.this_field_required))
                 currentPasswordValid = false
                 checkShowSendButton()
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorCurrentPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 currentPasswordValid = false
                 checkShowSendButton()
@@ -168,7 +151,7 @@ class ChangePasswordViewModel : ViewModel() {
             else -> {
                 currentPasswordValid = true
                 errorCurrentPassword.set("")
-                currentPasswordText = editable.toString()
+                currentPasswordText = text.toString()
                 checkShowSendButton()
             }
         }
@@ -180,34 +163,19 @@ class ChangePasswordViewModel : ViewModel() {
         } else sendButtonEnabled.set(false)
     }
 
-    fun getNewPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkNewPasswordValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
-
-    private fun checkNewPasswordValid(editable: Editable?) {
+    fun checkNewPasswordValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorNewPassword.set(UiUtil.getString(R.string.this_field_required))
                 newPasswordValid = false
                 checkShowSendButton()
             }
-            editable.contains(" ") -> {
+            text.contains(" ") -> {
                 errorNewPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 newPasswordValid = false
                 checkShowSendButton()
             }
-            editable.length < 6 -> {
+            text.length < 6 -> {
                 errorNewPassword.set(UiUtil.getString(R.string.password_too_short))
                 newPasswordValid = false
                 checkShowSendButton()
@@ -215,37 +183,20 @@ class ChangePasswordViewModel : ViewModel() {
             else -> {
                 newPasswordValid = true
                 errorNewPassword.set("")
-                newPasswordText = editable.toString()
+                newPasswordText = text.toString()
                 checkShowSendButton()
             }
         }
     }
 
-    fun getConfirmPasswordTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkConfirmPasswordValid(editable)
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-        }
-    }
-
-    private fun checkConfirmPasswordValid(editable: Editable?) {
+    fun checkConfirmPasswordValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorConfirmPassword.set(UiUtil.getString(R.string.this_field_required))
                 confirmPasswordValid = false
                 checkShowSendButton()
             }
-            newPasswordText != editable.toString() -> {
+            newPasswordText != text.toString() -> {
                 errorConfirmPassword.set(UiUtil.getString(R.string.not_matched_with_password))
                 confirmPasswordValid = false
                 checkShowSendButton()

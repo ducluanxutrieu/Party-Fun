@@ -1,7 +1,11 @@
 package com.uit.party.util
 
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputLayout
+import com.uit.party.R
 
 
 /*@Suppress("UNCHECKED_CAST")
@@ -29,7 +33,7 @@ fun <T> setupLinearRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>)
     }
 }*/
 
-/*@BindingAdapter("app:imageUrl")
+@BindingAdapter("app:imageUrl")
 fun setImageIcon(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
         val requestOptions = RequestOptions
@@ -38,9 +42,8 @@ fun setImageIcon(imageView: AppCompatImageView, url: String?) {
             .placeholder(R.drawable.ic_account_circle_24dp)
         Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
     }
-}*/
+}
 
-/*
 @BindingAdapter("app:dishUrl")
 fun setDishImage(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
@@ -50,9 +53,9 @@ fun setDishImage(imageView: AppCompatImageView, url: String?) {
             .placeholder(R.drawable.dish_sample)
         Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
     }
-}*/
+}
 
-/*@BindingAdapter("bind:textError")
+@BindingAdapter("bind:textError")
 fun setTextError(textInput: TextInputLayout, error: String?) {
     if (!error.isNullOrEmpty()) {
         textInput.error = error
@@ -61,4 +64,4 @@ fun setTextError(textInput: TextInputLayout, error: String?) {
         textInput.error = ""
         textInput.isErrorEnabled = false
     }
-}*/
+}

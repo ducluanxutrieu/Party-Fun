@@ -39,7 +39,8 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                bind:textError="@{viewModel.errorFullName}">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_full_name"
@@ -47,8 +48,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@={viewModel.mFullName}"
-                    app:addTextChangedListener="@{viewModel.getFullNameTextChanged()}" />
+                    android:text="@={viewModel.mFullName}" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -75,7 +75,8 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                bind:textError="@{viewModel.errorEmailText}">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_email"
@@ -83,8 +84,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="@={viewModel.mEmail}"
-                    app:addTextChangedListener="@{viewModel.getEmailTextChanged()}" />
+                    android:text="@={viewModel.mEmail}" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -110,7 +110,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                bind:textError="@{viewModel.errorPhoneNumber}">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_phone_number"
@@ -118,8 +119,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="phone"
                     android:singleLine="true"
-                    android:text="@={viewModel.mPhoneNumber}"
-                    app:addTextChangedListener="@{viewModel.getPhoneNumberTextChanged()}" />
+                    android:text="@={viewModel.mPhoneNumber}" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

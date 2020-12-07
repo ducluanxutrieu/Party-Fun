@@ -61,7 +61,7 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun listenLiveData() {
-        mViewModel.listMenu.observe(viewLifecycleOwner, Observer {
+        mViewModel.listMenu.observe(viewLifecycleOwner, {
             val listMenu = mViewModel.menuAllocation(it)
             mMenuAdapter.submitList(listMenu)
             mViewModel.mShowMenu.set(listMenu.isNotEmpty())

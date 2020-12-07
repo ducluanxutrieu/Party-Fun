@@ -1,7 +1,6 @@
 package com.uit.party.ui.signin
 
 import com.uit.party.data.CusResult
-import com.uit.party.di.ActivityScope
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.BaseResponse
 import com.uit.party.model.LoginModel
@@ -10,6 +9,7 @@ import com.uit.party.util.Constants
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.Storage
 import com.uit.party.util.handleRequest
+import dagger.Provides
 import javax.inject.Inject
 
 

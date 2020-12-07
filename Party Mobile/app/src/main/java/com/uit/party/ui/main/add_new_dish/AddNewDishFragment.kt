@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -23,7 +24,7 @@ class AddNewDishFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_new_dish, container, false)
         mViewModel = AddNewDishFragmentViewModel()
@@ -34,6 +35,7 @@ class AddNewDishFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupSpinner()
+        setupListener()
         getData()
     }
 
@@ -53,7 +55,7 @@ class AddNewDishFragment : Fragment() {
     }
 
     private fun setupSpinner() {
-        mSpinnerAdapter = SpinnerAdapter(this.context!!, R.layout.item_spinner_dish, Thumbnail.values())
+        mSpinnerAdapter = SpinnerAdapter(requireContext(), R.layout.item_spinner_dish, Thumbnail.values())
         mBinding.spinnerDishType.adapter = mSpinnerAdapter
             mBinding.spinnerDishType.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -71,5 +73,11 @@ class AddNewDishFragment : Fragment() {
                     mViewModel.mTypeText = Thumbnail.Thumbnail1.dishName
                 }
             }
+    }
+
+    private fun setupListener(){
+        mBinding.etTitleDish.doOnTextChanged { text, _, _, _ -> mViewModel.checkTitleValid(text) }
+        mBinding.etDescriptionDish.doOnTextChanged { text, _, _, _ -> mViewModel.checkDescriptionValid(text) }
+        mBinding.etPrice.doOnTextChanged { text, _, _, _ -> mViewModel.checkPriceValid(text) }
     }
 }

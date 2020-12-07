@@ -8,7 +8,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 // Definition of a Dagger component
-@Singleton
+//@Singleton
 @Component(modules = [StorageModule::class, AppSubcomponents::class])
 interface AppComponent {
     // Factory to create instances of the AppComponent

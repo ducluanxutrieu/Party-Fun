@@ -12,11 +12,8 @@ import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
 import com.uit.party.model.UserGender
 import com.uit.party.ui.main.MainActivity
+import com.uit.party.util.*
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
-import com.uit.party.util.SharedPrefs
-import com.uit.party.util.TimeFormatUtil
-import com.uit.party.util.UiUtil
-import com.uit.party.util.getNetworkService
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -38,16 +35,16 @@ class ProfileFragmentViewModel(val context: MainActivity) : ViewModel(){
     val mBirthDay = ObservableField("")
     val mAvatar = ObservableField("")
 
-    private var mAccount = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
+    private var mAccount = SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)!!
 
     init {
-        mName.set(mAccount?.fullName)
-        mEmail.set(mAccount?.email)
-        mSex.set(UserGender.values()[mAccount?.gender ?: 0].name)
-        mBirthDay.set(TimeFormatUtil.formatDateToClient(mAccount?.birthday))
-        mAvatar.set(mAccount?.avatar)
-        mMobile.set(mAccount?.phone.toString())
-        mUsername.set(mAccount?.username)
+        mName.set(mAccount.fullName)
+        mEmail.set(mAccount.email)
+        mSex.set(UserGender.values()[mAccount.gender ?: 0].name)
+        mBirthDay.set(TimeFormatUtil.formatDateToClient(mAccount.birthday))
+        mAvatar.set(mAccount.avatar)
+        mMobile.set(mAccount.phone.toString())
+        mUsername.set(mAccount.username)
     }
 
     fun editProfile(view: View){

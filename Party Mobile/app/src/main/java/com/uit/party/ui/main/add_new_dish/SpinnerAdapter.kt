@@ -52,7 +52,7 @@ class SpinnerAdapter internal constructor(context: Context, resource: Int, list:
     }
 
     private inner class ViewHolder {
-        internal var tile: TextView? = null
-        internal var image: ImageView? = null
+        var tile: TextView? = null
+        var image: ImageView? = null
     }
 }

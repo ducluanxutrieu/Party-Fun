@@ -11,6 +11,7 @@ import com.uit.party.util.Storage
 import javax.inject.Inject
 import javax.inject.Singleton
 
+//@Singleton
 class UserManager @Inject constructor(
     private val storage: Storage,
     private val userComponentFactory: UserComponent.Factory,
@@ -20,11 +21,6 @@ class UserManager @Inject constructor(
     var userComponent: UserComponent? = null
         private set
 
-    /**
-     *  UserDataRepository is specific to a logged in user. This determines if the user
-     *  is logged in or not, when the user logs in, a new instance will be created.
-     *  When the user logs out, this will be null.
-     */
 //    var userDataRepository: UserDataRepository? = null
 
     val username: String
@@ -50,18 +46,6 @@ class UserManager @Inject constructor(
         userJustLoggedIn()
 
         return result
-    }
-
-/*    suspend fun logout() {
-        userDataRepository.logout()
-        userComponent = null
-    }*/
-
-    fun unregister() {
-//        val username = storage.getData(REGISTERED_USER)
-//        storage.setString(REGISTERED_USER, "")
-//        storage.setString("$username$PASSWORD_SUFFIX", "")
-//        logout()
     }
 
     private fun userJustLoggedIn() {

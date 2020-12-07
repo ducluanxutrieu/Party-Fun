@@ -68,17 +68,17 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun setNavHeader(){
-        val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
-        if (!account?.avatar.isNullOrEmpty()) {
-            Glide.with(applicationContext).load(account?.avatar).apply { RequestOptions.circleCropTransform() }
+        val account = SharedPrefs(this).getData(USER_INFO_KEY, Account::class.java)!!
+        if (!account.avatar.isNullOrEmpty()) {
+            Glide.with(applicationContext).load(account.avatar).apply { RequestOptions.circleCropTransform() }
                 .into(headerBinding.ivAvatar)
         }
 
-        if (!account?.username.isNullOrEmpty()) {
-            headerBinding.tvUsername.text = account?.username
+        if (!account.username.isNullOrEmpty()) {
+            headerBinding.tvUsername.text = account.username
         }
-        if (!account?.fullName.isNullOrEmpty()) {
-            headerBinding.tvFullName.text = account?.fullName
+        if (!account.fullName.isNullOrEmpty()) {
+            headerBinding.tvFullName.text = account.fullName
         }
     }
 

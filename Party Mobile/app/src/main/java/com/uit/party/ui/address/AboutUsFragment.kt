@@ -16,7 +16,7 @@ class AboutUsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_about_us, container, false)
         return mBinding.root
     }

@@ -60,7 +60,6 @@ class RegisterFragment : Fragment() {
             false
         )
         binding.viewModel = viewModel
-        viewModel.init(this)
     }
 
     private fun animateRevealShow() {

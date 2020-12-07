@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
@@ -20,7 +21,7 @@ class EditProfileFragment : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false)
         mViewModel = EditProfileFragmentViewModel()
         binding.viewModel = mViewModel
@@ -30,6 +31,7 @@ class EditProfileFragment : Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupRadioButton()
+        setupListener()
     }
 
     private fun setupRadioButton(){
@@ -40,9 +42,15 @@ class EditProfileFragment : Fragment(){
             }
         }
 
-        when (mViewModel.account?.gender){
+        when (mViewModel.account.gender){
             UserGender.Male.ordinal -> binding.rbMale.isChecked = true
             UserGender.Female.ordinal -> binding.rbFemale.isChecked = true
         }
+    }
+
+    private fun setupListener(){
+        binding.etEmail.doOnTextChanged { text, _, _, _ -> mViewModel.checkEmailValid(text) }
+        binding.etFullName.doOnTextChanged { text, _, _, _ -> mViewModel.checkFullNameValid(text) }
+        binding.etPhoneNumber.doOnTextChanged { text, _, _, _ -> mViewModel.checkPhoneNumberValid(text) }
     }
 }

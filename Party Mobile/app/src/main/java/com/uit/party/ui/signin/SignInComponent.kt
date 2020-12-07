@@ -6,7 +6,7 @@ import com.uit.party.ui.signin.register.RegisterFragment
 import com.uit.party.ui.signin.reset_password.ResetPasswordFragment
 import dagger.Subcomponent
 
-@SignInScope
+@ActivityScope
 @Subcomponent
 interface SignInComponent {
 

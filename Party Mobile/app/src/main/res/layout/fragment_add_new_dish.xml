@@ -24,22 +24,23 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_item_form">
+                android:layout_margin="@dimen/margin_item_form"
+                bind:textError="@{viewModel.mErrorTitle}">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_title_dish"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/dish_title"
-                    android:text="@{viewModel.mTitle}"
-                    app:addTextChangedListener="@{viewModel.getTitleTextChanged()}" />
+                    android:text="@{viewModel.mTitle}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_item_form">
+                android:layout_margin="@dimen/margin_item_form"
+                bind:textError="@{viewModel.mErrorDescription}">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_description_dish"
@@ -47,8 +48,7 @@
                     android:layout_height="@dimen/_150sdp"
                     android:gravity="top|start"
                     android:hint="@string/dish_description"
-                    android:text="@{viewModel.mDescription}"
-                    app:addTextChangedListener="@{viewModel.getDescriptionTextChanged()}" />
+                    android:text="@{viewModel.mDescription}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -178,17 +178,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_4sdp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    bind:textError="@{viewModel.mErrorPrice}">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_price"
                         android:layout_width="@dimen/_120sdp"
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:hint="@string/_0"
                         android:inputType="phone"
                         android:singleLine="true"
-                        android:text="@{viewModel.mPrice}"
-                        app:addTextChangedListener="@{viewModel.getPriceTextChanged()}" />
+                        android:text="@{viewModel.mPrice}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView

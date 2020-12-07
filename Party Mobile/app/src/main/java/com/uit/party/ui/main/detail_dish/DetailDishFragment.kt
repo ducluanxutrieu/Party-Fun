@@ -23,6 +23,7 @@ import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
 import com.uit.party.model.UserRole
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
+import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.collect
@@ -77,7 +78,7 @@ class DetailDishFragment : Fragment() {
 
     private fun checkIsStaff(): Boolean {
         val role =
-            SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]?.role
+            SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)?.role
         return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
     }
 

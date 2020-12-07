@@ -1,8 +1,6 @@
 package com.uit.party.ui.profile.edit_profile
 
 import android.app.DatePickerDialog
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -44,7 +42,7 @@ class EditProfileFragmentViewModel : ViewModel() {
     private val formatDateUI = "dd-MM-yyyy"
     private val sf = SimpleDateFormat(formatDateUI, Locale.US)
 
-    val account = SharedPrefs().getInstance()[USER_INFO_KEY, Account::class.java]
+    val account = SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)!!
 
     private val birthDaySetListener =
         DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
@@ -60,27 +58,27 @@ class EditProfileFragmentViewModel : ViewModel() {
 
     init {
 //        val timeStart = sf.format(calBirthdayPicker.time)
-        if (account?.birthday.isNullOrEmpty()) {
-            mBirthday.set(account?.birthday)
+        if (account.birthday.isNullOrEmpty()) {
+            mBirthday.set(account.birthday)
         }
-        if (!account?.email.isNullOrEmpty()) {
-            mEmail.set(account?.email)
+        if (!account.email.isNullOrEmpty()) {
+            mEmail.set(account.email)
             emailValid = true
             checkEnableButtonUpdate()
         }
-        if (account?.phone != null) {
+        if (account.phone != null) {
             mPhoneNumber.set(account.phone.toString())
             phoneNumberValid = true
             checkEnableButtonUpdate()
         }
-        if (!account?.fullName.isNullOrEmpty()) {
-            mFullName.set(account?.fullName)
+        if (!account.fullName.isNullOrEmpty()) {
+            mFullName.set(account.fullName)
             fullNameValid = true
             checkEnableButtonUpdate()
         }
 
-        if (!account?.birthday.isNullOrEmpty()) {
-            mBirthday.set(TimeFormatUtil.formatDateToClient(account?.birthday))
+        if (!account.birthday.isNullOrEmpty()) {
+            mBirthday.set(TimeFormatUtil.formatDateToClient(account.birthday))
         }
     }
 
@@ -95,28 +93,14 @@ class EditProfileFragmentViewModel : ViewModel() {
         } else btnUpdateEnabled.set(false)
     }
 
-    fun getEmailTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkEmailValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkEmailValid(editable: Editable?) {
+    fun checkEmailValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorEmailText.set(UiUtil.getString(R.string.this_field_required))
                 emailValid = false
                 checkEnableButtonUpdate()
             }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(editable).matches() -> {
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches() -> {
                 errorEmailText.set(UiUtil.getString(R.string.email_not_valid))
                 emailValid = false
                 checkEnableButtonUpdate()
@@ -129,23 +113,9 @@ class EditProfileFragmentViewModel : ViewModel() {
         }
     }
 
-    fun getFullNameTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkFullNameValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        }
-    }
-
-    private fun checkFullNameValid(editable: Editable?) {
+    fun checkFullNameValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorFullName.set(UiUtil.getString(R.string.this_field_required))
                 fullNameValid = false
                 checkEnableButtonUpdate()
@@ -158,34 +128,19 @@ class EditProfileFragmentViewModel : ViewModel() {
         }
     }
 
-    fun getPhoneNumberTextChanged(): TextWatcher {
-        return object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                checkPhoneNumberValid(editable)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-        }
-    }
-
-    private fun checkPhoneNumberValid(editable: Editable?) {
+    fun checkPhoneNumberValid(text: CharSequence?) {
         when {
-            editable.isNullOrEmpty() -> {
+            text.isNullOrEmpty() -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.this_field_required))
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
             }
-            !android.util.Patterns.PHONE.matcher(editable).matches() -> {
+            !android.util.Patterns.PHONE.matcher(text).matches() -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.phone_not_valid))
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
             }
-            editable.trim().length < 9 -> {
+            text.trim().length < 9 -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.phone_number_too_short))
                 phoneNumberValid = false
                 checkEnableButtonUpdate()
@@ -239,6 +194,6 @@ class EditProfileFragmentViewModel : ViewModel() {
     }
 
     private fun saveToMemory(model: AccountResponse) {
-        SharedPrefs().getInstance().put(USER_INFO_KEY, model.account)
+        SharedPrefs(GlobalApplication.appContext!!).setData(USER_INFO_KEY, model.account)
     }
 }
