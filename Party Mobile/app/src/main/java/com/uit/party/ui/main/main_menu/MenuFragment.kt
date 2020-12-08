@@ -1,6 +1,7 @@
 package com.uit.party.ui.main.main_menu
 
 import android.animation.Animator
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,14 +10,11 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.uit.party.R
-import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.model.CartModel
 import com.uit.party.ui.main.MainActivity
@@ -26,9 +24,13 @@ import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
-    private lateinit var mViewModel: MenuViewModel
+
+    @Inject
+    lateinit var mViewModel: MenuViewModel
+
     private lateinit var binding: FragmentListDishBinding
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private val mMenuAdapter = MenuAdapter()
@@ -36,14 +38,20 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private var mDisposableAddCart: Disposable? = null
     private lateinit var mDisposableUpdateDish: Disposable
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity() as MainActivity).menuComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupBinding(container, inflater)
         setupRecyclerView()
+        setupListener()
         listenLiveData()
         return binding.root
     }
@@ -70,9 +78,6 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     private fun setupBinding(container: ViewGroup?, inflater: LayoutInflater) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_dish, container, false)
-        val database = getDatabase(this.requireContext())
-        mViewModel =
-            ViewModelProvider(this, HomeViewModelFactory(database)).get(MenuViewModel::class.java)
         binding.viewModel = mViewModel
     }
 
@@ -128,23 +133,24 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
 
             R.id.log_out -> {
-                logOut()
+                mViewModel.logout()
             }
         }
         return false
     }
 
-    private fun logOut() {
-        lifecycleScope.launch {
-            try {
-                mViewModel.logout()
-                val intent = Intent(context, SignInActivity::class.java)
-                startActivity(intent)
-                (context as MainActivity).finish()
-            } catch (error: Exception) {
-                UiUtil.showToast(error.message ?: "")
-            }
-        }
+    private fun setupListener(){
+        mViewModel.logoutState.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                UiUtil.showToast(it)
+            }else startSignInActivity()
+        })
+    }
+
+    private fun startSignInActivity(){
+        val intent = Intent(context, SignInActivity::class.java)
+        startActivity(intent)
+        (context as MainActivity).finish()
     }
 
     private fun rxBusListen() {

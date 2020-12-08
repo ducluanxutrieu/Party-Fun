@@ -4,6 +4,7 @@ import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
@@ -13,15 +14,25 @@ import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
+import com.uit.party.user.UserManager
+import com.uit.party.util.Constants
 import com.uit.party.util.UiUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MenuViewModel(private val repository: HomeRepository, private val cartRepository: CartRepository) : ViewModel(){
+class MenuViewModel @Inject constructor(
+    private val repository: HomeRepository,
+    private val cartRepository: CartRepository,
+    private val userManager: UserManager
+) : ViewModel() {
     val mShowFab = ObservableInt(View.GONE)
     val mShowLoading = ObservableBoolean(false)
     val mShowMenu = ObservableBoolean(false)
 
-    val listMenu:LiveData<List<DishModel>> = repository.listMenu
+    val listMenu: LiveData<List<DishModel>> = repository.listMenu
+    private val _logoutState = MutableLiveData<String>()
+    val logoutState: LiveData<String> = _logoutState
 
     init {
         viewModelScope.launch {
@@ -30,22 +41,30 @@ class MenuViewModel(private val repository: HomeRepository, private val cartRepo
         setIsAdmin()
     }
 
-    suspend fun getListDishes(){
+    suspend fun getListDishes() {
         try {
             repository.getListDishes()
-        }catch (error: Exception) {
+        } catch (error: Exception) {
             UiUtil.showToast(error.message ?: "")
         }
     }
 
-    suspend fun logout(){
-        try {
-            mShowLoading.set(true)
-            repository.logout()
-            mShowLoading.set(false)
-        }catch (cause : Throwable){
-            CusResult.Error(Exception(cause))
-            mShowLoading.set(false)
+    fun logout() {
+        mShowLoading.set(true)
+
+        viewModelScope.launch(Dispatchers.IO + Constants.coroutineExceptionHandler) {
+            try {
+                val result = userManager.logout()
+                if (result is CusResult.Success) {
+                    _logoutState.postValue("")
+                } else {
+                    _logoutState.postValue((result as CusResult.Error).exception.toString())
+                }
+            } catch (cause: Throwable) {
+                CusResult.Error(Exception(cause))
+            } finally {
+                mShowLoading.set(false)
+            }
         }
     }
 
@@ -55,7 +74,7 @@ class MenuViewModel(private val repository: HomeRepository, private val cartRepo
         }
     }
 
-    fun onAddDishClicked(view: View){
+    fun onAddDishClicked(view: View) {
         val action = MenuFragmentDirections.actionListDishToAddDish(0, "", null)
         view.findNavController().navigate(action)
     }
@@ -111,7 +130,7 @@ class MenuViewModel(private val repository: HomeRepository, private val cartRepo
         viewModelScope.launch {
             try {
                 repository.insertDish(dishModel)
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.message?.let { UiUtil.showToast(it) }
             }
         }

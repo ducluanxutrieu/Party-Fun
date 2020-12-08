@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class RegisterViewModel @Inject constructor (private val userManager: UserManager ) : ViewModel() {
+class RegisterViewModel @Inject constructor(private val userManager: UserManager) : ViewModel() {
     private var fullNameValid = false
     private var usernameValid = false
     private var emailValid = false
@@ -54,79 +54,67 @@ class RegisterViewModel @Inject constructor (private val userManager: UserManage
     }
 
     fun checkFullNameValid(text: CharSequence?) {
+        fullNameValid = false
         when {
             text.isNullOrEmpty() -> {
                 errorFullName.set(UiUtil.getString(R.string.this_field_required))
-                fullNameValid = false
-                checkShowButtonRegister()
             }
             text.trim().length < 6 -> {
                 errorFullName.set(UiUtil.getString(R.string.full_name_too_short))
-                fullNameValid = false
-                checkShowButtonRegister()
 
             }
             else -> {
                 fullNameValid = true
                 errorFullName.set("")
                 fullNameText = text.toString()
-                checkShowButtonRegister()
             }
         }
+        checkShowButtonRegister()
     }
 
     fun checkUsernameValid(text: CharSequence?) {
+        usernameValid = false
         when {
             text.isNullOrEmpty() -> {
                 errorUserName.set(UiUtil.getString(R.string.this_field_required))
-                usernameValid = false
-                checkShowButtonRegister()
             }
             text.contains(" ") -> {
                 errorUserName.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
-                usernameValid = false
-                checkShowButtonRegister()
             }
             text.trim().length < 6 -> {
                 errorUserName.set(UiUtil.getString(R.string.user_name_too_short))
-                usernameValid = false
-                checkShowButtonRegister()
             }
             else -> {
                 usernameValid = true
                 errorUserName.set("")
                 usernameText = text.toString()
-                checkShowButtonRegister()
             }
         }
+        checkShowButtonRegister()
+
     }
 
     fun checkPhoneNumberValid(text: CharSequence?) {
+        phoneNumberValid = false
         when {
             text.isNullOrEmpty() -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.this_field_required))
-                phoneNumberValid = false
-                checkShowButtonRegister()
             }
             !android.util.Patterns.PHONE.matcher(text).matches() -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.phone_not_valid))
-                phoneNumberValid = false
-                checkShowButtonRegister()
             }
 
             text.trim().length < 9 -> {
                 errorPhoneNumber.set(UiUtil.getString(R.string.phone_number_too_short))
-                phoneNumberValid = false
-                checkShowButtonRegister()
             }
 
             else -> {
                 phoneNumberValid = true
                 errorPhoneNumber.set("")
                 phoneNumberText = text.toString()
-                checkShowButtonRegister()
             }
         }
+        checkShowButtonRegister()
     }
 
     fun checkEmailValid(text: CharSequence?) {
@@ -134,20 +122,18 @@ class RegisterViewModel @Inject constructor (private val userManager: UserManage
             text.isNullOrEmpty() -> {
                 errorEmail.set(UiUtil.getString(R.string.this_field_required))
                 emailValid = false
-                checkShowButtonRegister()
             }
             !android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches() -> {
                 errorEmail.set(UiUtil.getString(R.string.email_not_valid))
                 emailValid = false
-                checkShowButtonRegister()
             }
             else -> {
                 emailValid = true
                 errorEmail.set("")
                 emailText = text.toString()
-                checkShowButtonRegister()
             }
         }
+        checkShowButtonRegister()
     }
 
     fun checkPasswordValid(text: CharSequence?) {
@@ -155,25 +141,22 @@ class RegisterViewModel @Inject constructor (private val userManager: UserManage
             text.isNullOrEmpty() -> {
                 errorPassword.set(UiUtil.getString(R.string.this_field_required))
                 passwordValid = false
-                checkShowButtonRegister()
             }
             text.contains(" ") -> {
                 errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
                 passwordValid = false
-                checkShowButtonRegister()
             }
             text.length < 6 -> {
                 errorPassword.set(UiUtil.getString(R.string.password_too_short))
                 passwordValid = false
-                checkShowButtonRegister()
             }
             else -> {
                 passwordValid = true
                 errorPassword.set("")
                 passwordText = text.toString()
-                checkShowButtonRegister()
             }
         }
+        checkShowButtonRegister()
     }
 
     fun checkConfirmPasswordValid(text: CharSequence?) {
@@ -181,19 +164,17 @@ class RegisterViewModel @Inject constructor (private val userManager: UserManage
             text.isNullOrEmpty() -> {
                 errorConfirmPassword.set(UiUtil.getString(R.string.this_field_required))
                 confirmPasswordValid = false
-                checkShowButtonRegister()
             }
             passwordText != text.toString() -> {
                 errorConfirmPassword.set(UiUtil.getString(R.string.not_matched_with_password))
                 confirmPasswordValid = false
-                checkShowButtonRegister()
             }
             else -> {
                 confirmPasswordValid = true
                 errorConfirmPassword.set("")
-                checkShowButtonRegister()
             }
         }
+        checkShowButtonRegister()
     }
 
     fun onRegisterClicked(view: View) {
@@ -203,13 +184,13 @@ class RegisterViewModel @Inject constructor (private val userManager: UserManage
         viewModelScope.launch {
             try {
                 val result = userManager.registerUser(model)
-                if (result is CusResult.Success){
+                if (result is CusResult.Success) {
                     result.data.message?.let { UiUtil.showToast(it) }
                     view.findNavController().popBackStack()
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.message?.let { UiUtil.showToast(it) }
-            }finally {
+            } finally {
                 mShowLoading.set(false)
             }
         }

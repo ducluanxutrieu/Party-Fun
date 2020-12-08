@@ -16,7 +16,7 @@ class CartDetailViewModelFactory(private val database: PartyBookingDatabase) : V
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CartDetailViewModel::class.java)) {
             return CartDetailViewModel(
-                    CartRepository(getNetworkService(), database.cartDao)
+                    CartRepository(getNetworkService(), database)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

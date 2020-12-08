@@ -19,18 +19,27 @@ import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
+import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
     private lateinit var headerBinding: NavHeaderMainBinding
 
-    private val mViewModel = MainViewModel()
+    @Inject
+    lateinit var mViewModel: MainViewModel
+
+    lateinit var menuComponent: MenuComponent
+
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        menuComponent = (application as GlobalApplication).appComponent.menuComponent().create()
+        menuComponent.inject(this)
+
         super.onCreate(savedInstanceState)
 
         setupBinding()

@@ -32,7 +32,7 @@ class BookPartyFragment : Fragment(){
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_book_party, container, false)
         val database = getDatabase(requireContext())
-        mViewModel = ViewModelProvider(this, BookPartyViewModelFactory(database.cartDao)).get(
+        mViewModel = ViewModelProvider(this, BookPartyViewModelFactory(database)).get(
             BookPartyViewModel::class.java
         )
         binding.viewModel = mViewModel

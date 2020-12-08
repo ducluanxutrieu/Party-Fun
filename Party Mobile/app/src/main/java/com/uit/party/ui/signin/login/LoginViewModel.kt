@@ -25,10 +25,10 @@ class LoginViewModel @Inject constructor(private val userManager: UserManager) :
     val loginState: LiveData<LoginViewState>
         get() = _loginState
 
-    val loginEnabled: ObservableBoolean = ObservableBoolean()
+    val loginEnabled = ObservableBoolean(false)
 
-    var errorUsername: ObservableField<String> = ObservableField()
-    var errorPassword: ObservableField<String> = ObservableField()
+    var errorUsername = ObservableField("")
+    var errorPassword = ObservableField("")
 
     private var usernameValid = false
     private var passwordValid = false
@@ -66,24 +66,17 @@ class LoginViewModel @Inject constructor(private val userManager: UserManager) :
     }
 
     fun checkUsernameValid(text: CharSequence?) {
+        usernameValid = false
         when {
-            text.isNullOrEmpty() -> {
-                errorUsername.set(UiUtil.getString(R.string.this_field_required))
-                usernameValid = false
-                checkShowButtonLogin()
-            }
-            text.contains(" ") -> {
-                errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
-                usernameValid = false
-                checkShowButtonLogin()
-            }
+            text.isNullOrEmpty() -> errorUsername.set(UiUtil.getString(R.string.this_field_required))
+            text.contains(" ") -> errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
             else -> {
                 usernameValid = true
                 errorUsername.set("")
                 usernameText = text.toString()
-                checkShowButtonLogin()
             }
         }
+        checkShowButtonLogin()
     }
 
     private fun checkShowButtonLogin() {
@@ -93,29 +86,18 @@ class LoginViewModel @Inject constructor(private val userManager: UserManager) :
     }
 
     fun checkPasswordValid(text: CharSequence?) {
+        passwordValid = false
         when {
-            text.isNullOrEmpty() -> {
-                errorPassword.set(UiUtil.getString(R.string.this_field_required))
-                passwordValid = false
-                checkShowButtonLogin()
-            }
-            text.contains(" ") -> {
-                errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
-                passwordValid = false
-                checkShowButtonLogin()
-            }
-            text.length < 6 -> {
-                errorPassword.set(UiUtil.getString(R.string.password_too_short))
-                passwordValid = false
-                checkShowButtonLogin()
-            }
+            text.isNullOrEmpty() -> errorPassword.set(UiUtil.getString(R.string.this_field_required))
+            text.contains(" ") -> errorPassword.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
+            text.length < 6 -> errorPassword.set(UiUtil.getString(R.string.password_too_short))
             else -> {
                 passwordValid = true
                 errorPassword.set("")
                 passwordText = text.toString()
-                checkShowButtonLogin()
             }
         }
+        checkShowButtonLogin()
     }
 
     fun onForgotPasswordClicked(view: View) {

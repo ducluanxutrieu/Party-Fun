@@ -12,13 +12,13 @@ import com.uit.party.util.getNetworkService
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
-class BookPartyViewModelFactory(private val cartDao: CartDao) : ViewModelProvider.Factory {
+class BookPartyViewModelFactory(private val database: PartyBookingDatabase) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(BookPartyViewModel::class.java)) {
             return BookPartyViewModel(
-                    CartRepository(getNetworkService(), cartDao)
+                    CartRepository(getNetworkService(), database)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

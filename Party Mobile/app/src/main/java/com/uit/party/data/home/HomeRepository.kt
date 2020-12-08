@@ -2,6 +2,7 @@ package com.uit.party.data.home
 
 import androidx.lifecycle.LiveData
 import com.uit.party.data.CusResult
+import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.data.getToken
 import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
@@ -12,12 +13,16 @@ import com.uit.party.util.GlobalApplication
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.SharedPrefs
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeRepository(
+@Singleton
+class HomeRepository @Inject constructor (
     private val networkService: ServiceRetrofit,
-    private val homeDao: HomeDao
+    database: PartyBookingDatabase
 ) {
 
+    private val homeDao = database.homeDao
     val listMenu: LiveData<List<DishModel>> = homeDao.allDish
 
     suspend fun getListDishes() {
@@ -28,15 +33,6 @@ class HomeRepository(
                 homeDao.deleteMenu()
                 homeDao.insertAllDish(dishes)
             }
-        } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
-        }
-    }
-
-    suspend fun logout() {
-        try {
-            networkService.logout(getToken())
-//            SharedPrefs().getInstance().clear()
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }

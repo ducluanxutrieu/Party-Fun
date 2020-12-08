@@ -2,6 +2,7 @@ package com.uit.party.data.cart
 
 import androidx.lifecycle.LiveData
 import com.uit.party.data.CusResult
+import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.data.getToken
 import com.uit.party.model.BillResponseModel
 import com.uit.party.model.CartModel
@@ -9,11 +10,15 @@ import com.uit.party.model.GetPaymentResponse
 import com.uit.party.model.RequestOrderPartyModel
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.handleRequest
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CartRepository(
+@Singleton
+class CartRepository @Inject constructor (
     private val networkService: ServiceRetrofit,
-    private val cartDao: CartDao
+    database: PartyBookingDatabase
 ) {
+    private val cartDao = database.cartDao
     val listCart: LiveData<List<CartModel>> = cartDao.getCart
 
     suspend fun deleteAllCart() {

@@ -1,5 +1,6 @@
 package com.uit.party.ui.main
 
-import androidx.databinding.BaseObservable
+import androidx.lifecycle.ViewModel
+import javax.inject.Inject
 
-class MainViewModel : BaseObservable()
+class MainViewModel @Inject constructor() : ViewModel()

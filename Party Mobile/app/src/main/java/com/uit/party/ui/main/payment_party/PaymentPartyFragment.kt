@@ -3,7 +3,6 @@ package com.uit.party.ui.main.payment_party
 //import com.uit.party.databinding.PaymentPartyFragmentBinding
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,11 +29,11 @@ class PaymentPartyFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.payment_party_fragment, container, false)
         val database = getDatabase(requireContext())
-        viewModel = ViewModelProvider(this, PaymentPartyViewModelFactory(database.cartDao)).get(
+        viewModel = ViewModelProvider(this, PaymentPartyViewModelFactory(database)).get(
             PaymentPartyViewModel::class.java
         )
         mBinding.viewModel = viewModel

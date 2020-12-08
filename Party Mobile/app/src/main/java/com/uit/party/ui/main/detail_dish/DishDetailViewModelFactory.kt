@@ -19,7 +19,7 @@ class DishDetailViewModelFactory(private val database: PartyBookingDatabase) : V
         if (modelClass.isAssignableFrom(DetailDishViewModel::class.java)) {
             val network = getNetworkService()
             return DetailDishViewModel(
-                    HomeRepository(network, database.homeDao), RateRepository(network, database), CartRepository(network, database.cartDao)
+                    HomeRepository(network, database), RateRepository(network, database), CartRepository(network, database)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

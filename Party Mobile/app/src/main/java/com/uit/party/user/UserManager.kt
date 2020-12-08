@@ -11,11 +11,12 @@ import com.uit.party.util.Storage
 import javax.inject.Inject
 import javax.inject.Singleton
 
-//@Singleton
+@Singleton
 class UserManager @Inject constructor(
     private val storage: Storage,
     private val userComponentFactory: UserComponent.Factory,
-    private val signInRepository: SignInRepository
+    private val signInRepository: SignInRepository,
+    private val userDataRepository: UserDataRepository
 ) {
 
     var userComponent: UserComponent? = null
@@ -55,5 +56,15 @@ class UserManager @Inject constructor(
 
     suspend fun resetPassword(username: String): CusResult<BaseResponse> {
         return signInRepository.resetPassword(username)
+    }
+
+    suspend fun logout(): CusResult<BaseResponse> {
+        val result = userDataRepository.logout()
+
+        if (result is CusResult.Success){
+            userDataRepository.clearData()
+        }
+
+        return result
     }
 }

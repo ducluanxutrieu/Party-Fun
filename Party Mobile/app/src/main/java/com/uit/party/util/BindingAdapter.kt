@@ -33,7 +33,7 @@ fun <T> setupLinearRecyclerView(recyclerView: RecyclerView, items: ArrayList<T>)
     }
 }*/
 
-@BindingAdapter("app:imageUrl")
+/*@BindingAdapter("app:imageUrl")
 fun setImageIcon(imageView: AppCompatImageView, url: String?) {
     if (!url.isNullOrEmpty()){
         val requestOptions = RequestOptions
@@ -42,7 +42,7 @@ fun setImageIcon(imageView: AppCompatImageView, url: String?) {
             .placeholder(R.drawable.ic_account_circle_24dp)
         Glide.with(imageView.context).load(url).apply(requestOptions).into(imageView)
     }
-}
+}*/
 
 @BindingAdapter("app:dishUrl")
 fun setDishImage(imageView: AppCompatImageView, url: String?) {

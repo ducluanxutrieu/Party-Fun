@@ -20,10 +20,10 @@ import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.ListDishes
 import com.uit.party.model.RequestOrderPartyModel
+import com.uit.party.util.Constants.Companion.coroutineExceptionHandler
 import com.uit.party.util.TimeFormatUtil
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -109,12 +109,6 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
     fun onOrderNowClicked(view: View) {
         mShowLoading.set(true)
         val bookModel = prepareDataForOrder()
-
-        val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
-            throwable.printStackTrace()
-            Log.e("BookPartyViewModel: ", throwable.message ?: "")
-//            toastLiveData.value = showToastValueWhatever()
-        }
 
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             try {
