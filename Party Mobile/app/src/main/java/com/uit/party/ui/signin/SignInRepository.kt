@@ -1,10 +1,7 @@
 package com.uit.party.ui.signin
 
 import com.uit.party.data.CusResult
-import com.uit.party.model.AccountResponse
-import com.uit.party.model.BaseResponse
-import com.uit.party.model.LoginModel
-import com.uit.party.model.RegisterModel
+import com.uit.party.model.*
 import com.uit.party.util.Constants
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.Storage
@@ -14,7 +11,10 @@ import javax.inject.Inject
 
 
 @SignInScope
-class SignInRepository @Inject constructor(private val networkService: ServiceRetrofit, private val storage: Storage) {
+class SignInRepository @Inject constructor(
+    private val networkService: ServiceRetrofit,
+    private val storage: Storage
+) {
 
     suspend fun register(registerModel: RegisterModel): CusResult<AccountResponse> {
         return handleRequest {
@@ -28,9 +28,10 @@ class SignInRepository @Inject constructor(private val networkService: ServiceRe
         }
     }
 
-    fun saveToMemory(model: AccountResponse) {
-        storage.setData(Constants.USER_INFO_KEY, model.account)
-        storage.setData(Constants.TOKEN_ACCESS_KEY, model.account?.token)
+    fun saveToMemory(model: Account?, token: String? = null) {
+        storage.setData(Constants.USER_INFO_KEY, model)
+        if (!token.isNullOrEmpty())
+            storage.setData(Constants.TOKEN_ACCESS_KEY, model?.token)
     }
 
     suspend fun resetPassword(username: String): CusResult<BaseResponse> {

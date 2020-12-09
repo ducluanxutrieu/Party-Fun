@@ -17,6 +17,7 @@ import com.uit.party.data.getToken
 import com.uit.party.databinding.ActivityMainBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
+import com.uit.party.ui.profile.ProfileComponent
 import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.GlobalApplication
@@ -33,12 +34,16 @@ class MainActivity : AppCompatActivity(){
     lateinit var mViewModel: MainViewModel
 
     lateinit var menuComponent: MenuComponent
+    lateinit var profileComponent: ProfileComponent
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        menuComponent = (application as GlobalApplication).appComponent.menuComponent().create()
+        val appComponent = (application as GlobalApplication).appComponent
+        menuComponent = appComponent.menuComponent().create()
         menuComponent.inject(this)
+        profileComponent = appComponent.profileComponent().create()
+        profileComponent.inject(this)
 
         super.onCreate(savedInstanceState)
 

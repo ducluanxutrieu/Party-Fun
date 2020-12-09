@@ -67,11 +67,11 @@ interface ServiceRetrofit {
 
     @Multipart
     @POST("user/uploadavatar")
-    fun updateAvatar(
+    suspend fun updateAvatar(
         @Header("authorization") token: String,
         @Part image: MultipartBody.Part,
         @Part("image") requestBody: RequestBody
-    ): Call<BaseResponse>
+    ): BaseResponse
 
     @Multipart
     @POST("product/adddish")
@@ -87,10 +87,10 @@ interface ServiceRetrofit {
     ): Call<AddDishResponse>
 
     @POST("product/updatedish")
-    fun updateDish(
+    suspend fun updateDish(
         @Header("authorization") token: String,
         @Body body: UpdateDishRequestModel
-    ): Call<UpdateDishResponse>
+    ): UpdateDishResponse
 
     @GET("product/dishs")
     suspend fun getListDishes(

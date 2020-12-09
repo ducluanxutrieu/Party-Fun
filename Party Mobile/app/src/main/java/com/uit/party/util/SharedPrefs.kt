@@ -14,6 +14,9 @@ class SharedPrefs @Inject constructor(context: Context): Storage {
         context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
 
+    val token: String
+    get() = SharedPrefs(GlobalApplication.appContext!!).getData(Constants.TOKEN_ACCESS_KEY, String::class.java) ?: ""
+
     override fun clear() {
         mSharedPreferences.edit().clear().apply()
     }

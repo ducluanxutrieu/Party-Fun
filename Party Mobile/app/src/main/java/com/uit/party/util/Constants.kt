@@ -2,9 +2,10 @@ package com.uit.party.util
 
 import android.util.Log
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 
 class Constants {
-    companion object{
+    companion object {
         const val PREFS_NAME = "com.uit.party"
         const val REGISTERED_USER = "registered_user"
         const val TOKEN_ACCESS_KEY = "TOKEN_ACCESS"
@@ -12,10 +13,14 @@ class Constants {
         const val STARTING_PAGE_INDEX = 1
         const val NETWORK_PAGE_SIZE = 5
 
-        val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
-            throwable.printStackTrace()
-            Log.e("CoroutineExceptionHandler: ", throwable.message ?: "")
-//            toastLiveData.value = showToastValueWhatever()
-        }
+        val coroutineIO = Dispatchers.IO + coroutineExceptionHandler
+
+        val coroutineExceptionHandler: CoroutineExceptionHandler
+            get() {
+                return CoroutineExceptionHandler { _, throwable ->
+                    throwable.printStackTrace()
+                    Log.e("CoroutineException: ", throwable.message ?: "")
+                }
+            }
     }
 }

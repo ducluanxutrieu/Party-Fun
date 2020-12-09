@@ -3,31 +3,42 @@ package com.uit.party.data.home
 import androidx.lifecycle.LiveData
 import com.uit.party.data.CusResult
 import com.uit.party.data.PartyBookingDatabase
-import com.uit.party.data.getToken
-import com.uit.party.model.Account
 import com.uit.party.model.BaseResponse
 import com.uit.party.model.DishModel
-import com.uit.party.model.UserRole
-import com.uit.party.util.Constants.Companion.USER_INFO_KEY
-import com.uit.party.util.GlobalApplication
+import com.uit.party.model.UpdateDishRequestModel
+import com.uit.party.model.UpdateDishResponse
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.SharedPrefs
+import com.uit.party.util.handleRequest
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HomeRepository @Inject constructor (
+class HomeRepository @Inject constructor(
     private val networkService: ServiceRetrofit,
+    private val sharedPrefs: SharedPrefs,
     database: PartyBookingDatabase
 ) {
 
     private val homeDao = database.homeDao
     val listMenu: LiveData<List<DishModel>> = homeDao.allDish
 
+    suspend fun updateDish(updateModel: UpdateDishRequestModel): CusResult<UpdateDishResponse> {
+        val result = handleRequest {
+            networkService.updateDish(sharedPrefs.token, updateModel)
+        }
+        if (result is CusResult.Success) {
+            val dishModel = result.data.dish
+            if (dishModel != null)
+                homeDao.updateDish(result.data.dish)
+        }
+        return result
+    }
+
     suspend fun getListDishes() {
         try {
-            val result = networkService.getListDishes(getToken())
+            val result = networkService.getListDishes(sharedPrefs.token)
             val dishes = result.listDishes
             if (dishes != null) {
                 homeDao.deleteMenu()
@@ -36,12 +47,6 @@ class HomeRepository @Inject constructor (
         } catch (cause: Throwable) {
             CusResult.Error(Exception(cause))
         }
-    }
-
-    fun checkAdmin(): Boolean {
-        val role =
-            SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)?.role
-        return (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
     }
 
     suspend fun insertDish(dishModel: DishModel) {
@@ -56,7 +61,7 @@ class HomeRepository @Inject constructor (
         return try {
             val map = HashMap<String, String>()
             map["_id"] = id
-            val result: BaseResponse = networkService.deleteDish(getToken(), map)
+            val result: BaseResponse = networkService.deleteDish(sharedPrefs.token, map)
             homeDao.deleteDish(id)
             CusResult.Success(result)
         } catch (cause: Throwable) {

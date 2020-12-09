@@ -6,54 +6,33 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uit.party.R
 import com.uit.party.data.CusResult
 import com.uit.party.user.UserManager
-import com.uit.party.util.UiUtil
+import com.uit.party.util.Constants
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ResetPasswordViewModel @Inject constructor(private val userManager: UserManager) :ViewModel(){
     var errorUsername: ObservableField<String> = ObservableField()
-    private var usernameText = ""
     val mShowLoading = ObservableBoolean(false)
-    val mNextButtonEnabled: ObservableBoolean = ObservableBoolean()
 
-    private val _resetState = MutableLiveData<Boolean>()
-    val resetPassState: LiveData<Boolean>
+    private val _resetState = MutableLiveData<Pair<Boolean, String?>>()
+    val resetPassState: LiveData<Pair<Boolean, String?>>
         get() = _resetState
 
-
-    fun checkUsernameValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                errorUsername.set(UiUtil.getString(R.string.this_field_required))
-                mNextButtonEnabled.set(false)
-            }
-            text.contains(" ") -> {
-                errorUsername.set(UiUtil.getString(R.string.this_field_cannot_contain_space))
-                mNextButtonEnabled.set(false)
-            }
-            else -> {
-                errorUsername.set("")
-                usernameText = text.toString()
-                mNextButtonEnabled.set(true)
-            }
-        }
-    }
-
-    fun onSendClicked(){
+    fun requestResetPassword(username: String){
         mShowLoading.set(true)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Constants.coroutineIO) {
             try {
-                val result = userManager.resetPassword(usernameText)
+                val result = userManager.resetPassword(username)
                 if (result is CusResult.Success){
-                    UiUtil.showToast(result.data.message)
-                    _resetState.postValue(true)
+                    _resetState.postValue(Pair(true, result.data.message))
+                }else {
+                    _resetState.postValue(Pair(true, (result as CusResult.Error).exception.toString()))
                 }
             }catch (ex: Exception){
-                ex.message?.let { UiUtil.showToast(it) }
+                _resetState.postValue(Pair(true, ex.message))
             }finally {
                 mShowLoading.set(false)
             }

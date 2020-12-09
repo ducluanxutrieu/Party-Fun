@@ -11,31 +11,31 @@ object TimeFormatUtil {
     private val sdfClient = SimpleDateFormat(formatClient, Locale.US)
     private val sdfTimeClient12h = SimpleDateFormat(formatTimeClient12h, Locale.US)
 
-    fun formatDateToServer(date: String?): String? {
-        if (date != null) {
-            val dateOrigin = sdfClient.parse(date)
+    fun String?.formatDateToServer(): String? {
+        if (this != null) {
+            val dateOrigin = sdfClient.parse(this)
             return sdfServer.format(dateOrigin!!)
         }
         return null
     }
 
-    fun formatDateToClient(date: String?): String? {
-        if (date != null) {
-            val dateOrigin = sdfServer.parse(date)
-            return sdfClient.format(dateOrigin!!)
+    fun String?.formatDateToClient(): String? {
+        if (this != null) {
+            val dateOrigin = sdfServer.parse(this) ?: return ""
+            return sdfClient.format(dateOrigin)
         }
         return null
     }
 
-    fun formatTimeToServer(calPicker : Calendar): String {
+    fun Calendar.formatTimeToServer(): String {
         val myFormat = "MM/dd/yyyy HH:mm"
         val sdf = SimpleDateFormat(myFormat, Locale.US)
-        return sdf.format(calPicker.time)
+        return sdf.format(this.time)
     }
 
-    fun formatTimeToClient(calPicker : Calendar): String {
+    fun Calendar.formatTimeToClient(): String {
         val sdf = SimpleDateFormat(formatTimeClient12h, Locale.US)
-        return sdf.format(calPicker.time)
+        return sdf.format(this.time)
     }
 
     fun String?.formatTime12hToClient(): String? {

@@ -34,22 +34,22 @@ class Account {
     val email : String ?= null
 
     @SerializedName("phone")
-    val phone : Long ?= 0
+    val phone : Long = 0
 
     @SerializedName("birthday")
-    val birthday : String ?= null
+    val birthday : String? = null
 
     @SerializedName("gender")
-    val gender : Int ?= 0
+    val gender : Int = 0
 
     @SerializedName("role")
-    val role : Int ?= 0
+    val role : Int = 0
 
     @SerializedName("avatar")
-    val avatar : String ?= null
+    var avatar : String ?= null
 
     @SerializedName("country_code")
-    val countryCode : Int ?= 0
+    val countryCode : Int = 0
 
     @SerializedName("token")
     val token : String ?= null

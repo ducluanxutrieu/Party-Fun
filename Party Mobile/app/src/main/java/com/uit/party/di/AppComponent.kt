@@ -2,6 +2,7 @@ package com.uit.party.di
 
 import android.content.Context
 import com.uit.party.ui.main.MenuComponent
+import com.uit.party.ui.profile.ProfileComponent
 import com.uit.party.ui.signin.SignInComponent
 import com.uit.party.user.UserManager
 import dagger.BindsInstance
@@ -23,6 +24,7 @@ interface AppComponent {
 
     fun signInComponent(): SignInComponent.Factory
     fun menuComponent(): MenuComponent.Factory
+    fun profileComponent(): ProfileComponent.Factory
 
 //    fun inject(activity: MainActivity)
 //    fun inject(activity: SettingsActivity)

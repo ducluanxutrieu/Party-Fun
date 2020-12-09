@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.uit.party.R
 import com.uit.party.databinding.FragmentResetPasswordBinding
 import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.util.UiUtil
+import com.uit.party.util.usernameErrorMes
 import javax.inject.Inject
 
 class ResetPasswordFragment : Fragment() {
@@ -44,11 +46,18 @@ class ResetPasswordFragment : Fragment() {
 
     private fun setupListener(){
         binding.etUsername.doOnTextChanged { text, _, _, _ ->
-            viewModel.checkUsernameValid(text)
+             val result = text.usernameErrorMes()
+            viewModel.errorUsername.set(result)
+            binding.btGo.isEnabled = result.isNotEmpty()
+        }
+
+        binding.btGo.setOnClickListener {
+            viewModel.requestResetPassword(binding.etUsername.text.toString())
         }
 
         viewModel.resetPassState.observe(viewLifecycleOwner, {
-            if (it){
+            UiUtil.showToast(it.second)
+            if (it.first){
                 val action = ResetPasswordFragmentDirections.actionResetPasswordFragmentToChangePasswordFragment("RESET")
                 this.findNavController().navigate(action)
             }

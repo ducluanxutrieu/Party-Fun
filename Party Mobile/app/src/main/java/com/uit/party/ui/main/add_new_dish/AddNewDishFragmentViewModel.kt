@@ -3,15 +3,15 @@ package com.uit.party.ui.main.add_new_dish
 import android.graphics.Bitmap
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.databinding.BaseObservable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
+import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
-import com.uit.party.data.getToken
+import com.uit.party.data.home.HomeRepository
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.*
@@ -29,8 +29,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
+import javax.inject.Inject
 
-class AddNewDishFragmentViewModel : BaseObservable() {
+class AddNewDishFragmentViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
@@ -83,7 +84,7 @@ class AddNewDishFragmentViewModel : BaseObservable() {
             val byteArrayOutputStream = ByteArrayOutputStream()
             result.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             listImagePath.add(result.path)
-            Glide.with(GlobalApplication.appContext!!).load(File(result.path))
+            Glide.with(view.context).load(File(result.path))
                 .apply { RequestOptions.fitCenterTransform() }.into(view as AppCompatImageView)
         }.setOnPickCancel { /*binding.loadingAvatar.visibility = View.GONE */ }
             .show((view.context as MainActivity).supportFragmentManager)

@@ -17,7 +17,6 @@ import com.uit.party.model.MenuModel
 import com.uit.party.user.UserManager
 import com.uit.party.util.Constants
 import com.uit.party.util.UiUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,24 +34,24 @@ class MenuViewModel @Inject constructor(
     val logoutState: LiveData<String> = _logoutState
 
     init {
-        viewModelScope.launch {
-            getListDishes()
-        }
+        getListDishes()
         setIsAdmin()
     }
 
-    suspend fun getListDishes() {
-        try {
-            repository.getListDishes()
-        } catch (error: Exception) {
-            UiUtil.showToast(error.message ?: "")
+    fun getListDishes() {
+        viewModelScope.launch(Constants.coroutineIO) {
+            try {
+                repository.getListDishes()
+            } catch (error: Exception) {
+                _logoutState.postValue(error.message)
+            }
         }
     }
 
     fun logout() {
         mShowLoading.set(true)
 
-        viewModelScope.launch(Dispatchers.IO + Constants.coroutineExceptionHandler) {
+        viewModelScope.launch(Constants.coroutineIO) {
             try {
                 val result = userManager.logout()
                 if (result is CusResult.Success) {
@@ -69,7 +68,7 @@ class MenuViewModel @Inject constructor(
     }
 
     private fun setIsAdmin() {
-        if (repository.checkAdmin()) {
+        if (userManager.isAdmin) {
             mShowFab.set(View.VISIBLE)
         }
     }

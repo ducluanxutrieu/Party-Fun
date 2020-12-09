@@ -5,17 +5,18 @@ import java.text.NumberFormat
 import java.util.*
 
 object UiUtil {
-    fun showToast(toast: String?){
-        val context =  GlobalApplication.appContext
-        Toast.makeText(context, toast ?: "", Toast.LENGTH_SHORT).show()
+    fun showToast(toast: String?) {
+        val context = GlobalApplication.appContext
+        if (!toast.isNullOrEmpty())
+            Toast.makeText(context, toast, Toast.LENGTH_SHORT).show()
     }
 
     fun getString(stringId: Int): String {
-        val context =  GlobalApplication.appContext
+        val context = GlobalApplication.appContext
         return context?.getString(stringId) ?: ""
     }
 
-    fun String?.toVNCurrency(): String{
+    fun String?.toVNCurrency(): String {
         val formatter = NumberFormat.getNumberInstance(Locale("vi"))
         return formatter.format(this?.toDouble()) + " ₫"
     }

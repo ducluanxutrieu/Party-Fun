@@ -1,11 +1,9 @@
 package com.uit.party.user
 
 import com.uit.party.data.CusResult
-import com.uit.party.model.AccountResponse
-import com.uit.party.model.BaseResponse
-import com.uit.party.model.LoginModel
-import com.uit.party.model.RegisterModel
+import com.uit.party.model.*
 import com.uit.party.ui.signin.SignInRepository
+import com.uit.party.util.Constants
 import com.uit.party.util.Constants.Companion.REGISTERED_USER
 import com.uit.party.util.Storage
 import javax.inject.Inject
@@ -25,7 +23,16 @@ class UserManager @Inject constructor(
 //    var userDataRepository: UserDataRepository? = null
 
     val username: String
-        get() = storage.getData(REGISTERED_USER, String::class.java) ?:""
+        get() = storage.getData(REGISTERED_USER, String::class.java) ?: ""
+
+    private val role: Int?
+        get() = storage.getData(Constants.USER_INFO_KEY, Account::class.java)?.role
+
+    val isAdmin: Boolean
+        get() = role == null && (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
+
+    val userAccount: Account?
+        get() = storage.getData(Constants.USER_INFO_KEY, Account::class.java)
 
     //    fun isUserLoggedIn() = userDataRepository != null
     fun isUserLoggedIn() = userComponent != null
@@ -40,13 +47,17 @@ class UserManager @Inject constructor(
     suspend fun loginUser(model: LoginModel): CusResult<AccountResponse> {
         val result = signInRepository.login(model)
 
-        if (result is CusResult.Success){
-            signInRepository.saveToMemory(result.data)
+        if (result is CusResult.Success) {
+            signInRepository.saveToMemory(result.data.account, result.data.account?.token)
         }
 
         userJustLoggedIn()
 
         return result
+    }
+
+    fun updateUserInfoToShared(userAccount: Account?){
+        signInRepository.saveToMemory(userAccount)
     }
 
     private fun userJustLoggedIn() {
@@ -61,7 +72,7 @@ class UserManager @Inject constructor(
     suspend fun logout(): CusResult<BaseResponse> {
         val result = userDataRepository.logout()
 
-        if (result is CusResult.Success){
+        if (result is CusResult.Success) {
             userDataRepository.clearData()
         }
 
