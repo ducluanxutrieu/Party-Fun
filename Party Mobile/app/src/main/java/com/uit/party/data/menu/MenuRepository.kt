@@ -1,7 +1,7 @@
 package com.uit.party.data.menu
 
 import androidx.lifecycle.LiveData
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.model.*
 import com.uit.party.util.*
@@ -33,7 +33,7 @@ class MenuRepository @Inject constructor(
         description: String?,
         price: String?,
         type: String
-    ): CusResult<AddDishResponse> {
+    ): Result<AddDishResponse> {
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
 
@@ -64,18 +64,18 @@ class MenuRepository @Inject constructor(
             )
         }
 
-        if (result is CusResult.Success) {
+        if (result is Result.Success) {
             result.data.dish?.let { menuDao.insertDish(it) }
         }
 
         return result
     }
 
-    suspend fun updateDish(updateModel: UpdateDishRequestModel): CusResult<UpdateDishResponse> {
+    suspend fun updateDish(updateModel: UpdateDishRequestModel): Result<UpdateDishResponse> {
         val result = handleRequest {
             networkService.updateDish(sharedPrefs.token, updateModel)
         }
-        if (result is CusResult.Success) {
+        if (result is Result.Success) {
             val dishModel = result.data.dish
             if (dishModel != null)
                 menuDao.updateDish(result.data.dish)
@@ -92,7 +92,7 @@ class MenuRepository @Inject constructor(
                 menuDao.insertAllDish(dishes)
             }
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 
@@ -100,19 +100,19 @@ class MenuRepository @Inject constructor(
         try {
             menuDao.insertDish(dishModel)
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 
-    suspend fun deleteDish(id: String): CusResult<BaseResponse> {
+    suspend fun deleteDish(id: String): Result<BaseResponse> {
         return try {
             val map = HashMap<String, String>()
             map["_id"] = id
             val result: BaseResponse = networkService.deleteDish(sharedPrefs.token, map)
             menuDao.deleteDish(id)
-            CusResult.Success(result)
+            Result.Success(result)
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 }

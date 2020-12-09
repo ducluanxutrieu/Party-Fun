@@ -1,7 +1,7 @@
 package com.uit.party.data.cart
 
 import androidx.lifecycle.LiveData
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.model.BillResponseModel
 import com.uit.party.model.CartModel
@@ -26,7 +26,7 @@ class CartRepository @Inject constructor (
         cartDao.deleteAllCart()
     }
 
-    suspend fun orderParty(bookModel: RequestOrderPartyModel): CusResult<BillResponseModel> {
+    suspend fun orderParty(bookModel: RequestOrderPartyModel): Result<BillResponseModel> {
         try {
             return handleRequest {
                 networkService.orderParty(sharedPrefs.token, bookModel)
@@ -36,7 +36,7 @@ class CartRepository @Inject constructor (
         }
     }
 
-    suspend fun getPayment(id: String): CusResult<GetPaymentResponse> {
+    suspend fun getPayment(id: String): Result<GetPaymentResponse> {
         return handleRequest {
             networkService.getPayment(sharedPrefs.token, id)
         }
@@ -52,7 +52,7 @@ class CartRepository @Inject constructor (
             } else
                 cartDao.insertCart(cartModel)
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 
@@ -60,7 +60,7 @@ class CartRepository @Inject constructor (
         try {
             cartDao.updateQuantityCart(cartModel.quantity, cartModel.id)
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 
@@ -68,7 +68,7 @@ class CartRepository @Inject constructor (
         try {
             cartDao.deleteCart(cartModel)
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 }

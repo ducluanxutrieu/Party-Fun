@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.sign_in.SignInActivity
 import com.uit.party.user.UserManager
 import com.uit.party.util.GlobalApplication
 

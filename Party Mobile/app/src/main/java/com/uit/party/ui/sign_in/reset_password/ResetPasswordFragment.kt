@@ -1,4 +1,4 @@
-package com.uit.party.ui.signin.reset_password
+package com.uit.party.ui.sign_in.reset_password
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.uit.party.R
 import com.uit.party.databinding.FragmentResetPasswordBinding
-import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.sign_in.SignInActivity
 import com.uit.party.util.UiUtil
 import com.uit.party.util.usernameErrorMes
 import javax.inject.Inject

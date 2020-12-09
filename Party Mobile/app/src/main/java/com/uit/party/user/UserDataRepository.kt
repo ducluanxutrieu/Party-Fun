@@ -1,6 +1,6 @@
 package com.uit.party.user
 
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.model.AccountResponse
 import com.uit.party.model.BaseResponse
@@ -26,17 +26,17 @@ class UserDataRepository @Inject constructor(
 ) {
 
 
-    suspend fun logout(): CusResult<BaseResponse> {
+    suspend fun logout(): Result<BaseResponse> {
         val result = handleRequest {
             networkService.logout(sharedPrefs.token)
         }
-        if (result is CusResult.Success){
+        if (result is Result.Success){
             clearData()
         }
         return result
     }
 
-    suspend fun changeAvatar(path: String): CusResult<BaseResponse> {
+    suspend fun changeAvatar(path: String): Result<BaseResponse> {
         val file = File(path)
         val parseType = "multipart/form-data"
 
@@ -51,7 +51,7 @@ class UserDataRepository @Inject constructor(
         val result = handleRequest {
             networkService.updateAvatar(sharedPrefs.token, part, description)
         }
-        if (result is CusResult.Success){
+        if (result is Result.Success){
             userManager.userAccount?.avatar = result.data.message
             userManager.updateUserInfoToShared(userManager.userAccount)
         }
@@ -59,27 +59,27 @@ class UserDataRepository @Inject constructor(
         return result
     }
 
-    fun clearData() {
+    private fun clearData() {
         sharedPrefs.clear()
         database.clearAllTables()
     }
 
-    suspend fun changePassword(password: String, newPassword: String): CusResult<BaseResponse> {
+    suspend fun changePassword(password: String, newPassword: String): Result<BaseResponse> {
         return handleRequest {
             networkService.changePassword(sharedPrefs.token, password, newPassword)
         }
     }
 
-    suspend fun verifyPassword(currentPassword: String, newPassword: String): CusResult<BaseResponse> {
+    suspend fun verifyPassword(currentPassword: String, newPassword: String): Result<BaseResponse> {
         return handleRequest {
             networkService.verifyPassword(currentPassword, newPassword)
         }
     }
 
-    suspend fun updateUser(requestModel: RequestUpdateProfile): CusResult<AccountResponse> {
+    suspend fun updateUser(requestModel: RequestUpdateProfile): Result<AccountResponse> {
         val result = handleRequest { networkService.updateUser(sharedPrefs.token, requestModel) }
 
-        if (result is CusResult.Success){
+        if (result is Result.Success){
             userManager.userAccount = result.data.account
             userManager.updateUserInfoToShared(result.data.account)
         }

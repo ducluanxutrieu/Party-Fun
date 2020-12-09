@@ -18,7 +18,7 @@ import com.uit.party.R
 import com.uit.party.databinding.FragmentListDishBinding
 import com.uit.party.model.CartModel
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.sign_in.SignInActivity
 import com.uit.party.util.UiUtil
 import com.uit.party.util.rxbus.RxBus
 import com.uit.party.util.rxbus.RxEvent
@@ -36,7 +36,6 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val mMenuAdapter = MenuAdapter()
 
     private var mDisposableAddCart: Disposable? = null
-    private lateinit var mDisposableUpdateDish: Disposable
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -158,12 +157,6 @@ class MenuFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             mDisposableAddCart = RxBus.listen(RxEvent.AddToCart::class.java).subscribe {
                 mViewModel.addDishToCart(CartModel(it.dishModel.id, name = it.dishModel.name, price = it.dishModel.price, newPrice = it.dishModel.newPrice, quantity = 1, featureImage = it.dishModel.featureImage))
                 startAnimationAddToCard()
-            }
-        }
-
-        mDisposableUpdateDish = RxBus.listen(RxEvent.AddDish::class.java).subscribe {
-            if (it.dishModel != null) {
-                mViewModel.addNewDish(it.dishModel)
             }
         }
     }

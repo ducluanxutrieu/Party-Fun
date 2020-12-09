@@ -23,7 +23,7 @@ open class GlobalApplication : Application() {
         DaggerAppComponent.factory().create(applicationContext)
     }
 
-    open fun initializeComponent(): AppComponent{
+/*    open fun initializeComponent(): AppComponent{
         return DaggerAppComponent.factory().create(applicationContext)
-    }
+    }*/
 }

@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uit.party.R
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.BillModel
 import com.uit.party.model.CartModel
@@ -27,7 +27,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class BookPartyViewModel @Inject constructor (private val repository: CartRepository) : ViewModel() {
+class BookPartyViewModel @Inject constructor(private val repository: CartRepository) : ViewModel() {
     val mTotalPrice = ObservableField("")
     val mDatePartyField = ObservableField("")
     val mDishCountCodeField = ObservableField("")
@@ -112,16 +112,21 @@ class BookPartyViewModel @Inject constructor (private val repository: CartReposi
             try {
                 val result = repository.orderParty(bookModel)
                 mShowLoading.set(false)
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     repository.deleteAllCart()
 
                     _messageLive.postValue(Pair(result.data.billModel, result.data.message))
                 } else {
-                    _messageLive.postValue(Pair(null, (result as CusResult.Error).exception.message))
+                    _messageLive.postValue(
+                        Pair(
+                            null,
+                            (result as Result.Error).exception.message
+                        )
+                    )
                 }
             } catch (cause: Throwable) {
                 _messageLive.postValue(Pair(null, cause.message))
-            }finally {
+            } finally {
                 mShowLoading.set(false)
             }
         }

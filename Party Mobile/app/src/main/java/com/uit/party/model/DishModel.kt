@@ -16,7 +16,7 @@ class AddDishResponse : BaseResponse() {
 
 @Entity(tableName = "dish_table")
 data class DishModel(
-    @PrimaryKey()
+    @PrimaryKey
     @SerializedName("_id") val id: String,
     @SerializedName("name") val name: String? = null,
     @SerializedName("price") val price: String? = null,

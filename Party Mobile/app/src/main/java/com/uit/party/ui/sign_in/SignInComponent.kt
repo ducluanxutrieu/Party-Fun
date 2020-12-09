@@ -1,10 +1,10 @@
-package com.uit.party.ui.signin
+package com.uit.party.ui.sign_in
 
 import com.uit.party.di.ActivityScope
 import com.uit.party.ui.SplashActivity
-import com.uit.party.ui.signin.login.LoginFragment
-import com.uit.party.ui.signin.register.RegisterFragment
-import com.uit.party.ui.signin.reset_password.ResetPasswordFragment
+import com.uit.party.ui.sign_in.login.LoginFragment
+import com.uit.party.ui.sign_in.register.RegisterFragment
+import com.uit.party.ui.sign_in.reset_password.ResetPasswordFragment
 import dagger.Subcomponent
 
 @ActivityScope

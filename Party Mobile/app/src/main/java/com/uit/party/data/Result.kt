@@ -4,10 +4,10 @@ package com.uit.party.data
  * A generic class that holds a value with its loading status.
  * @param <T>
  */
-sealed class CusResult<out T : Any> {
+sealed class Result<out T : Any> {
 
-    data class Success<out T : Any>(val data: T) : CusResult<T>()
-    data class Error(val exception: Exception) : CusResult<Nothing>()
+    data class Success<out T : Any>(val data: T) : Result<T>()
+    data class Error(val exception: Exception) : Result<Nothing>()
 
     fun toStrings(): String {
         return when (this) {

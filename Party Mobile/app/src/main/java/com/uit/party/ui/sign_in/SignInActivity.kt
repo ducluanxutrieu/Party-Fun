@@ -1,4 +1,4 @@
-package com.uit.party.ui.signin
+package com.uit.party.ui.sign_in
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

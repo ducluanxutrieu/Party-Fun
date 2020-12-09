@@ -3,7 +3,7 @@ package com.uit.party.data.rate
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.model.RateModel
 import com.uit.party.model.RequestRatingModel
@@ -34,15 +34,15 @@ class RateRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun requestRatingDish(requestModel: RequestRatingModel): CusResult<SingleRateResponseModel> {
+    suspend fun requestRatingDish(requestModel: RequestRatingModel): Result<SingleRateResponseModel> {
         return try {
             val result = networkService.ratingDish(sharedPrefs.token, requestModel)
             if (result.rateModel != null) {
                 database.rateDao.insertItemRating(result.rateModel)
             }
-            CusResult.Success(result)
+            Result.Success(result)
         } catch (cause: Throwable) {
-            CusResult.Error(Exception(cause))
+            Result.Error(Exception(cause))
         }
     }
 

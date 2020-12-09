@@ -84,7 +84,7 @@ class DishCart {
     val id: String? = null
 
     @SerializedName("count")
-    val count: Int? = 0
+    val count: Int = 0
 
     @SerializedName("name")
     val name: String? = null
@@ -93,14 +93,14 @@ class DishCart {
     val featureImage: String? = null
 
     @SerializedName("price")
-    val price: Int? = 0
+    val price: Int = 0
 
     @SerializedName("discount")
-    val discount: Int? = 0
+    val discount: Int = 0
 
     @SerializedName("currency")
     val currency: String? = null
 
     @SerializedName("total_money")
-    val totalMoney: Int? = 0
+    val totalMoney: Int = 0
 }

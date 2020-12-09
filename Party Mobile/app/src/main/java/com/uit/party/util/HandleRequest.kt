@@ -1,21 +1,21 @@
 package com.uit.party.util
 
 import com.google.gson.Gson
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.model.BaseResponse
 import retrofit2.HttpException
 import java.io.IOException
 
 
-suspend fun <T : Any> handleRequest(requestFunc: suspend () -> T): CusResult<T> {
+suspend fun <T : Any> handleRequest(requestFunc: suspend () -> T): Result<T> {
     return try {
-        CusResult.Success(requestFunc.invoke())
+        Result.Success(requestFunc.invoke())
     } catch (httpException: HttpException) {
         val errorMessage = getErrorMessageFromGenericResponse(httpException)
         if (errorMessage.isNullOrBlank()) {
-            CusResult.Error(httpException)
+            Result.Error(httpException)
         } else {
-            CusResult.Error(java.lang.Exception(errorMessage))
+            Result.Error(java.lang.Exception(errorMessage))
         }
     }
 }

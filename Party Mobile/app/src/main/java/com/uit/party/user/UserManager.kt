@@ -1,8 +1,8 @@
 package com.uit.party.user
 
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.model.*
-import com.uit.party.ui.signin.SignInRepository
+import com.uit.party.ui.sign_in.SignInRepository
 import com.uit.party.util.Constants
 import com.uit.party.util.Constants.Companion.REGISTERED_USER
 import com.uit.party.util.Constants.Companion.TOKEN_ACCESS_KEY
@@ -17,8 +17,7 @@ class UserManager @Inject constructor(
     private val signInRepository: SignInRepository
 ) {
 
-    var userComponent: UserComponent? = null
-        private set
+    private var userComponent: UserComponent? = null
 
     val username: String
         get() = storage.getData(REGISTERED_USER, String::class.java) ?: ""
@@ -32,7 +31,7 @@ class UserManager @Inject constructor(
     var userAccount: Account? = storage.getData(Constants.USER_INFO_KEY, Account::class.java)
 
     //    fun isUserLoggedIn() = userDataRepository != null
-    fun isUserLoggedIn() = userComponent != null
+//    fun isUserLoggedIn() = userComponent != null
 
     fun checkUserLoggedIn(): Boolean{
         val token = storage.getData(TOKEN_ACCESS_KEY, String::class.java)
@@ -43,15 +42,15 @@ class UserManager @Inject constructor(
         return false
     }
 
-    suspend fun registerUser(model: RegisterModel): CusResult<AccountResponse> {
+    suspend fun registerUser(model: RegisterModel): Result<AccountResponse> {
         return signInRepository.register(model)
 //        userJustLoggedIn()
     }
 
-    suspend fun loginUser(model: LoginModel): CusResult<AccountResponse> {
+    suspend fun loginUser(model: LoginModel): Result<AccountResponse> {
         val result = signInRepository.login(model)
 
-        if (result is CusResult.Success) {
+        if (result is Result.Success) {
             signInRepository.saveToMemory(result.data.account, result.data.account?.token)
         }
 
@@ -68,7 +67,7 @@ class UserManager @Inject constructor(
         userComponent = userComponentFactory.create()
     }
 
-    suspend fun resetPassword(username: String): CusResult<BaseResponse> {
+    suspend fun resetPassword(username: String): Result<BaseResponse> {
         return signInRepository.resetPassword(username)
     }
 }

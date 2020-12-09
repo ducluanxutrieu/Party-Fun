@@ -13,7 +13,6 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
-import com.uit.party.data.CusResult
 import com.uit.party.data.menu.MenuRepository
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity
@@ -22,6 +21,7 @@ import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import com.uit.party.data.Result
 import java.io.File
 import javax.inject.Inject
 
@@ -50,9 +50,9 @@ class AddNewDishFragmentViewModel @Inject constructor(private val repository: Me
 
     private val listImagePath = ArrayList<String>()
 
-    var mTitleValid = false
-    var mDescriptionValid = false
-    var mPriceValid = false
+    private var mTitleValid = false
+    private var mDescriptionValid = false
+    private var mPriceValid = false
 
     var mDishModel: DishModel? = null
 
@@ -123,12 +123,12 @@ class AddNewDishFragmentViewModel @Inject constructor(private val repository: Me
                     price = mPrice.get(),
                     type = mDishType
                 )
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     _messageCallback.postValue(Pair(true, result.data.message))
                 } else _messageCallback.postValue(
                     Pair(
                         false,
-                        (result as CusResult.Error).exception.message
+                        (result as Result.Error).exception.message
                     )
                 )
             } catch (ex: Exception) {
@@ -149,12 +149,12 @@ class AddNewDishFragmentViewModel @Inject constructor(private val repository: Me
         viewModelScope.launch(Constants.coroutineIO) {
             try {
                 val result = repository.updateDish(updateModel)
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     _messageCallback.postValue(Pair(true, result.data.message))
                 } else _messageCallback.postValue(
                     Pair(
                         false,
-                        (result as CusResult.Error).exception.message
+                        (result as Result.Error).exception.message
                     )
                 )
             } catch (ex: Exception) {

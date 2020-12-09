@@ -1,4 +1,4 @@
-package com.uit.party.ui.signin.login
+package com.uit.party.ui.sign_in.login
 
 import android.view.View
 import androidx.databinding.ObservableBoolean
@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.model.LoginModel
-import com.uit.party.ui.signin.LoginError
-import com.uit.party.ui.signin.LoginSuccess
-import com.uit.party.ui.signin.LoginViewState
+import com.uit.party.ui.sign_in.LoginError
+import com.uit.party.ui.sign_in.LoginSuccess
+import com.uit.party.ui.sign_in.LoginViewState
 import com.uit.party.user.UserManager
 import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(private val userManager: UserManager) :
         viewModelScope.launch {
             try {
                 val result = userManager.loginUser(loginModel)
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     _loginState.postValue(LoginSuccess)
                 } else
                     _loginState.postValue(LoginError)

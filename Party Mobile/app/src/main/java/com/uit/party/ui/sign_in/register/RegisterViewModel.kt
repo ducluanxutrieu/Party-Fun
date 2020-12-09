@@ -1,4 +1,4 @@
-package com.uit.party.ui.signin.register
+package com.uit.party.ui.sign_in.register
 
 import android.view.View
 import androidx.databinding.ObservableBoolean
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.model.RegisterModel
 import com.uit.party.user.UserManager
 import com.uit.party.util.UiUtil
@@ -184,7 +184,7 @@ class RegisterViewModel @Inject constructor(private val userManager: UserManager
         viewModelScope.launch {
             try {
                 val result = userManager.registerUser(model)
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     result.data.message?.let { UiUtil.showToast(it) }
                     view.findNavController().popBackStack()
                 }

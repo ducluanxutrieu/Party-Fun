@@ -1,4 +1,4 @@
-package com.uit.party.ui.signin.login
+package com.uit.party.ui.sign_in.login
 
 import android.content.Context
 import android.content.Intent
@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment
 import com.uit.party.R
 import com.uit.party.databinding.FragmentLoginBinding
 import com.uit.party.ui.main.MainActivity
-import com.uit.party.ui.signin.LoginSuccess
-import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.sign_in.LoginSuccess
+import com.uit.party.ui.sign_in.SignInActivity
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {

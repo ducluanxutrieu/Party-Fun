@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.cart.CartRepository
 import com.uit.party.data.menu.MenuRepository
 import com.uit.party.model.CartModel
@@ -17,7 +17,6 @@ import com.uit.party.model.MenuModel
 import com.uit.party.user.UserDataRepository
 import com.uit.party.user.UserManager
 import com.uit.party.util.Constants
-import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,13 +55,13 @@ class MenuViewModel @Inject constructor(
         viewModelScope.launch(Constants.coroutineIO) {
             try {
                 val result = userDataRepository.logout()
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     _logoutState.postValue("")
                 } else {
-                    _logoutState.postValue((result as CusResult.Error).exception.toString())
+                    _logoutState.postValue((result as Result.Error).exception.toString())
                 }
             } catch (cause: Throwable) {
-                CusResult.Error(Exception(cause))
+                Result.Error(Exception(cause))
             } finally {
                 mShowLoading.set(false)
             }
@@ -124,16 +123,6 @@ class MenuViewModel @Inject constructor(
     fun addDishToCart(cartModel: CartModel) {
         viewModelScope.launch {
             cartRepository.insertCart(cartModel)
-        }
-    }
-
-    fun addNewDish(dishModel: DishModel) {
-        viewModelScope.launch {
-            try {
-                repository.insertDish(dishModel)
-            } catch (ex: Exception) {
-                ex.message?.let { UiUtil.showToast(it) }
-            }
         }
     }
 }

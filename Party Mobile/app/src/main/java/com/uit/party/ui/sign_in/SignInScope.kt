@@ -1,6 +1,4 @@
-package com.uit.party.ui.signin
-
-import javax.inject.Scope
+package com.uit.party.ui.sign_in
 
 //@Scope
 @MustBeDocumented

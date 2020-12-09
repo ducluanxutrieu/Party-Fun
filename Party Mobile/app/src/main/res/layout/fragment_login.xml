@@ -8,7 +8,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.uit.party.ui.signin.login.LoginViewModel" />
+            type="com.uit.party.ui.sign_in.login.LoginViewModel" />
     </data>
 
     <RelativeLayout

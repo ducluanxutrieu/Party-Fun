@@ -7,7 +7,7 @@ import java.io.Serializable
 
 @Entity(tableName = "cart_table")
 data class CartModel(
-    @PrimaryKey()
+    @PrimaryKey
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String? = null,
     @SerializedName("price") val price: String? = null,

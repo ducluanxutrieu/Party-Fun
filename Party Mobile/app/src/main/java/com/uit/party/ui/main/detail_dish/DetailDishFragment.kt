@@ -10,7 +10,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,7 +18,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import com.uit.party.R
-import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
 import com.uit.party.model.UserRole
@@ -27,10 +25,10 @@ import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

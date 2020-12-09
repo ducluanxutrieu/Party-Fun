@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.BillModel
 import com.uit.party.util.UiUtil
@@ -24,7 +24,7 @@ class PaymentPartyViewModel @Inject constructor (private val cartRepository: Car
             try {
                  val result = cartRepository.getPayment(mBillModel._id)
                 mShowLoading.set(false)
-                if (result is CusResult.Success){
+                if (result is Result.Success){
                     mURLPaymentLive.postValue(result.data.paymentInfo?.id)
                 }else{
                     val message = result.toStrings()

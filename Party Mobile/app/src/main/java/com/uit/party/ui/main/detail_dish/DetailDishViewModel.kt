@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.data.cart.CartRepository
 import com.uit.party.data.menu.MenuRepository
 import com.uit.party.data.rate.RateRepository
@@ -28,8 +28,6 @@ class DetailDishViewModel @Inject constructor (
     private val rateRepo: RateRepository,
     private val cartRepo: CartRepository
 ) : ViewModel() {
-    var imageDish = ObservableField<String>()
-    var priceDish = ObservableField<String>()
     var nameDish = ObservableField<String>()
     var descriptionDish = ObservableField<String>()
     val mRatingShow = ObservableFloat(5f)
@@ -43,8 +41,7 @@ class DetailDishViewModel @Inject constructor (
 
 
     fun init() {
-        imageDish.set(mDishModel?.image?.get(0))
-        priceDish.set(mDishModel?.price.toString())
+        mPrice.set(mDishModel?.price.toString())
         nameDish.set(mDishModel?.name)
         descriptionDish.set(mDishModel?.description)
         if (mDishModel?.image != null) {
@@ -61,10 +58,10 @@ class DetailDishViewModel @Inject constructor (
         viewModelScope.launch {
             try {
                 val result = rateRepo.requestRatingDish(requestModel)
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     result.data.message?.let { UiUtil.showToast(it) }
                 } else {
-                    UiUtil.showToast((result as CusResult.Error).exception.toString())
+                    UiUtil.showToast((result as Result.Error).exception.toString())
                 }
             } catch (ex: Exception) {
                 ex.message?.let { UiUtil.showToast(it) }
@@ -100,7 +97,7 @@ class DetailDishViewModel @Inject constructor (
             viewModelScope.launch {
                 try {
                     val result = menuRepo.deleteDish(id)
-                    if (result is CusResult.Success) {
+                    if (result is Result.Success) {
                         result.data.message?.let { UiUtil.showToast(it) }
                         view.findNavController().popBackStack()
                         dialog.dismiss()

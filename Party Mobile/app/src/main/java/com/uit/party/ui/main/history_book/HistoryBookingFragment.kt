@@ -9,11 +9,9 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.uit.party.R
-import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentHistoryBookingBinding
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.detail_dish.ReposLoadStateAdapter

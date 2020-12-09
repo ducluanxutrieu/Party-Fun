@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.R
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.model.UserGender
 import com.uit.party.user.UserDataRepository
 import com.uit.party.user.UserManager
@@ -49,10 +49,10 @@ class ProfileViewModel @Inject constructor (userManager: UserManager, private va
         viewModelScope.launch(Constants.coroutineIO) {
             try {
                 val result = userRepository.changeAvatar(path)
-                if (result is CusResult.Success){
+                if (result is Result.Success){
                     mAvatar.set(result.data.message)
                 }else
-                    onComplete.invoke((result is CusResult.Error).toString())
+                    onComplete.invoke((result is Result.Error).toString())
             }catch (ex: Exception){
                 onComplete.invoke(ex.message)
             }

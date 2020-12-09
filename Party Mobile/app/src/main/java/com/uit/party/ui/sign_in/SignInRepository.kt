@@ -1,12 +1,11 @@
-package com.uit.party.ui.signin
+package com.uit.party.ui.sign_in
 
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.model.*
 import com.uit.party.util.Constants
 import com.uit.party.util.ServiceRetrofit
 import com.uit.party.util.Storage
 import com.uit.party.util.handleRequest
-import dagger.Provides
 import javax.inject.Inject
 
 
@@ -16,13 +15,13 @@ class SignInRepository @Inject constructor(
     private val storage: Storage
 ) {
 
-    suspend fun register(registerModel: RegisterModel): CusResult<AccountResponse> {
+    suspend fun register(registerModel: RegisterModel): Result<AccountResponse> {
         return handleRequest {
             networkService.register(registerModel)
         }
     }
 
-    suspend fun login(model: LoginModel): CusResult<AccountResponse> {
+    suspend fun login(model: LoginModel): Result<AccountResponse> {
         return handleRequest {
             networkService.login(model)
         }
@@ -34,7 +33,7 @@ class SignInRepository @Inject constructor(
             storage.setData(Constants.TOKEN_ACCESS_KEY, model?.token)
     }
 
-    suspend fun resetPassword(username: String): CusResult<BaseResponse> {
+    suspend fun resetPassword(username: String): Result<BaseResponse> {
         return handleRequest {
             networkService.resetPassword(username)
         }

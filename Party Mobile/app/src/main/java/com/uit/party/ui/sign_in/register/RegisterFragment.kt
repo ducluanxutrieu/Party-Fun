@@ -1,4 +1,4 @@
-package com.uit.party.ui.signin.register
+package com.uit.party.ui.sign_in.register
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.uit.party.R
 import com.uit.party.databinding.FragmentRegisterBinding
-import com.uit.party.ui.signin.SignInActivity
+import com.uit.party.ui.sign_in.SignInActivity
 import javax.inject.Inject
 
 

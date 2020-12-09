@@ -15,7 +15,7 @@ class Constants {
 
         val coroutineIO = Dispatchers.IO + coroutineExceptionHandler
 
-        val coroutineExceptionHandler: CoroutineExceptionHandler
+        private val coroutineExceptionHandler: CoroutineExceptionHandler
             get() {
                 return CoroutineExceptionHandler { _, throwable ->
                     throwable.printStackTrace()

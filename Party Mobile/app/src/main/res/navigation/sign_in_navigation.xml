@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_login"
-        android:name="com.uit.party.ui.signin.login.LoginFragment"
+        android:name="com.uit.party.ui.sign_in.login.LoginFragment"
         android:label="@string/login"
         tools:layout="@layout/fragment_login">
 
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/nav_reset_password"
-        android:name="com.uit.party.ui.signin.reset_password.ResetPasswordFragment"
+        android:name="com.uit.party.ui.sign_in.reset_password.ResetPasswordFragment"
         android:label="@string/reset_password"
         tools:layout="@layout/fragment_reset_password"
         >
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/nav_register"
-        android:name="com.uit.party.ui.signin.register.RegisterFragment"
+        android:name="com.uit.party.ui.sign_in.register.RegisterFragment"
         android:label="@string/register"
         tools:layout="@layout/fragment_register">
 

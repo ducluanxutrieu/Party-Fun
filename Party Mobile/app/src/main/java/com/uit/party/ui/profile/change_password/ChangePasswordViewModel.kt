@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uit.party.R
-import com.uit.party.data.CusResult
+import com.uit.party.data.Result
 import com.uit.party.user.UserDataRepository
 import com.uit.party.util.Constants
 import com.uit.party.util.UiUtil
@@ -60,13 +60,13 @@ class ChangePasswordViewModel @Inject constructor(private val userRepository: Us
                     newPasswordText
                 )
                 else userRepository.verifyPassword(currentPasswordText, newPasswordText)
-                if (result is CusResult.Success) {
+                if (result is Result.Success) {
                     _messageCallback.postValue(Pair(true, result.data.message))
                 } else
                     _messageCallback.postValue(
                         Pair(
                             false,
-                            (result as CusResult.Error).exception.message
+                            (result as Result.Error).exception.message
                         )
                     )
             } catch (ex: Exception) {

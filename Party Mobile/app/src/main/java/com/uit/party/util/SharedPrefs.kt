@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class SharedPrefs @Inject constructor(context: Context): Storage {
-    var mSharedPreferences: SharedPreferences =
+    private var mSharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
 
