@@ -1,6 +1,5 @@
 package com.uit.party.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
@@ -13,12 +12,10 @@ import androidx.navigation.ui.navigateUp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
-import com.uit.party.data.getToken
 import com.uit.party.databinding.ActivityMainBinding
 import com.uit.party.databinding.NavHeaderMainBinding
 import com.uit.party.model.Account
 import com.uit.party.ui.profile.ProfileComponent
-import com.uit.party.ui.signin.SignInActivity
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
@@ -48,7 +45,6 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
 
         setupBinding()
-        checkLogin()
         setSupportActionBar(binding.appBar)
         setupNavigationDrawer()
         setNavHeader()
@@ -99,18 +95,6 @@ class MainActivity : AppCompatActivity(){
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    private fun checkLogin() {
-        if (getToken().isEmpty()) {
-            goToSignIn()
-        }
-    }
-
-    private fun goToSignIn() {
-        val intent = Intent(this, SignInActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     private fun setupBinding() {

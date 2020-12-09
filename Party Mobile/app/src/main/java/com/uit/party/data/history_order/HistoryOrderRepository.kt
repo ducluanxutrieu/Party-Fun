@@ -6,11 +6,16 @@ import androidx.paging.PagingData
 import com.uit.party.data.PartyBookingDatabase
 import com.uit.party.util.Constants.Companion.NETWORK_PAGE_SIZE
 import com.uit.party.util.ServiceRetrofit
+import com.uit.party.util.SharedPrefs
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HistoryOrderRepository(
+@Singleton
+class HistoryOrderRepository @Inject constructor (
     private val networkService: ServiceRetrofit,
-    private val database: PartyBookingDatabase
+    private val database: PartyBookingDatabase,
+    private val sharedPrefs: SharedPrefs
 ) {
 
     fun getListOrdered(): Flow<PagingData<CartItem>>{
@@ -20,7 +25,7 @@ class HistoryOrderRepository(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = HistoryOrderRemoteMediator(
-                networkService, database
+                networkService, database, sharedPrefs.token
             )
         ).flow
     }

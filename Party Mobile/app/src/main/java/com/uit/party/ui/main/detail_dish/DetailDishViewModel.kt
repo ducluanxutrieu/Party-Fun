@@ -11,7 +11,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.uit.party.data.CusResult
 import com.uit.party.data.cart.CartRepository
-import com.uit.party.data.home.HomeRepository
+import com.uit.party.data.menu.MenuRepository
 import com.uit.party.data.rate.RateRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
@@ -22,8 +22,8 @@ import com.uit.party.util.UiUtil.toVNCurrency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class DetailDishViewModel(
-    private val homeRepo: HomeRepository,
+class DetailDishViewModel (
+    private val menuRepo: MenuRepository,
     private val rateRepo: RateRepository,
     private val cartRepo: CartRepository
 ) : ViewModel() {
@@ -98,7 +98,7 @@ class DetailDishViewModel(
         if (id.isNotEmpty())
             viewModelScope.launch {
                 try {
-                    val result = homeRepo.deleteDish(id)
+                    val result = menuRepo.deleteDish(id)
                     if (result is CusResult.Success) {
                         result.data.message?.let { UiUtil.showToast(it) }
                         view.findNavController().popBackStack()

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uit.party.R
 import com.uit.party.databinding.ItemRatingBinding
 import com.uit.party.model.RateModel
-import com.uit.party.util.TimeFormatUtil
+import com.uit.party.util.TimeFormatUtil.formatDateToClient
 
 class DishRatingAdapter :
     PagingDataAdapter<RateModel, DishRatingAdapter.DishRatingViewHolder>(DIFF_CALLBACK) {
@@ -38,7 +38,7 @@ class DishRatingAdapter :
             binding.tvUsernameRating.text = listRate.user_rate
             binding.tvContentRating.text = listRate.comment
             binding.ratingBar.rating = listRate.score ?: 5f
-            binding.tvTimeRating.text = TimeFormatUtil.formatDateToClient(listRate.update_at)
+            binding.tvTimeRating.text = listRate.update_at.formatDateToClient()
         }
     }
 

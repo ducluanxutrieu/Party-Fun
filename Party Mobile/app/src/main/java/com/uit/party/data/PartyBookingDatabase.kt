@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
 import com.uit.party.data.cart.CartDao
 import com.uit.party.data.history_order.CartItem
 import com.uit.party.data.history_order.HistoryOrderDao
-import com.uit.party.data.home.HomeDao
+import com.uit.party.data.menu.MenuDao
 import com.uit.party.data.rate.RateDishDao
 import com.uit.party.data.rate.RateRemoteKeysDao
 import com.uit.party.model.*
@@ -21,7 +21,7 @@ import com.uit.party.model.*
 @TypeConverters(ImageConverter::class)
 @Database(entities = [DishModel::class, CartModel::class, RateModel::class, RateRemoteKeys::class, CartItem::class], version = 6, exportSchema = false)
 abstract class PartyBookingDatabase : RoomDatabase() {
-    abstract val homeDao: HomeDao
+    abstract val menuDao: MenuDao
     abstract val rateDao: RateDishDao
     abstract val rateRemoteDao: RateRemoteKeysDao
     abstract val cartDao: CartDao

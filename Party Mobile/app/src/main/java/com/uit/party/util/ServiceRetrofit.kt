@@ -35,18 +35,18 @@ interface ServiceRetrofit {
 
     @POST("user/resetconfirm")
     @FormUrlEncoded
-    fun verifyPassword(
+    suspend fun verifyPassword(
         @Field("resetpassword") resetpassword: String,
         @Field("passwordnew") passwordnew: String
-    ): Call<BaseResponse>
+    ): BaseResponse
 
     @POST("user/changepassword")
     @FormUrlEncoded
-    fun changePassword(
+    suspend fun changePassword(
         @Header("authorization") token: String,
         @Field("password") password: String,
         @Field("newpassword") passwordchange: String
-    ): Call<BaseResponse>
+    ): BaseResponse
 
     @GET("user/profile")
     fun getProfile(
@@ -60,10 +60,10 @@ interface ServiceRetrofit {
     ): GetHistoryCartResponse?
 
     @POST("user/updateuser")
-    fun updateUser(
+    suspend fun updateUser(
         @Header("authorization") token: String,
         @Body body: RequestUpdateProfile
-    ): Call<AccountResponse>
+    ): AccountResponse
 
     @Multipart
     @POST("user/uploadavatar")
@@ -75,7 +75,7 @@ interface ServiceRetrofit {
 
     @Multipart
     @POST("product/adddish")
-    fun addDish(
+    suspend fun addDish(
         @Header("authorization") token: String,
         @Part("name") name: RequestBody?,
         @Part("description") description: RequestBody?,
@@ -84,7 +84,7 @@ interface ServiceRetrofit {
         @Part("discount") discount: RequestBody?,
         @Part image: ArrayList<MultipartBody.Part>,
         @Part("image") requestBody: RequestBody
-    ): Call<AddDishResponse>
+    ): AddDishResponse
 
     @POST("product/updatedish")
     suspend fun updateDish(

@@ -1,11 +1,11 @@
-package com.uit.party.data.home
+package com.uit.party.data.menu
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.uit.party.model.DishModel
 
 @Dao
-interface HomeDao {
+interface MenuDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDish(dish: DishModel)
 

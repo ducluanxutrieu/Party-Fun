@@ -1,5 +1,6 @@
 package com.uit.party.ui.profile.edit_profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +8,25 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.uit.party.R
 import com.uit.party.databinding.FragmentEditProfileBinding
 import com.uit.party.model.UserGender
+import com.uit.party.ui.main.MainActivity
+import com.uit.party.util.UiUtil
+import javax.inject.Inject
 
 @Suppress("DEPRECATION")
 class EditProfileFragment : Fragment(){
     private lateinit var binding: FragmentEditProfileBinding
-    private lateinit var mViewModel: EditProfileFragmentViewModel
 
+    @Inject
+    lateinit var mViewModel: EditProfileFragmentViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).profileComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +34,6 @@ class EditProfileFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false)
-        mViewModel = EditProfileFragmentViewModel()
         binding.viewModel = mViewModel
         return binding.root
     }
@@ -42,7 +52,7 @@ class EditProfileFragment : Fragment(){
             }
         }
 
-        when (mViewModel.account.gender){
+        when (mViewModel.account?.gender){
             UserGender.Male.ordinal -> binding.rbMale.isChecked = true
             UserGender.Female.ordinal -> binding.rbFemale.isChecked = true
         }
@@ -52,5 +62,12 @@ class EditProfileFragment : Fragment(){
         binding.etEmail.doOnTextChanged { text, _, _, _ -> mViewModel.checkEmailValid(text) }
         binding.etFullName.doOnTextChanged { text, _, _, _ -> mViewModel.checkFullNameValid(text) }
         binding.etPhoneNumber.doOnTextChanged { text, _, _, _ -> mViewModel.checkPhoneNumberValid(text) }
+
+        mViewModel.messageCallback.observe(viewLifecycleOwner, {
+            UiUtil.showToast(it.second)
+            if (it.first){
+                this.findNavController().popBackStack()
+            }
+        })
     }
 }

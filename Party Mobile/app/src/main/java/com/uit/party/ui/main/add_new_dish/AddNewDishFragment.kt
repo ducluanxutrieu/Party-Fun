@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.add_new_dish
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +9,29 @@ import android.widget.AdapterView
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.uit.party.R
 import com.uit.party.databinding.FragmentAddNewDishBinding
 import com.uit.party.model.Thumbnail
+import com.uit.party.ui.main.MainActivity
+import com.uit.party.util.UiUtil
+import javax.inject.Inject
 
 
 class AddNewDishFragment : Fragment() {
     private lateinit var mBinding: FragmentAddNewDishBinding
-    private lateinit var mViewModel: AddNewDishFragmentViewModel
+
+    @Inject
+    lateinit var mViewModel: AddNewDishFragmentViewModel
+
     private val myArgs: AddNewDishFragmentArgs by navArgs()
     private lateinit var mSpinnerAdapter: SpinnerAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).menuComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +40,6 @@ class AddNewDishFragment : Fragment() {
     ): View {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_new_dish, container, false)
-        mViewModel = AddNewDishFragmentViewModel()
         mBinding.viewModel = mViewModel
         return mBinding.root
     }
@@ -42,7 +54,7 @@ class AddNewDishFragment : Fragment() {
     private fun getData() {
         mViewModel.mDishModel = myArgs.StringDishModel
         mViewModel.mDishType = myArgs.dishType
-        mViewModel.mPositon = myArgs.position
+        mViewModel.mPosition = myArgs.position
         if (mViewModel.mDishModel != null) {
             mViewModel.initData()
             for (i in Thumbnail.values().indices){
@@ -79,5 +91,12 @@ class AddNewDishFragment : Fragment() {
         mBinding.etTitleDish.doOnTextChanged { text, _, _, _ -> mViewModel.checkTitleValid(text) }
         mBinding.etDescriptionDish.doOnTextChanged { text, _, _, _ -> mViewModel.checkDescriptionValid(text) }
         mBinding.etPrice.doOnTextChanged { text, _, _, _ -> mViewModel.checkPriceValid(text) }
+
+        mViewModel.messageCallback.observe(viewLifecycleOwner, {
+            UiUtil.showToast(it.second)
+            if (it.first){
+                this.findNavController().popBackStack()
+            }
+        })
     }
 }

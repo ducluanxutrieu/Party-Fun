@@ -3,12 +3,12 @@ package com.uit.party.data.cart
 import androidx.lifecycle.LiveData
 import com.uit.party.data.CusResult
 import com.uit.party.data.PartyBookingDatabase
-import com.uit.party.data.getToken
 import com.uit.party.model.BillResponseModel
 import com.uit.party.model.CartModel
 import com.uit.party.model.GetPaymentResponse
 import com.uit.party.model.RequestOrderPartyModel
 import com.uit.party.util.ServiceRetrofit
+import com.uit.party.util.SharedPrefs
 import com.uit.party.util.handleRequest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,6 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class CartRepository @Inject constructor (
     private val networkService: ServiceRetrofit,
+    private val sharedPrefs: SharedPrefs,
     database: PartyBookingDatabase
 ) {
     private val cartDao = database.cartDao
@@ -28,7 +29,7 @@ class CartRepository @Inject constructor (
     suspend fun orderParty(bookModel: RequestOrderPartyModel): CusResult<BillResponseModel> {
         try {
             return handleRequest {
-                networkService.orderParty(getToken(), bookModel)
+                networkService.orderParty(sharedPrefs.token, bookModel)
             }
         } catch (error: Throwable) {
             throw Throwable(error)
@@ -37,7 +38,7 @@ class CartRepository @Inject constructor (
 
     suspend fun getPayment(id: String): CusResult<GetPaymentResponse> {
         return handleRequest {
-            networkService.getPayment(getToken(), id)
+            networkService.getPayment(sharedPrefs.token, id)
         }
     }
 

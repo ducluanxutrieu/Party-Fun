@@ -4,28 +4,31 @@ import android.app.DatePickerDialog
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
+import androidx.lifecycle.viewModelScope
 import com.uit.party.R
-import com.uit.party.data.getToken
-import com.uit.party.model.Account
-import com.uit.party.model.AccountResponse
+import com.uit.party.data.CusResult
+import com.uit.party.user.UserDataRepository
+import com.uit.party.user.UserManager
 import com.uit.party.util.*
-import com.uit.party.util.Constants.Companion.USER_INFO_KEY
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.uit.party.util.TimeFormatUtil.formatDateToClient
+import com.uit.party.util.TimeFormatUtil.formatDateToServer
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class EditProfileFragmentViewModel : ViewModel() {
+class EditProfileFragmentViewModel @Inject constructor(private val userRepository: UserDataRepository, userManager: UserManager) : ViewModel() {
+    val account = userManager.userAccount
     private var fullNameValid = false
     private var phoneNumberValid = false
     private var emailValid = false
 
-    var errorFullName = ObservableField<String>("")
-    var errorPhoneNumber = ObservableField<String>("")
-    var errorEmailText = ObservableField<String>("")
+    var errorFullName = ObservableField("")
+    var errorPhoneNumber = ObservableField("")
+    var errorEmailText = ObservableField("")
 
     val mFullName = ObservableField("")
     val mPhoneNumber = ObservableField("")
@@ -39,10 +42,9 @@ class EditProfileFragmentViewModel : ViewModel() {
     private var calBirthdayPicker = Calendar.getInstance()
     private val calDateNow = Calendar.getInstance()
 
-    private val formatDateUI = "dd-MM-yyyy"
-    private val sf = SimpleDateFormat(formatDateUI, Locale.US)
-
-    val account = SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)!!
+    private val _messageCallback = MutableLiveData<Pair<Boolean, String?>>()
+    val messageCallback: LiveData<Pair<Boolean, String?>>
+        get() = _messageCallback
 
     private val birthDaySetListener =
         DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
@@ -58,31 +60,31 @@ class EditProfileFragmentViewModel : ViewModel() {
 
     init {
 //        val timeStart = sf.format(calBirthdayPicker.time)
-        if (account.birthday.isNullOrEmpty()) {
-            mBirthday.set(account.birthday)
+        if (account?.birthday.isNullOrEmpty()) {
+            mBirthday.set(account?.birthday)
         }
-        if (!account.email.isNullOrEmpty()) {
-            mEmail.set(account.email)
+        if (!account?.email.isNullOrEmpty()) {
+            mEmail.set(account?.email)
             emailValid = true
             checkEnableButtonUpdate()
         }
-        if (account.phone != null) {
-            mPhoneNumber.set(account.phone.toString())
-            phoneNumberValid = true
-            checkEnableButtonUpdate()
-        }
-        if (!account.fullName.isNullOrEmpty()) {
-            mFullName.set(account.fullName)
+        mPhoneNumber.set(account?.phone.toString())
+        phoneNumberValid = true
+        checkEnableButtonUpdate()
+        if (!account?.fullName.isNullOrEmpty()) {
+            mFullName.set(account?.fullName)
             fullNameValid = true
             checkEnableButtonUpdate()
         }
 
-        if (!account.birthday.isNullOrEmpty()) {
-            mBirthday.set(TimeFormatUtil.formatDateToClient(account.birthday))
+        if (!account?.birthday.isNullOrEmpty()) {
+            mBirthday.set(account?.birthday.formatDateToClient())
         }
     }
 
     private fun updateBirthdayInView() {
+        val formatDateUI = "dd-MM-yyyy"
+        val sf = SimpleDateFormat(formatDateUI, Locale.US)
         val timeStart = sf.format(calBirthdayPicker.time)
         this.mBirthday.set(timeStart)
     }
@@ -94,63 +96,24 @@ class EditProfileFragmentViewModel : ViewModel() {
     }
 
     fun checkEmailValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                errorEmailText.set(UiUtil.getString(R.string.this_field_required))
-                emailValid = false
-                checkEnableButtonUpdate()
-            }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches() -> {
-                errorEmailText.set(UiUtil.getString(R.string.email_not_valid))
-                emailValid = false
-                checkEnableButtonUpdate()
-            }
-            else -> {
-                emailValid = true
-                errorEmailText.set("")
-                checkEnableButtonUpdate()
-            }
-        }
+        val message = text.emailErrorMes()
+        errorEmailText.set(message)
+        emailValid = message.isEmpty()
+        checkEnableButtonUpdate()
     }
 
     fun checkFullNameValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                errorFullName.set(UiUtil.getString(R.string.this_field_required))
-                fullNameValid = false
-                checkEnableButtonUpdate()
-            }
-            else -> {
-                fullNameValid = true
-                errorFullName.set("")
-                checkEnableButtonUpdate()
-            }
-        }
+        val message = text.requireFieldErrorMes()
+        errorFullName.set(message)
+        fullNameValid = message.isEmpty()
+        checkEnableButtonUpdate()
     }
 
     fun checkPhoneNumberValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                errorPhoneNumber.set(UiUtil.getString(R.string.this_field_required))
-                phoneNumberValid = false
-                checkEnableButtonUpdate()
-            }
-            !android.util.Patterns.PHONE.matcher(text).matches() -> {
-                errorPhoneNumber.set(UiUtil.getString(R.string.phone_not_valid))
-                phoneNumberValid = false
-                checkEnableButtonUpdate()
-            }
-            text.trim().length < 9 -> {
-                errorPhoneNumber.set(UiUtil.getString(R.string.phone_number_too_short))
-                phoneNumberValid = false
-                checkEnableButtonUpdate()
-            }
-            else -> {
-                phoneNumberValid = true
-                errorPhoneNumber.set("")
-                checkEnableButtonUpdate()
-            }
-        }
+        val message = text.phoneErrorMes()
+        errorPhoneNumber.set(message)
+        phoneNumberValid = message.isEmpty()
+        checkEnableButtonUpdate()
     }
 
     fun onBirthdayClicked(view: View) {
@@ -163,37 +126,30 @@ class EditProfileFragmentViewModel : ViewModel() {
         ).show()
     }
 
-    fun onUpdateClicked(view: View) {
+    fun onUpdateClicked() {
         val requestModel = RequestUpdateProfile(
             mEmail.get(),
             mFullName.get(),
             mPhoneNumber.get(),
-            TimeFormatUtil.formatDateToServer(mBirthday.get()),
+            mBirthday.get().formatDateToServer(),
             mSex
         )
-        getNetworkService().updateUser(getToken(), requestModel)
-            .enqueue(object : Callback<AccountResponse> {
-                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                    if (!t.message.isNullOrEmpty()) {
-                        UiUtil.showToast(t.message!!)
-                    }
-                }
 
-                override fun onResponse(
-                    call: Call<AccountResponse>,
-                    response: Response<AccountResponse>
-                ) {
-                    val repo = response.body()
-                    if (repo != null) {
-                        saveToMemory(repo)
-                        UiUtil.showToast(UiUtil.getString(R.string.update_profile_success))
-                        view.findNavController().popBackStack()
-                    }
-                }
-            })
-    }
-
-    private fun saveToMemory(model: AccountResponse) {
-        SharedPrefs(GlobalApplication.appContext!!).setData(USER_INFO_KEY, model.account)
+        viewModelScope.launch(Constants.coroutineIO) {
+            try {
+                val result = userRepository.updateUser(requestModel)
+                if (result is CusResult.Success) {
+                    _messageCallback.postValue(Pair(true, result.data.message))
+                } else
+                    _messageCallback.postValue(
+                        Pair(
+                            false,
+                            (result as CusResult.Error).exception.message
+                        )
+                    )
+            } catch (ex: Exception) {
+                _messageCallback.postValue(Pair(false, ex.message))
+            }
+        }
     }
 }

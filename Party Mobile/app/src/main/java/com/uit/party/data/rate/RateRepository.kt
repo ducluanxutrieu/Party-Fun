@@ -5,17 +5,22 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.uit.party.data.CusResult
 import com.uit.party.data.PartyBookingDatabase
-import com.uit.party.data.getToken
 import com.uit.party.model.RateModel
 import com.uit.party.model.RequestRatingModel
 import com.uit.party.model.SingleRateResponseModel
 import com.uit.party.util.Constants.Companion.NETWORK_PAGE_SIZE
 import com.uit.party.util.ServiceRetrofit
+import com.uit.party.util.SharedPrefs
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RateRepository (private val networkService: ServiceRetrofit,
-                      private val database: PartyBookingDatabase
-){
+@Singleton
+class RateRepository @Inject constructor(
+    private val networkService: ServiceRetrofit,
+    private val sharedPrefs: SharedPrefs,
+    private val database: PartyBookingDatabase
+) {
     fun getDishRating(dishId: String): Flow<PagingData<RateModel>> {
         val pagingSourceFactory = { database.rateDao.getRateByDishId(dishId) }
         return Pager(
@@ -31,7 +36,7 @@ class RateRepository (private val networkService: ServiceRetrofit,
 
     suspend fun requestRatingDish(requestModel: RequestRatingModel): CusResult<SingleRateResponseModel> {
         return try {
-            val result = networkService.ratingDish(getToken(), requestModel)
+            val result = networkService.ratingDish(sharedPrefs.token, requestModel)
             if (result.rateModel != null) {
                 database.rateDao.insertItemRating(result.rateModel)
             }

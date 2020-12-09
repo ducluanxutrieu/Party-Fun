@@ -7,18 +7,16 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.uit.party.data.PartyBookingDatabase
-import com.uit.party.data.getToken
 import com.uit.party.util.Constants.Companion.STARTING_PAGE_INDEX
 import com.uit.party.util.ServiceRetrofit
-import com.uit.party.util.UiUtil
 import retrofit2.HttpException
 import java.io.IOException
-import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
-class HistoryOrderRemoteMediator(
+class HistoryOrderRemoteMediator (
     private val service: ServiceRetrofit,
-    private val database: PartyBookingDatabase
+    private val database: PartyBookingDatabase,
+    private val token: String
 ) :
     RemoteMediator<Int, CartItem>() {
 
@@ -30,7 +28,7 @@ class HistoryOrderRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, CartItem>
     ): MediatorResult {
-        val page: Int? = when (loadType) {
+        val page: Int = when (loadType) {
             LoadType.REFRESH -> {
                 Log.i("HistoryOrderRemote", "REFRESH")
                 STARTING_PAGE_INDEX
@@ -65,7 +63,7 @@ class HistoryOrderRemoteMediator(
         Log.i("HistoryOrderRemote", page.toString())
 
         try {
-            val apiResponse = service.getHistoryBooking(getToken(), page ?: 1)
+            val apiResponse = service.getHistoryBooking(token, page)
 
             val repos = apiResponse?.historyCartModel
             val endOfPaginationReached: Boolean =
@@ -75,8 +73,8 @@ class HistoryOrderRemoteMediator(
                 if (loadType == LoadType.REFRESH) {
                     historyDao.clearAllOrdered()
                 }
-                prevKey = if (page == STARTING_PAGE_INDEX) null else page?.minus(1)
-                nextKey = if (endOfPaginationReached) null else page?.plus(1)
+                prevKey = if (page == STARTING_PAGE_INDEX) null else page.minus(1)
+                nextKey = if (endOfPaginationReached) null else page.plus(1)
 
                 historyDao.insertListHistoryOrder(repos?.cartItems ?: emptyList())
             }
@@ -86,25 +84,5 @@ class HistoryOrderRemoteMediator(
         } catch (exception: HttpException) {
             return MediatorResult.Error(exception)
         }
-    }
-
-    private fun getRemoteKeyForFirstItem(state: PagingState<Int, CartItem>): Int? {
-        // Get the first page that was retrieved, that contained items.
-        // From that first page, get the first item
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let {
-                // Get the remote keys of the first items retrieved
-                prevKey
-            }
-    }
-
-    private fun getRemoteKeyForLastItem(state: PagingState<Int, CartItem>): Int? {
-        // Get the last page that was retrieved, that contained items.
-        // From that last page, get the last item
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let {
-                // Get the remote keys of the last item retrieved
-                nextKey
-            }
     }
 }

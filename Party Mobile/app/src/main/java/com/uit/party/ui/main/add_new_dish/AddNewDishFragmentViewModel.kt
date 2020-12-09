@@ -6,32 +6,27 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
-import com.uit.party.data.home.HomeRepository
+import com.uit.party.data.CusResult
+import com.uit.party.data.menu.MenuRepository
 import com.uit.party.model.*
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.*
-import com.uit.party.util.Constants.Companion.USER_INFO_KEY
-import com.uit.party.util.rxbus.RxBus
-import com.uit.party.util.rxbus.RxEvent
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 
-class AddNewDishFragmentViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
+class AddNewDishFragmentViewModel @Inject constructor(private val repository: MenuRepository) :
+    ViewModel() {
     val mTitle = ObservableField("")
     val mDescription = ObservableField("")
     val mPrice = ObservableField("")
@@ -42,36 +37,29 @@ class AddNewDishFragmentViewModel @Inject constructor(private val repository: Ho
     val mErrorDescription = ObservableField("")
     val mErrorPrice = ObservableField("")
 
-    private var mTitleText = ""
-    private var mDescriptionText = ""
-    private var mPriceText = ""
+    private val _messageCallback = MutableLiveData<Pair<Boolean, String?>>()
+    val messageCallback: LiveData<Pair<Boolean, String?>>
+        get() = _messageCallback
+
     var mTypeText = ""
 
-    var mPositon = 0
+    var mPosition = 0
     var mDishType = ""
 
     val mEnableSendButton = ObservableBoolean(false)
 
-    private val description = "image-type".toRequestBody("text/plain".toMediaTypeOrNull())
-
     private val listImagePath = ArrayList<String>()
 
-    private var mTitleValid = false
-    private var mDescriptionValid = false
-    private var mPriceValid = false
+    var mTitleValid = false
+    var mDescriptionValid = false
+    var mPriceValid = false
 
     var mDishModel: DishModel? = null
 
     fun initData() {
         mTitle.set(mDishModel?.name)
-        mTitleText = mDishModel?.name.toString()
-
         mDescription.set(mDishModel?.description)
-        mDescriptionText = mDishModel?.description.toString()
-
         mPrice.set(mDishModel?.price)
-        mPriceText = mDishModel?.price.toString()
-
         mTypeText = mDishModel?.categories.toString()
 
         mShowUploadImageDish.set(View.GONE)
@@ -90,86 +78,33 @@ class AddNewDishFragmentViewModel @Inject constructor(private val repository: Ho
             .show((view.context as MainActivity).supportFragmentManager)
     }
 
-    fun onSendAddDishClicked(view: View) {
+    fun onSendAddDishClicked() {
         if (mDishModel == null) {
-            addNewDish(view)
+            addNewDish()
         } else {
-            updateDish(view)
+            updateDish()
         }
-    }
-
-    private fun updateDish(view: View) {
-        val mUpdateModel = UpdateDishRequestModel(mDishModel?.id.toString(), mTitleText, mDescriptionText, mPriceText, mTypeText)
-        getNetworkService().updateDish(getToken(), mUpdateModel)
-            .enqueue(object : Callback<UpdateDishResponse>{
-                override fun onFailure(call: Call<UpdateDishResponse>, t: Throwable) {
-                    t.message?.let { UiUtil.showToast(it) }
-                }
-
-                override fun onResponse(
-                    call: Call<UpdateDishResponse>,
-                    response: Response<UpdateDishResponse>
-                ) {
-                    if (response.code() == 200){
-                        val repo = response.body()
-                        repo?.message?.let { UiUtil.showToast(it) }
-                        RxBus.publish(RxEvent.AddDish(repo?.dish, dishType = mDishType, position = mPositon))
-                        view.findNavController().popBackStack()
-
-
-                    }else{
-                        UiUtil.showToast(UiUtil.getString(R.string.update_dish_false))
-                    }
-                }
-            })
     }
 
     fun checkTitleValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                mErrorTitle.set(UiUtil.getString(R.string.this_field_required))
-                mTitleValid = false
-                checkEnableButtonSend()
-            }
-            else -> {
-                mTitleValid = true
-                mErrorTitle.set("")
-                checkEnableButtonSend()
-                mTitleText = text.toString()
-            }
-        }
+        val message = text.requireFieldErrorMes()
+        mErrorTitle.set(message)
+        mTitleValid = message.isEmpty()
+        checkEnableButtonSend()
     }
 
     fun checkDescriptionValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                mErrorDescription.set(UiUtil.getString(R.string.this_field_required))
-                mDescriptionValid = false
-                checkEnableButtonSend()
-            }
-            else -> {
-                mDescriptionValid = true
-                mErrorDescription.set("")
-                checkEnableButtonSend()
-                mDescriptionText = text.toString()
-            }
-        }
+        val message = text.requireFieldErrorMes()
+        mErrorDescription.set(message)
+        mDescriptionValid = message.isEmpty()
+        checkEnableButtonSend()
     }
 
     fun checkPriceValid(text: CharSequence?) {
-        when {
-            text.isNullOrEmpty() -> {
-                mErrorTitle.set(UiUtil.getString(R.string.this_field_required))
-                mPriceValid = false
-                checkEnableButtonSend()
-            }
-            else -> {
-                mPriceValid = true
-                mErrorTitle.set("")
-                checkEnableButtonSend()
-                mPriceText = text.toString()
-            }
-        }
+        val message = text.requireFieldErrorMes()
+        mErrorPrice.set(message)
+        mPriceValid = message.isEmpty()
+        checkEnableButtonSend()
     }
 
     private fun checkEnableButtonSend() {
@@ -178,50 +113,53 @@ class AddNewDishFragmentViewModel @Inject constructor(private val repository: Ho
         }
     }
 
-    private fun addNewDish(view: View) {
-        val builder = MultipartBody.Builder()
-        builder.setType(MultipartBody.FORM)
-
-        val multipartPath = ArrayList<MultipartBody.Part>()
-        val parseType = "multipart/form-data"
-        for (row in listImagePath) {
-            val file = File(row)
-
-            multipartPath.add(
-                MultipartBody.Part.createFormData(
-                    "image",
-                    file.name,
-                    file.asRequestBody(parseType.toMediaTypeOrNull())
+    private fun addNewDish() {
+        viewModelScope.launch(Constants.coroutineIO) {
+            try {
+                val result = repository.addNewDish(
+                    imagePaths = listImagePath,
+                    title = mTitle.get(),
+                    description = mDescription.get(),
+                    price = mPrice.get(),
+                    type = mDishType
                 )
-            )
+                if (result is CusResult.Success) {
+                    _messageCallback.postValue(Pair(true, result.data.message))
+                } else _messageCallback.postValue(
+                    Pair(
+                        false,
+                        (result as CusResult.Error).exception.message
+                    )
+                )
+            } catch (ex: Exception) {
+                _messageCallback.postValue(Pair(false, ex.message))
+            }
         }
+    }
 
-        //Create request body with text description and text media type
-        val token = SharedPrefs(GlobalApplication.appContext!!).getData(USER_INFO_KEY, Account::class.java)?.token
-        getNetworkService().addDish(
-            token!!,
-            mTitleText.toRequestBody(MultipartBody.FORM),
-            mDescriptionText.toRequestBody(MultipartBody.FORM),
-            mPriceText.toRequestBody(MultipartBody.FORM),
-            mTypeText.toRequestBody(MultipartBody.FORM),
-            ("0").toRequestBody((MultipartBody.FORM)),
-            multipartPath,
-            description
+    private fun updateDish() {
+        val updateModel = UpdateDishRequestModel(
+            mDishModel?.id.toString(),
+            mTitle.get() ?: "",
+            mDescription.get() ?: "",
+            mPrice.get() ?: "",
+            mTypeText
         )
-            .enqueue(object : Callback<AddDishResponse> {
-                override fun onFailure(call: Call<AddDishResponse>, t: Throwable) {
-                    t.message?.let { UiUtil.showToast(it) }
-                }
 
-                override fun onResponse(
-                    call: Call<AddDishResponse>,
-                    response: Response<AddDishResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        response.body()?.message?.let { UiUtil.showToast(it) }
-                        view.findNavController().popBackStack()
-                    }
-                }
-            })
+        viewModelScope.launch(Constants.coroutineIO) {
+            try {
+                val result = repository.updateDish(updateModel)
+                if (result is CusResult.Success) {
+                    _messageCallback.postValue(Pair(true, result.data.message))
+                } else _messageCallback.postValue(
+                    Pair(
+                        false,
+                        (result as CusResult.Error).exception.message
+                    )
+                )
+            } catch (ex: Exception) {
+                _messageCallback.postValue(Pair(false, ex.message))
+            }
+        }
     }
 }

@@ -31,8 +31,7 @@ class UserManager @Inject constructor(
     val isAdmin: Boolean
         get() = role == null && (role == UserRole.Admin.ordinal || role == UserRole.Staff.ordinal)
 
-    val userAccount: Account?
-        get() = storage.getData(Constants.USER_INFO_KEY, Account::class.java)
+    var userAccount: Account? = storage.getData(Constants.USER_INFO_KEY, Account::class.java)
 
     //    fun isUserLoggedIn() = userDataRepository != null
     fun isUserLoggedIn() = userComponent != null

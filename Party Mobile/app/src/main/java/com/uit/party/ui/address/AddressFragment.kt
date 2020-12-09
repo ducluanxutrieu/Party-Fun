@@ -30,19 +30,19 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_maps_address, container, false)
         return mBinding.root
     }
 
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(
-                activity!!,
+                requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 MY_PERMISSIONS_REQUEST_LOCATION
             )
@@ -63,7 +63,7 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
                     if (ContextCompat.checkSelfPermission(
-                            activity!!,
+                            requireActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
@@ -97,12 +97,13 @@ class AddressFragment : Fragment(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(LatLng(10.8812958, 106.8078998))
                     .title("Party Booking")
-                    .icon(bitmapDescriptorFromVector(context!!, R.drawable.ic_location))
+                    .icon(bitmapDescriptorFromVector(requireContext()))
             )
         }
     }
 
-    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
+    private fun bitmapDescriptorFromVector(context: Context): BitmapDescriptor {
+        val vectorResId = R.drawable.ic_location
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
         vectorDrawable!!.setBounds(
             0,

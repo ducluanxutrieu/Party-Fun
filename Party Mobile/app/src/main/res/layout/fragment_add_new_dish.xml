@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/dish_title"
-                    android:text="@{viewModel.mTitle}" />
+                    android:text="@={viewModel.mTitle}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -48,7 +48,7 @@
                     android:layout_height="@dimen/_150sdp"
                     android:gravity="top|start"
                     android:hint="@string/dish_description"
-                    android:text="@{viewModel.mDescription}" />
+                    android:text="@={viewModel.mDescription}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -111,9 +111,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:onClick="@{(view) -> viewModel.onAddImageDescription(view)}"
                 android:orientation="horizontal"
-                android:weightSum="4"
-                android:visibility="@{viewModel.mShowUploadImageDish}">
+                android:visibility="@{viewModel.mShowUploadImageDish}"
+                android:weightSum="4">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/btn_add_more_image"
@@ -122,7 +123,6 @@
                     android:layout_margin="@dimen/_3sdp"
                     android:layout_weight="1"
                     android:background="@color/background_color_image"
-                    android:onClick="@{(view) -> viewModel.onAddImageDescription(view)}"
                     android:src="@drawable/plus" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -132,7 +132,6 @@
                     android:layout_margin="@dimen/_3sdp"
                     android:layout_weight="1"
                     android:background="@color/background_color_image"
-                    android:onClick="@{(view) -> viewModel.onAddImageDescription(view)}"
                     android:src="@drawable/plus" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -142,7 +141,6 @@
                     android:layout_margin="@dimen/_3sdp"
                     android:layout_weight="1"
                     android:background="@color/background_color_image"
-                    android:onClick="@{(view) -> viewModel.onAddImageDescription(view)}"
                     android:src="@drawable/plus" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -152,7 +150,6 @@
                     android:layout_margin="@dimen/_3sdp"
                     android:layout_weight="1"
                     android:background="@color/background_color_image"
-                    android:onClick="@{(view) -> viewModel.onAddImageDescription(view)}"
                     android:src="@drawable/plus" />
             </LinearLayout>
 
@@ -167,11 +164,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/_10sdp"
                     android:fontFamily="@font/museo_sans_cyrl"
                     android:text="@string/price"
-                    android:textSize="@dimen/_12ssp"
-                    android:layout_margin="@dimen/_10sdp"
-                    />
+                    android:textSize="@dimen/_12ssp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -189,7 +185,7 @@
                         android:hint="@string/_0"
                         android:inputType="phone"
                         android:singleLine="true"
-                        android:text="@{viewModel.mPrice}" />
+                        android:text="@={viewModel.mPrice}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -201,11 +197,12 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_send_dish"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_margin="@dimen/_10sdp"
                 android:enabled="@{viewModel.mEnableSendButton}"
-                android:onClick="@{(view) -> viewModel.onSendAddDishClicked(view)}"
+                android:onClick="@{() -> viewModel.onSendAddDishClicked()}"
                 android:text="@{viewModel.mButtonField}"
                 app:cornerRadius="@dimen/corner_radius" />
         </LinearLayout>

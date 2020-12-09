@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.uit.party.data.CusResult
 import com.uit.party.data.cart.CartRepository
-import com.uit.party.data.home.HomeRepository
+import com.uit.party.data.menu.MenuRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MenuViewModel @Inject constructor(
-    private val repository: HomeRepository,
+    private val repository: MenuRepository,
     private val cartRepository: CartRepository,
     private val userManager: UserManager
 ) : ViewModel() {

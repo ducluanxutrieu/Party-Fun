@@ -21,7 +21,8 @@ import com.uit.party.model.CartModel
 import com.uit.party.model.ListDishes
 import com.uit.party.model.RequestOrderPartyModel
 import com.uit.party.util.Constants.Companion.coroutineExceptionHandler
-import com.uit.party.util.TimeFormatUtil
+import com.uit.party.util.TimeFormatUtil.formatTimeToClient
+import com.uit.party.util.TimeFormatUtil.formatTimeToServer
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +56,7 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
     init {
         val time = Calendar.getInstance()
         time.add(Calendar.DATE, 1)
-        val timeStart = TimeFormatUtil.formatTimeToClient(time)
+        val timeStart = time.formatTimeToClient()
         mDatePartyField.set(timeStart)
     }
 
@@ -87,7 +88,7 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
     }
 
     private fun updateDatePartyInView() {
-        val timeStart = TimeFormatUtil.formatTimeToClient(calDatePartyPicker)
+        val timeStart = calDatePartyPicker.formatTimeToClient()
         mDatePartyField.set(timeStart)
     }
 
@@ -148,7 +149,7 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
                 )
         }
 
-        val dateParty = TimeFormatUtil.formatTimeToServer(calDatePartyPicker)
+        val dateParty = calDatePartyPicker.formatTimeToServer()
         val discountCode = mDishCountCodeField.get()
 
         return RequestOrderPartyModel(

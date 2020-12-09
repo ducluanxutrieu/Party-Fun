@@ -48,7 +48,7 @@ class ResetPasswordFragment : Fragment() {
         binding.etUsername.doOnTextChanged { text, _, _, _ ->
              val result = text.usernameErrorMes()
             viewModel.errorUsername.set(result)
-            binding.btGo.isEnabled = result.isNotEmpty()
+            binding.btGo.isEnabled = result.isEmpty()
         }
 
         binding.btGo.setOnClickListener {

@@ -205,7 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:enabled="@{viewModel.btnUpdateEnabled}"
-            android:onClick="@{(view) -> viewModel.onUpdateClicked(view)}"
+            android:onClick="@{() -> viewModel.onUpdateClicked()}"
             android:text="@string/update"
             app:cornerRadius="@dimen/corner_radius" />
     </LinearLayout>
