@@ -8,8 +8,9 @@ import androidx.paging.cachedIn
 import com.uit.party.data.history_order.CartItem
 import com.uit.party.data.history_order.HistoryOrderRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class HistoryBookingViewModel(private val repository: HistoryOrderRepository) : ViewModel(){
+class HistoryBookingViewModel @Inject constructor (private val repository: HistoryOrderRepository) : ViewModel(){
     val mShowLoading = ObservableBoolean(false)
 
     fun getHistoryOrdered(): Flow<PagingData<CartItem>> {

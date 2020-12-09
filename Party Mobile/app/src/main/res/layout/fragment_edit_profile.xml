@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.uit.party.ui.profile.edit_profile.EditProfileFragmentViewModel" />
+            type="com.uit.party.ui.profile.edit_profile.EditProfileViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

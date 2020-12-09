@@ -1,6 +1,7 @@
 package com.uit.party.ui.main.detail_dish
 
 import android.animation.Animator
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -22,6 +23,7 @@ import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentDetailDishBinding
 import com.uit.party.model.Account
 import com.uit.party.model.UserRole
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
 import com.uit.party.util.GlobalApplication
 import com.uit.party.util.SharedPrefs
@@ -30,12 +32,20 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class DetailDishFragment : Fragment() {
-    private lateinit var viewModel: DetailDishViewModel
+
+    @Inject
+    lateinit var viewModel: DetailDishViewModel
     private lateinit var binding: FragmentDetailDishBinding
     private val mArgs: DetailDishFragmentArgs by navArgs()
     private val adapter = DishRatingAdapter()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).menuComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +64,6 @@ class DetailDishFragment : Fragment() {
             false
         )
 
-        val database = getDatabase(requireContext())
-        viewModel = ViewModelProvider(this, DishDetailViewModelFactory(database)).get(DetailDishViewModel::class.java)
         binding.viewModel = viewModel
 
         setupToolbar()

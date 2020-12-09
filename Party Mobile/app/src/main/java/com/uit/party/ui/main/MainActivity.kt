@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.uit.party.R
 import com.uit.party.databinding.ActivityMainBinding
 import com.uit.party.databinding.NavHeaderMainBinding
+import com.uit.party.di.OrderComponent
 import com.uit.party.model.Account
 import com.uit.party.ui.profile.ProfileComponent
 import com.uit.party.util.Constants.Companion.USER_INFO_KEY
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(){
 
     lateinit var menuComponent: MenuComponent
     lateinit var profileComponent: ProfileComponent
+    lateinit var orderComponent: OrderComponent
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity(){
         menuComponent.inject(this)
         profileComponent = appComponent.profileComponent().create()
         profileComponent.inject(this)
+        orderComponent = appComponent.orderComponent().create()
+        orderComponent.inject(this)
 
         super.onCreate(savedInstanceState)
 

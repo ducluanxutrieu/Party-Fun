@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.book_party
 
+import android.content.Context
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
@@ -8,22 +9,30 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.uit.party.R
-import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentBookPartyBinding
 import com.uit.party.model.CartModel
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.getNumber
+import javax.inject.Inject
 
 
 class BookPartyFragment : Fragment(){
     private val myArgs : BookPartyFragmentArgs by navArgs()
-    private lateinit var mViewModel: BookPartyViewModel
+
+    @Inject
+    lateinit var mViewModel: BookPartyViewModel
     private lateinit var binding: FragmentBookPartyBinding
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).orderComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,10 +40,6 @@ class BookPartyFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_book_party, container, false)
-        val database = getDatabase(requireContext())
-        mViewModel = ViewModelProvider(this, BookPartyViewModelFactory(database)).get(
-            BookPartyViewModel::class.java
-        )
         binding.viewModel = mViewModel
         return binding.root
     }
@@ -71,9 +76,15 @@ class BookPartyFragment : Fragment(){
     }
 
     private fun listenLiveData(){
-        mViewModel.toastMessage.observe(viewLifecycleOwner, {
-            if (it.isNotEmpty())
-                UiUtil.showToast(it)
+        mViewModel.messageLive.observe(viewLifecycleOwner, {
+            UiUtil.showToast(it.second)
+            if (it.first != null) {
+                val action =
+                    BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(
+                        it.first
+                    )
+                this.findNavController().navigate(action)
+            }
         })
     }
 }

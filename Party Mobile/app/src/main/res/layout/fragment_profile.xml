@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.uit.party.ui.profile.profile_fragment.ProfileFragmentViewModel" />
+            type="com.uit.party.ui.profile.profile_fragment.ProfileViewModel" />
     </data>
 
     <RelativeLayout
@@ -40,7 +40,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_account_circle_24dp"
-                    app:imageUrl="@{viewModel.mAvatar}"/>
+                    app:avatarUrl="@{viewModel.mAvatar}"/>
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout

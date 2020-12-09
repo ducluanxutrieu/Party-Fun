@@ -204,7 +204,7 @@
                     android:layout_marginStart="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_30sdp"
-                    android:onClick="@{(view) -> viewModel.onOrderNowClicked(view)}"
+                    android:onClick="@{() -> viewModel.onOrderNowClicked()}"
                     android:stateListAnimator="@drawable/state_list_animator_button"
                     android:text="@string/order_now"
                     app:cornerRadius="@dimen/corner_radius" />

@@ -7,5 +7,5 @@ import com.uit.party.ui.signin.SignInComponent
 import com.uit.party.user.UserComponent
 import dagger.Module
 
-@Module(subcomponents = [SignInComponent::class, UserComponent::class, MenuComponent::class, ProfileComponent::class])
+@Module(subcomponents = [SignInComponent::class, UserComponent::class, MenuComponent::class, ProfileComponent::class, OrderComponent::class])
 class AppSubcomponents

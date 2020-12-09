@@ -14,6 +14,7 @@ import com.uit.party.data.menu.MenuRepository
 import com.uit.party.model.CartModel
 import com.uit.party.model.DishModel
 import com.uit.party.model.MenuModel
+import com.uit.party.user.UserDataRepository
 import com.uit.party.user.UserManager
 import com.uit.party.util.Constants
 import com.uit.party.util.UiUtil
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class MenuViewModel @Inject constructor(
     private val repository: MenuRepository,
     private val cartRepository: CartRepository,
+    private val userDataRepository: UserDataRepository,
     private val userManager: UserManager
 ) : ViewModel() {
     val mShowFab = ObservableInt(View.GONE)
@@ -53,7 +55,7 @@ class MenuViewModel @Inject constructor(
 
         viewModelScope.launch(Constants.coroutineIO) {
             try {
-                val result = userManager.logout()
+                val result = userDataRepository.logout()
                 if (result is CusResult.Success) {
                     _logoutState.postValue("")
                 } else {

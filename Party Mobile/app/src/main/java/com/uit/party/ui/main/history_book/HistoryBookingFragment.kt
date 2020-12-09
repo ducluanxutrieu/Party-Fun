@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.history_book
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,24 +15,30 @@ import androidx.paging.LoadState
 import com.uit.party.R
 import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentHistoryBookingBinding
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.ui.main.detail_dish.ReposLoadStateAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class HistoryBookingFragment : Fragment(){
     private lateinit var mBinding: FragmentHistoryBookingBinding
-    private lateinit var mViewModel: HistoryBookingViewModel
+
+    @Inject
+    lateinit var mViewModel: HistoryBookingViewModel
     private val mAdapter = UserCardAdapter()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).orderComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_history_booking, container, false)
-
-        val database = getDatabase(requireContext())
-        mViewModel = ViewModelProvider(this, HistoryBookingViewModelFactory(database)).get(HistoryBookingViewModel::class.java)
 
         mBinding.viewModel = mViewModel
         return mBinding.root

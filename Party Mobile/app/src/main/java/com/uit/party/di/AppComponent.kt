@@ -25,6 +25,7 @@ interface AppComponent {
     fun signInComponent(): SignInComponent.Factory
     fun menuComponent(): MenuComponent.Factory
     fun profileComponent(): ProfileComponent.Factory
+    fun orderComponent(): OrderComponent.Factory
 
 //    fun inject(activity: MainActivity)
 //    fun inject(activity: SettingsActivity)

@@ -1,5 +1,6 @@
 package com.uit.party.ui.main.cart_detail
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,36 +12,38 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.uit.party.R
-import com.uit.party.data.getDatabase
 import com.uit.party.databinding.FragmentCartDetailBinding
 import com.uit.party.model.CartModel
+import com.uit.party.ui.main.MainActivity
+import javax.inject.Inject
 
 
 class CartDetailFragment : Fragment(), OnCartDetailListener {
     private lateinit var mBinding: FragmentCartDetailBinding
-    private lateinit var mViewModel: CartDetailViewModel
+
+    @Inject
+    lateinit var mViewModel: CartDetailViewModel
+
     val mCartAdapter = CartDetailAdapter(this)
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).orderComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_cart_detail, container, false)
-        val database = getDatabase(requireContext())
-        mViewModel = ViewModelProvider(
-            this,
-            CartDetailViewModelFactory(database)
-        ).get(CartDetailViewModel::class.java)
         listenLiveData()
         return mBinding.root
     }

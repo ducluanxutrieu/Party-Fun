@@ -10,21 +10,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.uit.party.R
-import com.uit.party.data.getDatabase
 import com.uit.party.databinding.PaymentPartyFragmentBinding
 import com.uit.party.model.Dishes
+import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.TimeFormatUtil.formatTime12hToClient
 import com.uit.party.util.UiUtil.toVNCurrency
+import javax.inject.Inject
 
 class PaymentPartyFragment : Fragment() {
     private lateinit var mBinding: PaymentPartyFragmentBinding
-    private lateinit var viewModel: PaymentPartyViewModel
+
+    @Inject
+    lateinit var viewModel: PaymentPartyViewModel
     private val myArgs: PaymentPartyFragmentArgs by navArgs()
     private val mAdapter = ListDishesAdapter()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity() as MainActivity).orderComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,10 +39,6 @@ class PaymentPartyFragment : Fragment() {
     ): View {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.payment_party_fragment, container, false)
-        val database = getDatabase(requireContext())
-        viewModel = ViewModelProvider(this, PaymentPartyViewModelFactory(database)).get(
-            PaymentPartyViewModel::class.java
-        )
         mBinding.viewModel = viewModel
         return mBinding.root
     }

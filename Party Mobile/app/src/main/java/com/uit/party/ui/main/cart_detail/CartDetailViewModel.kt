@@ -10,8 +10,9 @@ import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.CartModel
 import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CartDetailViewModel(private val repository: CartRepository) : ViewModel(){
+class CartDetailViewModel @Inject constructor (private val repository: CartRepository) : ViewModel(){
     val mShowCart = ObservableBoolean(false)
 
     val listCart = repository.listCart

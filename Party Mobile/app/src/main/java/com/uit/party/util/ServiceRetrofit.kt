@@ -5,7 +5,6 @@ import com.uit.party.model.*
 import com.uit.party.ui.profile.edit_profile.RequestUpdateProfile
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -48,10 +47,10 @@ interface ServiceRetrofit {
         @Field("newpassword") passwordchange: String
     ): BaseResponse
 
-    @GET("user/profile")
-    fun getProfile(
+    @GET("user/get_me")
+    suspend fun getProfile(
         @Header("authorization") token: String
-    ): Call<AccountResponse>
+    ): AccountResponse
 
     @GET("user/get_history_cart")
     suspend fun getHistoryBooking(

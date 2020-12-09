@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class EditProfileFragmentViewModel @Inject constructor(private val userRepository: UserDataRepository, userManager: UserManager) : ViewModel() {
+class EditProfileViewModel @Inject constructor(private val userRepository: UserDataRepository, userManager: UserManager) : ViewModel() {
     val account = userManager.userAccount
     private var fullNameValid = false
     private var phoneNumberValid = false

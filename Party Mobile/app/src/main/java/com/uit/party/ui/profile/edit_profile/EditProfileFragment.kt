@@ -21,7 +21,7 @@ class EditProfileFragment : Fragment(){
     private lateinit var binding: FragmentEditProfileBinding
 
     @Inject
-    lateinit var mViewModel: EditProfileFragmentViewModel
+    lateinit var mViewModel: EditProfileViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

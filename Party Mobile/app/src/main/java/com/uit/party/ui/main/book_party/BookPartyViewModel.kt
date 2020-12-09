@@ -3,9 +3,6 @@ package com.uit.party.ui.main.book_party
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -13,24 +10,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.findNavController
 import com.uit.party.R
 import com.uit.party.data.CusResult
 import com.uit.party.data.cart.CartRepository
+import com.uit.party.model.BillModel
 import com.uit.party.model.CartModel
 import com.uit.party.model.ListDishes
 import com.uit.party.model.RequestOrderPartyModel
-import com.uit.party.util.Constants.Companion.coroutineExceptionHandler
+import com.uit.party.util.Constants
 import com.uit.party.util.TimeFormatUtil.formatTimeToClient
 import com.uit.party.util.TimeFormatUtil.formatTimeToServer
 import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
 
-class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
+class BookPartyViewModel @Inject constructor (private val repository: CartRepository) : ViewModel() {
     val mTotalPrice = ObservableField("")
     val mDatePartyField = ObservableField("")
     val mDishCountCodeField = ObservableField("")
@@ -41,8 +38,8 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
     private val calDateNow = Calendar.getInstance()
     var listCartStorage = emptyList<CartModel>()
 
-    private val toastMessageLive = MutableLiveData("")
-    val toastMessage: LiveData<String> = toastMessageLive
+    private val _messageLive = MutableLiveData<Pair<BillModel?, String?>>()
+    val messageLive: LiveData<Pair<BillModel?, String?>> = _messageLive
 
 
     private val datePartySetListener =
@@ -107,33 +104,25 @@ class BookPartyViewModel(private val repository: CartRepository) : ViewModel() {
         mTotalPrice.set(totalPrice.toString().toVNCurrency())
     }
 
-    fun onOrderNowClicked(view: View) {
+    fun onOrderNowClicked() {
         mShowLoading.set(true)
         val bookModel = prepareDataForOrder()
 
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+        viewModelScope.launch(Constants.coroutineIO) {
             try {
                 val result = repository.orderParty(bookModel)
                 mShowLoading.set(false)
                 if (result is CusResult.Success) {
                     repository.deleteAllCart()
 
-                    Handler(Looper.getMainLooper()).post {
-                        Log.d("UI thread", "I am the UI thread")
-                        val action =
-                            BookPartyFragmentDirections.actionBookingPartyFragmentToPaymentFragment(
-                                result.data.billModel
-                            )
-                        view.findNavController().navigate(action)
-                    }
-
-
+                    _messageLive.postValue(Pair(result.data.billModel, result.data.message))
                 } else {
-                    toastMessageLive.postValue(result.toStrings())
+                    _messageLive.postValue(Pair(null, (result as CusResult.Error).exception.message))
                 }
             } catch (cause: Throwable) {
+                _messageLive.postValue(Pair(null, cause.message))
+            }finally {
                 mShowLoading.set(false)
-                toastMessageLive.postValue(cause.message.toString())
             }
         }
     }

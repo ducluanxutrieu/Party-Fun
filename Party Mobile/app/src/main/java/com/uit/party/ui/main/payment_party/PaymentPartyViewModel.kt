@@ -10,8 +10,9 @@ import com.uit.party.data.cart.CartRepository
 import com.uit.party.model.BillModel
 import com.uit.party.util.UiUtil
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PaymentPartyViewModel(private val cartRepository: CartRepository) : ViewModel() {
+class PaymentPartyViewModel @Inject constructor (private val cartRepository: CartRepository) : ViewModel() {
     val mShowLoading = ObservableBoolean(false)
     lateinit var mBillModel: BillModel
     private val mURLPaymentLive = MutableLiveData<String>()

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.uit.party.R
-import com.uit.party.databinding.FragmentProfileBindingImpl
+import com.uit.party.databinding.FragmentProfileBinding
 import com.uit.party.ui.main.MainActivity
 import com.uit.party.util.UiUtil
 import com.vansuita.pickimage.bundle.PickSetup
@@ -18,10 +18,10 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class ProfileFragment : Fragment(){
-    private lateinit var binding : FragmentProfileBindingImpl
+    private lateinit var binding : FragmentProfileBinding
 
     @Inject
-    lateinit var mViewModel: ProfileFragmentViewModel
+    lateinit var mViewModel: ProfileViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

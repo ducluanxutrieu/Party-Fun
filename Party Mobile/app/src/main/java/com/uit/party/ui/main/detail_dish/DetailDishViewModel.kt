@@ -21,8 +21,9 @@ import com.uit.party.util.UiUtil
 import com.uit.party.util.UiUtil.toVNCurrency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailDishViewModel (
+class DetailDishViewModel @Inject constructor (
     private val menuRepo: MenuRepository,
     private val rateRepo: RateRepository,
     private val cartRepo: CartRepository

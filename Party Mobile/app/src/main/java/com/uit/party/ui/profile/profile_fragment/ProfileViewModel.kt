@@ -10,13 +10,12 @@ import com.uit.party.data.CusResult
 import com.uit.party.model.UserGender
 import com.uit.party.user.UserDataRepository
 import com.uit.party.user.UserManager
-import com.uit.party.util.*
+import com.uit.party.util.Constants
 import com.uit.party.util.TimeFormatUtil.formatDateToClient
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
-class ProfileFragmentViewModel @Inject constructor (userManager: UserManager, private val userRepository: UserDataRepository) : ViewModel(){
+class ProfileViewModel @Inject constructor (userManager: UserManager, private val userRepository: UserDataRepository) : ViewModel(){
     val mName = ObservableField("")
     val mUsername = ObservableField("")
     val mEmail = ObservableField("")

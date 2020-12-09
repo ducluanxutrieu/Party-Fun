@@ -13,14 +13,11 @@ import javax.inject.Singleton
 class UserManager @Inject constructor(
     private val storage: Storage,
     private val userComponentFactory: UserComponent.Factory,
-    private val signInRepository: SignInRepository,
-    private val userDataRepository: UserDataRepository
+    private val signInRepository: SignInRepository
 ) {
 
     var userComponent: UserComponent? = null
         private set
-
-//    var userDataRepository: UserDataRepository? = null
 
     val username: String
         get() = storage.getData(REGISTERED_USER, String::class.java) ?: ""
@@ -35,8 +32,6 @@ class UserManager @Inject constructor(
 
     //    fun isUserLoggedIn() = userDataRepository != null
     fun isUserLoggedIn() = userComponent != null
-
-    fun isUserRegistered() = storage.getData(REGISTERED_USER, String::class.java)?.isNotEmpty()
 
     suspend fun registerUser(model: RegisterModel): CusResult<AccountResponse> {
         return signInRepository.register(model)
@@ -60,21 +55,10 @@ class UserManager @Inject constructor(
     }
 
     private fun userJustLoggedIn() {
-//        userDataRepository = UserDataRepository(this)
         userComponent = userComponentFactory.create()
     }
 
     suspend fun resetPassword(username: String): CusResult<BaseResponse> {
         return signInRepository.resetPassword(username)
-    }
-
-    suspend fun logout(): CusResult<BaseResponse> {
-        val result = userDataRepository.logout()
-
-        if (result is CusResult.Success) {
-            userDataRepository.clearData()
-        }
-
-        return result
     }
 }

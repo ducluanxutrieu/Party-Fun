@@ -27,9 +27,13 @@ class UserDataRepository @Inject constructor(
 
 
     suspend fun logout(): CusResult<BaseResponse> {
-        return handleRequest {
+        val result = handleRequest {
             networkService.logout(sharedPrefs.token)
         }
+        if (result is CusResult.Success){
+            clearData()
+        }
+        return result
     }
 
     suspend fun changeAvatar(path: String): CusResult<BaseResponse> {
