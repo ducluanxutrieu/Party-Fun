@@ -5,6 +5,7 @@ import com.uit.party.model.*
 import com.uit.party.ui.signin.SignInRepository
 import com.uit.party.util.Constants
 import com.uit.party.util.Constants.Companion.REGISTERED_USER
+import com.uit.party.util.Constants.Companion.TOKEN_ACCESS_KEY
 import com.uit.party.util.Storage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,6 +33,15 @@ class UserManager @Inject constructor(
 
     //    fun isUserLoggedIn() = userDataRepository != null
     fun isUserLoggedIn() = userComponent != null
+
+    fun checkUserLoggedIn(): Boolean{
+        val token = storage.getData(TOKEN_ACCESS_KEY, String::class.java)
+        if (token != null && userAccount != null) {
+            userJustLoggedIn()
+            return true
+        }
+        return false
+    }
 
     suspend fun registerUser(model: RegisterModel): CusResult<AccountResponse> {
         return signInRepository.register(model)
