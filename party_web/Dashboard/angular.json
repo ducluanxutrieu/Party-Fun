@@ -81,19 +81,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "admin-dashboard:build",
+            "buildTarget": "admin-dashboard:build",
             "port": 5000
           },
           "configurations": {
             "production": {
-              "browserTarget": "admin-dashboard:build:production"
+              "buildTarget": "admin-dashboard:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "admin-dashboard:build"
+            "buildTarget": "admin-dashboard:build"
           }
         },
         "test": {
@@ -141,5 +141,8 @@
       }
     }
   },
-  "defaultProject": "admin-dashboard"
+  "defaultProject": "admin-dashboard",
+  "cli": {
+    "analytics": "207abef3-8d25-4513-be18-eb72292df03f"
+  }
 }
