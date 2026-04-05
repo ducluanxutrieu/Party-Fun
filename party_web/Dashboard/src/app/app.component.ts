@@ -1,20 +1,18 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-//services
+// services
 import { AuthenticationService } from './_services/authentication.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(
     private router: Router,
-    public authenticationService: AuthenticationService,
-    private http: HttpClient
+    public authenticationService: AuthenticationService
   ) { }
 
   ngOnInit() { }
@@ -33,7 +31,7 @@ export class AppComponent {
       $('.content-inner').toggleClass('active');
       $(document).trigger('sidebarChanged');
 
-      if ($(window).outerWidth() > 1183) {
+      if (($(window).outerWidth() ?? 0) > 1183) {
         if ($('#toggle-btn').hasClass('active')) {
           $('.navbar-header .brand-small').hide();
           $('.navbar-header .brand-big').show();
@@ -43,7 +41,7 @@ export class AppComponent {
         }
       }
 
-      if ($(window).outerWidth() < 1183) {
+      if (($(window).outerWidth() ?? 0) < 1183) {
         $('.navbar-header .brand-small').show();
       }
     });

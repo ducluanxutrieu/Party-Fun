@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Product } from '../../../_models/product.model';
 import { Select2OptionData } from 'ng-select2';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
   styleUrls: ['./edit-product.component.css']
@@ -119,9 +119,9 @@ export class EditProductComponent implements OnInit {
     discount: number;
   }) {
     // this.product_categories.push(data.categories); // Push category vào mảng
-    let body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.categories)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
+    const body = `_id=${this.product_id}&name=${data.name}&description=${data.description}&price=${data.price}&discount=${data.discount}&currency=vnd&categories=${JSON.stringify(data.categories)}&image=${JSON.stringify(this.product_imgs_url)}&feature_image=${this.product_imgs_url[0]}`;
     this.productService.update_dish(body).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Edit product success");
         // window.location.reload();
       },

@@ -5,7 +5,7 @@ import { UserService } from '../../_services/user.service';
 // Models
 import { User } from '../../_models/user.model';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']

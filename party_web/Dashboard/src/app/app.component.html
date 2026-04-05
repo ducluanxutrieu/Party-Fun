@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
-   <!-- Google fonts - Poppins -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
-  <link rel="stylesheet" href="../assets/css/fontastic.css">
-</head>
-<body>
-  <div class="page">
+<div class="page">
     <!-- Main Navbar-->
     <header class="header">
       <nav class="navbar" *ngIf="authenticationService.is_loggedIn()">
@@ -42,6 +33,3 @@
       <router-outlet (activate)="sidebar_functionality()"></router-outlet>
     </ng-container>
   </div>
-
-</body>
-</html>

@@ -10,7 +10,7 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.pb-pagination /deep/ .ngx-pagination .current {
+.pb-pagination ::ng-deep .ngx-pagination .current {
     background-color: #796AEE;
     transition: 0.2s;
 }

@@ -10,14 +10,14 @@ import { PaymentService } from '../../../_services/payment.service';
 import { ProductService } from '../../../_services/product.service';
 
 
-declare var $: any;
-@Component({
+declare let $: any;
+@Component({ standalone: false,
   selector: 'app-all-bills',
   templateUrl: './all-bills.component.html',
   styleUrls: ['./all-bills.component.css']
 })
 export class AllBillsComponent implements OnInit {
-  @Input('data') all_bills: Bill[] = [];
+  @Input() all_bills: Bill[] = [];
   page: number = 1;
   total_pages: number;
 
@@ -96,7 +96,7 @@ export class AllBillsComponent implements OnInit {
   // Xác nhận đơn hàng
   confirm_bill(note: string) {
     this.paymentService.confirm_bill(this.current_bill._id, note).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Confirm bill success!");
         this.onload();
       },
@@ -110,7 +110,7 @@ export class AllBillsComponent implements OnInit {
   // Hủy đơn hàng
   cancel_bill(note: string) {
     this.paymentService.cancel_bill(this.current_bill._id, note).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Cancel bill success!");
         this.onload();
       },

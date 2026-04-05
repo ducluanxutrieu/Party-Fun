@@ -5,9 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 // Models
 import { Product } from '../../../_models/product.model';
 // jquery;
-declare var $: any;
+declare let $: any;
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css']
@@ -44,10 +44,10 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
 
   // Generate datatable 
   datatable_generate() {
-    var productTable = $('#productTable').DataTable();
-    var productTable_info = productTable.page.info();
+    const productTable = $('#productTable').DataTable();
+    const productTable_info = productTable.page.info();
 
-    if (productTable_info.pages == 1) {
+    if (productTable_info.pages === 1) {
       productTable.destroy();
       $('#productTable').DataTable({
         "paging": false
@@ -69,10 +69,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy, OnInit {
   // Lấy danh sách món ăn
   get_dishList() {
     this.productService.get_dishList().subscribe(
-      res => {
-        sessionStorage.setItem('response', JSON.stringify(res));
-        localStorage.setItem('dish-list', JSON.stringify(res.data));
-        this.product_list = res.data as Product[];
+      _res => {
       },
       err => {
         console.log("Error: " + err.error.message);

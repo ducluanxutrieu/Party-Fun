@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 /// Models
 import { Post } from '../../../_models/post.model';
 import { api } from '../../../_api/apiUrl';
-@Component({
+@Component({ standalone: false,
   selector: 'app-posts-edit',
   templateUrl: './posts-edit.component.html',
   styleUrls: ['./posts-edit.component.css']
@@ -79,8 +79,7 @@ export class PostsEditComponent implements OnInit {
         res => {
           this.post.feature_image = res.data;
         },
-        err => {
-          this.toastr.error("Error: Upload image error!");
+        _err => {
           return;
         },
         () => {
@@ -98,9 +97,9 @@ export class PostsEditComponent implements OnInit {
     title: string
   }
   ) {
-    let body = `_id=${this.post_id}&title=${content.title}&feature_image=${this.post.feature_image}&content=${encodeURIComponent(this.post.content)}`;
+    const body = `_id=${this.post_id}&title=${content.title}&feature_image=${this.post.feature_image}&content=${encodeURIComponent(this.post.content)}`;
     this.postService.edit_post(body).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Edit post success!");
         // window.location.reload();
       },

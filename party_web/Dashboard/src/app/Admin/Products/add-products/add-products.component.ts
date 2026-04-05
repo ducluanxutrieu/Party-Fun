@@ -6,13 +6,13 @@ import { ProductService } from '../../../_services/product.service';
 import { Select2OptionData } from 'ng-select2';
 import { ToastrService } from 'ngx-toastr';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-add-products',
   templateUrl: './add-products.component.html',
   styleUrls: ['./add-products.component.css']
 })
 export class AddProductsComponent implements OnInit {
-  @ViewChild('adddishForm', null) product_form: NgForm;
+  @ViewChild('adddishForm') product_form!: NgForm;
 
   product_imgs_files = [];
   product_imgs_urls: string[] = []; // Mảng chứa url hình server trả về sau khi upload ảnh
@@ -76,7 +76,7 @@ export class AddProductsComponent implements OnInit {
       },
       () => {
         // this.product_categories.push(data.type);
-        let body = `name=${data.name}&description=${data.description}&price=${data.price}&categories=${JSON.stringify(data.categories)}&discount=${data.discount}&image=${JSON.stringify(this.product_imgs_urls)}&feature_image=${this.product_imgs_urls[0]}&currency=vnd`;
+        const body = `name=${data.name}&description=${data.description}&price=${data.price}&categories=${JSON.stringify(data.categories)}&discount=${data.discount}&image=${JSON.stringify(this.product_imgs_urls)}&feature_image=${this.product_imgs_urls[0]}&currency=vnd`;
         this.productService.add_dish(body).subscribe(
           res => {
             sessionStorage.setItem('response', JSON.stringify(res));

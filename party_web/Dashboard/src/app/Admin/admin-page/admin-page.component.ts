@@ -7,9 +7,9 @@ import { StatisticalService } from '../../_services/statistical.service';
 // Models
 import { MoneyStatistic, DishStatistic, CustomerStatistic, StaffStatistic } from '../../_models/statistic.model';
 import { NewUpdateModel } from '../../_models/statistic.model';
-declare var $: any;
+declare let $: any;
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.css']
@@ -52,14 +52,9 @@ export class AdminPageComponent implements OnInit {
         {
           ticks: {
             beginAtZero: true,
-            userCallback: function (value, index, values) {
-              // Convert the number to a string and splite the string every 3 charaters from the end
-              value = value.toString();
-              value = value.split(/(?=(?:...)*$)/);
-
-              // Convert the array to a string and format the output
-              value = value.join('.');
-              return value;
+            userCallback: (value: number) => { // Convert the number to a string and splite the string every 3 charaters from the end
+              const str = value.toString().split(/(?=(?:...)*$)/);
+              return str.join('.');
             }
           }
         }
@@ -92,14 +87,9 @@ export class AdminPageComponent implements OnInit {
           id: 'y-axis-1',
           ticks: {
             beginAtZero: true,
-            userCallback: function (value, index, values) {
-              // Convert the number to a string and splite the string every 3 charaters from the end
-              value = value.toString();
-              value = value.split(/(?=(?:...)*$)/);
-
-              // Convert the array to a string and format the output
-              value = value.join('.');
-              return value;
+            userCallback: (value: number) => {
+              const str = value.toString().split(/(?=(?:...)*$)/);
+              return str.join('.');
             }
           },
           position: 'right',
@@ -175,7 +165,7 @@ export class AdminPageComponent implements OnInit {
 
   // Tạo biểu đồ từ Thống kê tổng hóa đơn theo 7 ngày gần nhất
   create_moneyChart(moneyData: MoneyStatistic[]) {
-    var money_data = [];
+    const money_data = [];
     for (let i = 0; i < moneyData.length; i++) {
       money_data.push(moneyData[i].total);
       this.moneyChartLabels.push(formatDate(moneyData[i]._id, 'dd-MM-yyyy', 'en-US'));
@@ -192,8 +182,8 @@ export class AdminPageComponent implements OnInit {
   create_productChart(productData: DishStatistic[]) {
     if (productData) {
       this.productChartLabels = [];
-      var product_data1 = [];
-      var product_data2 = [];
+      const product_data1 = [];
+      const product_data2 = [];
       for (let i = 0; i < productData.length; i++) {
         product_data1.push(productData[i].count);
         product_data2.push(productData[i].total_plate);
@@ -220,8 +210,8 @@ export class AdminPageComponent implements OnInit {
   create_customerChart(customerData: CustomerStatistic[]) {
     if (customerData) {
       this.customerChartLabels = [];
-      let customer_bills_count: number[] = [];
-      let customer_totalmoney: number[] = [];
+      const customer_bills_count: number[] = [];
+      const customer_totalmoney: number[] = [];
       for (let i = 0; i < customerData.length; i++) {
         customer_bills_count.push(customerData[i].count_bill);  // Đẩy bill count vào 1 mảng
         customer_totalmoney.push(customerData[i].total_money);  // Đẩy total money vào 1 mảng
@@ -246,8 +236,8 @@ export class AdminPageComponent implements OnInit {
   create_staffChart(staffData: StaffStatistic[]) {
     if (staffData) {
       this.staffChartLabels = [];
-      let staff_bills_count: number[] = [];
-      let staff_totalmoney: number[] = [];
+      const staff_bills_count: number[] = [];
+      const staff_totalmoney: number[] = [];
       for (let i = 0; i < staffData.length; i++) {
         staff_bills_count.push(staffData[i].count_bill);
         staff_totalmoney.push(staffData[i].total_money);

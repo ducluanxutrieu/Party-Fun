@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit, Input } from '@angular/cor
 import { StaffService } from '../../../_services/staff.service';
 import { ActivatedRoute, Router } from '@angular/router';
 // declare jquery;
-declare var $: any;
+declare let $: any;
 
 interface Staff {
   _id: string;
@@ -11,13 +11,13 @@ interface Staff {
   avatar: string;
 }
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-employees-list',
   templateUrl: './employees-list.component.html',
   styleUrls: ['./employees-list.component.css']
 })
 export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit {
-  @Input('data') staffs_List: Staff[] = [];
+  @Input() staffs_List: Staff[] = [];
   page: number = 1;
   total_pages: number;
 
@@ -37,10 +37,10 @@ export class EmployeesListComponent implements AfterViewInit, OnDestroy, OnInit 
 
   //Generate datatable 
   datatable_generate() {
-    var employeTable = $('#employeTable').DataTable();
-    var employeTable_info = employeTable.page.info();
+    const employeTable = $('#employeTable').DataTable();
+    const employeTable_info = employeTable.page.info();
 
-    if (employeTable_info.pages == 1) {
+    if (employeTable_info.pages === 1) {
       employeTable.destroy();
       $('#employeTable').DataTable({
         "paging": false

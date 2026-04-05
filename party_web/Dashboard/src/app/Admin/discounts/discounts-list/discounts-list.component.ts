@@ -5,7 +5,7 @@ import { Discount } from '../../../_models/discount.model';
 import { PaymentService } from '../../../_services/payment.service';
 import { ToastrService } from 'ngx-toastr';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-discounts-list',
   templateUrl: './discounts-list.component.html',
   styleUrls: ['./discounts-list.component.css']
@@ -42,10 +42,10 @@ export class DiscountsListComponent implements OnInit {
 
   // Tạo datatable 
   datatable_generate() {
-    var discountTable = $('#discountTable').DataTable();
-    var discountTable_info = discountTable.page.info();
+    const discountTable = $('#discountTable').DataTable();
+    const discountTable_info = discountTable.page.info();
 
-    if (discountTable_info.pages == 1) {
+    if (discountTable_info.pages === 1) {
       discountTable.destroy();
       $('#discountTable').DataTable({
         "paging": false

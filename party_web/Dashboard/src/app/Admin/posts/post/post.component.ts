@@ -6,7 +6,7 @@ import { PostService } from '../../../_services/post.service';
 import { CommonService } from '../../../_services/common.service';
 import { ToastrService } from 'ngx-toastr';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
@@ -79,14 +79,14 @@ export class PostComponent implements OnInit {
       res => {
         post_feature_image_url = res.data;
       },
-      err => {
+      _err => {
         this.toastr.error("Error: Upload image error!");
         return;
       },
       () => {
-        let body = `title=${content.title}&feature_image=${post_feature_image_url}&content=${encodeURIComponent(this.post_content)}`;
+        const body = `title=${content.title}&feature_image=${post_feature_image_url}&content=${encodeURIComponent(this.post_content)}`;
         this.postService.add_post(body).subscribe(
-          res => {
+          _res => {
             this.toastr.success("Add post success!");
             // window.location.reload();
             this.onload();

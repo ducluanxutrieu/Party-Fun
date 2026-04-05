@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
+
 // Services
 import { StatisticalService } from '../../../_services/statistical.service';
 import { PaymentService } from '../../../_services/payment.service';
@@ -10,16 +11,17 @@ import { Bill, Bill_item } from '../../../_models/bill.model';
 import { Subject } from 'rxjs';
 
 // declare jquery;
-declare var $: any;
+declare let $: any;
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-recent-bills',
   templateUrl: './recent-bills.component.html',
   styleUrls: ['./recent-bills.component.css']
 })
 
 export class RecentBillsComponent implements OnInit {
-  dtOptions: DataTables.Settings = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dtOptions: any = {};
   recent_bills: Bill[] = [];
   bill_detail: Bill_item[] = [];
   current_bill: Bill;
@@ -83,7 +85,7 @@ export class RecentBillsComponent implements OnInit {
     this.paymentService.get_bills_list(page).subscribe(
       res => {
         this.recent_bills = res.data.value as Bill[];
-        this.dtTrigger.next();
+        this.dtTrigger.next(null);
       },
       err => {
         console.log("Error: " + err.error.text);
@@ -100,7 +102,7 @@ export class RecentBillsComponent implements OnInit {
   // Xác nhận đơn hàng
   confirm_bill(bill_id: string, note: string) {
     this.paymentService.confirm_bill(bill_id, note).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Confirm bill success!");
       },
       err => {
@@ -113,7 +115,7 @@ export class RecentBillsComponent implements OnInit {
   // Hủy đơn hàng
   cancel_bill(bill_id: string, note: string) {
     this.paymentService.cancel_bill(bill_id, note).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Cancel bill success!");
       },
       err => {

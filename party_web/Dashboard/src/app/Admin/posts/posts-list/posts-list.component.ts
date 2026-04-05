@@ -4,13 +4,13 @@ import { PostService } from '../../../_services/post.service';
 // Models 
 import { Post } from '../../../_models/post.model';
 import { ActivatedRoute, Router } from '@angular/router';
-@Component({
+@Component({ standalone: false,
   selector: 'app-posts-list',
   templateUrl: './posts-list.component.html',
   styleUrls: ['./posts-list.component.css']
 })
 export class PostsListComponent implements OnInit {
-  @Input('data') posts_list: Post[] = [];
+  @Input() posts_list: Post[] = [];
   page: number = 1;
 
   total_pages: number
@@ -58,13 +58,13 @@ export class PostsListComponent implements OnInit {
   }
 
   // Xóa bài viết 
-  post_delete(id: string) {
+  post_delete(_id: string) {
 
   }
 
   // Tạo datatable 
   datatable_generate() {
-    var postsTable = $('#postsTable').DataTable({
+    $('#postsTable').DataTable({
       "paging": false
     });
     // if (postsTable instanceof $.fn.dataTable.Api) {

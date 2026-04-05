@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { api } from '../../../_api/apiUrl';
 import { NgForm } from '@angular/forms';
-@Component({
+@Component({ standalone: false,
   selector: 'app-add-employee',
   templateUrl: './add-employee.component.html',
   styleUrls: ['./add-employee.component.css']
 })
 export class AddEmployeeComponent implements OnInit {
-  @ViewChild('userreg', null) thisForm: NgForm;
-  @ViewChild('addExisted', null) modalForm: NgForm;
+  @ViewChild('userreg') thisForm!: NgForm;
+  @ViewChild('addExisted') modalForm!: NgForm;
   existed_username: string;
 
   constructor(
@@ -26,20 +26,20 @@ export class AddEmployeeComponent implements OnInit {
     username: string;
     pwd: string;
   }) {
-    let body = `fullName=${data.name}&username=${data.username}&email=${data.email}&phoneNumber=${data.phone}&password=${data.pwd}`;
+    const body = `fullName=${data.name}&username=${data.username}&email=${data.email}&phoneNumber=${data.phone}&password=${data.pwd}`;
     console.log(body);
-    let headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded'
     })
-    this.http.post(api.signup, body, { headers: headers, observe: 'response' }).subscribe(
+    this.http.post(api.signup, body, { headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
-        let headers = new HttpHeaders({
+        const headers2 = new HttpHeaders({
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': localStorage.getItem('token')
+          Authorization: localStorage.getItem('token')
         })
-        let body = `userupgrade=${data.username}`
-        this.http.post(api.upgrade_role, body, { headers: headers, observe: 'response' }).subscribe(
+        const body2 = `userupgrade=${data.username}`
+        this.http.post(api.upgrade_role, body2, { headers: headers2, observe: 'response' }).subscribe(
           res_data => {
             sessionStorage.setItem('response_body2', JSON.stringify(res_data.body));
             alert("Add Employee Success!");
@@ -57,12 +57,12 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   AddExistedUser(data: { username: string }) {
-    let headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': localStorage.getItem('token')
+      Authorization: localStorage.getItem('token')
     })
-    let body = `userupgrade=${data.username}`;
-    this.http.post(api.upgrade_role, body, { headers: headers, observe: 'response' }).subscribe(
+    const body = `userupgrade=${data.username}`;
+    this.http.post(api.upgrade_role, body, { headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
         alert("Add Employee Success!");

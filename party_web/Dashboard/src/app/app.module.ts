@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataTablesModule } from 'angular-datatables';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ChartsModule } from 'ng2-charts';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import 'froala-editor/js/plugins.pkgd.min.js'; // Import toàn bộ Froala plugin (Có thể import riêng lẻ từng cái)
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { NgSelect2Module } from 'ng-select2'
@@ -76,7 +76,7 @@ import { DiscountsListComponent } from './Admin/discounts/discounts-list/discoun
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    ChartsModule,
+    BaseChartDirective,
     DataTablesModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
@@ -89,6 +89,7 @@ import { DiscountsListComponent } from './Admin/discounts/discounts-list/discoun
     NgxPaginationModule
   ],
   providers: [
+    provideCharts(withDefaultRegisterables()),
     AuthenticationService,
     AuthGuard,
     ProductService,

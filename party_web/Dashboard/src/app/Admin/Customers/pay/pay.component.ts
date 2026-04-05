@@ -6,7 +6,7 @@ import { PaymentService } from '../../../_services/payment.service';
 // Models
 import { Bill, Bill_item } from '../../../_models/bill.model';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-pay',
   templateUrl: './pay.component.html',
   styleUrls: ['./pay.component.css']

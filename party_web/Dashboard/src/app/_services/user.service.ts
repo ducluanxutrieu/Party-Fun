@@ -18,17 +18,17 @@ export class UserService {
 
     // Lấy thông tin user
     get_userInfo() {
-        let headers = new HttpHeaders({
-            'Authorization': localStorage.getItem('token')
+        const headers = new HttpHeaders({
+            Authorization: localStorage.getItem('token')
         });
-        return this.http.get<ApiResponse>(api.get_profile, { headers: headers });
+        return this.http.get<ApiResponse>(api.get_profile, { headers });
     }
     // Cập nhật thông tin user
     update_userInfo(body: string) {
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': localStorage.getItem('token')
+            Authorization: localStorage.getItem('token')
         });
-        return this.http.put<ApiResponse>(api.update_user, body, { headers: headers });
+        return this.http.put<ApiResponse>(api.update_user, body, { headers });
     }
 }

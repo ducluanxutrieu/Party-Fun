@@ -5,13 +5,13 @@ import { NgForm } from '@angular/forms';
 //services
 import { AuthenticationService } from '../../_services/authentication.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-userlogin',
   templateUrl: './userlogin.component.html',
   styleUrls: ['./userlogin.component.css']
 })
 export class UserloginComponent implements OnInit {
-  @ViewChild('userlogin', null) thisForm: NgForm;
+  @ViewChild('userlogin') thisForm!: NgForm;
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService

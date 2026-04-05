@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 // Models
 import { User } from '../../_models/user.model';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
       res => {
         this.user_info = res.data as User;
       },
-      err => {
+      _err => {
         console.log("Get user info error!");
       }
     )
@@ -53,9 +53,9 @@ export class ProfileComponent implements OnInit {
     birthday: string;
   }) {
     this.birthday = this.datepipe.transform(data.birthday, 'MM/dd/yyyy');
-    let body = `full_name=${data.name}&gender=${data.gender}&birthday=${this.birthday}&phone=${data.phone}&email=${data.email}`;
+    const body = `full_name=${data.name}&gender=${data.gender}&birthday=${this.birthday}&phone=${data.phone}&email=${data.email}`;
     this.userService.update_userInfo(body).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Update info success!");
         this.onload();
       },
@@ -67,14 +67,14 @@ export class ProfileComponent implements OnInit {
   }
 
   avatarChanged(event: any) {
-    var body = new FormData();
+    const body2 = new FormData();
     for (const file of event.target.files) {
-      body.append('image', file);
+      body2.append('image', file);
     }
-    let headers = new HttpHeaders({
-      'Authorization': localStorage.getItem('token')
+    const headers = new HttpHeaders({
+      Authorization: localStorage.getItem('token')
     })
-    this.http.put(api.uploadavatar, body, { headers: headers, observe: 'response' }).subscribe(
+    this.http.put(api.uploadavatar, body2, { headers, observe: 'response' }).subscribe(
       res_data => {
         sessionStorage.setItem('response_body', JSON.stringify(res_data.body));
         this.onload();

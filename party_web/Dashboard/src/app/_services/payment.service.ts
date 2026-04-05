@@ -37,13 +37,13 @@ export class PaymentService {
 
     // Xác nhận đơn hàng
     confirm_bill(bill_id: string, note: string) {
-        let body = `note=${note}`
+        const body = `note=${note}`
         return this.http.post<ApiResponse>(api.bill_confirm + "/" + bill_id, body, { headers: this.headers });
     }
 
     // Hủy đơn hàng
     cancel_bill(bill_id: string, note: string) {
-        let body = `note=${note}`
+        const body = `note=${note}`
         return this.http.put<ApiResponse>(api.bill_cancel + "/" + bill_id, body, { headers: this.headers });
     }
     // // Xóa đơn hàng

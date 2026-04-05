@@ -9,7 +9,7 @@ import { ApiResponse } from '../_models/response.model';
 
 @Injectable()
 export class ProductService {
-    products = [];
+    products: any[] = [];
 
     constructor(
         private http: HttpClient
@@ -27,28 +27,28 @@ export class ProductService {
 
     // Thêm món ăn mới
     add_dish(body: any) {
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded',
-            'Authorization': localStorage.getItem('token')
+            Authorization: localStorage.getItem('token')
         });
-        return this.http.post<ApiResponse>(api.add_dish, body, { headers: headers });
+        return this.http.post<ApiResponse>(api.add_dish, body, { headers });
     }
 
     // Cập nhật món ăn có sẵn
     update_dish(body: string) {
-        let headers = new HttpHeaders({
+        const headers = new HttpHeaders({
             'Content-type': 'application/x-www-form-urlencoded',
-            'Authorization': localStorage.getItem('token')
+            Authorization: localStorage.getItem('token')
         });
-        return this.http.put<ApiResponse>(api.update_dish, body, { headers: headers });
+        return this.http.put<ApiResponse>(api.update_dish, body, { headers });
     }
 
     // Xóa món ăn
     delete_dish(id: string) {
-        let headers = new HttpHeaders({
-            'Authorization': localStorage.getItem('token')
+        const headers = new HttpHeaders({
+            Authorization: localStorage.getItem('token')
         });
-        let option = {
+        const option = {
             headers: headers,
             body: {
                 _id: id
@@ -58,14 +58,13 @@ export class ProductService {
     }
     // Tìm sản phẩm
     findAll(): any[] {
-        this.products = JSON.parse(localStorage.getItem('dish-list'));
+        this.products = JSON.parse(localStorage.getItem('dish-list') || '[]');
         return this.products;
     }
 
     // Tìm sản phẩm qua id
     find(id: string): any {
-        // Sử dụng local storage do lúc hàm này được gọi thì hàm getDishlist ở constructor vẫn chưa lấy xong
-        this.products = JSON.parse(localStorage.getItem('dish-list'));
+        this.products = JSON.parse(localStorage.getItem('dish-list') || '[]');
         return this.products[this.getSelectedIndex(id)];
     }
 
@@ -73,7 +72,7 @@ export class ProductService {
     private getSelectedIndex(id: string) {
         // console.log(this.products);
         for (let i = 0; i < this.products.length; i++) {
-            if (this.products[i]._id == id) {
+            if (this.products[i]._id === id) {
                 return i;
             }
         }

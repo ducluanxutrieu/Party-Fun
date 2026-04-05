@@ -23,7 +23,7 @@ export class AuthenticationService {
         });
         this.http.post<ApiResponse>(api.signin, body, { headers: headers }).subscribe(
             res => {
-                if (res.data.role == "2" || res.data.role == "3") {
+                if (res.data.role === "2" || res.data.role === "3") {
                     sessionStorage.setItem('response', JSON.stringify(res));
                     localStorage.setItem('token', res.data.token);
                     localStorage.setItem('userinfo', JSON.stringify(res.data));
@@ -61,17 +61,17 @@ export class AuthenticationService {
     }
     // Kiểm tra tài khoản có phải admin không
     is_admin() {
-        if (this.is_loggedIn() == true) {
-            var currentUser = JSON.parse(localStorage.getItem('userinfo'));
-            if (currentUser.role == "3") return true;
+        if (this.is_loggedIn() === true) {
+            const currentUser = JSON.parse(localStorage.getItem('userinfo') || 'null');
+            if (currentUser && currentUser.role === "3") return true;
         }
         return false;
     }
     // Kiểm tra tài khoản có phải nhân viên không
     is_staff() {
-        if (this.is_loggedIn() == true) {
-            var currentUser = JSON.parse(localStorage.getItem('userinfo'));
-            if (currentUser.role == "2") return true;
+        if (this.is_loggedIn() === true) {
+            const currentUser = JSON.parse(localStorage.getItem('userinfo') || 'null');
+            if (currentUser && currentUser.role === "2") return true;
         }
         return false;
     }

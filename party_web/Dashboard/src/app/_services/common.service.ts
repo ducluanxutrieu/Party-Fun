@@ -16,10 +16,10 @@ export class CommonService {
 
     // Upload ảnh
     upload_image(images: any[]) {
-        let headers = new HttpHeaders({
-            'Authorization': localStorage.getItem('token')
+        const headers = new HttpHeaders({
+            Authorization: localStorage.getItem('token')
         });
-        let body = new FormData();
+        const body = new FormData();
         for (let i = 0; i < images.length; i++) {
             body.append('image', images[i]);
         }

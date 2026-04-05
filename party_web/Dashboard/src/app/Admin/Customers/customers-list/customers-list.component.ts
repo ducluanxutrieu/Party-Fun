@@ -3,7 +3,7 @@ import { StaffService } from '../../../_services/staff.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // declare jquery;
-declare var $: any;
+declare let $: any;
 
 interface Customer {
   _id: string;
@@ -11,13 +11,13 @@ interface Customer {
   username: string;
   avatar: string;
 }
-@Component({
+@Component({ standalone: false,
   selector: 'app-customers-list',
   templateUrl: './customers-list.component.html',
   styleUrls: ['./customers-list.component.css']
 })
 export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit {
-  @Input('data') customers_list: Customer[] = [];
+  @Input() customers_list: Customer[] = [];
   page: number = 1;
   total_pages: number;
 
@@ -37,7 +37,7 @@ export class CustomersListComponent implements AfterViewInit, OnDestroy, OnInit 
 
   //Generate datatable 
   datatable_generate() {
-    var customerTable = $('#customerTable').DataTable({ "paging": false });
+    $('#customerTable').DataTable({ "paging": false });
     // var customerTable_info = customerTable.page.info();
 
     // if (customerTable_info.pages == 1) {

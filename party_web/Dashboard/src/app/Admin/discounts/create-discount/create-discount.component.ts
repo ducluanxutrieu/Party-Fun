@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { PaymentService } from '../../../_services/payment.service';
 import { ToastrService } from 'ngx-toastr';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-create-discount',
   templateUrl: './create-discount.component.html',
   styleUrls: ['./create-discount.component.css']
@@ -25,9 +25,9 @@ export class CreateDiscountComponent implements OnInit {
     expired: string;
     value: number;
   }) {
-    let body = `code=${data.code}&expiresIn=${data.expired}&discount=${data.value}`;
+    const body = `code=${data.code}&expiresIn=${data.expired}&discount=${data.value}`;
     this.paymentService.create_discount(body).subscribe(
-      res => {
+      _res => {
         this.toastr.success("Create discount code success!");
       },
       err => {

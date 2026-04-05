@@ -18,7 +18,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
+            "allowedCommonJsDependencies": [
+              "froala-editor/js/plugins.pkgd.min.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -26,7 +29,7 @@
             "styles": [
               "src/custom-theme.scss",
               "src/styles.css",
-              "node_modules/datatables.net-dt/css/jquery.dataTables.css",
+              "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
               "src/assets/css/bootstrap.min.css",
               "src/assets/css/style.default.css",
               "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
@@ -41,7 +44,7 @@
               "src/assets/vendor/jquery.cookie/jquery.cookie.js",
               "src/assets/vendor/jquery-validation/jquery.validate.min.js",
               "src/assets/js/front.js",
-              "node_modules/datatables.net/js/jquery.dataTables.min.js",
+              "node_modules/datatables.net/js/dataTables.min.js",
               "node_modules/froala-editor/js/froala_editor.pkgd.min.js",
               "node_modules/select2/dist/js/select2.min.js"
             ]
@@ -57,11 +60,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -141,7 +140,6 @@
       }
     }
   },
-  "defaultProject": "admin-dashboard",
   "cli": {
     "analytics": "207abef3-8d25-4513-be18-eb72292df03f"
   }

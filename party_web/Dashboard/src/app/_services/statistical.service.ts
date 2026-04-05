@@ -26,7 +26,7 @@ export class StatisticalService {
 
     // Thống kê món ăn được gọi
     get_productStatistics(type: string, date?: string) {
-        if (type == 'custom') {
+        if (type === 'custom') {
             return this.http.get<ApiResponse>(api.productStatistics + `?type=${type}&date=${date}`, { headers: this.headers });
         } else {
             return this.http.get<ApiResponse>(api.productStatistics + `?type=${type}`, { headers: this.headers });
@@ -35,7 +35,7 @@ export class StatisticalService {
 
     // Thống kê tiền khách hàng thanh toán
     get_customerStatistics(type: string, payment_status: number, date?: string) {
-        if (type == 'custom') {
+        if (type === 'custom') {
             return this.http.get<ApiResponse>(api.customerStatistics + `?type=${type}&date=${date}`, { headers: this.headers });
         } else {
             return this.http.get<ApiResponse>(api.customerStatistics + `?type=${type}&payment_status=${payment_status}`, { headers: this.headers });
@@ -44,7 +44,7 @@ export class StatisticalService {
 
     // Thống kê số tiền nhân viên đã thanh toán
     get_staffStatistics(type: string, date?: string) {
-        if (type == 'custom') {
+        if (type === 'custom') {
             return this.http.get<ApiResponse>(api.staffStatistics + `?type=${type}&date=${date}`, { headers: this.headers });
         } else {
             return this.http.get<ApiResponse>(api.staffStatistics + `?type=${type}`, { headers: this.headers });
