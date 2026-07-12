@@ -1,35 +1,36 @@
-import { TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { AuthenticationService } from './_services/authentication.service';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let authService: jasmine.SpyObj<AuthenticationService>;
+
+  beforeEach(async () => {
+    authService = jasmine.createSpyObj('AuthenticationService', ['is_loggedIn', 'logout']);
+    authService.is_loggedIn.and.returnValue(false);
+
+    await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [AppComponent],
+      providers: [{ provide: AuthenticationService, useValue: authService }]
     }).compileComponents();
-  }));
-
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'admin-dashboard'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('admin-dashboard');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('admin-dashboard app is running!');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('calls authenticationService.logout on logout()', () => {
+    component.logout();
+    expect(authService.logout).toHaveBeenCalled();
   });
 });
