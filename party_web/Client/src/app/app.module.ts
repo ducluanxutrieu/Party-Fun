@@ -40,7 +40,6 @@ import { EditPictureComponent } from './pages/User/Edit profile/edit-picture/edi
 import { UserProfileComponent } from './pages/User/Profile/user-profile/user-profile.component';
 import { UserCartInfoComponent } from './pages/User/Profile/user-cart-info/user-cart-info.component';
 import { NotFoundComponent } from './pages/not_found/not-found.component';
-import { JwPaginationComponent } from 'jw-angular-pagination';
 import { UserCartComponent } from './pages/User/Cart/user-cart/user-cart.component';
 import { UserCheckoutComponent } from './pages/User/Cart/user-checkout/user-checkout.component';
 import { ProductDetailComponent } from './pages/Products/product-detail/product-detail.component';
@@ -79,7 +78,6 @@ import { MapComponent } from './pages/map/map.component';
     UserProfileComponent,
     UserCartInfoComponent,
     NotFoundComponent,
-    JwPaginationComponent,
     UserCartComponent,
     UserCheckoutComponent,
     ProductDetailComponent,

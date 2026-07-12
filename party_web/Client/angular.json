@@ -18,8 +18,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
-            "rebaseRootRelativeCssUrls": true,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -46,12 +45,10 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -133,5 +130,8 @@
       }
     }
   },
-  "defaultProject": "project01"
+  "defaultProject": "project01",
+  "cli": {
+    "analytics": "7f909a90-fb9d-4d68-b8bc-1af7608c7def"
+  }
 }
