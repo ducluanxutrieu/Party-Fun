@@ -1,18 +1,52 @@
-# party_booking
+# Party Booking Flutter
 
-A new Flutter application.
+Mobile application for the Party-Fun platform built with Flutter, supporting Android and iOS.
 
-## Getting Started
+## Tech Stack
 
-This project is a starting point for a Flutter application.
+- **Framework**: Flutter (Dart SDK >=2.6.0)
+- **State management**: flutter_bloc + bloc
+- **Networking**: Chopper + Dio
+- **Maps**: google_maps_flutter
+- **UI**: Material Design + Google Fonts + Lottie animations
+- **Auth**: Shared preferences + JWT
 
-A few resources to get you started if this is your first Flutter project:
+## Setup
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```bash
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Code Generation
+
+```bash
+# One-time build
 flutter packages pub run build_runner build --delete-conflicting-outputs
+
+# Watch mode
 flutter packages pub run build_runner watch --delete-conflicting-outputs
+```
+
+## Project Structure
+
+```
+lib/
+├── authentication/   # Auth BLoC
+├── cart/             # Cart BLoC
+├── data/             # Network & database layer
+├── dish/             # Dish BLoC
+├── ui/               # Screens & pages
+├── widgets/          # Reusable widgets
+└── main.dart
+```
+
+## Build
+
+```bash
+# Android
+flutter build apk
+
+# iOS
+flutter build ios
+```

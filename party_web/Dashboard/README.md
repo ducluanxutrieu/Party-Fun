@@ -1,27 +1,39 @@
-# AdminDashboard
+# Party-Fun Admin Dashboard
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.19.
+Admin dashboard for managing the Party-Fun platform, built with Angular 21 and Angular Material.
 
-## Development server
+## Tech Stack
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- **Framework**: Angular 21
+- **UI**: Angular Material 21
+- **Charts**: Chart.js + ng2-charts
+- **Tables**: DataTables + angular-datatables
+- **Rich text**: angular-froala-wysiwyg
+- **Notifications**: ngx-toastr
+- **Linter**: ESLint + @angular-eslint
+- **Package manager**: pnpm
 
-## Code scaffolding
+## Setup
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+pnpm install
+pnpm start
+```
 
-## Build
+App runs on `http://localhost:4200`.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Scripts
 
-## Running unit tests
+| Command | Description |
+|---|---|
+| `pnpm start` | Start dev server |
+| `pnpm build` | Production build (output: `dist/`) |
+| `pnpm test` | Run unit tests via Karma |
+| `pnpm lint` | Lint with ESLint (0 warnings allowed) |
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Code Scaffolding
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```bash
+ng generate component component-name
+ng generate service|directive|pipe|guard|interface|enum|module <name>
+```
