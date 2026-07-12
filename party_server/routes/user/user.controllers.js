@@ -12,10 +12,9 @@ var CronJob = require('cron').CronJob;
 var ObjectId =  require('mongodb').ObjectId;
 
 // cron check user là khách hàng bạc / vàng / đồng theo thời gian tham gia vào nhóm
-let cron= new CronJob({
-    cronTime: '0 0 0 */1 * *',
-    // cronTime: '0 * * * * *',
-    onTick: async function () {
+let cron = new CronJob(
+    '0 0 0 */1 * *',
+    async function () {
         MongoClient.connect(
             'mongodb://localhost:27017/Android_Lab',
             function (err, db) {
@@ -66,9 +65,10 @@ let cron= new CronJob({
                 })
             })
     },
-    timeZone: "Asia/Ho_Chi_Minh",
-    start: true,
-})
+    null,
+    true,
+    'Asia/Ho_Chi_Minh'
+);
 module.exports = {
     signin: function (req, res) {
         MongoClient.connect(
