@@ -1,3 +1,5 @@
 party_booking_flutter/android/key.properties
 **/node_modules
 party_server/access.log
+**/.angular
+**/.gradle
